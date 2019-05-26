@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "hydrus-web",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*\\..*)",
+      "headers": { "cache-control": "public,max-age=0,must-revalidate" },
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "headers": { "cache-control": "public,max-age=0,must-revalidate" },
+      "dest": "/index.html"
+    }
+  ]
+}
