@@ -24,7 +24,7 @@
     "@angular/pwa": "^0.12.4",
     "@angular/router": "~8.0.0",
     "@angular/service-worker": "~8.0.0",
-    "@ngx-pwa/local-storage": "^7.4.2",
+    "@ngx-pwa/local-storage": "^8.0.0",
     "core-js": "^2.5.4",
     "rxjs": "~6.5.2",
     "tslib": "^1.9.0",
