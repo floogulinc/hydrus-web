@@ -1,6 +1,6 @@
 {
-  "name": "hydrus-web",
-  "short_name": "hydrus-web",
+  "name": "Hydrus Web",
+  "short_name": "Hydrus",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
