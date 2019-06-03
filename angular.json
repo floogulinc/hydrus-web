@@ -11,6 +11,9 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
+        },
+        "akita-schematics:component": {
+          "styleext": "scss"
         }
       },
       "architect": {
@@ -140,5 +143,8 @@
       }
     }
   },
-  "defaultProject": "hydrus-web"
+  "defaultProject": "hydrus-web",
+  "cli": {
+    "defaultCollection": "@datorama/akita"
+  }
 }
