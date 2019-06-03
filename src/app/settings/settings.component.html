@@ -1,0 +1,18 @@
+<div class="mdc-layout-grid__inner">
+  <div class="mdc-layout-grid__cell--span-12">
+      <div mdcHeadline4 class="settings-form-field">Settings</div>
+    <form #settingsForm="ngForm" (ngSubmit)="submitForm();" autocomplete="off">
+      <mdc-form-field fluid class="settings-form-field">
+        <mdc-text-field #input [(ngModel)]="hydrusApiUrl" name="hydrusApiUrl" type="url" label="Hydrus API URL" outlined></mdc-text-field>
+      </mdc-form-field>
+      <mdc-form-field fluid class="settings-form-field">
+        <mdc-text-field #input [(ngModel)]="hydrusApiKey" name="hydrusApiKey" type="password" label="Hydrus API Key" outlined></mdc-text-field>
+      </mdc-form-field>
+      <div class="settings-form-field">
+        <button mdc-button primary raised #input type="submit">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
