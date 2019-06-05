@@ -9,7 +9,7 @@
       <mdc-image-list textProtection class="standard-image-list image-list--rounded-corners">
           <mdc-image-list-item *ngFor="let item of this.testFiles">
             <mdc-image-list-image-aspect>
-                <div mdcImageListImage class="image-list-image" [style.background]="'url(http://localhost:45890/get_files/thumbnail?file_id=' + item + '&apikey=52efe9afee057193670a3c0a3fe198c5d675f0d7ecb8751141a44eadbc68189e)'"></div>
+                <div mdcImageListImage class="image-list-image" [style.background]="'url(http://apiurl/get_files/thumbnail?file_id=' + item + '&apikey=)'"></div>
             </mdc-image-list-image-aspect>
             <mdc-image-list-supporting>
               <span mdcImageListLabel>{{item}}</span>
