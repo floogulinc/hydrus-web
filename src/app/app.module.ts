@@ -7,7 +7,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
+import { StorageModule } from '@ngx-pwa/local-storage';
+
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -58,10 +59,12 @@ const MDC_MODULES: any[] = [
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     HttpClientModule,
-    environment.production ? [] : AkitaNgDevtools.forRoot(),
     FlexLayoutModule,
     FormsModule,
     MDC_MODULES,
+    StorageModule.forRoot({
+      IDBNoWrap: true,
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
