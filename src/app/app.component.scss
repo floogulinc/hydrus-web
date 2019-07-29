@@ -1,4 +1,4 @@
-.main-content {
+/* .main-content {
     overflow: auto;
     position: relative;
     //padding-left: 16px;
@@ -7,4 +7,38 @@
 
 .main-container {
     overflow: auto;
-}
+} */
+
+.sidenav-container {
+    height: 100%;
+  }
+  
+  .sidenav {
+    width: 256px;
+  }
+  
+  .sidenav .mat-toolbar {
+    background: inherit;
+  }
+  
+  .mat-toolbar.mat-primary {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  
+  .app-title {
+      padding-left: 20px;
+  }
+  
+  .mat-list-icon {
+    color: rgba(0, 0, 0, 0.54);
+    margin-right: 16px;
+  }
+
+  .main-content {
+      margin: 24px;
+      @media (max-width: 599px) {
+        margin: 16px;
+      }
+  }

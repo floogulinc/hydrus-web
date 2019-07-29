@@ -7,52 +7,53 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 
-import { StorageModule } from '@ngx-pwa/local-storage';
-
+import {NgxLocalStorageModule} from 'ngx-localstorage';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { FormsModule } from '@angular/forms';
 
-import {
-  MdcButtonModule,
-  MdcFabModule,
-  MdcIconModule,
-  MdcMenuModule,
-  MdcTopAppBarModule,
-  MdcTabBarModule,
-  MdcListModule,
-  MdcDrawerModule,
-  MdcIconButtonModule,
-  MdcTextFieldModule,
-  MdcFormFieldModule,
-  MdcTypographyModule,
-  MdcImageListModule
-} from '@angular-mdc/web';
 import { BrowseComponent } from './browse/browse.component';
 import { SettingsComponent } from './settings/settings.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-const MDC_MODULES: any[] = [
-  MdcButtonModule,
-  MdcFabModule,
-  MdcIconModule,
-  MdcMenuModule,
-  MdcTopAppBarModule,
-  MdcTabBarModule,
-  MdcListModule,
-  MdcDrawerModule,
-  MdcIconButtonModule,
-  MdcTextFieldModule,
-  MdcFormFieldModule ,
-  MdcTypographyModule,
-  MdcImageListModule
+import {MatButtonModule} from '@angular/material/button';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { TagInputComponent } from './tag-input/tag-input.component';
+import {MatCardModule} from '@angular/material/card';
+import {MatGridListModule} from '@angular/material/grid-list';
+
+
+const MAT_MODULES: any[] = [
+    MatToolbarModule,
+    MatButtonModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSnackBarModule,
+    MatChipsModule,
+    MatAutocompleteModule,
+    MatCardModule,
+    MatGridListModule
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     BrowseComponent,
-    SettingsComponent
+    SettingsComponent,
+    TagInputComponent
   ],
   imports: [
     BrowserModule,
@@ -61,10 +62,10 @@ const MDC_MODULES: any[] = [
     HttpClientModule,
     FlexLayoutModule,
     FormsModule,
-    MDC_MODULES,
-    StorageModule.forRoot({
-      IDBNoWrap: true,
-    })
+    MAT_MODULES,
+    NgxLocalStorageModule.forRoot({prefix: environment.localStoragePrefix}),
+    BrowserAnimationsModule,
+    LayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

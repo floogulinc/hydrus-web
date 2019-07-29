@@ -1,4 +1,43 @@
-<div class="main-container">
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+      mode="over">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
+      [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1" 
+      [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
+        <mat-icon matListIcon>photo</mat-icon>
+        Browse</mat-list-item>
+      <mat-list-item href="#" routerLink="/settings" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
+        <mat-icon matListIcon>settings</mat-icon>
+        Settings</mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+        >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span class="app-title">Hydrus Web</span>
+    </mat-toolbar>
+    <div class="main-content mat-typography">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+
+
+
+
+
+
+<!-- <div class="main-container">
   <mdc-top-app-bar fixed class="main-app-bar" [scrollTarget]="mainContent">
     <mdc-top-app-bar-row>
       <mdc-top-app-bar-section align="start" title="Hydrus Web">
@@ -43,4 +82,5 @@
         <router-outlet></router-outlet>
       </div>
   </div>
-</div>
+</div> -->
+

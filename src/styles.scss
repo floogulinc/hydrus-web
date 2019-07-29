@@ -1,5 +1,50 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+
+
+// Plus imports for other components in your app.
+
+@import '~src/_variables';
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+
+//setting up for future theme options
+@mixin app-theming($theme) {
+    // Extract the palettes you need from the theme definition.
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+  
+    // Define any styles affected by the theme.
+    .drawer-list-item-active {
+        background-color: mat-color($mat-grey, 100) !important;
+        color: mat-color($primary) !important;
+        .mat-list-icon {
+            color: mat-color($primary) !important;
+          }
+    }
+  }
+
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($light-theme);
+@include app-theming($light-theme);
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// --------------
+// OLD MDC STYLES
+// --------------
+
 /* You can add global styles to this file, and also import other style files */
-$mdc-theme-primary: #1565c0; // primary color
+/* $mdc-theme-primary: #1565c0; // primary color
 $mdc-theme-secondary: #388e3c; // secondary color
 
 @import "~@angular-mdc/theme/material";
@@ -29,4 +74,5 @@ body {
     background-repeat: no-repeat !important;
     background-position: center !important;
     background-size: cover !important;
-}
+} */
+

@@ -1,18 +1,33 @@
-<div class="mdc-layout-grid__inner">
+<!-- <div class="mdc-layout-grid__inner">
   <div class="mdc-layout-grid__cell--span-12">
       <div mdcHeadline4 class="settings-form-field">Settings</div>
-    <form #settingsForm="ngForm" (ngSubmit)="submitForm();" autocomplete="off">
       <mdc-form-field fluid class="settings-form-field">
-        <mdc-text-field #input [(ngModel)]="hydrusApiUrl" name="hydrusApiUrl" type="url" label="Hydrus API URL" outlined></mdc-text-field>
+        <mdc-text-field  name="hydrusApiUrl" type="url" autocomplete="off" label="Hydrus API URL" outlined ngxLocalStorage="hydrusApiUrl" lsEvent="input" lsDebounce="500" lsInitFromStorage="true"
+        (storedValue)="logStoredValue($event)" ></mdc-text-field>
       </mdc-form-field>
       <mdc-form-field fluid class="settings-form-field">
-        <mdc-text-field #input [(ngModel)]="hydrusApiKey" name="hydrusApiKey" type="password" label="Hydrus API Key" outlined></mdc-text-field>
+        <mdc-text-field (input)="apiKeyField.emit('input', )" name="hydrusApiKey" type="password" autocomplete="off" label="Hydrus API Key" outlined ngxLocalStorage="hydrusApiKey" lsEvent="input" lsDebounce="500" [lsInitFromStorage]="true" [lsValuePath]="['value']"
+        (storedValue)="console.log($event)"></mdc-text-field>
       </mdc-form-field>
-      <div class="settings-form-field">
-        <button mdc-button primary raised #input type="submit">
-          Save
-        </button>
-      </div>
-    </form>
+      <input ngxLocalStorage="hydrusApiKey" lsEvent="input" lsDebounce="500" [lsInitFromStorage]="true" [lsValuePath]="['value']"
+      (storedValue)="console.log($event)">
+  </div>
+</div> -->
+
+<div fxLayout="column">
+  <h2 class="mat-display-1">Settings</h2>
+  <mat-form-field appearance="outline" hintLabel="With the trailing /" style="margin-bottom: 16px;">
+    <mat-label>Hydrus API URL</mat-label>
+    <input matInput name="hydrusApiUrl" type="url" autocomplete="off"
+    ngxLocalStorage="hydrusApiUrl" lsEvent="input" lsDebounce="500" lsInitFromStorage="true" (lsStoredValue)="this.apiUrlStored()"
+    placeholder="http://127.0.0.1:45869/">
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+      <mat-label>Hydrus API Key</mat-label>
+    <input matInput name="hydrusApiKey" type="password" autocomplete="off"
+    ngxLocalStorage="hydrusApiKey" lsEvent="input" lsDebounce="500" lsInitFromStorage="true" (lsStoredValue)="this.apiKeyStored()">
+  </mat-form-field>
+  <div fxLayout="row">
+    <button mat-raised-button color="primary" (click)="this.testApi()">Test API</button>
   </div>
 </div>

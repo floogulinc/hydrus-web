@@ -1,0 +1,16 @@
+<mat-form-field class="tag-form-field">
+    <mat-chip-list #chipList aria-label="Tag Search">
+      <mat-chip *ngFor="let tag of searchTags" [selectable]="false" color="primary"
+                class="tag-chip"
+               [removable]="true" (removed)="removeSearchTag(tag)"
+               [ngClass]="'tag-namespace-' + this.tagUtils.getNamespace(tag)">
+        {{tag}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input placeholder="Tag Search"
+             [matChipInputFor]="chipList"
+             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+             matChipInputAddOnBlur="false"
+             (matChipInputTokenEnd)="addSearchTag($event)">
+    </mat-chip-list>
+</mat-form-field>
