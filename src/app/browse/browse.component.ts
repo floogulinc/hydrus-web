@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';
+import { SearchService } from '../search.service';
 
 
 @Component({
@@ -19,7 +20,7 @@ export class BrowseComponent implements OnInit {
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiKey: string;
 
-  constructor(private hydrusApi: HydrusApiService) { }
+  constructor(private searchService: SearchService) { }
 
   currentFiles: number[];
   searchTags: string[] = [];
@@ -43,7 +44,7 @@ export class BrowseComponent implements OnInit {
   }
 
   search() {
-    this.hydrusApi.searchFiles(this.searchTags).subscribe((result) => {
+    this.searchService.searchFiles(this.searchTags).subscribe((result) => {
       this.currentFiles = result;
       console.log(result);
     }, (error) => {

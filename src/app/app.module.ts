@@ -31,6 +31,7 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import { TagInputComponent } from './tag-input/tag-input.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { ResponsiveColumnsDirective } from './browse/responsive-columns.directive';
 
 
 const MAT_MODULES: any[] = [
@@ -53,7 +54,8 @@ const MAT_MODULES: any[] = [
     AppComponent,
     BrowseComponent,
     SettingsComponent,
-    TagInputComponent
+    TagInputComponent,
+    ResponsiveColumnsDirective
   ],
   imports: [
     BrowserModule,
