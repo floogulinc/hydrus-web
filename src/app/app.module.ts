@@ -32,6 +32,9 @@ import { TagInputComponent } from './tag-input/tag-input.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { ResponsiveColumnsDirective } from './browse/responsive-columns.directive';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 
 const MAT_MODULES: any[] = [
@@ -67,7 +70,9 @@ const MAT_MODULES: any[] = [
     MAT_MODULES,
     NgxLocalStorageModule.forRoot({prefix: environment.localStoragePrefix}),
     BrowserAnimationsModule,
-    LayoutModule
+    LayoutModule,
+    ReactiveFormsModule,
+    VirtualScrollerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

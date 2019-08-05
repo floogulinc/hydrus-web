@@ -7,7 +7,40 @@
 }
 
 .grid-img {
-    object-fit: cover; 
+    /* object-fit: cover; 
     height: inherit; 
-    width: inherit;
+    width: inherit; */
+    display: block;
+    float: left;
+    flex: 0 0 auto;
+    margin: 8px;
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+          width: calc(100%/4);
+          height: calc(100%/4);
+      }
+      
+      @media screen and (min-width: 481px) and (max-width: 768px) {
+          width: calc(100%/3);
+          height: calc(100%/3);
+      }
+      
+      @media screen and (min-width: 321px) and (max-width: 480px) {
+          width: calc(100%/2);
+          height: calc(100%/2);
+      }
+      
+      @media screen  and (max-width: 320px) {
+          width: 100%;
+          height: 100%;
+      }
+}
+
+.virtual-scroll {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: stretch;
 }

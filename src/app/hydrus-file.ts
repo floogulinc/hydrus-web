@@ -5,12 +5,12 @@ export interface HydrusFile {
     mime: string;
     width: number;
     height: number;
-    duration?: number;
-    num_frames?: number;
-    num_words?: number;
-    service_tags: {
-        (service : string) : {
-            (status: string) : [string]
+    duration?: number | null;
+    num_frames?: number | null;
+    num_words?: number | null;
+    service_names_to_statuses_to_tags: {
+        [service : string] : {
+            [status: string] : string[];
         }
     }
 }

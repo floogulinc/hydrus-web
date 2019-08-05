@@ -2,7 +2,7 @@
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       mode="over">
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
+    <mat-nav-list class="sidenav-list">
       <mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
       [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1" 
       [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">

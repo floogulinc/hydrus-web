@@ -80,6 +80,15 @@ export class HydrusApiService {
     });
   }
 
+  public getFileURL(file_id: number): string {
+    return this.hydrusApiUrl + 'get_files/file?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
+  }
+
+  public getThumbnailURL(file_id: number): string {
+    return this.hydrusApiUrl + 'get_files/thumbnail?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey
+  }
+
+
 
 
 }

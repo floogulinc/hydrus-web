@@ -2,17 +2,16 @@
   <div class="search-bar" fxLayout="column">
     <app-tag-input (tags)="tagsChanged($event)"></app-tag-input>
   </div>
-  <mat-grid-list cols="2" [responsiveColumns]="{xs: 4, sm: 6, md: 8, lg: 10, xl: 12}" rowHeight="1:1" gutterSize="8px">
-      <mat-grid-tile *ngFor="let file of currentFiles | slice:0:100">
-        <a [href]="this.hydrusApiUrl + 'get_files/file?file_id=' + file + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey">
-          <img [src]="this.hydrusApiUrl + 'get_files/thumbnail?file_id=' + file + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey" class="grid-img" >
-          <!-- <div class="image-list-image" [style.background]="'url(' + this.hydrusApiUrl + 'get_files/thumbnail?file_id=' + file + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey + ');'"></div> -->
-        </a>
-        <mat-grid-tile-footer>
-            <span>{{file}}</span>
-        </mat-grid-tile-footer>
-      </mat-grid-tile>
-  </mat-grid-list>
+  <button (click)="testStuff()">Test Stuff</button>
+  <virtual-scroller class="virtual-scroll" #scroll [items]="currentFiles" (vsEnd)="fetchMore($event)" [parentScroll]="scroll.window" [enableUnequalChildrenSizes]="true"
+  [bufferAmount]="10">
+        <div *ngFor="let file of scroll.viewPortItems" class="grid-img">
+          <a [href]="getFileURL(file.file_id)" >
+            <img [src]="getThumbnailURL(file.file_id)" >
+            <!-- <div class="image-list-image" [style.background]="'url(' + this.hydrusApiUrl + 'get_files/thumbnail?file_id=' + file + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey + ');'"></div> -->
+          </a>
+        </div>
+</virtual-scroller>
 </div>
 
 <ng-template #noApi>

@@ -1,7 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { HydrusFilesService } from './../hydrus-files.service';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
+import { FormControl } from '@angular/forms';
+import { startWith, map } from 'rxjs/operators';
+import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tag-input',
@@ -15,27 +20,44 @@ export class TagInputComponent implements OnInit {
 
   tagUtils = TagUtils;
 
+  tagCtrl = new FormControl();
+  filteredTags: Observable<string[]>;
+
   @Output()
   tags = new EventEmitter<string[]>();
 
+  @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto', {static: false}) matAutocomplete: MatAutocomplete;
 
-  constructor() { }
+  constructor(public filesService : HydrusFilesService) {
+    this.filteredTags = this.tagCtrl.valueChanges.pipe(
+      startWith(""),
+      map((tag: string) => this._filter(tag))
+    );
+    
+   }
 
   ngOnInit() {
   }
 
-  addSearchTag(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
+  chipInputEvent(event: MatChipInputEvent): void {
+    if (!this.matAutocomplete.isOpen) {
+      const input = event.input;
+      const value = event.value.toLowerCase(); //Hydrus tags are always lowercase
 
-    // Add our fruit
+      this.addSearchTag(value);
+
+      // Reset the input value
+      if (input) {
+        input.value = '';
+      }
+    }
+  }
+
+  addSearchTag(tag: string) {
+    const value = tag.toLowerCase();
     if ((value || '').trim()) {
       this.searchTags.push(value);
-    }
-
-    // Reset the input value
-    if (input) {
-      input.value = '';
     }
 
     this.tags.emit(this.searchTags);
@@ -50,6 +72,19 @@ export class TagInputComponent implements OnInit {
     }
 
     this.tags.emit(this.searchTags);
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    this.addSearchTag(event.option.viewValue);
+    this.tagInput.nativeElement.value = '';
+    this.tagCtrl.setValue(null);
+  }
+
+
+  private _filter(value: string): string[] {
+    const filterValue = value ? value.toLowerCase() : "";
+
+    return Array.from(this.filesService.getKnownTags()).filter(tag => tag.toLowerCase().indexOf(filterValue) === 0).filter(tag => !this.searchTags.includes(tag)).slice(0,25);
   }
   
 
