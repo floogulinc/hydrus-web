@@ -41,7 +41,7 @@ export class TagInputComponent implements OnInit {
   }
 
   chipInputEvent(event: MatChipInputEvent): void {
-    if (!this.matAutocomplete.isOpen) {
+    //if (!this.matAutocomplete.isOpen) {
       const input = event.input;
       const value = event.value.toLowerCase(); //Hydrus tags are always lowercase
 
@@ -51,7 +51,7 @@ export class TagInputComponent implements OnInit {
       if (input) {
         input.value = '';
       }
-    }
+    //}
   }
 
   addSearchTag(tag: string) {

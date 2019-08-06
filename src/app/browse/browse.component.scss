@@ -60,3 +60,12 @@
         @include mdc-image-list-standard-columns(4, 8px);
     }
 }
+
+.loader {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.spinner {
+    margin: auto;
+}

@@ -3,50 +3,50 @@
     <app-tag-input (tags)="tagsChanged($event)"></app-tag-input>
   </div>
   <virtual-scroller class="virtual-scroll" #scroll [items]="currentFiles" (vsEnd)="fetchMore($event)" [parentScroll]="appComponent.sidenavContent.elementRef.nativeElement">
-  <ul class="mdc-image-list browse-image-list" #container>
-    
+    <ul class="mdc-image-list browse-image-list" #container>
+      
       <li class="mdc-image-list__item grid-img" *ngFor="let file of scroll.viewPortItems; trackBy: scrollTrackByFunction">
-          <a [href]="getFileURL(file.file_id)" >  
-        <div class="mdc-image-list__image-aspect-container">
-              <!-- <img class="mdc-image-list__image" [src]="getThumbnailURL(file.file_id)"> -->
-              <div class="mdc-image-list__image image-list-image" [ngStyle]="{'background-image':'url('+getThumbnailURL(file.file_id)+')'}"></div>
-        </div>
-            <!-- <div class="image-list-image" [style.background]="'url(' + this.hydrusApiUrl + 'get_files/thumbnail?file_id=' + file + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey + ');'"></div> -->
-          </a>
-
-  </ul>
-</virtual-scroller>
-</div>
-
-<ng-template #noApi>
-  <mat-card>
+        <a [href]="getFileURL(file.file_id)" >  
+          <div class="mdc-image-list__image-aspect-container">
+            <!-- <img class="mdc-image-list__image" [src]="getThumbnailURL(file.file_id)"> -->
+            <div class="mdc-image-list__image image-list-image" [ngStyle]="{'background-image':'url('+getThumbnailURL(file.file_id)+')'}"></div>
+          </div>
+        </a>
+        
+      </ul>
+      <div *ngIf="loading" class="loader"><mat-spinner class="spinner"></mat-spinner></div>
+    </virtual-scroller>
+  </div>
+  
+  <ng-template #noApi>
+    <mat-card>
       <mat-card-title>Welcome to Hydrus Web</mat-card-title>
-    <mat-card-content>
-      <p>To begin, enter your Hydrus API information in the settings page</p>
-    </mat-card-content>
-    <mat-card-actions>
+      <mat-card-content>
+        <p>To begin, enter your Hydrus API information in the settings page</p>
+      </mat-card-content>
+      <mat-card-actions>
         <button mat-button routerLink="/settings">Go to Settings</button>
-    </mat-card-actions>
-  </mat-card>
-</ng-template>
-
-<!-- 
-<div class="mdc-layout-grid__inner">
-    <div class="mdc-layout-grid__cell--span-12">
+      </mat-card-actions>
+    </mat-card>
+  </ng-template>
+  
+  <!-- 
+    <div class="mdc-layout-grid__inner">
+      <div class="mdc-layout-grid__cell--span-12">
         <mdc-form-field fluid class="search-form-field">
-            <mdc-text-field  name="searchField" type="url" label="Search Tags" outlined></mdc-text-field>
-          </mdc-form-field>
-    </div>
-    <div class="mdc-layout-grid__cell--span-12">
-      <mdc-image-list textProtection class="standard-image-list image-list--rounded-corners">
+          <mdc-text-field  name="searchField" type="url" label="Search Tags" outlined></mdc-text-field>
+        </mdc-form-field>
+      </div>
+      <div class="mdc-layout-grid__cell--span-12">
+        <mdc-image-list textProtection class="standard-image-list image-list--rounded-corners">
           <mdc-image-list-item *ngFor="let item of this.testFiles">
             <mdc-image-list-image-aspect>
-                <div mdcImageListImage class="image-list-image" [style.background]="'url(http://apiurl/get_files/thumbnail?file_id=' + item + '&apikey=)'"></div>
+              <div mdcImageListImage class="image-list-image" [style.background]="'url(http://apiurl/get_files/thumbnail?file_id=' + item + '&apikey=)'"></div>
             </mdc-image-list-image-aspect>
             <mdc-image-list-supporting>
               <span mdcImageListLabel>{{item}}</span>
             </mdc-image-list-supporting>
           </mdc-image-list-item>
         </mdc-image-list>
-  </div>
-</div> -->
+      </div>
+    </div> -->
