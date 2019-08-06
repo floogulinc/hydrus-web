@@ -1,3 +1,4 @@
+import { AppComponent } from './../app.component';
 import { HydrusApiService } from './../hydrus-api.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -23,7 +24,7 @@ export class BrowseComponent implements OnInit {
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiKey: string;
 
-  constructor(private searchService: SearchService, private apiService: HydrusApiService, public filesService: HydrusFilesService) { }
+  constructor(private searchService: SearchService, private apiService: HydrusApiService, public filesService: HydrusFilesService, public appComponent: AppComponent) { }
 
   currentSearchIDs: number[] = [];
   currentFiles: HydrusFile[] = [];
@@ -33,7 +34,7 @@ export class BrowseComponent implements OnInit {
 
   loading: boolean = false;
 
-  loadAtOnce: number = 50;
+  loadAtOnce: number = 64;
 
   ngOnInit() {
     
@@ -51,6 +52,7 @@ export class BrowseComponent implements OnInit {
     if(this.hydrusApiUrl && this.hydrusApiKey) {
       this.search();
     }
+    console.log(this.appComponent.sidenavContent);
   }
 
   tagsChanged(tags: string[]) {
@@ -71,6 +73,7 @@ export class BrowseComponent implements OnInit {
   }
 
   fetchMore(event?: IPageInfo) {
+    console.log(event);
     if ((event && (event.endIndex !== this.currentFiles.length-1)) || this.loading) return;
     this.loading = true;
        // this.fetchNextChunk(this.buffer.length, 10).then(chunk => {
@@ -91,6 +94,10 @@ export class BrowseComponent implements OnInit {
       console.log(this.filesService.getKnownTags());
     })
   }
+
+  public scrollTrackByFunction(index: number, file: HydrusFile): number {
+    return file.file_id;
+}
 
 
 

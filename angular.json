@@ -27,6 +27,11 @@
               "src/assets",
               "src/manifest.json"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                    "node_modules"
+               ]
+            },
             "styles": [
               "src/styles.scss"
             ],

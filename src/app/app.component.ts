@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, share } from 'rxjs/operators';
+import { MatSidenavContent } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -19,4 +20,7 @@ export class AppComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver) {}
+
+  @ViewChild(MatSidenavContent, {static: true}) 
+  public sidenavContent: MatSidenavContent;
 }
