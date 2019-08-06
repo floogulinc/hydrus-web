@@ -1,13 +1,13 @@
 @import '~src/_variables';
 @import "@material/image-list/mdc-image-list";
 
-/* .image-list-image {
+.image-list-image {
     width: 100%;
     height: 100%;
     background-repeat: no-repeat !important;
     background-position: center !important;
     background-size: cover !important;
-} */
+} 
 
 /* .grid-img {
  */    /* object-fit: cover; 
@@ -50,12 +50,13 @@
 
 .browse-image-list {
     //@include mdc-image-list-aspect(1.5); // Images are 3:2
-    @include mdc-image-list-standard-columns(8);
+    @include mdc-image-list-standard-columns(8, 8px);
     max-width: 1440px;
+    @include mdc-image-list-shape-radius(8px);
 }
 
 @media (max-width: 599px) {
     .browse-image-list {
-        @include mdc-image-list-standard-columns(4);
+        @include mdc-image-list-standard-columns(4, 8px);
     }
 }

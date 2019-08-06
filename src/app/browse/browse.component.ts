@@ -34,7 +34,7 @@ export class BrowseComponent implements OnInit {
 
   loading: boolean = false;
 
-  loadAtOnce: number = 64;
+  loadAtOnce: number = 100;
 
   ngOnInit() {
     
@@ -52,7 +52,6 @@ export class BrowseComponent implements OnInit {
     if(this.hydrusApiUrl && this.hydrusApiKey) {
       this.search();
     }
-    console.log(this.appComponent.sidenavContent);
   }
 
   tagsChanged(tags: string[]) {
@@ -73,27 +72,22 @@ export class BrowseComponent implements OnInit {
   }
 
   fetchMore(event?: IPageInfo) {
-    console.log(event);
-    if ((event && (event.endIndex !== this.currentFiles.length-1)) || this.loading) return;
+    if (
+      (event && (
+        (event.endIndex !== this.currentFiles.length-1) || 
+        (event.endIndex+1 >= this.currentSearchIDs.length)
+        ) )|| this.loading) return;
     this.loading = true;
        // this.fetchNextChunk(this.buffer.length, 10).then(chunk => {
        //     this.buffer = this.buffer.concat(chunk);
        //     this.loading = false;
        // }, () => this.loading = false);
-       console.log(this.currentFiles.length);
     this.filesService.getFileMetadata(this.currentSearchIDs.slice(this.currentFiles.length, this.currentFiles.length + this.loadAtOnce)).subscribe((files) => {
       this.currentFiles = this.currentFiles.concat(files);
       this.loading = false;
-      console.log(this.currentFiles);
     })
   }
 
-  testStuff() {
-    this.filesService.getFileMetadata(this.currentSearchIDs.slice(0,100)).subscribe(files => {
-      console.log(files);
-      console.log(this.filesService.getKnownTags());
-    })
-  }
 
   public scrollTrackByFunction(index: number, file: HydrusFile): number {
     return file.file_id;
