@@ -1,7 +1,12 @@
 <div fxLayout="column">
     <h2 class="mat-display-1">About</h2>
+    <div>
+        <p>Hydrus Web {{ env.versionInfo.version }} running on <code>{{doc.location.origin}}</code></p>
+        <p>Git commit: <a [href]="repoURL + '/commit/' + env.versionInfo.hash"><code>{{env.versionInfo.hash}}</code></a></p>
+        <p>Production build: {{env.production}}</p>
+    </div>
     <div fxLayout="row">
-        <p><a mat-stroked-button href="https://github.com/floogulinc/hydrus-web">GitHub Repository</a></p>
+        <p><a mat-stroked-button [href]="repoURL">GitHub Repository</a></p>
     </div>
     
 

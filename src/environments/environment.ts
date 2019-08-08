@@ -4,7 +4,18 @@
 
 export const environment = {
   production: false,
-  localStoragePrefix: "hydrus-web-1"
+  localStoragePrefix: "hydrus-web-1",
+  versionInfo: {
+    "dirty": false,
+    "raw": "devrawhash",
+    "hash": "devhash",
+    "distance": null,
+    "tag": null,
+    "semver": null,
+    "suffix": "devsuffix",
+    "semverString": null,
+    "version": "0.0.0"
+  }
 };
 
 /*

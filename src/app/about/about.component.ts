@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 
@@ -9,6 +10,12 @@ import { SwUpdate } from '@angular/service-worker';
 export class AboutComponent implements OnInit {
 
   constructor(public updates: SwUpdate) { }
+
+  public doc = document;
+
+  public env = environment;
+
+  public repoURL = "https://github.com/floogulinc/hydrus-web";
 
   ngOnInit() {
     
