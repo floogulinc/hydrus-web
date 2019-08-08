@@ -6,13 +6,10 @@
     
 
     <h2 class="mat-h2">Service Worker</h2>
-    <span>Service Worker: {{(this.updates.isEnabled | async) ? "Enabled" : "Disabled" }}</span>
-    <div *ngIf="this.updates.available | async as available">
-        <span>Current version is {{available.current}}</span>
-        <span>Available version is {{available.available}}</span>
+    <div>
+        Service Worker: {{this.updates.isEnabled ? "Enabled" : "Disabled" }}
     </div>
-    <div *ngIf="this.updates.activated | async as activated">
-        <span>Previous version was {{activated.previous}}</span>
-        <span>New version is {{activated.current}}</span>
+    <div fxLayout="row">
+        <button [disabled]="!this.updates.isEnabled" mat-stroked-button (click)="updates.checkForUpdate()">Check for Updates</button>
     </div>
 </div>

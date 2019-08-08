@@ -11,6 +11,7 @@ export class AboutComponent implements OnInit {
   constructor(public updates: SwUpdate) { }
 
   ngOnInit() {
+    
   }
 
 }
