@@ -15,6 +15,7 @@ $light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
 
 $dark-theme: mat-dark-theme($dark-primary, $light-accent, $light-warn);
 
+// Original tag colors from Hydrus source code
 $tag-colors: (
     system: rgb(153, 101, 21),
     meta: rgb(0, 0, 0),
