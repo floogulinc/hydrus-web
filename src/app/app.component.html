@@ -7,10 +7,16 @@
       [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1" 
       [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
         <mat-icon matListIcon>photo</mat-icon>
-        Browse</mat-list-item>
+        Browse
+      </mat-list-item>
       <mat-list-item href="#" routerLink="/settings" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
         <mat-icon matListIcon>settings</mat-icon>
-        Settings</mat-list-item>
+        Settings
+      </mat-list-item>
+      <mat-list-item href="#" routerLink="/about" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
+        <mat-icon matListIcon>info</mat-icon>
+        About
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

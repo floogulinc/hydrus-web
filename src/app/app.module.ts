@@ -38,6 +38,7 @@ import { ResponsiveColumnsDirective } from './browse/responsive-columns.directiv
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { AboutComponent } from './about/about.component';
 
 
 const MAT_MODULES: any[] = [
@@ -62,7 +63,8 @@ const MAT_MODULES: any[] = [
     BrowseComponent,
     SettingsComponent,
     TagInputComponent,
-    ResponsiveColumnsDirective
+    ResponsiveColumnsDirective,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
