@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {ngxLocalStorage} from 'ngx-localstorage';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 export interface HydrusKeyVerificationData {
@@ -25,11 +25,16 @@ export class HydrusApiService {
 
   constructor(private http: HttpClient) { }
 
+
+  private getHeaders() : HttpHeaders {
+    return new HttpHeaders({
+      "Hydrus-Client-API-Access-Key" : this.hydrusApiKey
+    });
+  }
+
   public testApi(): Observable<HydrusKeyVerificationData> {
     return this.http.get<HydrusKeyVerificationData>(this.hydrusApiUrl + "verify_access_key", {
-      headers: {
-        "Hydrus-Client-API-Access-Key" : this.hydrusApiKey
-      }
+      headers: this.getHeaders()
     });
   }
 
@@ -51,9 +56,7 @@ export class HydrusApiService {
     console.log(httpParams);
     return this.http.get(this.hydrusApiUrl + "get_files/search_files", {
       params: httpParams,
-      headers: {
-        "Hydrus-Client-API-Access-Key" : this.hydrusApiKey
-      }
+      headers: this.getHeaders()
     });
   }
 
@@ -74,9 +77,7 @@ export class HydrusApiService {
     
     return this.http.get(this.hydrusApiUrl + "get_files/file_metadata", {
       params: httpParams,
-      headers: {
-        "Hydrus-Client-API-Access-Key" : this.hydrusApiKey
-      }
+      headers: this.getHeaders()
     });
   }
 
