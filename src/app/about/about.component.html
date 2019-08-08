@@ -2,8 +2,9 @@
     <h2 class="mat-display-1">About</h2>
     <div>
         <p>Hydrus Web {{ env.versionInfo.version }} running on <code>{{doc.location.origin}}</code></p>
-        <p>Git commit: <a [href]="repoURL + '/commit/' + env.versionInfo.hash"><code>{{env.versionInfo.hash}}</code></a></p>
+        <p>Git commit: <a [href]="repoURL + '/commit/' + env.versionInfo.gitinfo.hash"><code>{{env.versionInfo.gitinfo.hash}}</code></a></p>
         <p>Production build: {{env.production}}</p>
+        <p *ngIf="env.versionInfo.infotype == 'now-github'">Deployed on ZEIT Now</p>
     </div>
     <div fxLayout="row">
         <p><a mat-stroked-button [href]="repoURL">GitHub Repository</a></p>
