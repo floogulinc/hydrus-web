@@ -1,6 +1,6 @@
 <div fxLayout="column">
   <h2 class="mat-display-1">Settings</h2>
-  <mat-form-field appearance="outline" hintLabel="With the trailing /" style="margin-bottom: 16px;">
+  <mat-form-field appearance="outline">
     <mat-label>Hydrus API URL</mat-label>
     <input matInput name="hydrusApiUrl" type="url" autocomplete="off"
     ngxLocalStorage="hydrusApiUrl" lsEvent="input" lsDebounce="1000" lsInitFromStorage="true" (lsStoredValue)="this.apiUrlStored()"

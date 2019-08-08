@@ -3,6 +3,8 @@ const { version } = require('./package.json');
 const { resolve, relative } = require('path');
 const { writeFileSync } = require('fs-extra');
 
+// Mostly from this article: https://medium.com/@amcdnl/version-stamping-your-app-with-the-angular-cli-d563284bb94d
+
 var gitInfo;
 if(process.env.NOW_GITHUB_DEPLOYMENT) {
     gitInfo = {
@@ -42,4 +44,4 @@ export const VERSION = ${JSON.stringify(gitInfo, null, 4)};
 /* tslint:enable */
 `, { encoding: 'utf-8' });
 
-console.log(`Wrote version info ${gitInfo.gitinfo.raw} to ${relative(resolve(__dirname, '..'), file)}`);
+console.log(`Wrote version info ${gitInfo.gitinfo.hash} to ${relative(resolve(__dirname, '..'), file)}`);

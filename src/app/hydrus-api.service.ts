@@ -26,14 +26,25 @@ export class HydrusApiService {
   constructor(private http: HttpClient) { }
 
 
+  private getAPIUrl(): string {
+    return this.hydrusApiUrl + (this.hydrusApiUrl.endsWith("/") ? "" : "/");
+  }
+
   private getHeaders() : HttpHeaders {
     return new HttpHeaders({
       "Hydrus-Client-API-Access-Key" : this.hydrusApiKey
     });
   }
 
+  private apiGet(path: string, params: HttpParams) {
+    return this.http.get(this.getAPIUrl() + path, {
+      params: params,
+      headers: this.getHeaders()
+    });
+  }
+
   public testApi(): Observable<HydrusKeyVerificationData> {
-    return this.http.get<HydrusKeyVerificationData>(this.hydrusApiUrl + "verify_access_key", {
+    return this.http.get<HydrusKeyVerificationData>(this.getAPIUrl() + "verify_access_key", {
       headers: this.getHeaders()
     });
   }
@@ -54,10 +65,7 @@ export class HydrusApiService {
     if(system_inbox) httpParams = httpParams.set("system_inbox", system_inbox);
     if(system_archive) httpParams = httpParams.set("system_archive", system_archive);
     console.log(httpParams);
-    return this.http.get(this.hydrusApiUrl + "get_files/search_files", {
-      params: httpParams,
-      headers: this.getHeaders()
-    });
+    return this.apiGet("get_files/search_files", httpParams);
   }
 
   /**
@@ -75,10 +83,7 @@ export class HydrusApiService {
     if(hashes) httpParams = httpParams.set("hashes", hashes);
     if(only_return_identifiers) httpParams = httpParams.set("only_return_identifiers", only_return_identifiers);
     
-    return this.http.get(this.hydrusApiUrl + "get_files/file_metadata", {
-      params: httpParams,
-      headers: this.getHeaders()
-    });
+    return this.apiGet("get_files/file_metadata", httpParams);
   }
 
   public getFileURL(file_id: number): string {
