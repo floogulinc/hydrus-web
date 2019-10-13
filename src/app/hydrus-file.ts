@@ -5,6 +5,8 @@ export interface HydrusFile {
     mime: string;
     width: number;
     height: number;
+    has_audio: boolean;
+    known_urls: string[];
     duration?: number | null;
     num_frames?: number | null;
     num_words?: number | null;
