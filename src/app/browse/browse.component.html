@@ -4,20 +4,20 @@
   </div>
   <virtual-scroller class="virtual-scroll" #scroll [items]="currentFiles" (vsEnd)="fetchMore($event)" [parentScroll]="appComponent.sidenavContent.elementRef.nativeElement">
     <ul class="mdc-image-list browse-image-list" #container>
-      
+
       <li class="mdc-image-list__item grid-img" *ngFor="let file of scroll.viewPortItems; trackBy: scrollTrackByFunction">
-        <a [href]="getFileURL(file.file_id)" >  
+        <a href="#" (click)="this.photoswipe.openPhotoSwipe(file.file_id)">
           <div class="mdc-image-list__image-aspect-container">
             <!-- <img class="mdc-image-list__image" [src]="getThumbnailURL(file.file_id)"> -->
-            <div class="mdc-image-list__image image-list-image" [ngStyle]="{'background-image':'url('+getThumbnailURL(file.file_id)+')'}"></div>
+            <div class="mdc-image-list__image image-list-image" [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')'}"></div>
           </div>
         </a>
-        
+
       </ul>
       <div *ngIf="loading" class="loader"><mat-spinner class="spinner"></mat-spinner></div>
     </virtual-scroller>
   </div>
-  
+
   <ng-template #noApi>
     <mat-card>
       <mat-card-title>Welcome to Hydrus Web</mat-card-title>
@@ -29,8 +29,11 @@
       </mat-card-actions>
     </mat-card>
   </ng-template>
-  
-  <!-- 
+
+
+  <app-photoswipe [items]="this.currentFiles"></app-photoswipe>
+
+  <!--
     <div class="mdc-layout-grid__inner">
       <div class="mdc-layout-grid__cell--span-12">
         <mdc-form-field fluid class="search-form-field">

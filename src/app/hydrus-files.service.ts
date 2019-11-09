@@ -8,30 +8,35 @@ import { map, switchMap, mergeMap, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class HydrusFilesService {
-  
+
   constructor(private api: HydrusApiService) { }
-  
+
   private allFiles : Map<number, HydrusFile> = new Map<number, HydrusFile>();
-  
+
   private allTags : Set<string> = new Set<string>();
-  
+
   private getFileMetadataAPI(file_ids: number[]): Observable<HydrusFile[]> {
     return this.api.getFileMetadata(JSON.stringify(file_ids)).pipe(map(val => val["metadata"]));
   }
-  
+
   private getAndAddMetadata(file_ids: number[]) : Observable<HydrusFile[]> {
     if(file_ids.length == 0) return of([]);
     return this.getFileMetadataAPI(file_ids).pipe(
+      map(v => v.map(i => ({
+        ...i,
+        file_url: this.api.getFileURL(i.file_id),
+        thumbnail_url: this.api.getThumbnailURL(i.file_id)
+      }))),
       tap(v => this.addFilesAndTags(v)));
   }
-    
+
   private addFilesAndTags(files: HydrusFile[]) {
     files.forEach((file) => {
       this.allFiles.set(file.file_id, file);
       this.AddTags(file);
     });
   }
-  
+
   getFileMetadata(file_ids: number[]) : Observable<HydrusFile[]> {
     let files : HydrusFile[] = [];
     let filesToGet: number[] = [];
@@ -50,9 +55,9 @@ export class HydrusFilesService {
         })
       })
       );
-      
+
   }
-    
+
     private AddTags(file: HydrusFile) {
       if(file.service_names_to_statuses_to_tags){
         Object.entries(file.service_names_to_statuses_to_tags).forEach(([key, value]) => {
@@ -62,13 +67,13 @@ export class HydrusFilesService {
         })
       }
     }
-    
+
     getKnownTags() : Set<string> {
       return this.allTags;
     }
-      
+
       /*   public getFileMetadata(id: number) : Observable<HydrusFile> {
-        
+
         return Observable.create((observer) => {
           observer.next(this.allFiles.get(id));
           observer.complete();
@@ -82,10 +87,9 @@ export class HydrusFilesService {
           return this.getAndAddFile(id);
         }
       } */
-      
+
       /* private getAndAddFile(id: number) : Observable<HydrusFile> {
-        
+
       } */
-      
+
 }
-    

@@ -1,6 +1,6 @@
 import { AppComponent } from './../app.component';
 import { HydrusApiService } from './../hydrus-api.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ngxLocalStorage } from 'ngx-localstorage';
@@ -9,6 +9,7 @@ import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { HydrusFile } from '../hydrus-file';
+import { PhotoswipeComponent } from '../photoswipe/photoswipe.component';
 
 
 @Component({
@@ -24,6 +25,9 @@ export class BrowseComponent implements OnInit {
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiKey: string;
 
+  @ViewChild(PhotoswipeComponent, {static: true})
+  photoswipe: PhotoswipeComponent;
+
   constructor(private searchService: SearchService, private apiService: HydrusApiService, public filesService: HydrusFilesService, public appComponent: AppComponent) { }
 
   currentSearchIDs: number[] = [];
@@ -37,15 +41,7 @@ export class BrowseComponent implements OnInit {
   loadAtOnce: number = 100;
 
   ngOnInit() {
-    
-  }
 
-  getThumbnailURL(id: number) {
-    return this.apiService.getThumbnailURL(id);
-  }
-
-  getFileURL(id: number) {
-    return this.apiService.getFileURL(id);
   }
 
   ngAfterViewInit() {
@@ -56,7 +52,6 @@ export class BrowseComponent implements OnInit {
 
   tagsChanged(tags: string[]) {
     this.searchTags = tags;
-    console.log(tags);
     this.search();
   }
 
@@ -65,7 +60,6 @@ export class BrowseComponent implements OnInit {
       this.currentFiles = [];
       this.currentSearchIDs = result;
       this.fetchMore();
-      console.log(result);
     }, (error) => {
 
     })
@@ -74,7 +68,7 @@ export class BrowseComponent implements OnInit {
   fetchMore(event?: IPageInfo) {
     if (
       (event && (
-        (event.endIndex !== this.currentFiles.length-1) || 
+        (event.endIndex !== this.currentFiles.length-1) ||
         (event.endIndex+1 >= this.currentSearchIDs.length)
         ) )|| this.loading) return;
     this.loading = true;
