@@ -15,6 +15,8 @@ export interface HydrusFile {
             [status: string] : string[];
         }
     }
+    file_url?: string;
+    thumbnail_url?: string;
 }
 
 export interface HydrusFileList {
