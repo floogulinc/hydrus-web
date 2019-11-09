@@ -6,7 +6,7 @@
     <ul class="mdc-image-list browse-image-list" #container>
 
       <li class="mdc-image-list__item grid-img" *ngFor="let file of scroll.viewPortItems; trackBy: scrollTrackByFunction">
-        <a href="#" (click)="this.photoswipe.openPhotoSwipe(file.file_id)">
+        <a [href]="file.file_url" (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(file.file_id);">
           <div class="mdc-image-list__image-aspect-container">
             <!-- <img class="mdc-image-list__image" [src]="getThumbnailURL(file.file_id)"> -->
             <div class="mdc-image-list__image image-list-image" [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')'}"></div>
