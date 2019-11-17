@@ -32,6 +32,8 @@ import { TagInputComponent } from './tag-input/tag-input.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatTabsModule} from '@angular/material/tabs';
+
 
 
 import { ResponsiveColumnsDirective } from './browse/responsive-columns.directive';
@@ -42,6 +44,7 @@ import { AboutComponent } from './about/about.component';
 import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
+import { FilesPageComponent } from './files-page/files-page.component';
 
 
 const MAT_MODULES: any[] = [
@@ -57,7 +60,8 @@ const MAT_MODULES: any[] = [
     MatAutocompleteModule,
     MatCardModule,
     MatGridListModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTabsModule
 ];
 
 @NgModule({
@@ -70,7 +74,8 @@ const MAT_MODULES: any[] = [
     AboutComponent,
     PhotoswipeComponent,
     ImageListComponent,
-    PagesComponent
+    PagesComponent,
+    FilesPageComponent
   ],
   imports: [
     BrowserModule,

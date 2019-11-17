@@ -9,10 +9,9 @@ export interface HydrusPageListItem extends HydrusPageSimple {
   pages?: HydrusPageListItem[]
 }
 
-export interface HydrusFileSearchPage extends HydrusPageSimple {
-  page_type: 6;
-  management: any;
-  media: {
+export interface HydrusPage extends HydrusPageSimple {
+  management?: any;
+  media?: {
     num_files: number;
     hash_ids: number[];
     hashes?: string[];

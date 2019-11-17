@@ -1,11 +1,19 @@
 <ng-template #recursiveList let-list>
-    <li *ngFor="let item of list">
-      {{item.name}}
-      <ul *ngIf="item.pages && item.pages.length > 0">
-        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: item.pages }"></ng-container>
-      </ul>
-    </li>
-  </ng-template>
+
+<mat-tab-group animationDuration="0ms" dynamicHeight>
+  <mat-tab *ngFor="let page of list" [label]="page.name">
+    <ng-template matTabContent>
+      <div *ngIf="page.pages && page.pages.length > 0">
+        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: page.pages }"></ng-container>
+      </div>
+      <div *ngIf="page.page_type == 6 || page.page_type == 7 || page.page_type == 3">
+        <app-files-page [pageListItem]="page"></app-files-page>
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+</ng-template>
 
 
-  <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: this.pages }"></ng-container>
+<ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: this.pages }"></ng-container>
+
