@@ -41,6 +41,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AboutComponent } from './about/about.component';
 import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
+import { PagesComponent } from './pages/pages.component';
 
 
 const MAT_MODULES: any[] = [
@@ -68,7 +69,8 @@ const MAT_MODULES: any[] = [
     ResponsiveColumnsDirective,
     AboutComponent,
     PhotoswipeComponent,
-    ImageListComponent
+    ImageListComponent,
+    PagesComponent
   ],
   imports: [
     BrowserModule,

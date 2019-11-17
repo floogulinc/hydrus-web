@@ -4,10 +4,14 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list class="sidenav-list">
       <mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
-      [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1" 
+      [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1"
       [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
         <mat-icon matListIcon>photo</mat-icon>
         Browse
+      </mat-list-item>
+      <mat-list-item href="#" routerLink="/pages" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
+        <mat-icon matListIcon>photo_library</mat-icon>
+        Pages
       </mat-list-item>
       <mat-list-item href="#" routerLink="/settings" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
         <mat-icon matListIcon>settings</mat-icon>

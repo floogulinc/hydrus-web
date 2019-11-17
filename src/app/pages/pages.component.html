@@ -1,0 +1,11 @@
+<ng-template #recursiveList let-list>
+    <li *ngFor="let item of list">
+      {{item.name}}
+      <ul *ngIf="item.pages && item.pages.length > 0">
+        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: item.pages }"></ng-container>
+      </ul>
+    </li>
+  </ng-template>
+
+
+  <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: this.pages }"></ng-container>

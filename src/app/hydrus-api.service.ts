@@ -36,7 +36,7 @@ export class HydrusApiService {
     });
   }
 
-  private apiGet(path: string, params: HttpParams) {
+  private apiGet(path: string, params?: HttpParams) {
     return this.http.get(this.getAPIUrl() + path, {
       params: params,
       headers: this.getHeaders()
@@ -49,10 +49,10 @@ export class HydrusApiService {
     });
   }
 
-  
+
   /**
    * GET /get_files/search_files
-   * 
+   *
    * Search for the client's files.
    * @param tags (a list of tags you wish to search for)
    * @param [system_inbox] true or false (optional, defaulting to false)
@@ -60,17 +60,15 @@ export class HydrusApiService {
    * @returns The full list of numerical file ids that match the search.
    */
   public searchFiles(tags: string, system_inbox?: string, system_archive?: string) {
-    console.log(tags);
     let httpParams: HttpParams = new HttpParams().set("tags", tags);
     if(system_inbox) httpParams = httpParams.set("system_inbox", system_inbox);
     if(system_archive) httpParams = httpParams.set("system_archive", system_archive);
-    console.log(httpParams);
     return this.apiGet("get_files/search_files", httpParams);
   }
 
   /**
    * GET /get_files/file_metadata
-   * 
+   *
    * Get metadata about files in the client.
    * @param [file_ids] (a list of numerical file ids)
    * @param [hashes] (a list of hexadecimal SHA256 hashes)
@@ -82,7 +80,7 @@ export class HydrusApiService {
     if(file_ids) httpParams = httpParams.set("file_ids", file_ids);
     if(hashes) httpParams = httpParams.set("hashes", hashes);
     if(only_return_identifiers) httpParams = httpParams.set("only_return_identifiers", only_return_identifiers);
-    
+
     return this.apiGet("get_files/file_metadata", httpParams);
   }
 
@@ -92,6 +90,16 @@ export class HydrusApiService {
 
   public getThumbnailURL(file_id: number): string {
     return this.hydrusApiUrl + 'get_files/thumbnail?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey
+  }
+
+  public getPages() {
+    return this.apiGet("manage_pages/get_pages");
+  }
+
+  public getPageInfo(page_key: string, simple: string) {
+    let httpParams: HttpParams = new HttpParams().set("page_key", page_key);
+    if(simple) httpParams = httpParams.set("simple", simple);
+    return this.apiGet("manage_pages/get_page_info", httpParams);
   }
 
 
