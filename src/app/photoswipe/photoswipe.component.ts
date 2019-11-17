@@ -16,8 +16,6 @@ export class PhotoswipeComponent implements OnInit {
   @ViewChild('pspel', {static: true})
   private pspElement: ElementRef;
 
-  //ps: PhotoSwipe<{}>;
-
   getPhotoSwipeItems() : PhotoSwipe.Item[] {
     return this.items.map((i) => this.getPhotoSwipeItem(i));
   }
@@ -59,7 +57,6 @@ export class PhotoswipeComponent implements OnInit {
       showAnimationDuration:0
     });
     ps.init();
-    //ps.goTo(imgindex);
   }
 
 }

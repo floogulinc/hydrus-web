@@ -26,17 +26,13 @@ export class BrowseComponent implements OnInit {
   hydrusApiKey: string;
 
 
-  constructor(private searchService: SearchService, private apiService: HydrusApiService, public filesService: HydrusFilesService) { }
+  constructor(private searchService: SearchService, public filesService: HydrusFilesService) { }
 
   currentSearchIDs: number[] = [];
-  //currentFiles: HydrusFile[] = [];
   searchTags: string[] = [];
 
   searchArchive: boolean = false;
 
-  //loading: boolean = false;
-
-  //loadAtOnce: number = 100;
 
   ngOnInit() {
 
@@ -55,23 +51,10 @@ export class BrowseComponent implements OnInit {
 
   search() {
     this.searchService.searchFiles(this.searchTags).subscribe((result) => {
-      //this.currentFiles = [];
       this.currentSearchIDs = result;
-      //this.fetchMore();
     }, (error) => {
 
     })
   }
-
-
-
-
-  //public scrollTrackByFunction(index: number, file: HydrusFile): number {
- //   return file.file_id;
- // }
-
-
-
-
 
 }

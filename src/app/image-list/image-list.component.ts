@@ -41,10 +41,7 @@ export class ImageListComponent implements OnInit {
         (event.endIndex+1 >= this.fileIDs.length)
         ) )|| this.loading) return;
     this.loading = true;
-       // this.fetchNextChunk(this.buffer.length, 10).then(chunk => {
-       //     this.buffer = this.buffer.concat(chunk);
-       //     this.loading = false;
-       // }, () => this.loading = false);
+
     this.filesService.getFileMetadata(this.fileIDs.slice(this.currentFiles.length, this.currentFiles.length + this.loadAtOnce)).subscribe((files) => {
       this.currentFiles = this.currentFiles.concat(files);
       this.loading = false;

@@ -28,7 +28,7 @@
     @if $is-dark {
         .mat-toolbar.mat-primary {
             background: mat-color($background, app-bar);
-            color: mat-color($foreground, text);        
+            color: mat-color($foreground, text);
         }
     }
 
@@ -64,41 +64,4 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     @include angular-material-theme($dark-theme);
     @include app-theming($dark-theme);
 }
-
-// --------------
-// OLD MDC STYLES
-// --------------
-
-/* You can add global styles to this file, and also import other style files */
-/* $mdc-theme-primary: #1565c0; // primary color
-$mdc-theme-secondary: #388e3c; // secondary color
-
-@import "~@angular-mdc/theme/material";
-
-body {
-    margin: 0;
-}
-
-.standard-image-list {
-    //@include mdc-image-list-aspect(1.5); // Images are 3:2
-    @include mdc-image-list-standard-columns(8);
-    max-width: 1440px;
-}
-
-@media (max-width: 599px) {
-    .standard-image-list {
-        @include mdc-image-list-standard-columns(3);
-    }
-}
-
-.image-list--rounded-corners {
-    @include mdc-image-list-shape-radius(8px);
-}
-
-
-.image-list-image {
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: cover !important;
-} */
 
