@@ -25,20 +25,18 @@ export class BrowseComponent implements OnInit {
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiKey: string;
 
-  @ViewChild(PhotoswipeComponent, {static: true})
-  photoswipe: PhotoswipeComponent;
 
-  constructor(private searchService: SearchService, private apiService: HydrusApiService, public filesService: HydrusFilesService, public appComponent: AppComponent) { }
+  constructor(private searchService: SearchService, private apiService: HydrusApiService, public filesService: HydrusFilesService) { }
 
   currentSearchIDs: number[] = [];
-  currentFiles: HydrusFile[] = [];
+  //currentFiles: HydrusFile[] = [];
   searchTags: string[] = [];
 
   searchArchive: boolean = false;
 
-  loading: boolean = false;
+  //loading: boolean = false;
 
-  loadAtOnce: number = 100;
+  //loadAtOnce: number = 100;
 
   ngOnInit() {
 
@@ -57,35 +55,22 @@ export class BrowseComponent implements OnInit {
 
   search() {
     this.searchService.searchFiles(this.searchTags).subscribe((result) => {
-      this.currentFiles = [];
+      //this.currentFiles = [];
       this.currentSearchIDs = result;
-      this.fetchMore();
+      //this.fetchMore();
     }, (error) => {
 
     })
   }
 
-  fetchMore(event?: IPageInfo) {
-    if (
-      (event && (
-        (event.endIndex !== this.currentFiles.length-1) ||
-        (event.endIndex+1 >= this.currentSearchIDs.length)
-        ) )|| this.loading) return;
-    this.loading = true;
-       // this.fetchNextChunk(this.buffer.length, 10).then(chunk => {
-       //     this.buffer = this.buffer.concat(chunk);
-       //     this.loading = false;
-       // }, () => this.loading = false);
-    this.filesService.getFileMetadata(this.currentSearchIDs.slice(this.currentFiles.length, this.currentFiles.length + this.loadAtOnce)).subscribe((files) => {
-      this.currentFiles = this.currentFiles.concat(files);
-      this.loading = false;
-    })
-  }
 
 
-  public scrollTrackByFunction(index: number, file: HydrusFile): number {
-    return file.file_id;
-}
+
+  //public scrollTrackByFunction(index: number, file: HydrusFile): number {
+ //   return file.file_id;
+ // }
+
+
 
 
 

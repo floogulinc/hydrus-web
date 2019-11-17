@@ -40,6 +40,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AboutComponent } from './about/about.component';
 import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
+import { ImageListComponent } from './image-list/image-list.component';
 
 
 const MAT_MODULES: any[] = [
@@ -66,7 +67,8 @@ const MAT_MODULES: any[] = [
     TagInputComponent,
     ResponsiveColumnsDirective,
     AboutComponent,
-    PhotoswipeComponent
+    PhotoswipeComponent,
+    ImageListComponent
   ],
   imports: [
     BrowserModule,

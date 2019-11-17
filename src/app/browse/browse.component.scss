@@ -1,71 +1,9 @@
 @import '~src/_variables';
-@import "@material/image-list/mdc-image-list";
 
-.image-list-image {
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat !important;
-    background-position: center !important;
-    background-size: cover !important;
-} 
-
-/* .grid-img {
- */    /* object-fit: cover; 
-    height: inherit; 
-    width: inherit; */
-  /*   display: block;
-    float: left;
-    flex: 0 0 auto;
-    margin: 8px;
-    @media screen and (min-width: 769px) and (max-width: 1024px) {
-          width: calc(100%/4);
-          height: calc(100%/4);
-      }
-      
-      @media screen and (min-width: 481px) and (max-width: 768px) {
-          width: calc(100%/3);
-          height: calc(100%/3);
-      }
-      
-      @media screen and (min-width: 321px) and (max-width: 480px) {
-          width: calc(100%/2);
-          height: calc(100%/2);
-      }
-      
-      @media screen  and (max-width: 320px) {
-          width: 100%;
-          height: 100%;
-      }
-} */
-
-.virtual-scroll {
-    //width: 100%;
-   // height: 100%;
-/*     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-content: stretch; */
+.browse-container {
+  max-width: 1920px;
+  width: 100%;
+  margin: auto;
 }
 
-.browse-image-list {
-    //@include mdc-image-list-aspect(1.5); // Images are 3:2
-    @include mdc-image-list-standard-columns(8, 8px);
-    max-width: 1440px;
-    @include mdc-image-list-shape-radius(8px);
-}
 
-@media (max-width: 599px) {
-    .browse-image-list {
-        @include mdc-image-list-standard-columns(4, 8px);
-    }
-}
-
-.loader {
-    margin-top: 16px;
-    margin-bottom: 16px;
-}
-
-.spinner {
-    margin: auto;
-}

@@ -1,10 +1,10 @@
-$pswp__show-hide-transition-duration: 333ms;
-$pswp__controls-transition-duration: 333ms;
+$pswp__show-hide-transition-duration: 0ms;
+$pswp__controls-transition-duration: 0ms;
 $pswp__background-color: #000;
 $pswp__placeholder-color: #222;
 $pswp__box-sizing-border-box: true; // disable .pswp * { box-sizing:border-box } (in case you already have it in your site css)
 $pswp__root-z-index: 1500;
-$pswp__assets-path: '/assets/media/'; // path to skin assets folder (preloader, PNG and SVG sprite)
+$pswp__assets-path: '/assets/photoswipe/'; // path to skin assets folder (preloader, PNG and SVG sprite)
 $pswp__error-text-color: #ccc; // "Image not loaded" text color
 $pswp__include-minimal-style: true;
 

@@ -1,21 +1,8 @@
-<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi">
-  <div class="search-bar" fxLayout="column">
-    <app-tag-input (tags)="tagsChanged($event)"></app-tag-input>
+<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi" class="browse-container">
+  <div class="search-bar">
+    <app-tag-input (tags)="tagsChanged($event)" class="tag-input"></app-tag-input>
   </div>
-  <virtual-scroller class="virtual-scroll" #scroll [items]="currentFiles" (vsEnd)="fetchMore($event)" [parentScroll]="appComponent.sidenavContent.elementRef.nativeElement">
-    <ul class="mdc-image-list browse-image-list" #container>
-
-      <li class="mdc-image-list__item grid-img" *ngFor="let file of scroll.viewPortItems; trackBy: scrollTrackByFunction">
-        <a [href]="file.file_url" (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(file.file_id);">
-          <div class="mdc-image-list__image-aspect-container">
-            <!-- <img class="mdc-image-list__image" [src]="getThumbnailURL(file.file_id)"> -->
-            <div class="mdc-image-list__image image-list-image" [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')'}"></div>
-          </div>
-        </a>
-
-      </ul>
-      <div *ngIf="loading" class="loader"><mat-spinner class="spinner"></mat-spinner></div>
-    </virtual-scroller>
+  <app-image-list [fileIDs]="this.currentSearchIDs" class="app-image-list"></app-image-list>
   </div>
 
   <ng-template #noApi>
@@ -30,8 +17,6 @@
     </mat-card>
   </ng-template>
 
-
-  <app-photoswipe [items]="this.currentFiles"></app-photoswipe>
 
   <!--
     <div class="mdc-layout-grid__inner">

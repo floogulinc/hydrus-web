@@ -22,22 +22,22 @@ export class PhotoswipeComponent implements OnInit {
     return this.items.map((i) => this.getPhotoSwipeItem(i));
   }
 
-  getPhotoSwipeItem(file: HydrusFile) {
+  getPhotoSwipeItem(file: HydrusFile) : PhotoSwipe.Item {
     return {
       src: file.file_url,
+      msrc: file.thumbnail_url,
       w: file.width,
       h: file.height
     }
   }
 
+
   constructor() { }
 
   ngOnInit() {
-    //this.ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.items, {});
   }
 
   ngOnChanges() {
-    //this.ps.
 
   }
 
@@ -49,7 +49,15 @@ export class PhotoswipeComponent implements OnInit {
     let imgindex = this.items.findIndex(e => e.file_id == id);
     console.log(imgindex);
 
-    let ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(), {index: imgindex, showHideOpacity: true, history: false});
+    let ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(),
+    {
+      index: imgindex,
+      showHideOpacity: false,
+      history: false,
+      closeOnScroll: false,
+      hideAnimationDuration:0,
+      showAnimationDuration:0
+    });
     ps.init();
     //ps.goTo(imgindex);
   }
