@@ -12,29 +12,33 @@
 .sidenav-container {
     height: 100%;
   }
-  
+
   .sidenav {
     width: 256px;
   }
-  
+
   .sidenav .mat-toolbar {
     background: inherit;
   }
-  
+
   .mat-toolbar.mat-primary {
     position: sticky;
     top: 0;
     z-index: 1;
   }
-  
+
   .app-title {
       padding-left: 20px;
   }
-  
+
 
   .main-content {
       margin: 24px;
       @media (max-width: 599px) {
         margin: 16px;
       }
+  }
+
+  .main-toolbar {
+    z-index: 5 !important;
   }
