@@ -1,4 +1,4 @@
-<virtual-scroller class="virtual-scroll" #scroll [items]="currentFiles" (vsEnd)="fetchMore($event)" [parentScroll]="appComponent.sidenavContent.getElementRef().nativeElement" [bufferAmount]="12">
+<virtual-scroller class="virtual-scroll" #scroll [items]="currentFiles" (vsEnd)="fetchMore($event)" [parentScroll]="appComponent.sidenavContent.getElementRef().nativeElement" [bufferAmount]="24">
   <ul class="mdc-image-list browse-image-list" #container>
 
     <li class="mdc-image-list__item grid-img" *ngFor="let file of scroll.viewPortItems; trackBy: scrollTrackByFunction">
@@ -8,7 +8,7 @@
           <div class="mdc-image-list__image image-list-image" [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')'}" [ngClass]="'file-id-' + file.file_id"></div>
         </div>
       </a>
-
+      </li>
     </ul>
     <div *ngIf="loading" class="loader"><mat-spinner class="spinner"></mat-spinner></div>
   </virtual-scroller>

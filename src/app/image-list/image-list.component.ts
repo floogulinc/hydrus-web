@@ -21,7 +21,7 @@ export class ImageListComponent implements OnInit {
 
   loading: boolean = false;
 
-  loadAtOnce: number = 100;
+  loadAtOnce: number = 48;
 
   constructor(public filesService: HydrusFilesService, public appComponent: AppComponent) { }
 
