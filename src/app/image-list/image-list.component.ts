@@ -2,8 +2,8 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { HydrusFile } from '../hydrus-file';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { AppComponent } from '../app.component';
-import { PhotoswipeComponent } from '../photoswipe/photoswipe.component';
 import { IPageInfo } from 'ngx-virtual-scroller';
+import { PhotoswipeService } from '../photoswipe/photoswipe.service';
 
 @Component({
   selector: 'app-image-list',
@@ -14,8 +14,8 @@ export class ImageListComponent implements OnInit {
 
   @Input() fileIDs : number[] = [];
 
-  @ViewChild(PhotoswipeComponent, {static: true})
-  photoswipe: PhotoswipeComponent;
+  //@ViewChild(PhotoswipeComponent, {static: true})
+  //photoswipe: PhotoswipeComponent;
 
   currentFiles: HydrusFile[] = [];
 
@@ -23,7 +23,7 @@ export class ImageListComponent implements OnInit {
 
   loadAtOnce: number = 48;
 
-  constructor(public filesService: HydrusFilesService, public appComponent: AppComponent) { }
+  constructor(public filesService: HydrusFilesService, public appComponent: AppComponent, public photoswipe : PhotoswipeService) { }
 
   ngOnInit() {
 

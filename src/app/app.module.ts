@@ -92,6 +92,7 @@ const MAT_MODULES: any[] = [
     VirtualScrollerModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [PhotoswipeComponent],
 })
 export class AppModule { }

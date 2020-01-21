@@ -9,54 +9,13 @@ import { HydrusFile } from '../hydrus-file';
   templateUrl: './photoswipe.component.html',
   styleUrls: ['./photoswipe.component.scss']
 })
-export class PhotoswipeComponent implements OnInit {
+export class PhotoswipeComponent{
 
-  @Input() items : HydrusFile[] = [];
+  //@Input() items : HydrusFile[] = [];
 
   @ViewChild('pspel', {static: true})
-  private pspElement: ElementRef;
-
-  getPhotoSwipeItems() : PhotoSwipe.Item[] {
-    return this.items.map((i) => this.getPhotoSwipeItem(i));
-  }
-
-  getPhotoSwipeItem(file: HydrusFile) : PhotoSwipe.Item {
-    return {
-      src: file.file_url,
-      msrc: file.thumbnail_url,
-      w: file.width,
-      h: file.height
-    }
-  }
-
+  public pspElement: ElementRef;
 
   constructor() { }
-
-  ngOnInit() {
-  }
-
-  ngOnChanges() {
-
-  }
-
-  ps : PhotoSwipe<{}>;
-
-  public openPhotoSwipe(id: number) {
-    console.log(id);
-
-    let imgindex = this.items.findIndex(e => e.file_id == id);
-    console.log(imgindex);
-
-    let ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(),
-    {
-      index: imgindex,
-      showHideOpacity: false,
-      history: false,
-      closeOnScroll: false,
-      hideAnimationDuration:0,
-      showAnimationDuration:0
-    });
-    ps.init();
-  }
 
 }
