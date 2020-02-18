@@ -8,7 +8,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "node version-info.js",
+    "versioninfo": "node version-info.js",
+    "postinstall": "versioninfo",
+    "postversion": "versioninfo",
     "now-build": "ng build --prod --output-path dist"
   },
   "license": "MIT",
