@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import * as PhotoSwipe from 'photoswipe';
 import * as PhotoSwipeUI_Default from "photoswipe/dist/photoswipe-ui-default";
 import { HydrusFile } from '../hydrus-file';
@@ -7,7 +7,8 @@ import { HydrusFile } from '../hydrus-file';
 @Component({
   selector: 'app-photoswipe',
   templateUrl: './photoswipe.component.html',
-  styleUrls: ['./photoswipe.component.scss']
+  styleUrls: ['./photoswipe.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PhotoswipeComponent{
 

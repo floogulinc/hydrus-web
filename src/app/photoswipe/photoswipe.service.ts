@@ -9,15 +9,17 @@ import { HydrusFile } from '../hydrus-file';
 })
 export class PhotoswipeService {
 
-  private photoswipeComponent: ComponentRef<PhotoswipeComponent>
-  private pspElement: ElementRef
-
   constructor(private applicationRef: ApplicationRef, private injector: Injector, private resolver: ComponentFactoryResolver) {
-    this.photoswipeComponent = this.resolver.resolveComponentFactory(PhotoswipeComponent).create(this.injector)
+    this.photoswipeComponent = this.resolver.resolveComponentFactory(PhotoswipeComponent).create(this.injector);
     this.pspElement = this.photoswipeComponent.instance.pspElement;
-    this.applicationRef.attachView(this.photoswipeComponent.hostView)
-    document.body.appendChild(this.photoswipeComponent.location.nativeElement)
+    this.applicationRef.attachView(this.photoswipeComponent.hostView);
+    document.body.appendChild(this.photoswipeComponent.location.nativeElement);
   }
+
+  private photoswipeComponent: ComponentRef<PhotoswipeComponent>;
+  private pspElement: ElementRef;
+
+  ps: PhotoSwipe<{}>;
 
   getPhotoSwipeItems(items : HydrusFile[]) : PhotoSwipe.Item[] {
     return items.map((i) => this.getPhotoSwipeItem(i));
@@ -29,10 +31,8 @@ export class PhotoswipeService {
       msrc: file.thumbnail_url,
       w: file.width,
       h: file.height
-    }
+    };
   }
-
-  ps : PhotoSwipe<{}>;
 
   public openPhotoSwipe(items : HydrusFile[], id: number) {
     console.log(id);
@@ -45,6 +45,7 @@ export class PhotoswipeService {
       index: imgindex,
       showHideOpacity: false,
       history: false,
+      shareEl: false,
       closeOnScroll: false,
       hideAnimationDuration:0,
       showAnimationDuration:0
