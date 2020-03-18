@@ -5,7 +5,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
 import { FormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
-import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material';
+import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 
 @Component({
