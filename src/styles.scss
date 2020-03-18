@@ -70,3 +70,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   width: 100%;
   margin: auto;
 }
+
+.main-content {
+  margin: 24px;
+  @media (max-width: 599px) {
+    margin: 16px;
+  }
+}
+
+body {
+  overscroll-behavior: none;
+}
