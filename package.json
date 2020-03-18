@@ -31,7 +31,6 @@
     "@angular/router": "~9.0.7",
     "@angular/service-worker": "~9.0.7",
     "@material/image-list": "^3.1.0",
-    "@ngx-pwa/local-storage": "^8.0.2",
     "core-js": "^2.5.4",
     "ngx-localstorage": "^2.3.0",
     "ngx-virtual-scroller": "^3.0.2",
