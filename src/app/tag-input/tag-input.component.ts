@@ -26,8 +26,8 @@ export class TagInputComponent implements OnInit {
   @Output()
   tags = new EventEmitter<string[]>();
 
-  @ViewChild('tagInput', {static: false}) tagInput: ElementRef<HTMLInputElement>;
-  @ViewChild('auto', {static: false}) matAutocomplete: MatAutocomplete;
+  @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   constructor(public filesService : HydrusFilesService) {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
