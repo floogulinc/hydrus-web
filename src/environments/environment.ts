@@ -17,7 +17,8 @@ export const environment = {
       "suffix": "devsuffix",
       "semverString": null,
     },
-    "version": "0.0.0"
+    "version": "0.0.0",
+    "branch": "devbranch"
   }
 };
 
