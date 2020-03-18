@@ -7,7 +7,7 @@ import {
   OnInit
 } from '@angular/core';
 import { MediaObserver } from '@angular/flex-layout';
-import { MatGridList } from '@angular/material';
+import { MatGridList } from '@angular/material/grid-list';
 import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
