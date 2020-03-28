@@ -58,15 +58,18 @@ export class HydrusFilesService {
 
   }
 
-    private AddTags(file: HydrusFile) {
-      if(file.service_names_to_statuses_to_tags){
-        Object.entries(file.service_names_to_statuses_to_tags).forEach(([key, value]) => {
-          if ("0" in value) {
-            value["0"].forEach((tag) => this.allTags.add(tag));
+      private AddTags(file: HydrusFile) {
+        if(file.service_names_to_statuses_to_tags){
+          // Object.entries(file.service_names_to_statuses_to_tags).forEach(([key, value]) => {
+          //   if ("0" in value) {
+          //     value["0"].forEach((tag) => this.allTags.add(tag));
+          //   }
+          // })
+          if ("0" in file.service_names_to_statuses_to_tags["all known tags"]) {
+            file.service_names_to_statuses_to_tags["all known tags"]["0"].forEach((tag) => this.allTags.add(tag));
           }
-        })
+        }
       }
-    }
 
     getKnownTags() : Set<string> {
       return this.allTags;
