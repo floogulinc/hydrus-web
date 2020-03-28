@@ -44,10 +44,7 @@ export class PhotoswipeService {
   }
 
   public openPhotoSwipe(items : HydrusFile[], id: number) {
-    console.log(id);
-
     let imgindex = items.findIndex(e => e.file_id == id);
-    console.log(imgindex);
 
     let ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(items),
     {
@@ -71,7 +68,6 @@ export class PhotoswipeService {
       }
     });
     this.onMouse$.pipe(takeUntil(this.psClose$)).subscribe((event) => {
-      console.log(event);
       if(event.button == 1) {
         ps.close();
       }
