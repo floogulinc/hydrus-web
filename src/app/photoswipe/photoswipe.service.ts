@@ -2,7 +2,7 @@ import { Injectable, ApplicationRef, Injector, ComponentFactoryResolver, Compone
 import { PhotoswipeComponent } from './photoswipe.component';
 import * as PhotoSwipe from 'photoswipe';
 import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
-import { HydrusFile } from '../hydrus-file';
+import { HydrusFile, HydrusFileType } from '../hydrus-file';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -35,12 +35,30 @@ export class PhotoswipeService {
   }
 
   getPhotoSwipeItem(file: HydrusFile) : PhotoSwipe.Item {
-    return {
-      src: file.file_url,
-      msrc: file.thumbnail_url,
-      w: file.width,
-      h: file.height
-    };
+    if(file.file_type === HydrusFileType.Image) {
+      return {
+        src: file.file_url,
+        msrc: file.thumbnail_url,
+        w: file.width,
+        h: file.height
+      };
+    } else if(file.file_type === HydrusFileType.Video) {
+      return {
+        html: `
+        <div class="pswp__error-msg">
+          <a href="${file.file_url}" target="_blank" rel="noopener noreferrer">
+            <img src="${file.thumbnail_url}">
+          </a>
+          <p>Click to open the video in a new tab. (type: ${file.mime})</p>
+        </div>`
+      };
+    } else {
+      return {
+        html: `<div class="pswp__error-msg">
+        The file could not be loaded. (type: ${file.mime})
+        </div>`
+      };
+    }
   }
 
   public openPhotoSwipe(items : HydrusFile[], id: number) {
@@ -72,6 +90,7 @@ export class PhotoswipeService {
         ps.close();
       }
     })
+
   }
 
 }
