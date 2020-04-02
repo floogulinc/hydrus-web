@@ -20,8 +20,8 @@ if(process.env.NOW_GITHUB_DEPLOYMENT) {
             NOW_GITHUB_COMMIT_SHA: process.env.NOW_GITHUB_COMMIT_SHA,
             NOW_GITHUB_COMMIT_AUTHOR_LOGIN: process.env.NOW_GITHUB_COMMIT_AUTHOR_LOGIN,
             NOW_GITHUB_COMMIT_AUTHOR_NAME: process.env.NOW_GITHUB_COMMIT_AUTHOR_NAME,
-            hash: process.env.NOW_GITHUB_COMMIT_SHA
         },
+        hash: process.env.NOW_GITHUB_COMMIT_SHA,
         branch: process.env.NOW_GITHUB_COMMIT_REF
     }
 } else {
@@ -34,6 +34,7 @@ if(process.env.NOW_GITHUB_DEPLOYMENT) {
         }),
         branch: branch.sync()
     };
+    gitInfo.hash = gitInfo.gitinfo.hash.substring(1);
 }
 
 
@@ -47,4 +48,4 @@ export const VERSION = ${JSON.stringify(gitInfo, null, 4)};
 /* tslint:enable */
 `, { encoding: 'utf-8' });
 
-console.log(`Wrote version info ${gitInfo.gitinfo.hash} to ${relative(resolve(__dirname, '..'), file)}`);
+console.log(`Wrote version info ${gitInfo.hash} (branch: ${gitInfo.branch}) to ${relative(resolve(__dirname, '..'), file)}`);

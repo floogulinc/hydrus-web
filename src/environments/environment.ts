@@ -18,7 +18,8 @@ export const environment = {
       "semverString": null,
     },
     "version": "0.0.0",
-    "branch": "devbranch"
+    "branch": "devbranch",
+    "hash": "devhash"
   }
 };
 
