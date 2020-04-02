@@ -8,9 +8,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "node version-info.js",
+    "prebuild": "node version-info.js",
     "postversion": "node version-info.js",
-    "now-build": "ng build --prod --output-path dist"
+    "docker-build": "npm run build -- --prod --output-path dist",
+    "now-build": "npm run build -- --prod --output-path dist"
   },
   "license": "MIT",
   "engines": {
