@@ -36,3 +36,7 @@
 .spinner {
   margin: auto;
 }
+
+.grid-item > a {
+  -webkit-tap-highlight-color: transparent;
+}

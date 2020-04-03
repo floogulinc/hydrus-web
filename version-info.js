@@ -2,6 +2,7 @@ const { gitDescribeSync } = require('git-describe');
 const { version } = require('./package.json');
 const { resolve, relative } = require('path');
 const { writeFileSync } = require('fs-extra');
+const branch = require('git-branch');
 
 // Mostly from this article: https://medium.com/@amcdnl/version-stamping-your-app-with-the-angular-cli-d563284bb94d
 
@@ -19,8 +20,9 @@ if(process.env.NOW_GITHUB_DEPLOYMENT) {
             NOW_GITHUB_COMMIT_SHA: process.env.NOW_GITHUB_COMMIT_SHA,
             NOW_GITHUB_COMMIT_AUTHOR_LOGIN: process.env.NOW_GITHUB_COMMIT_AUTHOR_LOGIN,
             NOW_GITHUB_COMMIT_AUTHOR_NAME: process.env.NOW_GITHUB_COMMIT_AUTHOR_NAME,
-            hash: process.env.NOW_GITHUB_COMMIT_SHA
-        }
+        },
+        hash: process.env.NOW_GITHUB_COMMIT_SHA,
+        branch: process.env.NOW_GITHUB_COMMIT_REF
     }
 } else {
     gitInfo = {
@@ -29,8 +31,10 @@ if(process.env.NOW_GITHUB_DEPLOYMENT) {
             customArguments: ['--abbrev=40'],
             dirtyMark: false,
             dirtySemver: false
-        })
+        }),
+        branch: branch.sync()
     };
+    gitInfo.hash = gitInfo.gitinfo.hash.substring(1);
 }
 
 
@@ -44,4 +48,4 @@ export const VERSION = ${JSON.stringify(gitInfo, null, 4)};
 /* tslint:enable */
 `, { encoding: 'utf-8' });
 
-console.log(`Wrote version info ${gitInfo.gitinfo.hash} to ${relative(resolve(__dirname, '..'), file)}`);
+console.log(`Wrote version info ${gitInfo.hash} (branch: ${gitInfo.branch}) to ${relative(resolve(__dirname, '..'), file)}`);

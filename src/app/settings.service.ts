@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { every, map } from 'rxjs/operators';
 import { Observable, forkJoin, merge } from 'rxjs';
-import { StorageMap } from '@ngx-pwa/local-storage';
 
 const storageAPIKEY = "hydrusApiKey";
 const storageAPIURL = "hydrusApiUrl";
@@ -23,7 +22,7 @@ export class SettingsService {
   public getAPISettings(): Observable<APISettings> {
     return this.storageMap.get<unknown>("app_settings_1");
   }
-  
+
   public getApiUrl(): Observable<string> {
     return this.storageMap.get<unknown>(storageAPIURL) as Observable<string>; //probably bad
   }
