@@ -1,10 +1,18 @@
-
-
+<div align="center">
 <img src="https://raw.githubusercontent.com/floogulinc/hydrus-web/master/src/assets/icon.svg?sanitize=true" alt="Hydrus Web Icon" width="150"/>
+<h1 style="border-bottom: 0px; margin-bottom: 0px"> Hydrus Web </h1>
 
-# Hydrus Web [![Docker Hub build](https://img.shields.io/docker/cloud/build/floogulinc/hydrus-web.svg)](https://hub.docker.com/r/floogulinc/hydrus-web/) 
+[![Docker Hub build](https://img.shields.io/docker/cloud/build/floogulinc/hydrus-web.svg)](https://hub.docker.com/r/floogulinc/hydrus-web/)
 
-Hydrus web is a web-based client for [Hydrus](https://hydrusnetwork.github.io/hydrus/)
+Hydrus web is a web client for [Hydrus](https://hydrusnetwork.github.io/hydrus/)
+
+</div>
+<div align="center">
+<br>
+<img src="https://i.vgy.me/wkx8qQ.png" width="45%" />
+<img src="https://i.vgy.me/8aMaai.png" width="45%" />
+
+</div>
 
 ## Usage
 
