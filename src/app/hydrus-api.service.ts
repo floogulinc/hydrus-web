@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {ngxLocalStorage} from 'ngx-localstorage';
+import { ngxLocalStorage } from 'ngx-localstorage';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
@@ -17,10 +17,10 @@ export interface HydrusKeyVerificationData {
 export class HydrusApiService {
 
 
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
+  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
   hydrusApiUrl: string;
 
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
+  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
   hydrusApiKey: string;
 
   constructor(private http: HttpClient) { }
@@ -32,7 +32,7 @@ export class HydrusApiService {
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Hydrus-Client-API-Access-Key' : this.hydrusApiKey
+      'Hydrus-Client-API-Access-Key': this.hydrusApiKey
     });
   }
 
@@ -59,9 +59,9 @@ export class HydrusApiService {
    * @param options.system_archive true or false (optional, defaulting to false)
    * @returns The full list of numerical file ids that match the search.
    */
-  public searchFiles(tags: string, options: {system_inbox?: string, system_archive?: string}) {
+  public searchFiles(tags: string, options: { system_inbox?: string, system_archive?: string }) {
     let httpParams: HttpParams = new HttpParams().set('tags', tags);
-    if(options) {
+    if (options) {
       if (options.system_inbox) { httpParams = httpParams.set('system_inbox', options.system_inbox); }
       if (options.system_archive) { httpParams = httpParams.set('system_archive', options.system_archive); }
     }
@@ -77,7 +77,7 @@ export class HydrusApiService {
    * @param params.only_return_identifiers true or false (optional, defaulting to false)
    * @returns  A list of JSON Objects that store a variety of file metadata.
    */
-  public getFileMetadata(params: {file_ids?: string, hashes?: string, only_return_identifiers?: string}) {
+  public getFileMetadata(params: { file_ids?: string, hashes?: string, only_return_identifiers?: string }) {
     let httpParams: HttpParams = new HttpParams();
     if (params.file_ids) { httpParams = httpParams.set('file_ids', params.file_ids); }
     if (params.hashes) { httpParams = httpParams.set('hashes', params.hashes); }
@@ -120,7 +120,7 @@ export class HydrusApiService {
    * @param page_key (hexadecimal page_key as stated in /manage_pages/get_pages)
    * @param simple true or false (optional, defaulting to true)
    */
-  public getPageInfo(page_key: string, simple: string) {
+  public getPageInfo(page_key: string, simple?: string) {
     let httpParams: HttpParams = new HttpParams().set('page_key', page_key);
     if (simple) { httpParams = httpParams.set('simple', simple); }
     return this.apiGet('manage_pages/get_page_info', httpParams);
