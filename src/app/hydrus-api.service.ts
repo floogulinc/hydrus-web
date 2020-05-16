@@ -126,7 +126,46 @@ export class HydrusApiService {
     return this.apiGet('manage_pages/get_page_info', httpParams);
   }
 
+  /**
+   * GET /add_urls/get_url_files
+   *
+   * Ask the client about an URL's files.
+   * @param url (the url you want to ask about)
+   */
+  public getUrlFiles(url: string) {
+    return this.apiGet('add_urls/get_url_files', new HttpParams().set('url', url));
+  }
 
+  /**
+   * GET /add_urls/get_url_info
+   *
+   * Ask the client for information about a URL.
+   * @param url (the url you want to ask about)
+   */
+  public getUrlInfo(url: string) {
+    return this.apiGet('add_urls/get_url_info', new HttpParams().set('url', url));
+  }
+
+  /**
+   * POST /add_urls/add_url
+   *
+   * Tell the client to 'import' a URL. This triggers the exact same routine as drag-and-dropping a text URL onto the main client window.
+   * @param data.url (the url you want to add)
+   * @param data.destination_page_key (optional page identifier for the page to receive the url)
+   * @param data.destination_page_name (optional page name to receive the url)
+   * @param data.show_destination_page (optional, defaulting to false, controls whether the UI will change pages on add)
+   * @param data.service_names_to_tags (optional tags to give to any files imported from this url)
+   */
+  public addUrl(data: { url: string,
+                        destination_page_key?: string,
+                        destination_page_name?: string,
+                        show_destination_page?: string,
+                        service_names_to_tags?: any}) {
+
+    return this.http.post(this.getAPIUrl() + 'add_urls/add_url',
+                          data,
+                          {headers: this.getHeaders().set('Content-Type', 'application/json')});
+  }
 
 
 }
