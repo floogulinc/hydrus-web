@@ -68,7 +68,7 @@ export class HydrusFilesService {
   }
 
   private getFileMetadataAPI(file_ids: number[]): Observable<HydrusFileFromAPI[]> {
-    return this.api.getFileMetadata(JSON.stringify(file_ids)).pipe(map(val => val["metadata"]));
+    return this.api.getFileMetadata({file_ids: JSON.stringify(file_ids)}).pipe(map(val => val["metadata"]));
   }
 
   private getAndAddMetadata(file_ids: number[]) : Observable<HydrusFile[]> {

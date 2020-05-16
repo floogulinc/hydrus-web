@@ -59,10 +59,12 @@ export class HydrusApiService {
    * @param system_archive true or false (optional, defaulting to false)
    * @returns The full list of numerical file ids that match the search.
    */
-  public searchFiles(tags: string, system_inbox?: string, system_archive?: string) {
+  public searchFiles(tags: string, options: {system_inbox?: string, system_archive?: string}) {
     let httpParams: HttpParams = new HttpParams().set('tags', tags);
-    if (system_inbox) { httpParams = httpParams.set('system_inbox', system_inbox); }
-    if (system_archive) { httpParams = httpParams.set('system_archive', system_archive); }
+    if(options) {
+      if (options.system_inbox) { httpParams = httpParams.set('system_inbox', options.system_inbox); }
+      if (options.system_archive) { httpParams = httpParams.set('system_archive', options.system_archive); }
+    }
     return this.apiGet('get_files/search_files', httpParams);
   }
 
@@ -75,11 +77,11 @@ export class HydrusApiService {
    * @param only_return_identifiers true or false (optional, defaulting to false)
    * @returns  A list of JSON Objects that store a variety of file metadata.
    */
-  public getFileMetadata(file_ids?: string, hashes?: string, only_return_identifiers?: string) {
+  public getFileMetadata(params: {file_ids?: string, hashes?: string, only_return_identifiers?: string}) {
     let httpParams: HttpParams = new HttpParams();
-    if (file_ids) { httpParams = httpParams.set('file_ids', file_ids); }
-    if (hashes) { httpParams = httpParams.set('hashes', hashes); }
-    if (only_return_identifiers) { httpParams = httpParams.set('only_return_identifiers', only_return_identifiers); }
+    if (params.file_ids) { httpParams = httpParams.set('file_ids', params.file_ids); }
+    if (params.hashes) { httpParams = httpParams.set('hashes', params.hashes); }
+    if (params.only_return_identifiers) { httpParams = httpParams.set('only_return_identifiers', params.only_return_identifiers); }
 
     return this.apiGet('get_files/file_metadata', httpParams);
   }
