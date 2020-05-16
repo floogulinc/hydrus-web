@@ -55,8 +55,8 @@ export class HydrusApiService {
    *
    * Search for the client's files.
    * @param tags (a list of tags you wish to search for)
-   * @param system_inbox true or false (optional, defaulting to false)
-   * @param system_archive true or false (optional, defaulting to false)
+   * @param options.system_inbox true or false (optional, defaulting to false)
+   * @param options.system_archive true or false (optional, defaulting to false)
    * @returns The full list of numerical file ids that match the search.
    */
   public searchFiles(tags: string, options: {system_inbox?: string, system_archive?: string}) {
@@ -72,9 +72,9 @@ export class HydrusApiService {
    * GET /get_files/file_metadata
    *
    * Get metadata about files in the client.
-   * @param file_ids (a list of numerical file ids)
-   * @param hashes (a list of hexadecimal SHA256 hashes)
-   * @param only_return_identifiers true or false (optional, defaulting to false)
+   * @param params.file_ids (a list of numerical file ids)
+   * @param params.hashes (a list of hexadecimal SHA256 hashes)
+   * @param params.only_return_identifiers true or false (optional, defaulting to false)
    * @returns  A list of JSON Objects that store a variety of file metadata.
    */
   public getFileMetadata(params: {file_ids?: string, hashes?: string, only_return_identifiers?: string}) {
