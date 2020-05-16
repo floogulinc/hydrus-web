@@ -16,8 +16,8 @@ export class SearchService {
     return this.api.searchFiles(
       JSON.stringify(tags),
       {
-        system_inbox: options.system_inbox ? "true" : "false",
-        system_archive: options.system_archive ? "true" : "false"
+        system_inbox: options && options.system_inbox ? "true" : "false",
+        system_archive: options && options.system_archive ? "true" : "false"
       }
     ).pipe(map(a => a['file_ids']));
   }
