@@ -65,17 +65,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     @include app-theming($dark-theme);
 }
 
-.main-container {
-  max-width: 1920px;
-  width: 100%;
-  margin: auto;
-}
 
 .main-content {
-  margin: 24px;
+  margin: auto;
+  padding: 24px;
   @media (max-width: 599px) {
-    margin: 16px;
+    padding: 16px;
   }
+  //width: 100%;
+  max-width: 1920px;
 }
 
 body {
