@@ -45,6 +45,7 @@ import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
 import { FilesPageComponent } from './files-page/files-page.component';
+import { SendComponent } from './send/send.component';
 
 
 const MAT_MODULES: any[] = [
@@ -75,7 +76,8 @@ const MAT_MODULES: any[] = [
     PhotoswipeComponent,
     ImageListComponent,
     PagesComponent,
-    FilesPageComponent
+    FilesPageComponent,
+    SendComponent
   ],
   imports: [
     BrowserModule,
