@@ -13,4 +13,4 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           pr-branch-prefix: ng-update-
           pr-title: 'Update Angular dependencies'
-          pr-labels: dependencies, javascript
+          pr-labels: dependencies
