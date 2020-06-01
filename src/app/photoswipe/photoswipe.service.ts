@@ -68,9 +68,9 @@ export class PhotoswipeService {
   }
 
   public openPhotoSwipe(items : HydrusFile[], id: number) {
-    let imgindex = items.findIndex(e => e.file_id == id);
+    const imgindex = items.findIndex(e => e.file_id == id);
 
-    let ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(items),
+    const ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(items),
     {
       index: imgindex,
       showHideOpacity: false,
@@ -81,8 +81,13 @@ export class PhotoswipeService {
       showAnimationDuration:0
     });
 
-    let removeVideos = () => {
-      ps.container.querySelectorAll<HTMLVideoElement>('.pswp-video').forEach((video) => video.remove());
+    const removeVideos = () => {
+      ps.container.querySelectorAll<HTMLVideoElement>('.pswp-video').forEach((video) => {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        video.remove();
+      });
     }
 
     ps.listen('close', () => {
@@ -96,11 +101,11 @@ export class PhotoswipeService {
     });
     ps.listen('afterChange', () => {
       if (ps.currItem.html) {
-        let pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
-        let vidContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-video-${pid}`);
+        const pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
+        const vidContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-video-${pid}`);
         if(vidContainer) {
-          let item = items.find(i => i.file_id === pid);
-          let vid = document.createElement('video');
+          const item = items.find(i => i.file_id === pid);
+          const vid = document.createElement('video');
           vid.src = item.file_url;
           vid.autoplay = true;
           vid.controls = true;
