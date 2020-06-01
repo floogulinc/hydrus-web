@@ -37,5 +37,14 @@
 <body class="mdc-typography">
   <app-root></app-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
+  <script>
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+                "public_path": "/assets/ruffle/",
+                "polyfills": []
+                /* ^ Which polyfills should be run. */
+    }
+    </script>
+    <script src="/assets/ruffle/ruffle.js"></script>
 </body>
 </html>

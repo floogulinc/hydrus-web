@@ -11,7 +11,7 @@ $pswp__include-minimal-style: true;
 @import 'photoswipe/src/css/main.scss';
 @import 'photoswipe/src/css/default-skin/default-skin.scss';
 
-.pswp-video-container {
+.pswp-video-container, .pswp-flash-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,12 +24,20 @@ $pswp__include-minimal-style: true;
   height: 100%;
 }
 
-.pswp-video-placeholder {
+.pwsp-flash {
+
+}
+
+.pswp-video-placeholder, .pswp-flash-placeholder {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
 .pswp-video ~ .pswp-video-placeholder {
+  display: none;
+}
+
+.pswp-flash ~ .pswp-flash-placeholder {
   display: none;
 }

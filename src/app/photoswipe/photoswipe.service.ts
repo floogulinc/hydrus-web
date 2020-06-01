@@ -57,6 +57,15 @@ export class PhotoswipeService {
         `,
         pid: file.file_id
       };
+    } else if(file.file_type === HydrusFileType.Flash) {
+      return {
+        html: `
+        <div id="pswp-flash-${file.file_id}" class="pswp-flash-container">
+        <img src="${file.thumbnail_url}" class="pswp-flash-placeholder">
+        </div>
+        `,
+        pid: file.file_id
+      };
     } else {
       return {
         html: `<div class="pswp__error-msg">
@@ -88,6 +97,9 @@ export class PhotoswipeService {
         video.load();
         video.remove();
       });
+      ps.container.querySelectorAll<any>('.pswp-flash').forEach((flash) => {
+        flash.disconnectedCallback();
+      });
     }
 
     ps.listen('close', () => {
@@ -102,9 +114,9 @@ export class PhotoswipeService {
     ps.listen('afterChange', () => {
       if (ps.currItem.html) {
         const pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
-        const vidContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-video-${pid}`);
-        if(vidContainer) {
-          const item = items.find(i => i.file_id === pid);
+        const item = items.find(i => i.file_id === pid);
+        if(item.file_type === HydrusFileType.Video) {
+          const vidContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-video-${pid}`);
           const vid = document.createElement('video');
           vid.src = item.file_url;
           vid.autoplay = true;
@@ -113,6 +125,13 @@ export class PhotoswipeService {
           vid.loop = true;
           vid.className = 'pswp-video';
           vidContainer.prepend(vid);
+        } else if(item.file_type === HydrusFileType.Flash) {
+          const flashContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-flash-${pid}`);
+          let ruffle = (window as any).RufflePlayer.newest();
+          let player = ruffle.create_player();
+          flashContainer.prepend(player);
+          player.stream_swf_url(item.file_url);
+          player.className = 'pswp-flash';
         }
       }
     });
