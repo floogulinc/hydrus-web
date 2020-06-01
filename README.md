@@ -47,7 +47,7 @@ https://1.8.local.floogulinc.com {
 	proxy / 127.0.0.1:45869 # proxy the Hydrus client API
 	gzip
 	tls {
-		dns cloudflare # Use TLS based verification for Let's Encrypt (need env variables set)
+		dns cloudflare # Use DNS based verification for Let's Encrypt (need env variables set)
 	}
 }
 ```
