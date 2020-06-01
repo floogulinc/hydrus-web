@@ -45,12 +45,10 @@ export class PhotoswipeService {
     } else if(file.file_type === HydrusFileType.Video) {
       return {
         html: `
-        <div class="pswp__error-msg">
-          <a href="${file.file_url}" target="_blank" rel="noopener noreferrer">
-            <img src="${file.thumbnail_url}">
-          </a>
-          <p>Click to open the video in a new tab. (type: ${file.mime})</p>
-        </div>`
+        <div class="pswp-video-container">
+        <video class="pswp-video" controls autoplay loop src="${file.file_url}" poster="${file.thumbnail_url}">
+        </div>
+        `
       };
     } else {
       return {
