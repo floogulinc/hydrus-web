@@ -34,6 +34,8 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span class="app-title">Hydrus Web</span>
+      <span fxFlex="1 1 auto"></span>
+      <button type="button" mat-icon-button aria-label="Refresh" (click)="refresh$.next()"><mat-icon>refresh</mat-icon></button>
     </mat-toolbar>
     <div class="main-content mat-typography">
       <router-outlet></router-outlet>
