@@ -77,8 +77,9 @@ export class PhotoswipeService {
       history: false,
       shareEl: false,
       closeOnScroll: false,
-      hideAnimationDuration:0,
-      showAnimationDuration:0
+      hideAnimationDuration: 0,
+      showAnimationDuration: 0,
+      clickToCloseNonZoomable: false
     });
 
     const removeVideos = () => {
