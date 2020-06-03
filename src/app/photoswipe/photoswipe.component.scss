@@ -33,3 +33,39 @@ $pswp__include-minimal-style: true;
 .pswp-video ~ .pswp-video-placeholder {
   display: none;
 }
+
+.pswp-info-button {
+  width: 44px;
+	height: 44px;
+	position: relative;
+	background: none;
+	cursor: pointer;
+	overflow: visible;
+	-webkit-appearance: none;
+	display: block;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	float: right;
+	opacity: 0.75;
+	transition: opacity 0.2s;
+	box-shadow: none;
+
+	&:focus,
+	&:hover {
+		opacity: 1;
+	}
+
+	&:active {
+		outline: none;
+		opacity: 0.9;
+	}
+
+	&::-moz-focus-inner {
+		padding: 0;
+		border: 0
+  }
+
+  display: block;
+  color: white;
+}

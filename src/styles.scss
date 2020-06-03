@@ -81,3 +81,27 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 body {
   overscroll-behavior: none;
 }
+
+.cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
+.tag-chip {
+  background-color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
+  color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
+  font-weight: 400;
+  @each $tag, $palette in $mat-tag-colors {
+      &.tag-namespace-#{$tag} {
+          background-color: map-get($palette, "default");
+          color: map-get($palette, "default-contrast");
+      }
+  }
+  &.tag-namespace- {
+      background-color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
+      color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
+  }
+  .mat-chip-remove {
+      opacity: 0.6;
+  }
+  //color: white;
+}

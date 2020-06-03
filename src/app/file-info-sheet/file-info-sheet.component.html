@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>File Info</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-list role="list">
+    <mat-list-item role="listitem"><strong>ID:</strong>&nbsp;{{data.file.file_id}}</mat-list-item>
+    <mat-list-item role="listitem"><strong>Type:</strong>&nbsp;{{data.file.file_type}}</mat-list-item>
+    <mat-list-item role="listitem"><strong>MIME:</strong>&nbsp;{{data.file.mime}}</mat-list-item>
+    <mat-list-item role="listitem"><strong>Dimensions:</strong>&nbsp;{{data.file.width}}x{{data.file.height}}</mat-list-item>
+    <mat-list-item role="listitem"><strong>Size:</strong>&nbsp;{{data.file.size | bytes: 2}}</mat-list-item>
+  </mat-list>
+  <mat-expansion-panel *ngIf="data.file.service_names_to_statuses_to_tags['all known tags'] && data.file.service_names_to_statuses_to_tags['all known tags'][0]">
+    <mat-expansion-panel-header>
+      Tags ({{data.file.service_names_to_statuses_to_tags['all known tags'][0].length}})
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+        <mat-chip *ngFor="let tag of data.file.service_names_to_statuses_to_tags['all known tags'][0]" [selectable]="false" class="tag-chip" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespace(tag)">
+          {{tag}}
+        </mat-chip>
+      </mat-chip-list>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-dialog-content>

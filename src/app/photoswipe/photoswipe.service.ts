@@ -5,6 +5,8 @@ import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { HydrusFile, HydrusFileType } from '../hydrus-file';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { FileInfoSheetComponent } from '../file-info-sheet/file-info-sheet.component';
 
 
 interface PhotoSwipeItemWithPID extends PhotoSwipe.Item {
@@ -25,7 +27,12 @@ export class PhotoswipeService {
   public onMouse$: Observable<MouseEvent>;
   public psClose$ = new Subject();
 
-  constructor(private applicationRef: ApplicationRef, private injector: Injector, private resolver: ComponentFactoryResolver) {
+  constructor(
+    private applicationRef: ApplicationRef,
+    private injector: Injector,
+    private resolver: ComponentFactoryResolver,
+    private bottomSheet: MatBottomSheet
+    ) {
     this.photoswipeComponent = this.resolver.resolveComponentFactory(PhotoswipeComponent).create(this.injector);
     this.pspElement = this.photoswipeComponent.instance.pspElement;
     this.applicationRef.attachView(this.photoswipeComponent.hostView);
@@ -129,6 +136,17 @@ export class PhotoswipeService {
       if(event.button == 1) {
         ps.close();
       }
+    });
+    this.photoswipeComponent.instance.infoButtonClick$.pipe(takeUntil(this.psClose$)).subscribe(() => {
+      const pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
+      const item = items.find(i => i.file_id === pid);
+      console.log(item);
+      this.bottomSheet.open(FileInfoSheetComponent, {
+        data: {
+          file: item
+        }
+      });
+
     });
   }
 

@@ -45,9 +45,13 @@ import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
 import { FilesPageComponent } from './files-page/files-page.component';
+import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { NgPipesModule } from 'ngx-pipes';
 
-
-const MAT_MODULES: any[] = [
+const MAT_MODULES = [
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -61,8 +65,12 @@ const MAT_MODULES: any[] = [
     MatCardModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    MatTabsModule
+    MatTabsModule,
+    MatBottomSheetModule,
+    MatDialogModule,
+    MatExpansionModule
 ];
+
 
 @NgModule({
   declarations: [
@@ -75,7 +83,8 @@ const MAT_MODULES: any[] = [
     PhotoswipeComponent,
     ImageListComponent,
     PagesComponent,
-    FilesPageComponent
+    FilesPageComponent,
+    FileInfoSheetComponent
   ],
   imports: [
     BrowserModule,
@@ -89,10 +98,11 @@ const MAT_MODULES: any[] = [
     BrowserAnimationsModule,
     LayoutModule,
     ReactiveFormsModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+    NgPipesModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [PhotoswipeComponent],
+  entryComponents: [PhotoswipeComponent, FileInfoSheetComponent],
 })
 export class AppModule { }
