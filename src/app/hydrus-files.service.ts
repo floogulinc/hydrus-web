@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HydrusFileList, HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
-import { Observable, of, iif, forkJoin } from 'rxjs';
+import { HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
+import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
-import { map, switchMap, mergeMap, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

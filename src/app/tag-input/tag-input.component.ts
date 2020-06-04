@@ -34,7 +34,7 @@ export class TagInputComponent implements OnInit {
       startWith(""),
       map((tag: string) => this._filter(tag))
     );
-    
+
    }
 
   ngOnInit() {
@@ -62,7 +62,7 @@ export class TagInputComponent implements OnInit {
 
     this.tags.emit(this.searchTags);
   }
-  
+
 
   removeSearchTag(tag: string): void {
     const index = this.searchTags.indexOf(tag);
@@ -84,8 +84,8 @@ export class TagInputComponent implements OnInit {
   private _filter(value: string): string[] {
     const filterValue = value ? value.toLowerCase() : "";
 
-    return Array.from(this.filesService.getKnownTags()).filter(tag => tag.toLowerCase().indexOf(filterValue) === 0).filter(tag => !this.searchTags.includes(tag)).slice(0,25);
+    return Array.from(this.filesService.getKnownTags()).filter(tag => tag.toLowerCase().indexOf(filterValue) !== -1).filter(tag => !this.searchTags.includes(tag)).slice(0,25);
   }
-  
+
 
 }

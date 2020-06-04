@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HydrusPagesService } from '../hydrus-pages.service';
-import { Observable } from 'rxjs';
 import { HydrusPageListItem } from '../hydrus-page';
 import { ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';

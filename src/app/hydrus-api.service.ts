@@ -3,7 +3,6 @@ import { ngxLocalStorage } from 'ngx-localstorage';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];

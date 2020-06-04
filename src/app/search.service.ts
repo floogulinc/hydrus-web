@@ -1,7 +1,6 @@
 import { HydrusApiService } from './hydrus-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SettingsService } from './settings.service';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -21,8 +20,4 @@ export class SearchService {
       }
     ).pipe(map(a => a['file_ids']));
   }
-  /* search(tags?: string[]) : Observable<number[]> {
-    return this.settings.getApi
-  } */
-
 }
