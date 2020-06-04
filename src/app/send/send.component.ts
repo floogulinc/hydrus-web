@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HydrusAddService } from '../hydrus-add.service';
-import { Validators, FormControl, FormGroup } from '@angular/forms';
+import { HydrusAddService, AddUrlOptions } from '../hydrus-add.service';
+import { Validators, FormControl, FormGroup, AbstractControl } from '@angular/forms';
 import { switchMap, debounceTime, share, throttleTime, tap, skipWhile, filter, catchError } from 'rxjs/operators';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusURLInfo, HydrusURLFiles } from '../hydrus-url';
@@ -26,12 +26,13 @@ export class SendComponent implements OnInit {
       Validators.required,
       Validators.pattern(SendComponent.urlRegex)
     ]),
-    destPageName: new FormControl('url import')
+    destPageName: new FormControl('')
   });
 
   get sendUrl() {
     return this.sendForm.get('sendUrl');
   }
+
 
   ngOnInit(): void {
     this.sendUrl.valueChanges.pipe(
@@ -48,25 +49,37 @@ export class SendComponent implements OnInit {
       [this.currentUrlInfo, this.currentUrlFiles] = res;
     });
 
-    this.route.queryParams.subscribe(params => {
-      if(params.url) {
-        this.sendUrl.setValue(params.url);
+    this.route.queryParamMap.subscribe(params => {
+      if(params.has('url')) {
+        this.sendUrl.setValue(params.get('url'));
         this.sendUrl.markAsTouched();
+      } else {
+        const possibleParams = ['text', 'title'];
+        const param = possibleParams.find(p => params.has(p) && SendComponent.urlRegex.test(params.get(p)));
+        if(param) {
+          this.sendUrl.setValue(params.get(param).match(SendComponent.urlRegex)[0]);
+          this.sendUrl.markAsTouched();
+        }
       }
     });
   }
 
   onSubmit() {
-    this.addService.addUrl(this.sendForm.value.sendUrl, {destination_page_name: this.sendForm.value.destPageName}).subscribe(res => {
+    const options: AddUrlOptions = {};
+    if (this.sendForm.value.destPageName !== '') {
+      options.destination_page_name = this.sendForm.value.destPageName;
+    }
+    this.addService.addUrl(this.sendForm.value.sendUrl, options).subscribe(res => {
       this.snackbar.open(res.human_result_text, undefined, {
         duration: 5000
       });
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.sendUrl.reset();
+      this.sendUrl.setErrors(null);
       this.router.navigate(['/send']);
     }, error => {
       console.log(error);
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
-        duration: 5000
+      this.snackbar.open(`Error: ${error.error}`, undefined, {
+        duration: 10000
       });
     })
   }
