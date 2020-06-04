@@ -13,6 +13,10 @@
         <mat-icon matListIcon>photo_library</mat-icon>
         Pages
       </mat-list-item>
+      <mat-list-item href="#" routerLink="/send" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
+        <mat-icon matListIcon>send</mat-icon>
+        Send
+      </mat-list-item>
       <mat-list-item href="#" routerLink="/settings" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
         <mat-icon matListIcon>settings</mat-icon>
         Settings
@@ -49,7 +53,7 @@
 
 
 
-<!-- <div class="main-container">
+<!-- <div >
   <mdc-top-app-bar fixed class="main-app-bar" [scrollTarget]="mainContent">
     <mdc-top-app-bar-row>
       <mdc-top-app-bar-section align="start" title="Hydrus Web">

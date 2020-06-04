@@ -45,6 +45,7 @@ import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
 import { FilesPageComponent } from './files-page/files-page.component';
+import { SendComponent } from './send/send.component';
 import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -84,6 +85,7 @@ const MAT_MODULES = [
     ImageListComponent,
     PagesComponent,
     FilesPageComponent,
+    SendComponent,
     FileInfoSheetComponent
   ],
   imports: [
