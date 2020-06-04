@@ -9,13 +9,22 @@ export interface HydrusURLFiles {
   url_file_statuses: HydrusURLFile[];
 }
 
+export enum HydrusUrlType {
+  Post = 0,
+  File = 2,
+  Gallery = 3,
+  Watchable = 4,
+  Unknown = 5
+}
+
 export interface HydrusURLInfo {
   normalised_url: string;
-  url_type: 0 | 2 | 3 | 4 | 5;
+  url_type: HydrusUrlType;
   url_type_string: string;
   match_name: string;
   can_parse: boolean;
 }
+
 
 export interface HydrusURLServiceNamesToTags {
   [service: string]: string[];
