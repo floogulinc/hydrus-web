@@ -163,7 +163,7 @@ export class HydrusApiService {
 
     return this.http.post(this.getAPIUrl() + 'add_urls/add_url',
                           data,
-                          {headers: this.getHeaders().set('Content-Type', 'application/json')});
+                          {headers: this.getHeaders()});
   }
 
 
