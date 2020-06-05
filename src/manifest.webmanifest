@@ -34,21 +34,21 @@
       "short_name": "Browse",
       "description": "Browse and search for your files",
       "url": "/",
-      "icons": [{ "src": "/assets/shortcuts/photo_black_192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/assets/shortcuts/photo_white_192.png", "sizes": "192x192" }]
     },
     {
       "name": "View Pages",
       "short_name": "Pages",
       "description": "View your open Hydrus pages",
       "url": "/pages",
-      "icons": [{ "src": "/assets/shortcuts/photo_library_black_192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/assets/shortcuts/photo_library_white_192.png", "sizes": "192x192" }]
     },
     {
       "name": "Send to Hydrus",
       "short_name": "Send",
       "description": "Send URLs to Hydrus",
       "url": "/send",
-      "icons": [{ "src": "/assets/shortcuts/send_black_192.png", "sizes": "192x192" }]
+      "icons": [{ "src": "/assets/shortcuts/send_white_192.png", "sizes": "192x192" }]
     }
   ]
 }
