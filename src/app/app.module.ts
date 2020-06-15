@@ -36,7 +36,6 @@ import {MatTabsModule} from '@angular/material/tabs';
 
 
 
-import { ResponsiveColumnsDirective } from './browse/responsive-columns.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
@@ -79,7 +78,6 @@ const MAT_MODULES = [
     BrowseComponent,
     SettingsComponent,
     TagInputComponent,
-    ResponsiveColumnsDirective,
     AboutComponent,
     PhotoswipeComponent,
     ImageListComponent,
