@@ -35,7 +35,7 @@ export class SettingsComponent implements OnInit {
       });
     }, (error) => {
       console.log(error);
-      this.snackbar.open("Error: " + error.message + " (" + error.statusText + ")", undefined, {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 5000
       });
     })

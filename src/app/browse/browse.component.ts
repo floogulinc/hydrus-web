@@ -4,7 +4,7 @@ import { ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';
 import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 
@@ -31,6 +31,7 @@ export class BrowseComponent implements OnInit, OnDestroy, AfterViewInit {
 
   destroyNotifier$ = new Subject();
 
+  searchSub: Subscription;
 
   ngOnInit() {
     this.appComponent.refresh$.pipe(takeUntil(this.destroyNotifier$)).subscribe(() => {
@@ -56,8 +57,9 @@ export class BrowseComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   search() {
-    console.log('search called')
-    this.searchService.searchFiles(this.searchTags).pipe(takeUntil(this.destroyNotifier$)).subscribe((result) => {
+    console.log('search called');
+    this.searchSub?.unsubscribe();
+    this.searchSub = this.searchService.searchFiles(this.searchTags).pipe(takeUntil(this.destroyNotifier$)).subscribe((result) => {
       this.currentSearchIDs = result;
     }, () => {
 

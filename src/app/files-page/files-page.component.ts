@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { HydrusPageListItem, HydrusPage,  } from '../hydrus-page';
 import { HydrusPagesService } from '../hydrus-pages.service';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { takeUntil } from 'rxjs/operators';
 
@@ -20,9 +20,12 @@ export class FilesPageComponent implements OnInit, OnDestroy {
 
   constructor(public pagesService: HydrusPagesService, private appComponent: AppComponent) { }
 
+  loadSub: Subscription;
+
   load() {
+    this.loadSub?.unsubscribe();
     this.pageInfo = null;
-    this.pagesService.getPage(this.pageListItem.page_key).pipe(takeUntil(this.destroyNotifier$)).subscribe(
+    this.loadSub = this.pagesService.getPage(this.pageListItem.page_key).pipe(takeUntil(this.destroyNotifier$)).subscribe(
       (result) => {
         this.pageInfo = result;
       }

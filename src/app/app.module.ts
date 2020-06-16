@@ -33,6 +33,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 
@@ -68,7 +69,8 @@ const MAT_MODULES = [
     MatTabsModule,
     MatBottomSheetModule,
     MatDialogModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatProgressBarModule
 ];
 
 
