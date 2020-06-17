@@ -47,14 +47,12 @@ export class ImageListComponent implements OnInit, OnChanges {
   }
 
   fetchMore() {
-    console.log("loading more")
     this.loading = true;
     this.filesService.getFileMetadata(this.fileIDs.slice(this.currentFiles.length, this.currentFiles.length + this.loadAtOnce)).subscribe((files) => {
       this.currentFiles = this.currentFiles.concat(files);
       this.loading = false;
       this.cdr.markForCheck();
-      console.log("got more")
-    })
+    });
   }
 
   public scrollTrackByFunction(index: number, file: HydrusFile): number {

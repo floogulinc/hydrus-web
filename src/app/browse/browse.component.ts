@@ -57,7 +57,6 @@ export class BrowseComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   search() {
-    console.log('search called');
     this.searchSub?.unsubscribe();
     this.searchSub = this.searchService.searchFiles(this.searchTags).pipe(takeUntil(this.destroyNotifier$)).subscribe((result) => {
       this.currentSearchIDs = result;

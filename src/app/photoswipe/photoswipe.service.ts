@@ -140,7 +140,6 @@ export class PhotoswipeService {
     this.photoswipeComponent.instance.infoButtonClick$.pipe(takeUntil(this.psClose$)).subscribe(() => {
       const pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
       const item = items.find(i => i.file_id === pid);
-      console.log(item);
       this.bottomSheet.open(FileInfoSheetComponent, {
         data: {
           file: item
