@@ -84,10 +84,30 @@ export class PhotoswipeService {
       history: false,
       shareEl: false,
       closeOnScroll: false,
-      hideAnimationDuration: 0,
-      showAnimationDuration: 0,
-      clickToCloseNonZoomable: false
+      //hideAnimationDuration: 0,
+      //showAnimationDuration: 0,
+      clickToCloseNonZoomable: false,
+      getThumbBoundsFn: (index: number) => {
+        // find thumbnail element
+        let item = ps.items[index] as PhotoSwipeItemWithPID;
+        console.log(item);
+        let thumbnail = document.querySelector<HTMLDivElement>(`.image-list-image.file-id-${item.pid}`)
+        if(!thumbnail) {
+          return {x: null, y: null, w: null};
+        }
+        // get window scroll Y
+        let pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
+        // optionally get horizontal scroll
+
+        // get position of element relative to viewport
+        let rect = thumbnail.getBoundingClientRect();
+
+        // w = width
+        return {x:rect.left, y:rect.top + pageYScroll, w:rect.width};
+      }
     });
+
+
 
     const removeVideos = () => {
       ps.container.querySelectorAll<HTMLVideoElement>('.pswp-video').forEach((video) => {
