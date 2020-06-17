@@ -7,13 +7,13 @@
         (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.currentFiles, file.file_id);">
         <div class="mdc-image-list__image-aspect-container">
           <div class="mdc-image-list__image image-list-image"
-            [ngStyle]="file.has_thumbnail ? {'background-image':'url('+ file.thumbnail_url +')'} : {'background-color' : '#c7c5cb'}"
+            [ngStyle]="file.has_thumbnail ? {'background-image':'url('+ file.thumbnail_url +')'} : {}"
             [ngClass]="'file-id-' + file.file_id"></div>
         </div>
       </a>
     </li>
   </ul>
-</virtual-scroller>
-<div *ngIf="loading || currentFiles.length === 0" class="loader">
+  <div *ngIf="loading || currentFiles.length === 0" class="loader">
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 </div>
+</virtual-scroller>
