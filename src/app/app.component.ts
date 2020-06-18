@@ -5,6 +5,7 @@ import { map, share } from 'rxjs/operators';
 import { MatSidenavContent } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate } from '@angular/service-worker';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,8 @@ export class AppComponent implements OnInit {
 
   @ViewChild(MatSidenavContent, {static: true})
   public sidenavContent: MatSidenavContent;
+
+  public env = environment;
 
   ngOnInit() {
     this.updates.available.subscribe(event => {
