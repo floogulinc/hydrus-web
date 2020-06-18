@@ -33,10 +33,10 @@ import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 
-import { ResponsiveColumnsDirective } from './browse/responsive-columns.directive';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
@@ -45,9 +45,14 @@ import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
 import { FilesPageComponent } from './files-page/files-page.component';
+import { SendComponent } from './send/send.component';
+import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
+import { NgPipesModule } from 'ngx-pipes';
 
-
-const MAT_MODULES: any[] = [
+const MAT_MODULES = [
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -61,8 +66,13 @@ const MAT_MODULES: any[] = [
     MatCardModule,
     MatGridListModule,
     MatProgressSpinnerModule,
-    MatTabsModule
+    MatTabsModule,
+    MatBottomSheetModule,
+    MatDialogModule,
+    MatExpansionModule,
+    MatProgressBarModule
 ];
+
 
 @NgModule({
   declarations: [
@@ -70,12 +80,13 @@ const MAT_MODULES: any[] = [
     BrowseComponent,
     SettingsComponent,
     TagInputComponent,
-    ResponsiveColumnsDirective,
     AboutComponent,
     PhotoswipeComponent,
     ImageListComponent,
     PagesComponent,
-    FilesPageComponent
+    FilesPageComponent,
+    SendComponent,
+    FileInfoSheetComponent
   ],
   imports: [
     BrowserModule,
@@ -89,10 +100,11 @@ const MAT_MODULES: any[] = [
     BrowserAnimationsModule,
     LayoutModule,
     ReactiveFormsModule,
-    VirtualScrollerModule
+    VirtualScrollerModule,
+    NgPipesModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [PhotoswipeComponent],
+  entryComponents: [PhotoswipeComponent, FileInfoSheetComponent],
 })
 export class AppModule { }

@@ -35,7 +35,9 @@
                ]
             },
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/material-design-icons/iconfont/material-icons.css",
+              "node_modules/typeface-roboto/index.css"
             ],
             "scripts": [],
             "es5BrowserSupport": true

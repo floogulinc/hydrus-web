@@ -10,12 +10,59 @@
     {
         "src": "assets/android-chrome-192x192.png",
         "sizes": "192x192",
-        "type": "image/png"
+        "type": "image/png",
+        "purpose": "any"
     },
     {
         "src": "assets/android-chrome-512x512.png",
         "sizes": "512x512",
-        "type": "image/png"
+        "type": "image/png",
+        "purpose": "any"
+    },
+    {
+      "src": "assets/maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "assets/maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "share_target": {
+    "action": "/send",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "shortcuts": [
+    {
+      "name": "Browse Files",
+      "short_name": "Browse",
+      "description": "Browse and search for your files",
+      "url": "/",
+      "icons": [{ "src": "/assets/shortcuts/photo_indigo_192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "View Pages",
+      "short_name": "Pages",
+      "description": "View your open Hydrus pages",
+      "url": "/pages",
+      "icons": [{ "src": "/assets/shortcuts/photo_library_indigo_192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Send to Hydrus",
+      "short_name": "Send",
+      "description": "Send URLs to Hydrus",
+      "url": "/send",
+      "icons": [{ "src": "/assets/shortcuts/send_indigo_192.png", "sizes": "192x192" }]
     }
   ]
 }

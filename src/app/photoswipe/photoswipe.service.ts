@@ -5,6 +5,13 @@ import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { HydrusFile, HydrusFileType } from '../hydrus-file';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { FileInfoSheetComponent } from '../file-info-sheet/file-info-sheet.component';
+
+
+interface PhotoSwipeItemWithPID extends PhotoSwipe.Item {
+  pid?: string | number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +27,12 @@ export class PhotoswipeService {
   public onMouse$: Observable<MouseEvent>;
   public psClose$ = new Subject();
 
-  constructor(private applicationRef: ApplicationRef, private injector: Injector, private resolver: ComponentFactoryResolver) {
+  constructor(
+    private applicationRef: ApplicationRef,
+    private injector: Injector,
+    private resolver: ComponentFactoryResolver,
+    private bottomSheet: MatBottomSheet
+    ) {
     this.photoswipeComponent = this.resolver.resolveComponentFactory(PhotoswipeComponent).create(this.injector);
     this.pspElement = this.photoswipeComponent.instance.pspElement;
     this.applicationRef.attachView(this.photoswipeComponent.hostView);
@@ -30,52 +42,87 @@ export class PhotoswipeService {
     this.onMouse$ = fromEvent<MouseEvent>(this.photoswipeComponent.location.nativeElement, 'auxclick');
   }
 
-  getPhotoSwipeItems(items : HydrusFile[]) : PhotoSwipe.Item[] {
+  getPhotoSwipeItems(items : HydrusFile[]) : PhotoSwipeItemWithPID[] {
     return items.map((i) => this.getPhotoSwipeItem(i));
   }
 
-  getPhotoSwipeItem(file: HydrusFile) : PhotoSwipe.Item {
+  getPhotoSwipeItem(file: HydrusFile) : PhotoSwipeItemWithPID {
     if(file.file_type === HydrusFileType.Image) {
       return {
         src: file.file_url,
         msrc: file.thumbnail_url,
         w: file.width,
-        h: file.height
+        h: file.height,
+        pid: file.file_id
       };
     } else if(file.file_type === HydrusFileType.Video) {
       return {
         html: `
-        <div class="pswp__error-msg">
-          <a href="${file.file_url}" target="_blank" rel="noopener noreferrer">
-            <img src="${file.thumbnail_url}">
-          </a>
-          <p>Click to open the video in a new tab. (type: ${file.mime})</p>
-        </div>`
+        <div id="pswp-video-${file.file_id}" class="pswp-video-container">
+        <img src="${file.thumbnail_url}" class="pswp-video-placeholder">
+        </div>
+        `,
+        pid: file.file_id
       };
     } else {
       return {
         html: `<div class="pswp__error-msg">
         The file could not be loaded. (type: ${file.mime})
-        </div>`
+        </div>`,
+        pid: file.file_id
       };
     }
   }
 
   public openPhotoSwipe(items : HydrusFile[], id: number) {
-    let imgindex = items.findIndex(e => e.file_id == id);
+    const imgindex = items.findIndex(e => e.file_id == id);
 
-    let ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(items),
+    const ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(items),
     {
       index: imgindex,
       showHideOpacity: false,
       history: false,
       shareEl: false,
       closeOnScroll: false,
-      hideAnimationDuration:0,
-      showAnimationDuration:0
+      hideAnimationDuration: 0,
+      showAnimationDuration: 0,
+      clickToCloseNonZoomable: false
     });
+
+    const removeVideos = () => {
+      ps.container.querySelectorAll<HTMLVideoElement>('.pswp-video').forEach((video) => {
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        video.remove();
+      });
+    }
+
     ps.listen('close', () => {
       this.psClose$.next();
+    });
+    ps.listen('destroy', () => {
+      removeVideos();
+    });
+    ps.listen('beforeChange', () => {
+      removeVideos();
+    });
+    ps.listen('afterChange', () => {
+      if (ps.currItem.html) {
+        const pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
+        const vidContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-video-${pid}`);
+        if(vidContainer) {
+          const item = items.find(i => i.file_id === pid);
+          const vid = document.createElement('video');
+          vid.src = item.file_url;
+          vid.autoplay = true;
+          vid.controls = true;
+          vid.poster = item.thumbnail_url;
+          vid.loop = true;
+          vid.className = 'pswp-video';
+          vidContainer.prepend(vid);
+        }
+      }
     });
     ps.init();
     this.onMouseWheel$.pipe(takeUntil(this.psClose$)).subscribe((event) => {
@@ -89,8 +136,17 @@ export class PhotoswipeService {
       if(event.button == 1) {
         ps.close();
       }
-    })
+    });
+    this.photoswipeComponent.instance.infoButtonClick$.pipe(takeUntil(this.psClose$)).subscribe(() => {
+      const pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
+      const item = items.find(i => i.file_id === pid);
+      this.bottomSheet.open(FileInfoSheetComponent, {
+        data: {
+          file: item
+        }
+      });
 
+    });
   }
 
 }

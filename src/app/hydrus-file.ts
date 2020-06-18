@@ -14,9 +14,10 @@ export interface HydrusFileFromAPI {
       [service : string] : {
           [status: string] : string[];
       }
-  }
-  file_url?: string;
-  thumbnail_url?: string;
+  };
+  is_inbox: boolean;
+  is_local: boolean;
+  is_trashed: boolean;
 }
 
 export interface HydrusFile extends HydrusFileFromAPI {

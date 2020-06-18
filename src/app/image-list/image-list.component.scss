@@ -7,6 +7,13 @@
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-size: cover !important;
+  animation: fadeIn ease 500ms;
+  background-color: #c7c5cb;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
 }
 
 .browse-image-list {

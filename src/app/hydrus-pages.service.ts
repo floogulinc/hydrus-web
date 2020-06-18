@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HydrusPageListItem, HydrusPageSimple, HydrusPage } from './hydrus-page';
+import { HydrusPageListItem, HydrusPage } from './hydrus-page';
 import { HydrusApiService } from './hydrus-api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';

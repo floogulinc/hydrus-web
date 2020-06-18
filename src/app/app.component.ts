@@ -1,6 +1,6 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { MatSidenavContent } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,20 +11,21 @@ import { SwUpdate } from '@angular/service-worker';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'hydrus-web';
 
+  public refresh$: Subject<boolean> = new Subject();
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
       map(result => result.matches),
       share()
-    );
+  );
 
-  constructor(private breakpointObserver: BreakpointObserver, private updates: SwUpdate, 
-    private snackBar: MatSnackBar) {}
+  constructor(private breakpointObserver: BreakpointObserver, private updates: SwUpdate,
+              private snackBar: MatSnackBar) {}
 
-  @ViewChild(MatSidenavContent, {static: true}) 
+  @ViewChild(MatSidenavContent, {static: true})
   public sidenavContent: MatSidenavContent;
 
   ngOnInit() {

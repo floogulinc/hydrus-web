@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HydrusFileList, HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
-import { Observable, of, iif, forkJoin } from 'rxjs';
+import { HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
+import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
-import { map, switchMap, mergeMap, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -68,7 +68,7 @@ export class HydrusFilesService {
   }
 
   private getFileMetadataAPI(file_ids: number[]): Observable<HydrusFileFromAPI[]> {
-    return this.api.getFileMetadata(JSON.stringify(file_ids)).pipe(map(val => val["metadata"]));
+    return this.api.getFileMetadata({file_ids: JSON.stringify(file_ids)}).pipe(map(val => val["metadata"]));
   }
 
   private getAndAddMetadata(file_ids: number[]) : Observable<HydrusFile[]> {
