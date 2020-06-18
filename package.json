@@ -1,6 +1,6 @@
 {
   "name": "hydrus-web",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
