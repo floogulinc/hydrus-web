@@ -7,6 +7,21 @@
     <mat-list-item role="listitem"><strong>Dimensions:</strong>&nbsp;{{data.file.width}}x{{data.file.height}}</mat-list-item>
     <mat-list-item role="listitem"><strong>Size:</strong>&nbsp;{{data.file.size | bytes: 2}}</mat-list-item>
   </mat-list>
+  <mat-expansion-panel *ngIf="data.file.known_urls?.length > 0">
+    <mat-expansion-panel-header>
+      Known URLs ({{data.file.known_urls.length}})
+    </mat-expansion-panel-header>
+
+    <mat-nav-list>
+      <mat-list-item *ngFor="let url of data.file.known_urls">
+        <a matLine [href]="url" target="_blank" rel="noopener">{{ url }}</a>
+        <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url)">
+          <mat-icon>share</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-expansion-panel>
+  <br>
   <mat-expansion-panel *ngIf="data.file.service_names_to_statuses_to_tags['all known tags'] && data.file.service_names_to_statuses_to_tags['all known tags'][0]">
     <mat-expansion-panel-header>
       Tags ({{data.file.service_names_to_statuses_to_tags['all known tags'][0].length}})
