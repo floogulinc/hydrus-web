@@ -25,7 +25,7 @@ export class PhotoswipeService {
 
   public onMouseWheel$: Observable<WheelEvent>;
   public onMouse$: Observable<MouseEvent>;
-  public psClose$ = new Subject();
+  public psClose$ = new Subject<number>();
 
   constructor(
     private applicationRef: ApplicationRef,
@@ -99,7 +99,7 @@ export class PhotoswipeService {
     }
 
     ps.listen('close', () => {
-      this.psClose$.next();
+      this.psClose$.next(ps.getCurrentIndex());
     });
     ps.listen('destroy', () => {
       removeVideos();

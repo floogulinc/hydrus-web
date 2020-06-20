@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, ViewChild, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { HydrusFile } from '../hydrus-file';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { AppComponent } from '../app.component';
-import { IPageInfo } from 'ngx-virtual-scroller';
+import { IPageInfo, VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { PhotoswipeService } from '../photoswipe/photoswipe.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-image-list',
@@ -11,18 +12,23 @@ import { PhotoswipeService } from '../photoswipe/photoswipe.service';
   styleUrls: ['./image-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ImageListComponent implements OnInit, OnChanges {
+export class ImageListComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() fileIDs : number[] = [];
 
   //@ViewChild(PhotoswipeComponent, {static: true})
   //photoswipe: PhotoswipeComponent;
 
+  @ViewChild(VirtualScrollerComponent)
+  private virtualScroller: VirtualScrollerComponent;
+
   currentFiles: HydrusFile[] = [];
 
   loading: boolean = false;
 
   loadAtOnce: number = 48;
+
+  psSub: Subscription;
 
   constructor(
     public filesService: HydrusFilesService,
@@ -32,12 +38,22 @@ export class ImageListComponent implements OnInit, OnChanges {
     ) { }
 
   ngOnInit() {
-
+    this.psSub = this.photoswipe.psClose$.subscribe((index) => {
+      console.log(index);
+      console.log(this.virtualScroller.viewPortInfo);
+      if (index < this.virtualScroller.viewPortInfo.startIndex || index > this.virtualScroller.viewPortInfo.endIndex) {
+        this.virtualScroller.scrollToIndex(index);
+      }
+    });
   }
 
   ngOnChanges() {
     this.currentFiles = [];
     this.fetchMore();
+  }
+
+  ngOnDestroy() {
+    this.psSub.unsubscribe();
   }
 
   vsEnd(event: IPageInfo) {
