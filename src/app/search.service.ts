@@ -13,7 +13,7 @@ export class SearchService {
 
   public searchFiles(tags: string[], options?: {system_inbox?: boolean, system_archive?: boolean}): Observable<number[]> {
     return this.api.searchFiles(
-      JSON.stringify(tags),
+      encodeURIComponent(JSON.stringify(tags)),
       {
         system_inbox: options && options.system_inbox ? "true" : "false",
         system_archive: options && options.system_archive ? "true" : "false"
