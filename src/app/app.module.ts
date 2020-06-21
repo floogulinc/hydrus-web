@@ -51,6 +51,8 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { NgPipesModule } from 'ngx-pipes';
+import { ComicsListComponent } from './comics-list/comics-list.component';
+import { ComicComponent } from './comic/comic.component';
 
 const MAT_MODULES = [
     MatToolbarModule,
@@ -86,7 +88,9 @@ const MAT_MODULES = [
     PagesComponent,
     FilesPageComponent,
     SendComponent,
-    FileInfoSheetComponent
+    FileInfoSheetComponent,
+    ComicsListComponent,
+    ComicComponent
   ],
   imports: [
     BrowserModule,
