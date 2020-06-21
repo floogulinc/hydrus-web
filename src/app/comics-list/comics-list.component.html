@@ -1,5 +1,9 @@
 <p>comics-list works!</p>
 <button (click)="comicsService.findComics()">Find Comics</button>
 <ul>
-  <li *ngFor="let tag of comicsService.comicTags">{{tag}}</li>
+  <li *ngFor="let comic of comicsService.comicTags">{{comic.tag}}
+    <ul>
+      <li *ngFor="let volume of comic.volumes">{{volume.tag}}</li>
+    </ul>
+  </li>
 </ul>
