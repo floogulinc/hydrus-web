@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HydrusFilesService } from './hydrus-files.service';
 import { SearchService } from './search.service';
 import { forkJoin, from } from 'rxjs';
-import { map, switchMap, filter, mergeMap, toArray, delay, concatMap, tap } from 'rxjs/operators';
+import { map, switchMap, filter, mergeMap, toArray, delay, concatMap, tap, reduce } from 'rxjs/operators';
 import { TagUtils } from './tag-utils';
 import { HydrusFile } from './hydrus-file';
 
@@ -20,15 +20,7 @@ export class ComicsService {
 
   constructor(private fileService: HydrusFilesService, private searchService: SearchService) { }
 
-  comicTags: {
-    tag: string,
-    volumes: {tag: string, coverFile: HydrusFile}[],
-    coverFile: HydrusFile
-  }[] = [];
-
-
   comicsFlat: FlatComic[] = [];
-
 
   comicFilters: string[] = [];
 
@@ -72,7 +64,6 @@ export class ComicsService {
 
   findComics() {
     this.comicsFlat = [];
-    this.comicTags = [];
     this.loadingState = {
       loading: true,
       barMode: 'query',
@@ -87,7 +78,6 @@ export class ComicsService {
         total: tags.size,
       }),
       switchMap(tags => from(tags)),
-      //filter(tag => TagUtils.getNamespace(tag) === 'title'),
       mergeMap(tag => this.searchService.searchFiles([tag]).pipe(
         tap(() => this.updateLoading(tag)),
         map(files => ({tag, files}))
@@ -106,18 +96,17 @@ export class ComicsService {
           coverFile: this.findCoverFile(fileMetadata)
         }))
       )),
-      toArray()
+      reduce((acc, val) => acc.concat([{tag: val.tag, coverFile: val.coverFile}, ...val.volumes.map(v => ({
+        tag: val.tag,
+        volume: v.tag,
+        coverFile: v.coverFile
+      }))]), [])
     ).subscribe(x => {
       this.loadingState = {
         loading: false,
         barMode: 'indeterminate'
       };
-      this.comicTags = x;
-      this.comicsFlat = x.reduce((acc, val) => acc.concat([{tag: val.tag, coverFile: val.coverFile}, ...val.volumes.map(v => ({
-        tag: val.tag,
-        volume: v.tag,
-        coverFile: v.coverFile
-      }))]), []);
+      this.comicsFlat = x;
       console.log(x);
     });
   }

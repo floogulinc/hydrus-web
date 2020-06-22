@@ -1,8 +1,8 @@
 <div fxLayout="column">
   <h2 class="mat-display-1">Comics</h2>
   <div class="loader" *ngIf="comicsService.loadingState.loading">
-    <span *ngIf="comicsService.loadingState.currentTag">{{comicsService.loadingState.currentTag}}</span>
     <mat-progress-bar [mode]="comicsService.loadingState.barMode" [value]="comicsService.loadingState.total && comicsService.loadingState.progress ? (comicsService.loadingState.progress / comicsService.loadingState.total) * 100 : 0"></mat-progress-bar>
+    <span *ngIf="comicsService.loadingState.currentTag">{{comicsService.loadingState.currentTag}}</span>
   </div>
   <div>
     <ul class="mdc-image-list comics-image-list" #container>
