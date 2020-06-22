@@ -31,7 +31,7 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
   }
 
   listScrollEnd(event: IPageInfo) {
-    if(!((event.endIndex+1 >= this.fileIDs.length)) || this.loading) {
+    if(!((event.endIndex+1 >= this.fileIDs.length) || this.loading)) {
       this.fetchMore();
     }
   }
