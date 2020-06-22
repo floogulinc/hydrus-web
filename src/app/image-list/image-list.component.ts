@@ -40,7 +40,7 @@ export class ImageListComponent implements OnInit, OnChanges {
   }
 
   vsEnd(event: IPageInfo) {
-    if (!(event.endIndex !== this.files.length-1)) {
+    if (!(event.endIndex !== this.files?.length-1)) {
       this.scrollEnd.emit(event);
     }
   }

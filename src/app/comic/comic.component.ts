@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { HydrusFile } from '../hydrus-file';
+import { SearchService } from '../search.service';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap, map } from 'rxjs/operators';
+import { HydrusFilesService } from '../hydrus-files.service';
+import { TagUtils } from '../tag-utils';
 
 @Component({
   selector: 'app-comic',
@@ -7,9 +14,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ComicComponent implements OnInit {
 
-  constructor() { }
+  files$: Observable<HydrusFile[]>
+
+  constructor(public route: ActivatedRoute, public searchService: SearchService, public fileService: HydrusFilesService) { }
+
+
+  private pageNumberFromFile(file: HydrusFile): number {
+    return parseInt(TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'page')), 10);
+  }
+
+  private volumeNumberFromFile(file: HydrusFile): number {
+    return parseInt(TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'volume')), 10);
+  }
 
   ngOnInit(): void {
+    this.files$ = this.route.queryParamMap.pipe(
+      switchMap(params => this.searchService.searchFiles([...params.getAll('title'), ...params.getAll('volume')])),
+      switchMap(files => this.fileService.getFileMetadata(files)),
+      map(files => files
+        .sort((a, b) => this.pageNumberFromFile(a) - this.pageNumberFromFile(b))
+        .sort((a, b) => this.volumeNumberFromFile(a) - this.volumeNumberFromFile(b))
+      )
+    );
   }
 
 }
