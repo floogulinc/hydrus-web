@@ -2,7 +2,7 @@
   <div class="search-bar">
     <app-tag-input (tags)="tagsChanged($event)" class="tag-input"></app-tag-input>
   </div>
-  <app-image-list [fileIDs]="this.currentSearchIDs" class="app-image-list"></app-image-list>
+  <app-image-list-loader [fileIDs]="this.currentSearchIDs" class="app-image-list"></app-image-list-loader>
   </div>
 
   <ng-template #noApi>
