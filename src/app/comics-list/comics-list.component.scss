@@ -11,6 +11,11 @@
   background-color: #c7c5cb;
 }
 
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
 .comics-image-list {
   //@include mdc-image-list-aspect(1.5); // Images are 3:2
   @include mdc-image-list-standard-columns(9, 8px);

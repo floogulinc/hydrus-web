@@ -20,11 +20,11 @@ export class ComicComponent implements OnInit {
 
 
   private pageNumberFromFile(file: HydrusFile): number {
-    return parseInt(TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'page')), 10);
+    return parseFloat(TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'page')));
   }
 
   private volumeNumberFromFile(file: HydrusFile): number {
-    return parseInt(TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'volume')), 10);
+    return parseFloat(TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'volume')));
   }
 
   ngOnInit(): void {
