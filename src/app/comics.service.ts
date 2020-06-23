@@ -101,13 +101,12 @@ export class ComicsService {
         volume: v.tag,
         coverFile: v.coverFile
       }))]), [])
-    ).subscribe(x => {
+    ).subscribe(comics => {
       this.loadingState = {
         loading: false,
         barMode: 'indeterminate'
       };
-      this.comicsFlat = x;
-      console.log(x);
+      this.comicsFlat = comics;
     });
   }
 }
