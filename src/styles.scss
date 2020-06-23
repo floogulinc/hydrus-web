@@ -25,6 +25,7 @@
 
     $is-dark: map-get($theme, is-dark);
 
+
     @if $is-dark {
         .mat-toolbar.mat-primary {
             background: mat-color($background, app-bar);
@@ -47,6 +48,10 @@
             color: mat-color($foreground, icon);
             margin-right: 16px;
         }
+    }
+
+    .image-grid-supporting-text {
+      color: mat-color($foreground, text) !important;
     }
   }
 

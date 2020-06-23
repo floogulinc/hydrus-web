@@ -3,7 +3,7 @@
       <mat-chip *ngFor="let tag of searchTags" [selectable]="false" color="primary"
                 class="tag-chip"
                [removable]="true" (removed)="removeSearchTag(tag)"
-               [ngClass]="'tag-namespace-' + this.tagUtils.getNamespace(tag)">
+               [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">
         {{tag}}
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
@@ -17,7 +17,7 @@
              [matAutocomplete]="auto">
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-      <mat-option *ngFor="let tag of filteredTags | async" [value]="tag" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespace(tag)">
+      <mat-option *ngFor="let tag of filteredTags | async" [value]="tag" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">
         {{tag}}
       </mat-option>
     </mat-autocomplete>

@@ -1,0 +1,24 @@
+<div fxLayout="column">
+  <h2 class="mat-display-1">Comics</h2>
+  <div class="loader" *ngIf="comicsService.loadingState.loading">
+    <mat-progress-bar [mode]="comicsService.loadingState.barMode" [value]="comicsService.loadingState.total && comicsService.loadingState.progress ? (comicsService.loadingState.progress / comicsService.loadingState.total) * 100 : 0"></mat-progress-bar>
+    <span *ngIf="comicsService.loadingState.currentTag">{{comicsService.loadingState.currentTag}}</span>
+  </div>
+  <div>
+    <ul class="mdc-image-list comics-image-list" #container>
+      <li class="mdc-image-list__item grid-item"
+        *ngFor="let comic of (comicsService.comicsFlat | orderBy: ['tag', 'volume'])">
+        <a routerLink="/comics/view" [queryParams]="{title: comic.tag, volume: comic.volume}">
+          <div class="mdc-image-list__image-aspect-container">
+            <div class="mdc-image-list__image image-list-image"
+              [ngStyle]="comic.coverFile.has_thumbnail ? {'background-image':'url('+ comic.coverFile.thumbnail_url +')'} : {'background-color' : '#c7c5cb'}"
+              [ngClass]="'file-id-' + comic.coverFile.file_id"></div>
+          </div>
+        </a>
+        <div class="mdc-image-list__supporting image-grid-supporting-text">
+          <span class="mdc-image-list__label image-label">{{comic.tag.replace('title:', '')}} {{comic.volume?.replace('volume:', 'v')}}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
