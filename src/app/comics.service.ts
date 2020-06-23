@@ -63,6 +63,7 @@ export class ComicsService {
   }
 
   findComics() {
+    let startTime = performance.now();
     this.comicsFlat = [];
     this.loadingState = {
       loading: true,
@@ -73,9 +74,12 @@ export class ComicsService {
       map(r => [...new Set([].concat(...r))]),
       switchMap(ids => this.fileService.getFileMetadata(ids)),
       map(files => new Set(files.map(f => this.tagsFromFile(f)).reduce((acc, val) => acc.concat(val), []).filter(tag => TagUtils.getNamespace(tag) === 'title'))),
-      tap(tags => this.loadingState = {
-        ...this.loadingState,
-        total: tags.size,
+      tap(tags => {
+        this.loadingState = {
+          ...this.loadingState,
+          total: tags.size,
+        };
+        console.log(`Found ${tags.size} title tags`);
       }),
       switchMap(tags => from(tags)),
       mergeMap(tag => this.searchService.searchFiles([tag]).pipe(
@@ -107,6 +111,8 @@ export class ComicsService {
         barMode: 'indeterminate'
       };
       this.comicsFlat = comics;
+      let endTime = performance.now();
+      console.log(`Found ${comics.length} comics in ${endTime - startTime}ms`);
     });
   }
 }
