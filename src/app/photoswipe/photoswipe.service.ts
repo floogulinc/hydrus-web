@@ -9,10 +9,6 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileInfoSheetComponent } from '../file-info-sheet/file-info-sheet.component';
 
 
-interface PhotoSwipeItemWithPID extends PhotoSwipe.Item {
-  pid?: string | number;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -42,11 +38,11 @@ export class PhotoswipeService {
     this.onMouse$ = fromEvent<MouseEvent>(this.photoswipeComponent.location.nativeElement, 'auxclick');
   }
 
-  getPhotoSwipeItems(items : HydrusFile[]) : PhotoSwipeItemWithPID[] {
+  getPhotoSwipeItems(items : HydrusFile[]) : PhotoSwipe.Item[] {
     return items.map((i) => this.getPhotoSwipeItem(i));
   }
 
-  getPhotoSwipeItem(file: HydrusFile) : PhotoSwipeItemWithPID {
+  getPhotoSwipeItem(file: HydrusFile) : PhotoSwipe.Item {
     if(file.file_type === HydrusFileType.Image) {
       return {
         src: file.file_url,
@@ -109,7 +105,7 @@ export class PhotoswipeService {
     });
     ps.listen('afterChange', () => {
       if (ps.currItem.html) {
-        const pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
+        const pid = (ps.currItem as PhotoSwipe.Item).pid;
         const vidContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-video-${pid}`);
         if(vidContainer) {
           const item = items.find(i => i.file_id === pid);
@@ -138,7 +134,7 @@ export class PhotoswipeService {
       }
     });
     this.photoswipeComponent.instance.infoButtonClick$.pipe(takeUntil(this.psClose$)).subscribe(() => {
-      const pid = (ps.currItem as PhotoSwipeItemWithPID).pid;
+      const pid = (ps.currItem as PhotoSwipe.Item).pid;
       const item = items.find(i => i.file_id === pid);
       this.bottomSheet.open(FileInfoSheetComponent, {
         data: {
