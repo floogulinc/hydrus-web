@@ -77,7 +77,8 @@ export class PhotoswipeService {
     {
       index: imgindex,
       showHideOpacity: false,
-      history: false,
+      history: true,
+      galleryPIDs: true,
       shareEl: false,
       closeOnScroll: false,
       hideAnimationDuration: 0,
