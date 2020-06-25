@@ -11,15 +11,13 @@ import { Subject } from 'rxjs';
 })
 export class ComicsListComponent implements OnInit, OnDestroy {
 
-  isLoading: boolean = false;
-
   destroyNotifier$ = new Subject();
 
   constructor(public comicsService: ComicsService, private appComponent: AppComponent) { }
 
   ngOnInit(): void {
     if(this.comicsService.comicsFlat.length === 0) {
-      this.comicsService.findComics();
+      setTimeout(() => this.comicsService.findComics(), 500);
     }
     this.appComponent.refresh$.pipe(takeUntil(this.destroyNotifier$)).subscribe(() => {
       this.comicsService.findComics();
