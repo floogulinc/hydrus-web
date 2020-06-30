@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "patch-package",
+    "postinstall": "patch-package && ngcc",
     "prebuild": "node version-info.js",
     "postversion": "node version-info.js",
     "docker-build": "npm run build -- --prod --output-path dist",
