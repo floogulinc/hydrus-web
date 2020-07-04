@@ -1,22 +1,39 @@
 <div fxLayout="column">
-    <h2 class="mat-display-1">About</h2>
-    <div>
-        <p>Hydrus Web {{ env.versionInfo.version }} running on <code>{{doc.location.origin}}</code></p>
-        <p>Git commit: <a [href]="repoURL + '/commit/' + env.versionInfo.hash"><code>{{env.versionInfo.hash}}</code></a></p>
-        <p>Git branch: <code>{{env.versionInfo.branch}}</code></p>
-        <p>Production build: {{env.production}}</p>
-        <p *ngIf="env.versionInfo.infotype == 'now-github'">Deployed on ZEIT Now</p>
-    </div>
-    <div fxLayout="row">
-        <p><a mat-stroked-button [href]="repoURL">GitHub Repository</a></p>
-    </div>
-
-
-    <h2 class="mat-h2">Service Worker</h2>
-    <div>
-        Service Worker: {{this.updates.isEnabled ? "Enabled" : "Disabled" }}
-    </div>
-    <div fxLayout="row">
-        <button [disabled]="!this.updates.isEnabled" mat-stroked-button (click)="updates.checkForUpdate()">Check for Updates</button>
-    </div>
+  <h2 class="mat-display-1">About</h2>
+  <mat-nav-list role="list">
+    <div mat-subheader>General</div>
+    <a mat-list-item role="listitem" [href]="repoURL + '/releases/tag/v' + env.versionInfo.version">
+      <div mat-line>Release Version</div>
+      <div mat-line>Hydrus Web {{ env.versionInfo.version }}</div>
+    </a>
+    <mat-list-item role="listitem">
+      <div mat-line>Running on</div>
+      <div mat-line><code>{{doc.location.origin}}</code></div>
+    </mat-list-item>
+    <a mat-list-item role="listitem" [href]="repoURL">
+      <div mat-line>GitHub Repo</div>
+      <div mat-line><code>floogulinc/hydrus-web</code></div>
+    </a>
+    <a mat-list-item role="listitem" (click)="updates.checkForUpdate()" *ngIf="this.updates.isEnabled">
+      <div mat-line>Check for updates</div>
+    </a>
+    <mat-divider></mat-divider>
+    <div mat-subheader>Debug</div>
+    <a mat-list-item role="listitem" [href]="repoURL + '/commit/' + env.versionInfo.hash">
+      <div mat-line>Git Commit Hash</div>
+      <div mat-line><code>{{env.versionInfo.hash}}</code></div>
+    </a>
+    <mat-list-item role="listitem">
+      <div mat-line>Git Branch</div>
+      <div mat-line><code>{{env.versionInfo.branch}}</code></div>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <div mat-line>{{env.production ? 'Production' : 'Development'}} Build</div>
+      <div mat-line *ngIf="env.versionInfo.infotype == 'now-github'">Deployed on ZEIT Now</div>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <div mat-line>Service Worker</div>
+      <div mat-line>{{this.updates.isEnabled ? "Enabled" : "Disabled" }}</div>
+    </mat-list-item>
+  </mat-nav-list>
 </div>
