@@ -1,19 +1,19 @@
 import { AppComponent } from './../app.component';
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';
 import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-
+@UntilDestroy()
 @Component({
   selector: 'app-browse',
   templateUrl: './browse.component.html',
   styleUrls: ['./browse.component.scss']
 })
-export class BrowseComponent implements OnInit, OnDestroy, AfterViewInit {
+export class BrowseComponent implements OnInit, AfterViewInit {
 
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiUrl: string;
@@ -29,12 +29,10 @@ export class BrowseComponent implements OnInit, OnDestroy, AfterViewInit {
 
   searchArchive: boolean = false;
 
-  destroyNotifier$ = new Subject();
-
   searchSub: Subscription;
 
   ngOnInit() {
-    this.appComponent.refresh$.pipe(takeUntil(this.destroyNotifier$)).subscribe(() => {
+    this.appComponent.refresh$.pipe(untilDestroyed(this)).subscribe(() => {
       this.currentSearchIDs = [];
       this.search();
     });
@@ -46,11 +44,6 @@ export class BrowseComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnDestroy() {
-    this.destroyNotifier$.next();
-    this.destroyNotifier$.complete();
-  }
-
   tagsChanged(tags: string[]) {
     this.searchTags = tags;
     this.search();
@@ -58,7 +51,7 @@ export class BrowseComponent implements OnInit, OnDestroy, AfterViewInit {
 
   search() {
     this.searchSub?.unsubscribe();
-    this.searchSub = this.searchService.searchFiles(this.searchTags).pipe(takeUntil(this.destroyNotifier$)).subscribe((result) => {
+    this.searchSub = this.searchService.searchFiles(this.searchTags).pipe(untilDestroyed(this)).subscribe((result) => {
       this.currentSearchIDs = result;
     }, () => {
 
