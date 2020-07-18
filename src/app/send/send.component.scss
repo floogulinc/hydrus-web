@@ -11,3 +11,15 @@ mat-icon.mat-card-avatar {
   height: 40px;
   font-size: 40px;
 }
+
+.send-button {
+  margin-left: 8px;
+}
+
+.saucenao-thumbnail {
+  border-radius: 4px !important;
+}
+
+.metadata-line span:not(:last-of-type) {
+  margin-right: 20px;
+}

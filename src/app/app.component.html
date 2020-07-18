@@ -4,7 +4,6 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list class="sidenav-list">
       <mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
-      [attr.tabindex]="routerLinkActiveInstance.isActive ? 0 : -1"
       [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
         <mat-icon matListIcon>photo</mat-icon>
         Browse

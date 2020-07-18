@@ -6,6 +6,8 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusURLInfo, HydrusURLFiles } from '../hydrus-url';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SaucenaoService } from '../saucenao.service';
+import { SagiriResult } from 'sagiri';
 
 @Component({
   selector: 'app-send',
@@ -16,7 +18,13 @@ export class SendComponent implements OnInit {
 
   public static urlRegex: RegExp = /([-a-zA-Z0-9^\p{L}\p{C}\u00a1-\uffff@:%_\+.~#?&//=]{2,256}){1}(\.[a-z]{2,4}){1}(\:[0-9]*)?(\/[-a-zA-Z0-9\u00a1-\uffff\(\)@:%,_\+.~#?&//=]*)?([-a-zA-Z0-9\(\)@:%,_\+.~#?&//=]*)?/;
 
-  constructor(private addService: HydrusAddService, private route: ActivatedRoute, private snackbar: MatSnackBar, private router: Router) { }
+  constructor(
+    private addService: HydrusAddService,
+    private route: ActivatedRoute,
+    private snackbar: MatSnackBar,
+    private router: Router,
+    private saucenaoService: SaucenaoService
+  ) { }
 
   currentUrlInfo: HydrusURLInfo;
   currentUrlFiles: HydrusURLFiles;
@@ -33,6 +41,7 @@ export class SendComponent implements OnInit {
     return this.sendForm.get('sendUrl');
   }
 
+  saucenaoResults: SagiriResult[];
 
   ngOnInit(): void {
     this.sendUrl.valueChanges.pipe(
@@ -82,6 +91,15 @@ export class SendComponent implements OnInit {
         duration: 10000
       });
     })
+  }
+
+  saucenaoLookup() {
+    const lookupUrl = this.sendForm.value.sendUrl;
+    this.saucenaoService.search(lookupUrl).subscribe(
+      results => this.saucenaoResults = results,
+      err => this.snackbar.open(err, undefined, {
+        duration: 5000
+      }));
   }
 
 }

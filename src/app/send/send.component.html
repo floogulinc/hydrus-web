@@ -27,8 +27,17 @@
       <input matInput type="text" autocomplete="off"
       formControlName="destPageName" placeholder="" >
     </mat-form-field>
-    <div fxLayout="row">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!sendForm.valid">Send to Hydrus</button>
+    <div fxLayout="row" fxLayoutAlign="end">
+      <button mat-raised-button color="primary" type="button" [disabled]="sendForm.get('sendUrl').invalid" (click)="saucenaoLookup()">SauceNAO Lookup</button>
+      <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
     </div>
   </form>
+  <mat-list *ngIf="saucenaoResults">
+    <mat-list-item *ngFor="let result of saucenaoResults">
+      <img matListAvatar class="saucenao-thumbnail" [src]="result.thumbnail">
+      <div mat-line>{{result.site}}</div>
+      <div mat-line *ngIf="result.authorName">{{result.authorName}}</div>
+      <div mat-line>{{result.similarity}}%</div>
+    </mat-list-item>
+  </mat-list>
 </div>
