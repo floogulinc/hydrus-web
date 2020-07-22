@@ -28,7 +28,7 @@
               "src/assets",
               "src/manifest.webmanifest",
               "src/browserconfig.xml",
-              "src/assetlinks.json"
+              "src/.well-known/assetlinks.json"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
