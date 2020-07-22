@@ -17,8 +17,16 @@ export class AboutComponent implements OnInit {
 
   public repoURL = "https://github.com/floogulinc/hydrus-web";
 
+  public navigator = navigator;
+
+  public storageQuota: StorageEstimate;
+  public storagePersisted: boolean;
+
   ngOnInit() {
-    
+    if (navigator.storage) {
+      navigator.storage.estimate().then(quota => this.storageQuota = quota);
+      navigator.storage.persisted().then(persisted => this.storagePersisted = persisted);
+    }
   }
 
 }

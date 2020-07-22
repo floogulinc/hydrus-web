@@ -35,5 +35,10 @@
       <div mat-line>Service Worker</div>
       <div mat-line>{{this.updates.isEnabled ? "Enabled" : "Disabled" }}</div>
     </mat-list-item>
+    <mat-list-item role="listitem" *ngIf="navigator.storage">
+      <div mat-line>Storage</div>
+      <div mat-line>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
+      <div mat-line *ngIf="storageQuota">{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
+    </mat-list-item>
   </mat-nav-list>
 </div>
