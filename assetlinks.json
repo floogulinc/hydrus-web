@@ -1,0 +1,5 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target" : { "namespace": "android_app", "package_name": "app.hydrus.twa",
+                   "sha256_cert_fingerprints": ["EA:DA:A8:99:DA:8F:C8:DB:BE:F0:F6:F9:70:03:E0:AB:CC:25:AE:FB:48:4E:4F:0F:0C:C3:45:5E:3E:34:71:70"] }
+    }]

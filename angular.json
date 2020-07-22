@@ -27,7 +27,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.webmanifest",
-              "src/browserconfig.xml"
+              "src/browserconfig.xml",
+              "src/assetlinks.json"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
