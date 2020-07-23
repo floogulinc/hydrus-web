@@ -10,6 +10,7 @@ interface FlatComic {
   tag: string;
   volume?: string;
   coverFile: HydrusFile;
+  numFiles: number;
 }
 
 
@@ -22,7 +23,7 @@ export class ComicsService {
 
   comicsFlat: FlatComic[] = [];
 
-  comicFilters: string[] = [];
+  comicFilters: string[] = ['medium:comic'];
   titleNamespace: string = 'title';
 
   loadingState : {
@@ -97,18 +98,24 @@ export class ComicsService {
           tag,
           volumes: [...new Set(fileMetadata.map(f => this.tagsFromFile(f)).reduce((acc, val) => acc.concat(val), []))]
             .filter(t => TagUtils.getNamespace(t) === 'volume')
-            .map(vtag => ({
-              tag: vtag,
-              coverFile: this.findCoverFile(fileMetadata.filter(f => this.tagsFromFile(f).includes(vtag)))
-            })
+            .map(vtag => {
+              const volumefiles = fileMetadata.filter(f => this.tagsFromFile(f).includes(vtag));
+              return {
+                tag: vtag,
+                coverFile: this.findCoverFile(volumefiles),
+                numFiles: volumefiles.length
+              };
+            }
           ),
-          coverFile: this.findCoverFile(fileMetadata)
+          coverFile: this.findCoverFile(fileMetadata),
+          numFiles: fileMetadata.length
         }))
       )),
-      reduce((acc, val) => acc.concat([{tag: val.tag, coverFile: val.coverFile}, ...val.volumes.map(v => ({
+      reduce((acc, val) => acc.concat([{tag: val.tag, coverFile: val.coverFile, numFiles: val.numFiles}, ...val.volumes.map(v => ({
         tag: val.tag,
         volume: v.tag,
-        coverFile: v.coverFile
+        coverFile: v.coverFile,
+        numFiles: v.numFiles
       }))]), [])
     ).subscribe(comics => {
       this.loadingState = {

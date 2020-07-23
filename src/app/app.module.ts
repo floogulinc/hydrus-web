@@ -34,6 +34,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatBadgeModule} from '@angular/material/badge';
 
 
 
@@ -73,7 +74,8 @@ const MAT_MODULES = [
     MatBottomSheetModule,
     MatDialogModule,
     MatExpansionModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatBadgeModule
 ];
 
 
