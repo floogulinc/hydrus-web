@@ -7,6 +7,7 @@ import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileInfoSheetComponent } from '../file-info-sheet/file-info-sheet.component';
+import { Platform } from '@angular/cdk/platform';
 
 
 @Injectable({
@@ -27,7 +28,8 @@ export class PhotoswipeService {
     private applicationRef: ApplicationRef,
     private injector: Injector,
     private resolver: ComponentFactoryResolver,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    public platform: Platform
     ) {
     this.photoswipeComponent = this.resolver.resolveComponentFactory(PhotoswipeComponent).create(this.injector);
     this.pspElement = this.photoswipeComponent.instance.pspElement;
@@ -113,7 +115,7 @@ export class PhotoswipeService {
           const vid = document.createElement('video');
           vid.src = item.file_url;
           vid.autoplay = true;
-          vid.controls = true;
+          vid.controls = !this.platform.FIREFOX;
           vid.poster = item.thumbnail_url;
           vid.loop = true;
           vid.className = 'pswp-video';
