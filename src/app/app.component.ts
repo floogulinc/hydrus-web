@@ -6,6 +6,7 @@ import { MatSidenavContent } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
+import { MigrationService } from './migration.service';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +25,7 @@ export class AppComponent implements OnInit {
   );
 
   constructor(private breakpointObserver: BreakpointObserver, private updates: SwUpdate,
-              private snackBar: MatSnackBar) {}
+              private snackBar: MatSnackBar, private migrationService: MigrationService) {}
 
   @ViewChild(MatSidenavContent, {static: true})
   public sidenavContent: MatSidenavContent;
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit {
   public env = environment;
 
   ngOnInit() {
+    this.migrationService.migrateLocalStorage();
     this.updates.available.subscribe(event => {
       console.log('current version is', event.current);
       console.log('available version is', event.available);
