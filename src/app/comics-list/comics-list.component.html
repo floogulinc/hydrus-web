@@ -1,5 +1,5 @@
 <div fxLayout="column">
-  <h2 class="mat-display-1">Comics</h2>
+  <h2 class="mat-display-1">Comics <span class="mat-small">alpha</span></h2>
   <div class="loader" *ngIf="comicsService.loadingState.loading">
     <mat-progress-bar [mode]="comicsService.loadingState.barMode" [value]="comicsService.loadingState.total && comicsService.loadingState.progress ? (comicsService.loadingState.progress / comicsService.loadingState.total) * 100 : 0"></mat-progress-bar>
     <div fxLayout='row' fxLayoutAlign="space-between none">
@@ -12,7 +12,8 @@
   <div>
     <ul class="mdc-image-list comics-image-list" #container>
       <li class="mdc-image-list__item grid-item"
-        *ngFor="let comic of (comicsService.comicsFlat | orderBy: ['tag', 'volume'])">
+        *ngFor="let comic of (comicsService.comicsFlat | orderBy: ['tag', 'volume'])"
+        title="{{comic.tag}} {{comic.volume}}">
         <a routerLink="/comics/view" [queryParams]="{title: comic.tag, volume: comic.volume}">
           <div class="mdc-image-list__image-aspect-container">
             <div class="mdc-image-list__image image-list-image"
@@ -21,7 +22,8 @@
           </div>
         </a>
         <div class="mdc-image-list__supporting image-grid-supporting-text">
-          <span class="mdc-image-list__label image-label">{{comic.tag.replace('title:', '')}} {{comic.volume?.replace('volume:', 'v')}}</span>
+          <span class="mdc-image-list__label image-label">{{comic.tag.replace(comicsService.titleNamespace + ':', '')}}</span>
+          <span class="mdc-image-list__label image-label">{{comic.volume?.replace('volume:', 'v')}}</span>
         </div>
       </li>
     </ul>

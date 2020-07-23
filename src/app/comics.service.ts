@@ -23,6 +23,7 @@ export class ComicsService {
   comicsFlat: FlatComic[] = [];
 
   comicFilters: string[] = [];
+  titleNamespace: string = 'title';
 
   loadingState : {
     loading: boolean,
@@ -77,7 +78,7 @@ export class ComicsService {
     forkJoin([this.searchService.searchFiles(['page:0', ...this.comicFilters]), this.searchService.searchFiles(['page:1', ...this.comicFilters])]).pipe(
       map(r => [...new Set([].concat(...r))]),
       switchMap(ids => this.fileService.getFileMetadata(ids)),
-      map(files => new Set(files.map(f => this.tagsFromFile(f)).reduce((acc, val) => acc.concat(val), []).filter(tag => TagUtils.getNamespace(tag) === 'title'))),
+      map(files => new Set(files.map(f => this.tagsFromFile(f)).reduce((acc, val) => acc.concat(val), []).filter(tag => TagUtils.getNamespace(tag) === this.titleNamespace))),
       tap(tags => {
         this.loadingState = {
           ...this.loadingState,
