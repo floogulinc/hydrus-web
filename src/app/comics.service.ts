@@ -23,7 +23,7 @@ export class ComicsService {
 
   comicsFlat: FlatComic[] = [];
 
-  comicFilters: string[] = ['medium:comic'];
+  comicFilters: string[] = [];
   titleNamespace: string = 'title';
 
   loadingState : {

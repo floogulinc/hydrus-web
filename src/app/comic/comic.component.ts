@@ -18,13 +18,25 @@ export class ComicComponent implements OnInit {
 
   constructor(public route: ActivatedRoute, public searchService: SearchService, public fileService: HydrusFilesService) { }
 
+  collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'variant'});
 
-  private pageNumberFromFile(file: HydrusFile): number {
-    return parseFloat(TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'page')));
+  private compare(a, b): number {
+    if (!a || !b) {
+      return a ? b ? 0 : 1 : b ? -1 : 1;
+    }
+    return this.collator.compare(a, b);
   }
 
-  private volumeNumberFromFile(file: HydrusFile): number {
-    return parseFloat(TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'volume')));
+  private pageNumberFromFile(file: HydrusFile): string {
+    return TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'page'));
+  }
+
+  private volumeNumberFromFile(file: HydrusFile): string {
+    return TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'volume'));
+  }
+
+  private chapterNumberFromFile(file: HydrusFile): string {
+    return TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'chapter'));
   }
 
   ngOnInit(): void {
@@ -32,8 +44,9 @@ export class ComicComponent implements OnInit {
       switchMap(params => this.searchService.searchFiles([...params.getAll('title'), ...params.getAll('volume')])),
       switchMap(files => this.fileService.getFileMetadata(files)),
       map(files => files
-        .sort((a, b) => this.pageNumberFromFile(a) - this.pageNumberFromFile(b))
-        .sort((a, b) => this.volumeNumberFromFile(a) - this.volumeNumberFromFile(b))
+        .sort((a, b) => this.compare(this.pageNumberFromFile(a), this.pageNumberFromFile(b)))
+        .sort((a, b) => this.compare(this.chapterNumberFromFile(a), this.chapterNumberFromFile(b)))
+        .sort((a, b) => this.compare(this.volumeNumberFromFile(a), this.volumeNumberFromFile(b)))
       )
     );
   }
