@@ -35,6 +35,10 @@ export class ComicsService {
     barMode: 'indeterminate'
   };
 
+  clearComics() {
+    this.comicsFlat = [];
+  }
+
   updateLoading(tag: string) {
     if(this.loadingState.progress + 1 === this.loadingState.total) {
       this.loadingState = {
@@ -64,7 +68,7 @@ export class ComicsService {
 
   findComics() {
     let startTime = performance.now();
-    this.comicsFlat = [];
+    this.clearComics();
     this.loadingState = {
       loading: true,
       barMode: 'query',

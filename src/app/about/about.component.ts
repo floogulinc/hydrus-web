@@ -1,6 +1,8 @@
 import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
+import { HydrusFilesService } from '../hydrus-files.service';
+import { ComicsService } from '../comics.service';
 
 @Component({
   selector: 'app-about',
@@ -9,7 +11,10 @@ import { SwUpdate } from '@angular/service-worker';
 })
 export class AboutComponent implements OnInit {
 
-  constructor(public updates: SwUpdate) { }
+  constructor(
+    public updates: SwUpdate,
+    public filesService: HydrusFilesService,
+    public comicsService: ComicsService) { }
 
   public doc = document;
 
