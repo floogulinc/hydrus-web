@@ -14,7 +14,7 @@ import { TagUtils } from '../tag-utils';
 })
 export class ComicComponent implements OnInit {
 
-  files$: Observable<HydrusFile[]>
+  files$: Observable<HydrusFile[]>;
 
   constructor(public route: ActivatedRoute, public searchService: SearchService, public fileService: HydrusFilesService) { }
 

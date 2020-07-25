@@ -38,7 +38,7 @@ export class SettingsComponent implements OnInit {
       this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 5000
       });
-    })
+    });
   }
 
 }

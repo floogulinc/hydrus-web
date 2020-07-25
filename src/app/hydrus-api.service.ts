@@ -9,6 +9,7 @@ export interface HydrusKeyVerificationData {
   human_description: string;
 }
 
+// tslint:disable: variable-name
 
 @Injectable({
   providedIn: 'root'

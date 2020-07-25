@@ -22,12 +22,12 @@ export class PagesComponent implements OnInit {
   pages: HydrusPageListItem[] = [];
 
   ngOnInit() {
-    if(this.hydrusApiUrl && this.hydrusApiKey) {
+    if (this.hydrusApiUrl && this.hydrusApiKey) {
       this.pagesService.getAllPages().subscribe(
         (result) => {
           this.pages = result;
         }
-      )
+      );
     }
   }
 

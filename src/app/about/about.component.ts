@@ -22,7 +22,7 @@ export class AboutComponent implements OnInit {
 
   public env = environment;
 
-  public repoURL = "https://github.com/floogulinc/hydrus-web";
+  public repoURL = 'https://github.com/floogulinc/hydrus-web';
 
   public navigator = navigator;
 

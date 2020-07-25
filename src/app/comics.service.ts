@@ -24,9 +24,9 @@ export class ComicsService {
   comicsFlat: FlatComic[] = [];
 
   comicFilters: string[] = [];
-  titleNamespace: string = 'title';
+  titleNamespace = 'title';
 
-  loadingState : {
+  loadingState: {
     loading: boolean,
     progress?: number,
     total?: number,
@@ -42,7 +42,7 @@ export class ComicsService {
   }
 
   updateLoading(tag: string) {
-    if(this.loadingState.progress + 1 === this.loadingState.total) {
+    if (this.loadingState.progress + 1 === this.loadingState.total) {
       this.loadingState = {
         loading: true,
         barMode: 'indeterminate'
@@ -57,29 +57,32 @@ export class ComicsService {
     }
   }
 
-  private tagsFromFile(file: HydrusFile): string[] {
-    return '0' in file.service_names_to_statuses_to_tags['all known tags'] ? file.service_names_to_statuses_to_tags['all known tags']['0'] : [];
-  }
-
   private findCoverFile(files: HydrusFile[]): HydrusFile {
-    let coverFile: HydrusFile = files.find(f => this.tagsFromFile(f).includes('page:0'));
-    if (!coverFile) { coverFile = files.find(f => this.tagsFromFile(f).includes('page:1')); }
+    let coverFile: HydrusFile = files.find(f => TagUtils.tagsFromFile(f).includes('page:0'));
+    if (!coverFile) { coverFile = files.find(f => TagUtils.tagsFromFile(f).includes('page:1')); }
     if (!coverFile) { coverFile = files[0]; }
     return coverFile;
   }
 
   findComics() {
-    let startTime = performance.now();
+    const startTime = performance.now();
     this.clearComics();
     this.loadingState = {
       loading: true,
       barMode: 'query',
       progress: 0
     };
-    forkJoin([this.searchService.searchFiles(['page:0', ...this.comicFilters]), this.searchService.searchFiles(['page:1', ...this.comicFilters])]).pipe(
+    forkJoin([
+      this.searchService.searchFiles(['page:0', ...this.comicFilters]),
+      this.searchService.searchFiles(['page:1', ...this.comicFilters])])
+    .pipe(
       map(r => [...new Set([].concat(...r))]),
       switchMap(ids => this.fileService.getFileMetadata(ids)),
-      map(files => new Set(files.map(f => this.tagsFromFile(f)).reduce((acc, val) => acc.concat(val), []).filter(tag => TagUtils.getNamespace(tag) === this.titleNamespace))),
+      map(files => new Set(
+        files.map(f => TagUtils.tagsFromFile(f))
+        .reduce((acc, val) => acc.concat(val), [])
+        .filter(tag => TagUtils.getNamespace(tag) === this.titleNamespace)
+      )),
       tap(tags => {
         this.loadingState = {
           ...this.loadingState,
@@ -96,10 +99,10 @@ export class ComicsService {
       mergeMap(({tag, files}) => this.fileService.getFileMetadata(files).pipe(
         map(fileMetadata => ({
           tag,
-          volumes: [...new Set(fileMetadata.map(f => this.tagsFromFile(f)).reduce((acc, val) => acc.concat(val), []))]
+          volumes: [...new Set(fileMetadata.map(f => TagUtils.tagsFromFile(f)).reduce((acc, val) => acc.concat(val), []))]
             .filter(t => TagUtils.getNamespace(t) === 'volume')
             .map(vtag => {
-              const volumefiles = fileMetadata.filter(f => this.tagsFromFile(f).includes(vtag));
+              const volumefiles = fileMetadata.filter(f => TagUtils.tagsFromFile(f).includes(vtag));
               return {
                 tag: vtag,
                 coverFile: this.findCoverFile(volumefiles),
@@ -123,7 +126,7 @@ export class ComicsService {
         barMode: 'indeterminate'
       };
       this.comicsFlat = comics;
-      let endTime = performance.now();
+      const endTime = performance.now();
       console.log(`Found ${comics.length} comics in ${endTime - startTime}ms`);
     });
   }

@@ -39,7 +39,7 @@ export class AppComponent implements OnInit {
         duration: 10000
       }).onAction().subscribe(() => {
         this.updates.activateUpdate().then(() => document.location.reload());
-      })
+      });
     });
     this.updates.activated.subscribe(event => {
       console.log('old version was', event.previous);

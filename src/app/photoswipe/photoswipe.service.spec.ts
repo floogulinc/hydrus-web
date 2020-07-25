@@ -6,7 +6,7 @@ describe('PhotoswipeService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: PhotoswipeService = TestBed.get(PhotoswipeService);
+    const service: PhotoswipeService = TestBed.inject(PhotoswipeService);
     expect(service).toBeTruthy();
   });
 });

@@ -11,9 +11,9 @@ import { IPageInfo } from 'ngx-virtual-scroller';
 })
 export class ImageListLoaderComponent implements OnInit, OnChanges {
 
-  @Input() fileIDs : number[] = [];
+  @Input() fileIDs: number[] = [];
 
-  @Input() loadAtOnce?: number = 48;
+  @Input() loadAtOnce = 48;
 
   loading = false;
 
@@ -31,14 +31,16 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
   }
 
   listScrollEnd(event: IPageInfo) {
-    if(!((event.endIndex+1 >= this.fileIDs.length) || this.loading)) {
+    if (!((event.endIndex + 1 >= this.fileIDs.length) || this.loading)) {
       this.fetchMore();
     }
   }
 
   fetchMore() {
     this.loading = true;
-    this.filesService.getFileMetadata(this.fileIDs.slice(this.currentFiles.length, this.currentFiles.length + this.loadAtOnce)).subscribe((files) => {
+    this.filesService.getFileMetadata(
+      this.fileIDs.slice(this.currentFiles.length, this.currentFiles.length + this.loadAtOnce)
+    ).subscribe((files) => {
       this.currentFiles = this.currentFiles.concat(files);
       this.loading = false;
       this.cdr.markForCheck();

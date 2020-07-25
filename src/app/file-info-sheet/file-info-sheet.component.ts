@@ -4,11 +4,11 @@ import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { TagUtils } from '../tag-utils';
 
 
-type ShareData = {
+interface ShareData {
   title?: string;
   text?: string;
   url?: string;
-};
+}
 
 declare global {
   interface Navigator {
@@ -28,7 +28,7 @@ export class FileInfoSheetComponent {
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusFile}) { }
 
   get fileIcon() {
-    switch(this.data.file.file_type) {
+    switch (this.data.file.file_type) {
       case HydrusFileType.Image: {
         return 'photo';
       }

@@ -14,9 +14,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class SendComponent implements OnInit {
 
+  // tslint:disable-next-line: max-line-length
   public static urlRegex: RegExp = /([-a-zA-Z0-9^\p{L}\p{C}\u00a1-\uffff@:%_\+.~#?&//=]{2,256}){1}(\.[a-z]{2,4}){1}(\:[0-9]*)?(\/[-a-zA-Z0-9\u00a1-\uffff\(\)@:%,_\+.~#?&//=]*)?([-a-zA-Z0-9\(\)@:%,_\+.~#?&//=]*)?/;
 
-  constructor(private addService: HydrusAddService, private route: ActivatedRoute, private snackbar: MatSnackBar, private router: Router) { }
+  constructor(
+    private addService: HydrusAddService,
+    private route: ActivatedRoute,
+    private snackbar: MatSnackBar,
+    private router: Router
+  ) { }
 
   currentUrlInfo: HydrusURLInfo;
   currentUrlFiles: HydrusURLFiles;
@@ -50,13 +56,13 @@ export class SendComponent implements OnInit {
     });
 
     this.route.queryParamMap.subscribe(params => {
-      if(params.has('url')) {
+      if (params.has('url')) {
         this.sendUrl.setValue(params.get('url'));
         this.sendUrl.markAsTouched();
       } else {
         const possibleParams = ['text', 'title'];
         const param = possibleParams.find(p => params.has(p) && SendComponent.urlRegex.test(params.get(p)));
-        if(param) {
+        if (param) {
           this.sendUrl.setValue(params.get(param).match(SendComponent.urlRegex)[0]);
           this.sendUrl.markAsTouched();
         }
@@ -81,7 +87,7 @@ export class SendComponent implements OnInit {
       this.snackbar.open(`Error: ${error.error}`, undefined, {
         duration: 10000
       });
-    })
+    });
   }
 
 }

@@ -29,9 +29,9 @@ export class TagInputComponent implements OnInit {
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
-  constructor(public filesService : HydrusFilesService) {
+  constructor(public filesService: HydrusFilesService) {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(""),
+      startWith(''),
       map((tag: string) => this._filter(tag))
     );
 
@@ -41,9 +41,9 @@ export class TagInputComponent implements OnInit {
   }
 
   chipInputEvent(event: MatChipInputEvent): void {
-    //if (!this.matAutocomplete.isOpen) {
+    // if (!this.matAutocomplete.isOpen) {
       const input = event.input;
-      const value = event.value.toLowerCase(); //Hydrus tags are always lowercase
+      const value = event.value.toLowerCase(); // Hydrus tags are always lowercase
 
       this.addSearchTag(value);
 
@@ -51,7 +51,7 @@ export class TagInputComponent implements OnInit {
       if (input) {
         input.value = '';
       }
-    //}
+    // }
   }
 
   addSearchTag(tag: string) {
@@ -82,9 +82,11 @@ export class TagInputComponent implements OnInit {
 
 
   private _filter(value: string): string[] {
-    const filterValue = value ? value.toLowerCase() : "";
+    const filterValue = value ? value.toLowerCase() : '';
 
-    return Array.from(this.filesService.getKnownTags()).filter(tag => tag.toLowerCase().indexOf(filterValue) !== -1).filter(tag => !this.searchTags.includes(tag)).slice(0,25);
+    return Array.from(this.filesService.getKnownTags())
+    .filter(tag => tag.toLowerCase().indexOf(filterValue) !== -1)
+    .filter(tag => !this.searchTags.includes(tag)).slice(0, 25);
   }
 
 

@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./photoswipe.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class PhotoswipeComponent{
+export class PhotoswipeComponent {
 
   @ViewChild('pspel', {static: true})
   public pspElement: ElementRef;
