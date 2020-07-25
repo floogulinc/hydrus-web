@@ -7,6 +7,7 @@ import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileInfoSheetComponent } from '../file-info-sheet/file-info-sheet.component';
+import { Platform } from '@angular/cdk/platform';
 
 
 @Injectable({
@@ -27,7 +28,8 @@ export class PhotoswipeService {
     private applicationRef: ApplicationRef,
     private injector: Injector,
     private resolver: ComponentFactoryResolver,
-    private bottomSheet: MatBottomSheet
+    private bottomSheet: MatBottomSheet,
+    public platform: Platform
     ) {
     this.photoswipeComponent = this.resolver.resolveComponentFactory(PhotoswipeComponent).create(this.injector);
     this.pspElement = this.photoswipeComponent.instance.pspElement;
@@ -38,12 +40,12 @@ export class PhotoswipeService {
     this.onMouse$ = fromEvent<MouseEvent>(this.photoswipeComponent.location.nativeElement, 'auxclick');
   }
 
-  getPhotoSwipeItems(items : HydrusFile[]) : PhotoSwipe.Item[] {
+  getPhotoSwipeItems(items: HydrusFile[]): PhotoSwipe.Item[] {
     return items.map((i) => this.getPhotoSwipeItem(i));
   }
 
-  getPhotoSwipeItem(file: HydrusFile) : PhotoSwipe.Item {
-    if(file.file_type === HydrusFileType.Image) {
+  getPhotoSwipeItem(file: HydrusFile): PhotoSwipe.Item {
+    if (file.file_type === HydrusFileType.Image) {
       return {
         src: file.file_url,
         msrc: file.thumbnail_url,
@@ -51,7 +53,7 @@ export class PhotoswipeService {
         h: file.height,
         pid: file.file_id
       };
-    } else if(file.file_type === HydrusFileType.Video) {
+    } else if (file.file_type === HydrusFileType.Video) {
       return {
         html: `
         <div id="pswp-video-${file.file_id}" class="pswp-video-container">
@@ -70,8 +72,8 @@ export class PhotoswipeService {
     }
   }
 
-  public openPhotoSwipe(items : HydrusFile[], id: number) {
-    const imgindex = items.findIndex(e => e.file_id == id);
+  public openPhotoSwipe(items: HydrusFile[], id: number) {
+    const imgindex = items.findIndex(e => e.file_id === id);
 
     const ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(items),
     {
@@ -93,7 +95,7 @@ export class PhotoswipeService {
         video.load();
         video.remove();
       });
-    }
+    };
 
     ps.listen('close', () => {
       this.psClose$.next();
@@ -108,12 +110,12 @@ export class PhotoswipeService {
       if (ps.currItem.html) {
         const pid = (ps.currItem as PhotoSwipe.Item).pid;
         const vidContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-video-${pid}`);
-        if(vidContainer) {
+        if (vidContainer) {
           const item = items.find(i => i.file_id === pid);
           const vid = document.createElement('video');
           vid.src = item.file_url;
           vid.autoplay = true;
-          vid.controls = true;
+          vid.controls = !this.platform.FIREFOX;
           vid.poster = item.thumbnail_url;
           vid.loop = true;
           vid.className = 'pswp-video';
@@ -123,14 +125,14 @@ export class PhotoswipeService {
     });
     ps.init();
     this.onMouseWheel$.pipe(takeUntil(this.psClose$)).subscribe((event) => {
-      if(event.deltaY < 0) { //wheel up
+      if (event.deltaY < 0) { // wheel up
         ps.prev();
-      } else if (event.deltaY > 0) { //wheel down
+      } else if (event.deltaY > 0) { // wheel down
         ps.next();
       }
     });
     this.onMouse$.pipe(takeUntil(this.psClose$)).subscribe((event) => {
-      if(event.button == 1) {
+      if (event.button === 1) {
         ps.close();
       }
     });

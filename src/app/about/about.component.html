@@ -31,9 +31,36 @@
       <div mat-line>{{env.production ? 'Production' : 'Development'}} Build</div>
       <div mat-line *ngIf="env.versionInfo.infotype == 'now-github'">Deployed on ZEIT Now</div>
     </mat-list-item>
+    <a mat-list-item role="listitem" (click)="filesService.clearFilesCache()">
+      <div mat-line>Clear session file metadata cache</div>
+      <div mat-line>{{filesService.getFilesCacheSize()}} files cached</div>
+    </a>
+    <a mat-list-item role="listitem" (click)="filesService.clearKnownTags()">
+      <div mat-line>Clear session known tags</div>
+      <div mat-line>{{filesService.getKnownTagsSize()}} tags cached</div>
+    </a>
+    <a mat-list-item role="listitem" (click)="comicsService.clearComics()">
+      <div mat-line>Clear known comics</div>
+      <div mat-line>{{comicsService.comicsFlat.length}} comics cached</div>
+    </a>
+    <mat-list-item role="listitem">
+      <div mat-line>Platform</div>
+      <div mat-line *ngIf="platform.ANDROID">Android</div>
+      <div mat-line *ngIf="platform.IOS">iOS</div>
+      <div mat-line *ngIf="platform.BLINK">Blink</div>
+      <div mat-line *ngIf="platform.EDGE">Edge</div>
+      <div mat-line *ngIf="platform.FIREFOX">Firefox</div>
+      <div mat-line *ngIf="platform.TRIDENT">Trident</div>
+      <div mat-line *ngIf="platform.WEBKIT">WebKit</div>
+    </mat-list-item>
     <mat-list-item role="listitem">
       <div mat-line>Service Worker</div>
       <div mat-line>{{this.updates.isEnabled ? "Enabled" : "Disabled" }}</div>
+    </mat-list-item>
+    <mat-list-item role="listitem" *ngIf="navigator.storage">
+      <div mat-line>Storage</div>
+      <div mat-line>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
+      <div mat-line *ngIf="storageQuota">{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
     </mat-list-item>
   </mat-nav-list>
 </div>

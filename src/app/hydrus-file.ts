@@ -11,8 +11,8 @@ export interface HydrusFileFromAPI {
   num_frames?: number | null;
   num_words?: number | null;
   service_names_to_statuses_to_tags: {
-      [service : string] : {
-          [status: string] : string[];
+      [service: string]: {
+          [status: string]: string[];
       }
   };
   is_inbox: boolean;
@@ -28,7 +28,7 @@ export interface HydrusFile extends HydrusFileFromAPI {
 }
 
 export interface HydrusFileList {
-    [file_id : number] : HydrusFile;
+    [fileId: number]: HydrusFile;
 }
 
 export enum HydrusFileType {

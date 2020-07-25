@@ -6,7 +6,7 @@ describe('HydrusFilesService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: HydrusFilesService = TestBed.get(HydrusFilesService);
+    const service: HydrusFilesService = TestBed.inject(HydrusFilesService);
     expect(service).toBeTruthy();
   });
 });

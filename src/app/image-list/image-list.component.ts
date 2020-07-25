@@ -1,6 +1,14 @@
-import { Component, OnInit, Input, ViewChild, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  OnChanges,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Output,
+  EventEmitter
+} from '@angular/core';
 import { HydrusFile } from '../hydrus-file';
-import { HydrusFilesService } from '../hydrus-files.service';
 import { AppComponent } from '../app.component';
 import { IPageInfo } from 'ngx-virtual-scroller';
 import { PhotoswipeService } from '../photoswipe/photoswipe.service';
@@ -13,21 +21,13 @@ import { PhotoswipeService } from '../photoswipe/photoswipe.service';
 })
 export class ImageListComponent implements OnInit, OnChanges {
 
-  //@Input() fileIDs : number[] = [];
-
-  //@ViewChild(PhotoswipeComponent, {static: true})
-  //photoswipe: PhotoswipeComponent;
-
   @Input() files: HydrusFile[] = [];
-
-  //loading: boolean = false;
-
 
   @Output() scrollEnd: EventEmitter<IPageInfo> = new EventEmitter();
 
   constructor(
     public appComponent: AppComponent,
-    public photoswipe : PhotoswipeService,
+    public photoswipe: PhotoswipeService,
     public cdr: ChangeDetectorRef
     ) { }
 
@@ -40,7 +40,7 @@ export class ImageListComponent implements OnInit, OnChanges {
   }
 
   vsEnd(event: IPageInfo) {
-    if (!(event.endIndex !== this.files?.length-1)) {
+    if (!(event.endIndex !== this.files?.length - 1)) {
       this.scrollEnd.emit(event);
     }
   }

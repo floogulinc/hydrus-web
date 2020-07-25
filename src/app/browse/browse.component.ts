@@ -27,7 +27,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   currentSearchIDs: number[] = [];
   searchTags: string[] = [];
 
-  searchArchive: boolean = false;
+  searchArchive = false;
 
   searchSub: Subscription;
 
@@ -39,7 +39,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if(this.hydrusApiUrl && this.hydrusApiKey) {
+    if (this.hydrusApiUrl && this.hydrusApiKey) {
       this.search();
     }
   }
@@ -55,7 +55,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       this.currentSearchIDs = result;
     }, () => {
 
-    })
+    });
   }
 
 }

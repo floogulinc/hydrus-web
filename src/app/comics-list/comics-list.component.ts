@@ -14,7 +14,7 @@ export class ComicsListComponent implements OnInit {
   constructor(public comicsService: ComicsService, private appComponent: AppComponent) { }
 
   ngOnInit(): void {
-    if(this.comicsService.comicsFlat.length === 0) {
+    if (this.comicsService.comicsFlat.length === 0) {
       setTimeout(() => this.comicsService.findComics(), 500);
     }
     this.appComponent.refresh$.pipe(untilDestroyed(this)).subscribe(() => {
