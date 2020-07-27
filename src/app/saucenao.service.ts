@@ -18,11 +18,18 @@ interface SacuenaoOptions {
   db?: string;
 }
 
+export interface SaucenaoResults extends SagiriResult {
+  urls: {
+    site: string;
+    url: string;
+  }[];
+}
+
 const defaultSaucenaoOptions: SacuenaoOptions = {
   db: '999',
   output_type: '2',
-  numres: '3',
-}
+  numres: '5',
+};
 
 @Injectable({
   providedIn: 'root'
@@ -89,6 +96,11 @@ export class SaucenaoService {
           header: { similarity, thumbnail },
         } = result;
 
+        const urls = result.data.ext_urls.map(url => ({
+          site: Object.values(sites).find(site => site.urlMatcher.test(url))?.name ?? 'Unknown',
+          url
+        }));
+
         return {
           url,
           site: name,
@@ -98,6 +110,7 @@ export class SaucenaoService {
           authorName,
           authorUrl,
           raw: result,
+          urls
         };
       }))
     );
