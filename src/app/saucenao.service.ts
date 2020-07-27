@@ -39,20 +39,37 @@ export class SaucenaoService {
         url
       }
     }).pipe(
+      catchError(err => {
+        if(!err.error.header) {
+          throw err;
+        }
+        const {
+          header: { status, message},
+        } = err.error;
+
+        if (status > 0) {
+          // Server side error
+          throw new SagiriServerError(status, message);
+        } else if (status < 0) {
+          // Client side error
+          throw new SagiriClientError(status, message);
+        }
+        return of(null);
+      }),
       map(res => {
         const {
           header: { status, message},
         } = res;
         if (status > 0) {
           // Server side error
-          throw new SagiriServerError(status, message!);
+          throw new SagiriServerError(status, message);
         } else if (status < 0) {
           // Client side error
-          throw new SagiriClientError(status, message!);
+          throw new SagiriClientError(status, message);
         }
 
         return res;
-      })
+      }),
     );
   }
 
