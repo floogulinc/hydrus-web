@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Result, Response } from 'sagiri/dist/response';
-import sites from 'sagiri/dist/sites';
+import sites, { SiteData } from 'sagiri/dist/sites';
 import { SagiriResult, Options } from 'sagiri/dist/index';
 import { resolveResult } from 'sagiri/dist/util';
 import { SagiriClientError, SagiriServerError } from 'sagiri/dist/errors';
-import { map } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 
 interface SacuenaoOptions {
   numres?: string;
@@ -80,16 +80,17 @@ export class SaucenaoService {
     );
   }
 
-  public searchResults(url: string, options?: SacuenaoOptions): Observable<Result[]> {
+  public filteredSearchResponse(url: string, options?: SacuenaoOptions, minSimilarity: number = 70): Observable<Result[]> {
     return this.searchResponse(url, options).pipe(
-      map(resp => resp.results.filter(({ header: { index_id: id } }) => !!sites[id])
-      .sort((a, b) => b.header.similarity - a.header.similarity))
+      map(resp => resp.results.filter(({ header: { index_id: id, similarity} }) => !!sites[id] && similarity >= minSimilarity)
+      .sort((a, b) => b.header.similarity - a.header.similarity)),
+      tap(x => console.log(x))
     );
   }
 
   // Adapted from https://github.com/ClarityCafe/Sagiri
-  public search(url: string, options?: SacuenaoOptions): Observable<SagiriResult[]> {
-    return this.searchResults(url, options).pipe(
+  public search(url: string, options?: SacuenaoOptions): Observable<SaucenaoResults[]> {
+    return this.filteredSearchResponse(url, options).pipe(
       map(results => results.map(result => {
         const { url, name, id, authorName, authorUrl } = resolveResult(result);
         const {
