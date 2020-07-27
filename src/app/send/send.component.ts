@@ -6,8 +6,7 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusURLInfo, HydrusURLFiles } from '../hydrus-url';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SaucenaoService } from '../saucenao.service';
-import { SagiriResult } from 'sagiri';
+import { SaucenaoService, SaucenaoResults } from '../saucenao.service';
 
 @Component({
   selector: 'app-send',
@@ -42,7 +41,7 @@ export class SendComponent implements OnInit {
     return this.sendForm.get('sendUrl');
   }
 
-  saucenaoResults: SagiriResult[];
+  saucenaoResults: SaucenaoResults[];
 
   ngOnInit(): void {
     this.sendUrl.valueChanges.pipe(
