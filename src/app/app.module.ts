@@ -35,6 +35,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatBadgeModule} from '@angular/material/badge';
+import {MatMenuModule} from '@angular/material/menu';
 
 
 
@@ -75,7 +76,8 @@ const MAT_MODULES = [
     MatDialogModule,
     MatExpansionModule,
     MatProgressBarModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatMenuModule
 ];
 
 
