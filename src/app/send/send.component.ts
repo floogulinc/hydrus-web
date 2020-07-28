@@ -73,6 +73,13 @@ export class SendComponent implements OnInit {
     });
   }
 
+  resetForm() {
+    this.sendUrl.reset();
+    this.sendUrl.setErrors(null);
+    this.saucenaoResults = null;
+    this.router.navigate(['/send']);
+  }
+
   onSubmit() {
     const options: AddUrlOptions = {};
     if (this.sendForm.value.destPageName !== '') {
@@ -82,12 +89,10 @@ export class SendComponent implements OnInit {
       this.snackbar.open(res.human_result_text, undefined, {
         duration: 5000
       });
-      this.sendUrl.reset();
-      this.sendUrl.setErrors(null);
-      this.router.navigate(['/send']);
+      this.resetForm();
     }, error => {
       console.log(error);
-      this.snackbar.open(`Error: ${error.error}`, undefined, {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 10000
       });
     });
@@ -96,10 +101,16 @@ export class SendComponent implements OnInit {
   saucenaoLookup() {
     const lookupUrl = this.sendForm.value.sendUrl;
     this.saucenaoService.search(lookupUrl).subscribe(
-      results => this.saucenaoResults = results,
-      err => this.snackbar.open(err, undefined, {
-        duration: 5000
-      }));
+      results => {
+        this.saucenaoResults = results;
+        console.log(results);
+      },
+      err => {
+        this.snackbar.open('Error: ' + err.message, undefined, {
+          duration: 5000
+        });
+        console.log(err);
+      });
   }
 
 }

@@ -38,11 +38,21 @@
     </div>
   </form>
   <mat-list *ngIf="saucenaoResults">
-    <mat-list-item *ngFor="let result of saucenaoResults">
-      <img matListAvatar class="saucenao-thumbnail" [src]="result.thumbnail">
-      <div mat-line>{{result.site}}</div>
-      <div mat-line *ngIf="result.authorName">{{result.authorName}}</div>
-      <div mat-line>{{result.similarity}}%</div>
-    </mat-list-item>
+    <h3 matSubheader>SauceNao Results</h3>
+    <ng-container *ngFor="let result of saucenaoResults">
+      <mat-list-item >
+        <img matListAvatar class="saucenao-thumbnail" [src]="result.thumbnail">
+        <div mat-line>{{result.site}}</div>
+        <div mat-line *ngIf="result.authorName">{{result.authorName}}</div>
+        <div mat-line>{{result.similarity}}%</div>
+      </mat-list-item>
+      <mat-selection-list dense class="saucenao-url-list">
+        <mat-list-option *ngFor="let url of result.urls">
+          <div mat-line>{{url.site}}</div>
+          <div mat-line>{{url.url}}</div>
+        </mat-list-option>
+      </mat-selection-list>
+    </ng-container>
+
   </mat-list>
 </div>
