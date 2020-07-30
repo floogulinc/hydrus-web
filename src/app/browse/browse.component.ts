@@ -29,7 +29,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
   FilterOption = FilterOption;
 
-  constructor(private searchService: SearchService, public filesService: HydrusFilesService, private appComponent: AppComponent) { }
+  constructor(private searchService: SearchService, public filesService: HydrusFilesService) { }
 
   currentSearchIDs: number[] = [];
   searchTags: string[] = [];
@@ -44,10 +44,11 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.appComponent.refresh$.pipe(untilDestroyed(this)).subscribe(() => {
-      this.currentSearchIDs = [];
-      this.search();
-    });
+  }
+
+  refreshButton() {
+    this.currentSearchIDs = [];
+    this.search();
   }
 
   ngAfterViewInit() {

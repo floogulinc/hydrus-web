@@ -43,7 +43,7 @@
       </button>
       <span class="app-title">Hydrus Web <span class="mat-small" *ngIf="env.versionInfo?.branch !== 'master'">{{env.versionInfo?.branch}}</span></span>
       <span fxFlex="1 1 auto"></span>
-      <button type="button" mat-icon-button aria-label="Refresh" (click)="refresh$.next()"><mat-icon>refresh</mat-icon></button>
+      <ng-template cdkPortalOutlet #toolbarActionsPortal></ng-template>
     </mat-toolbar>
     <div class="main-content mat-typography">
       <router-outlet></router-outlet>

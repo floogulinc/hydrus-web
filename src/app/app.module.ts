@@ -37,7 +37,7 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatMenuModule} from '@angular/material/menu';
 
-
+import {PortalModule} from '@angular/cdk/portal';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -56,6 +56,8 @@ import { NgPipesModule } from 'ngx-pipes';
 import { ComicsListComponent } from './comics-list/comics-list.component';
 import { ComicComponent } from './comic/comic.component';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
+import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
+
 
 const MAT_MODULES = [
     MatToolbarModule,
@@ -96,7 +98,8 @@ const MAT_MODULES = [
     FileInfoSheetComponent,
     ComicsListComponent,
     ComicComponent,
-    ImageListLoaderComponent
+    ImageListLoaderComponent,
+    ToolbarActionsComponent
   ],
   imports: [
     BrowserModule,
@@ -105,6 +108,7 @@ const MAT_MODULES = [
     HttpClientModule,
     FlexLayoutModule,
     FormsModule,
+    PortalModule,
     MAT_MODULES,
     NgxLocalStorageModule.forRoot({prefix: environment.localStoragePrefix}),
     BrowserAnimationsModule,

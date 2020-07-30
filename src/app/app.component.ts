@@ -6,6 +6,7 @@ import { MatSidenavContent } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
+import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,8 @@ export class AppComponent implements OnInit {
   title = 'hydrus-web';
 
   public refresh$: Subject<boolean> = new Subject();
+
+  @ViewChild('toolbarActionsPortal', {read: CdkPortalOutlet}) public toolbarActionsPortal: CdkPortalOutlet;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
