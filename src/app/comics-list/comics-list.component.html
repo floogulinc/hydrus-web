@@ -35,6 +35,6 @@
 </div>
 
 <app-toolbar-actions>
-  <span class="mat-small">{{this.comicsService.loadingState.loading ?  'loading comics' : this.comicsService.comicsFlat.length +  ' comics'}}</span>
+  <span class="mat-small toolbar-count">{{this.comicsService.loadingState.loading ?  'loading' : this.comicsService.comicsFlat.length}}</span>
   <button type="button" mat-icon-button aria-label="Refresh" (click)="refreshButton()"><mat-icon>refresh</mat-icon></button>
 </app-toolbar-actions>

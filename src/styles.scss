@@ -109,3 +109,10 @@ body {
   height: 100% !important;
   //color: white;
 }
+
+.toolbar-count{
+  padding-left: 4px;
+  padding-right: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
