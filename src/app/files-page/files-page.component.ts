@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Optional } from '@angular/core';
 import { HydrusPageListItem, HydrusPage,  } from '../hydrus-page';
 import { HydrusPagesService } from '../hydrus-pages.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { PagesComponent } from '../pages/pages.component';
 
 @UntilDestroy()
 @Component({
@@ -14,10 +15,11 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 export class FilesPageComponent implements OnInit {
 
   @Input() pageListItem: HydrusPageListItem;
+  @Input() refresh?: Observable<any>;
 
   pageInfo: HydrusPage;
 
-  constructor(public pagesService: HydrusPagesService, private appComponent: AppComponent) { }
+  constructor(public pagesService: HydrusPagesService) { }
 
   loadSub: Subscription;
 
@@ -33,10 +35,13 @@ export class FilesPageComponent implements OnInit {
 
   ngOnInit() {
     this.load();
-    this.appComponent.refresh$.pipe(untilDestroyed(this)).subscribe(() => {
-      this.load();
-    });
+    if (this.refresh) {
+      this.refresh.pipe(untilDestroyed(this)).subscribe(() => {
+        this.load();
+      });
+    }
   }
+
 
 
 }
