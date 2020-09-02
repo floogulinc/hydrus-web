@@ -76,7 +76,7 @@ export class SendComponent implements OnInit {
   resetForm() {
     this.sendUrl.reset();
     this.saucenaoResults = null;
-    this.router.navigate(['/send']);
+    this.router.navigate(['/send'], { replaceUrl: true });
   }
 
   send(url: string, reset?: boolean) {
