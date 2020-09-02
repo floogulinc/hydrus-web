@@ -37,34 +37,6 @@
       <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
     </div>
   </form>
-  <!-- <mat-card *ngIf="saucenaoResults" class="saucenao-card">
-    <mat-card-title>SauceNao Results</mat-card-title>
-    <mat-card-content>
-      <mat-list>
-        <ng-container *ngFor="let result of saucenaoResults">
-          <mat-list-item>
-            <img mat-list-avatar class="saucenao-thumbnail" [src]="result.thumbnail">
-            <div mat-line>{{result.site}}</div>
-            <div mat-line *ngIf="result.authorName">{{result.authorName}}</div>
-            <div mat-line>{{result.similarity}}%</div>
-          </mat-list-item>
-          <mat-list class="saucenao-url-list">
-            <mat-list-item *ngFor="let url of result.urls">
-              <div mat-line>{{url.site}}</div>
-              <div mat-line>{{url.url}}</div>
-              <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
-                <mat-icon>open_in_new</mat-icon>
-              </a>
-              <button mat-icon-button (click)="send(url.url)" title="Send to Hydrus">
-                <mat-icon>send</mat-icon>
-              </button>
-            </mat-list-item>
-          </mat-list>
-        </ng-container>
-
-      </mat-list>
-    </mat-card-content>
-  </mat-card> -->
 
   <div *ngIf="saucenaoResults" class="saucenao-results">
     <h2 class="mat-title">SauceNao Results</h2>
@@ -96,6 +68,5 @@
       </mat-card-header>
     </mat-card>
   </div>
-
 
 </div>
