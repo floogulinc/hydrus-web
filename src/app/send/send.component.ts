@@ -75,27 +75,32 @@ export class SendComponent implements OnInit {
 
   resetForm() {
     this.sendUrl.reset();
-    this.sendUrl.setErrors(null);
     this.saucenaoResults = null;
     this.router.navigate(['/send']);
   }
 
-  onSubmit() {
+  send(url: string, reset?: boolean) {
     const options: AddUrlOptions = {};
     if (this.sendForm.value.destPageName !== '') {
       options.destination_page_name = this.sendForm.value.destPageName;
     }
-    this.addService.addUrl(this.sendForm.value.sendUrl, options).subscribe(res => {
+    this.addService.addUrl(url, options).subscribe(res => {
       this.snackbar.open(res.human_result_text, undefined, {
         duration: 5000
       });
-      this.resetForm();
+      if (reset) {
+        this.resetForm();
+      }
     }, error => {
       console.log(error);
       this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 10000
       });
     });
+  }
+
+  onSubmit() {
+    this.send(this.sendForm.value.sendUrl, true);
   }
 
   saucenaoLookup() {
