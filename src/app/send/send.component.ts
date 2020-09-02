@@ -108,7 +108,6 @@ export class SendComponent implements OnInit {
     this.saucenaoService.search(lookupUrl).subscribe(
       results => {
         this.saucenaoResults = results;
-        console.log(results);
       },
       err => {
         this.snackbar.open('Error: ' + err.message, undefined, {

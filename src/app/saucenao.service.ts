@@ -104,8 +104,7 @@ export class SaucenaoService {
   public filteredSearchResponse(url: string, options?: SacuenaoOptions, minSimilarity: number = 70): Observable<Result[]> {
     return this.searchResponse(url, options).pipe(
       map(resp => resp.results.filter(({ header: { index_id: id, similarity} }) => !!sites[id] && similarity >= minSimilarity)
-      .sort((a, b) => b.header.similarity - a.header.similarity)),
-      tap(x => console.log(x))
+      .sort((a, b) => b.header.similarity - a.header.similarity))
     );
   }
 
