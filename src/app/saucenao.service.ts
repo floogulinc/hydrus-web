@@ -3,10 +3,31 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Result, Response } from 'sagiri/dist/response';
 import sites, { SiteData } from 'sagiri/dist/sites';
-import { SagiriResult, Options } from 'sagiri/dist/index';
 import { resolveResult } from 'sagiri/dist/util';
 import { SagiriClientError, SagiriServerError } from 'sagiri/dist/errors';
 import { map, tap, catchError } from 'rxjs/operators';
+// import { SagiriResult, Options } from 'sagiri/dist/index';
+
+// from https://github.com/ClarityCafe/Sagiri/blob/master/lib/index.ts#L138-L145
+interface Options {
+  results?: number;
+  mask?: number[];
+  excludeMask?: number[];
+  testMode?: boolean;
+  db?: number;
+}
+
+// from https://github.com/ClarityCafe/Sagiri/blob/master/lib/index.ts#L147-L156
+interface SagiriResult {
+  url: string;
+  site: string;
+  index: number;
+  similarity: number;
+  thumbnail: string;
+  authorName: string | null;
+  authorUrl: string | null;
+  raw: Result;
+}
 
 interface SacuenaoOptions {
   numres?: string;
