@@ -89,6 +89,12 @@
         </mat-list>
       </mat-card-content>
     </mat-card>
+    <mat-card *ngIf="saucenaoResults.length === 0" class="saucenao-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>error</mat-icon>
+        <mat-card-title>No results found</mat-card-title>
+      </mat-card-header>
+    </mat-card>
   </div>
 
 
