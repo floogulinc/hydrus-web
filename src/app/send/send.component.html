@@ -5,6 +5,9 @@
       <mat-label>URL to send</mat-label>
       <input matInput type="url" autocomplete="off" required
       formControlName="sendUrl" placeholder="http://example.com/" >
+      <button mat-icon-button matSuffix (click)="resetForm()" type="button" title="Clear URL">
+        <mat-icon>clear</mat-icon>
+      </button>
       <mat-error *ngIf="sendUrl.hasError('pattern') && !sendUrl.hasError('required')">
         Please enter a valid URL
       </mat-error>
@@ -14,7 +17,9 @@
     </mat-form-field>
     <mat-card *ngIf="this.currentUrlInfo" class="url-info-card">
       <mat-card-header>
-        <mat-icon mat-card-avatar [color]="this.currentUrlInfo.can_parse ? 'none' : 'warn'">{{this.currentUrlInfo.can_parse ? 'done' : 'error'}}</mat-icon>
+        <mat-icon mat-card-avatar [color]="this.currentUrlFiles.url_file_statuses[0]?.status === 2 || this.currentUrlInfo.can_parse ? 'none' : 'warn'">
+          {{this.currentUrlFiles.url_file_statuses[0]?.status === 2 ? 'library_add_check' : 'library_add'}}
+        </mat-icon>
         <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
         <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
       </mat-card-header>
@@ -27,8 +32,64 @@
       <input matInput type="text" autocomplete="off"
       formControlName="destPageName" placeholder="" >
     </mat-form-field>
-    <div fxLayout="row">
-      <button mat-raised-button color="primary" type="submit" [disabled]="!sendForm.valid">Send to Hydrus</button>
+    <div fxLayout="row" fxLayoutAlign="end">
+      <button mat-raised-button color="primary" type="button" [disabled]="sendUrl.invalid" (click)="saucenaoLookup()">SauceNAO Lookup</button>
+      <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
     </div>
   </form>
+  <!-- <mat-card *ngIf="saucenaoResults" class="saucenao-card">
+    <mat-card-title>SauceNao Results</mat-card-title>
+    <mat-card-content>
+      <mat-list>
+        <ng-container *ngFor="let result of saucenaoResults">
+          <mat-list-item>
+            <img mat-list-avatar class="saucenao-thumbnail" [src]="result.thumbnail">
+            <div mat-line>{{result.site}}</div>
+            <div mat-line *ngIf="result.authorName">{{result.authorName}}</div>
+            <div mat-line>{{result.similarity}}%</div>
+          </mat-list-item>
+          <mat-list class="saucenao-url-list">
+            <mat-list-item *ngFor="let url of result.urls">
+              <div mat-line>{{url.site}}</div>
+              <div mat-line>{{url.url}}</div>
+              <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
+                <mat-icon>open_in_new</mat-icon>
+              </a>
+              <button mat-icon-button (click)="send(url.url)" title="Send to Hydrus">
+                <mat-icon>send</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </ng-container>
+
+      </mat-list>
+    </mat-card-content>
+  </mat-card> -->
+
+  <div *ngIf="saucenaoResults" class="saucenao-results">
+    <h2 class="mat-title">SauceNao Results</h2>
+    <mat-card *ngFor="let result of saucenaoResults" class="saucenao-card">
+      <mat-card-header>
+        <img mat-card-avatar class="saucenao-thumbnail" [src]="result.thumbnail">
+        <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>
+        <mat-card-subtitle>{{result.similarity}}%</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list class="saucenao-url-list">
+          <mat-list-item *ngFor="let url of result.urls">
+            <div mat-line>{{url.site}}</div>
+            <div mat-line>{{url.url}}</div>
+            <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
+              <mat-icon>open_in_new</mat-icon>
+            </a>
+            <button mat-icon-button (click)="send(url.url)" title="Send to Hydrus">
+              <mat-icon>send</mat-icon>
+            </button>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+
 </div>

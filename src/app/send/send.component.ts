@@ -6,6 +6,7 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusURLInfo, HydrusURLFiles } from '../hydrus-url';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SaucenaoService, SaucenaoResults } from '../saucenao.service';
 
 @Component({
   selector: 'app-send',
@@ -21,7 +22,8 @@ export class SendComponent implements OnInit {
     private addService: HydrusAddService,
     private route: ActivatedRoute,
     private snackbar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private saucenaoService: SaucenaoService
   ) { }
 
   currentUrlInfo: HydrusURLInfo;
@@ -39,6 +41,7 @@ export class SendComponent implements OnInit {
     return this.sendForm.get('sendUrl');
   }
 
+  saucenaoResults: SaucenaoResults[];
 
   ngOnInit(): void {
     this.sendUrl.valueChanges.pipe(
@@ -70,24 +73,49 @@ export class SendComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  resetForm() {
+    this.sendUrl.reset();
+    this.saucenaoResults = null;
+    this.router.navigate(['/send'], { replaceUrl: true });
+  }
+
+  send(url: string, reset?: boolean) {
     const options: AddUrlOptions = {};
     if (this.sendForm.value.destPageName !== '') {
       options.destination_page_name = this.sendForm.value.destPageName;
     }
-    this.addService.addUrl(this.sendForm.value.sendUrl, options).subscribe(res => {
+    this.addService.addUrl(url, options).subscribe(res => {
       this.snackbar.open(res.human_result_text, undefined, {
         duration: 5000
       });
-      this.sendUrl.reset();
-      this.sendUrl.setErrors(null);
-      this.router.navigate(['/send']);
+      if (reset) {
+        this.resetForm();
+      }
     }, error => {
       console.log(error);
-      this.snackbar.open(`Error: ${error.error}`, undefined, {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 10000
       });
     });
+  }
+
+  onSubmit() {
+    this.send(this.sendForm.value.sendUrl, true);
+  }
+
+  saucenaoLookup() {
+    const lookupUrl = this.sendForm.value.sendUrl;
+    this.saucenaoService.search(lookupUrl).subscribe(
+      results => {
+        this.saucenaoResults = results;
+        console.log(results);
+      },
+      err => {
+        this.snackbar.open('Error: ' + err.message, undefined, {
+          duration: 5000
+        });
+        console.log(err);
+      });
   }
 
 }

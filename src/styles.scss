@@ -35,7 +35,7 @@
 
     // Define any styles affected by the theme.
     .drawer-list-item-active {
-        background-color: mat-color($background, hover) !important;
+        //background-color: mat-color($background, hover) !important;
         color: mat-color($primary) !important;
         .mat-list-icon {
             color: mat-color($primary) !important;
@@ -115,4 +115,8 @@ body {
   padding-right: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.mat-button, .mat-raised-button, .mat-stroked-button, .mat-flat-button {
+  text-transform: uppercase;
 }
