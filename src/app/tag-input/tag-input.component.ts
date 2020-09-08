@@ -82,11 +82,21 @@ export class TagInputComponent implements OnInit {
 
 
   private _filter(value: string): string[] {
-    const filterValue = value ? value.toLowerCase() : '';
+    let filterValue = value ? value.toLowerCase() : '';
+    const isNegated = filterValue.startsWith('-');
+    if (isNegated) {
+      filterValue = filterValue.substring(1);
+    }
 
-    return Array.from(this.filesService.getKnownTags())
-    .filter(tag => tag.toLowerCase().indexOf(filterValue) !== -1)
-    .filter(tag => !this.searchTags.includes(tag)).slice(0, 25);
+    let results = Array.from(this.filesService.getKnownTags())
+      .filter(tag => tag.toLowerCase().indexOf(filterValue) !== -1)
+      .filter(tag => !this.searchTags.includes(tag)).slice(0, 25);
+
+    if (isNegated) {
+      results = results.map(t => `-${t}`);
+    }
+
+    return results;
   }
 
 
