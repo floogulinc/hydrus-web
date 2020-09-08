@@ -1,12 +1,10 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '@angular/material/theming';
-
+@import "@angular/material/theming";
 
 // Plus imports for other components in your app.
 
-@import '~src/_variables';
+@import "~src/_variables";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
@@ -15,46 +13,44 @@
 
 //setting up for future theme options
 @mixin app-theming($theme) {
-    // Extract the palettes you need from the theme definition.
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
+  // Extract the palettes you need from the theme definition.
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
 
-    $foreground: map-get($theme, foreground);
+  $foreground: map-get($theme, foreground);
 
-    $background: map-get($theme, background);
+  $background: map-get($theme, background);
 
-    $is-dark: map-get($theme, is-dark);
+  $is-dark: map-get($theme, is-dark);
 
-
-    @if $is-dark {
-        .mat-toolbar.mat-primary {
-            background: mat-color($background, app-bar);
-            color: mat-color($foreground, text);
-        }
-    }
-
-    // Define any styles affected by the theme.
-    .drawer-list-item-active {
-        //background-color: mat-color($background, hover) !important;
-        color: mat-color($primary) !important;
-        .mat-list-icon {
-            color: mat-color($primary) !important;
-          }
-    }
-
-    .sidenav-list {
-        .mat-list-icon {
-            //color: rgba(0, 0, 0, 0.54);
-            color: mat-color($foreground, icon);
-            margin-right: 16px;
-        }
-    }
-
-    .image-grid-supporting-text {
-      color: mat-color($foreground, text) !important;
+  @if $is-dark {
+    .mat-toolbar.mat-primary {
+      background: mat-color($background, app-bar);
+      color: mat-color($foreground, text);
     }
   }
 
+  // Define any styles affected by the theme.
+  .drawer-list-item-active {
+    //background-color: mat-color($background, hover) !important;
+    color: mat-color($primary) !important;
+    .mat-list-icon {
+      color: mat-color($primary) !important;
+    }
+  }
+
+  .sidenav-list {
+    .mat-list-icon {
+      //color: rgba(0, 0, 0, 0.54);
+      color: mat-color($foreground, icon);
+      margin-right: 16px;
+    }
+  }
+
+  .image-grid-supporting-text {
+    color: mat-color($foreground, text) !important;
+  }
+}
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -62,14 +58,19 @@
 @include angular-material-theme($light-theme);
 @include app-theming($light-theme);
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-@media (prefers-color-scheme: dark) {
-    @include angular-material-theme($dark-theme);
-    @include app-theming($dark-theme);
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+@media (prefers-color-scheme: dark) {
+  @include angular-material-theme($dark-theme);
+  @include app-theming($dark-theme);
+}
 
 .main-content {
   margin: auto;
@@ -90,33 +91,48 @@ body {
 }
 
 .tag-chip {
-  background-color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
-  color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
+  background-color: map-get(
+    map-get($mat-tag-colors, "default-namespace"),
+    "default"
+  );
+  color: map-get(
+    map-get($mat-tag-colors, "default-namespace"),
+    "default-contrast"
+  );
   font-weight: 400;
   @each $tag, $palette in $mat-tag-colors {
-      &.tag-namespace-#{$tag} {
-          background-color: map-get($palette, "default");
-          color: map-get($palette, "default-contrast");
-      }
+    &.tag-namespace-#{$tag} {
+      background-color: map-get($palette, "default");
+      color: map-get($palette, "default-contrast");
+    }
   }
   &.tag-namespace- {
-      background-color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
-      color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
+    background-color: map-get(
+      map-get($mat-tag-colors, "no-namespace"),
+      "default"
+    );
+    color: map-get(
+      map-get($mat-tag-colors, "no-namespace"),
+      "default-contrast"
+    );
   }
   .mat-chip-remove {
-      opacity: 0.6;
+    opacity: 0.6;
   }
   height: 100% !important;
   //color: white;
 }
 
-.toolbar-count{
+.toolbar-count {
   padding-left: 4px;
   padding-right: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.mat-button, .mat-raised-button, .mat-stroked-button, .mat-flat-button {
+.mat-button,
+.mat-raised-button,
+.mat-stroked-button,
+.mat-flat-button {
   text-transform: uppercase;
 }
