@@ -34,24 +34,27 @@ export class TagInputComponent implements OnInit {
       startWith(''),
       map((tag: string) => this._filter(tag))
     );
-
    }
 
   ngOnInit() {
   }
 
   chipInputEvent(event: MatChipInputEvent): void {
-    // if (!this.matAutocomplete.isOpen) {
-      const input = event.input;
-      const value = event.value.toLowerCase(); // Hydrus tags are always lowercase
+    if(this.matAutocomplete.isOpen && this.matAutocomplete.options.some(x => x.active)) {
+      return;
+    }
 
-      this.addSearchTag(value);
+    const input = event.input;
+    const value = event.value.toLowerCase(); // Hydrus tags are always lowercase
 
-      // Reset the input value
-      if (input) {
-        input.value = '';
-      }
-    // }
+    this.addSearchTag(value);
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.tagCtrl.setValue(null);
   }
 
   addSearchTag(tag: string) {
