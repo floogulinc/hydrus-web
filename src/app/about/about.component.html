@@ -30,7 +30,7 @@
     <mat-list-item role="listitem">
       <div mat-line>{{env.production ? 'Production' : 'Development'}} Build</div>
     </mat-list-item>
-    <a mat-list-item role="listitem" *ngIf="env.versionInfo.infotype" [href]="env.versionInfo.gitinfo.VERCEL_URL + '/_logs'">
+    <a mat-list-item role="listitem" *ngIf="env.versionInfo.infotype" [href]="'https://' + env.versionInfo.gitinfo.VERCEL_URL + '/_logs'">
       <div mat-line>Deployed on Vercel</div>
       <div mat-line><code>{{env.versionInfo.gitinfo.VERCEL_URL}}</code></div>
     </a>
