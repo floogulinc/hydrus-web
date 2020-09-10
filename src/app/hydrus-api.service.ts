@@ -122,6 +122,18 @@ export class HydrusApiService {
     return this.getAPIUrl() + 'get_files/thumbnail?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
   }
 
+
+  public getFileAsBlob(file_hash: string): Observable<Blob> {
+    return this.http.get(
+      this.getAPIUrl() + 'get_files/file?hash=' + file_hash,
+      {
+        headers: this.getHeaders(),
+        responseType: 'blob'
+      },
+    );
+  }
+
+
   /**
    * GET /manage_pages/get_pages
    *
@@ -184,6 +196,4 @@ export class HydrusApiService {
                           data,
                           {headers: this.getHeaders()});
   }
-
-
 }

@@ -3,6 +3,7 @@ export interface HydrusFileFromAPI {
   hash: string;
   size: number;
   mime: string;
+  ext: string;
   width: number;
   height: number;
   has_audio: boolean;
