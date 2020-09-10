@@ -8,34 +8,35 @@ const branch = require('git-branch');
 
 var gitInfo;
 if(process.env.VERCEL_GITHUB_DEPLOYMENT) {
-    gitInfo = {
-        infotype: "vercel-github",
-        gitinfo: {
-            VERCEL_URL: process.env.VERCEL_URL,
-            VERCEL_GITHUB_DEPLOYMENT: process.env.VERCEL_GITHUB_DEPLOYMENT,
-            VERCEL_GITHUB_ORG: process.env.VERCEL_GITHUB_ORG,
-            VERCEL_GITHUB_REPO: process.env.VERCEL_GITHUB_REPO,
-            VERCEL_GITHUB_COMMIT_ORG: process.env.VERCEL_GITHUB_COMMIT_ORG,
-            VERCEL_GITHUB_COMMIT_REPO: process.env.VERCEL_GITHUB_COMMIT_REPO,
-            VERCEL_GITHUB_COMMIT_REF: process.env.VERCEL_GITHUB_COMMIT_REF,
-            VERCEL_GITHUB_COMMIT_SHA: process.env.VERCEL_GITHUB_COMMIT_SHA,
-            VERCEL_GITHUB_COMMIT_AUTHOR_LOGIN: process.env.VERCEL_GITHUB_COMMIT_AUTHOR_LOGIN,
-            VERCEL_GITHUB_COMMIT_AUTHOR_NAME: process.env.VERCEL_GITHUB_COMMIT_AUTHOR_NAME,
-        },
-        hash: process.env.VERCEL_GITHUB_COMMIT_SHA,
-        branch: process.env.VERCEL_GITHUB_COMMIT_REF
-    }
+  console.log(`Detected GitHub deployment on Vercel. URL: ${process.env.VERCEL_URL}`);
+  gitInfo = {
+      infotype: "vercel-github",
+      gitinfo: {
+          VERCEL_URL: process.env.VERCEL_URL,
+          VERCEL_GITHUB_DEPLOYMENT: process.env.VERCEL_GITHUB_DEPLOYMENT,
+          VERCEL_GITHUB_ORG: process.env.VERCEL_GITHUB_ORG,
+          VERCEL_GITHUB_REPO: process.env.VERCEL_GITHUB_REPO,
+          VERCEL_GITHUB_COMMIT_ORG: process.env.VERCEL_GITHUB_COMMIT_ORG,
+          VERCEL_GITHUB_COMMIT_REPO: process.env.VERCEL_GITHUB_COMMIT_REPO,
+          VERCEL_GITHUB_COMMIT_REF: process.env.VERCEL_GITHUB_COMMIT_REF,
+          VERCEL_GITHUB_COMMIT_SHA: process.env.VERCEL_GITHUB_COMMIT_SHA,
+          VERCEL_GITHUB_COMMIT_AUTHOR_LOGIN: process.env.VERCEL_GITHUB_COMMIT_AUTHOR_LOGIN,
+          VERCEL_GITHUB_COMMIT_AUTHOR_NAME: process.env.VERCEL_GITHUB_COMMIT_AUTHOR_NAME,
+      },
+      hash: process.env.VERCEL_GITHUB_COMMIT_SHA,
+      branch: process.env.VERCEL_GITHUB_COMMIT_REF
+  }
 } else {
-    gitInfo = {
-        infotype: "git-describe",
-        gitinfo: gitDescribeSync({
-            customArguments: ['--abbrev=40'],
-            dirtyMark: false,
-            dirtySemver: false
-        }),
-        branch: branch.sync()
-    };
-    gitInfo.hash = gitInfo.gitinfo.hash.substring(1);
+  gitInfo = {
+      infotype: "git-describe",
+      gitinfo: gitDescribeSync({
+          customArguments: ['--abbrev=40'],
+          dirtyMark: false,
+          dirtySemver: false
+      }),
+      branch: branch.sync()
+  };
+  gitInfo.hash = gitInfo.gitinfo.hash.substring(1);
 }
 
 
@@ -49,4 +50,4 @@ export const VERSION = ${JSON.stringify(gitInfo, null, 4)};
 /* tslint:enable */
 `, { encoding: 'utf-8' });
 
-console.log(`Wrote version info ${gitInfo.hash} (branch: ${gitInfo.branch}) to ${relative(resolve(__dirname, '..'), file)}`);
+console.log(`Wrote version info ${gitInfo.hash} (branch: ${gitInfo.branch}, type: ${gitInfo.infotype}) to ${relative(resolve(__dirname, '..'), file)}`);
