@@ -30,10 +30,13 @@ export class TagUtils {
     }
 
     public static getTagValue(tag: string) {
+      if (!tag) {
+        return tag;
+      }
       if (tag.startsWith('-')) {
         tag = tag.substring(1);
       }
-      if (!tag?.includes(':')) { return tag; }
+      if (!tag.includes(':')) { return tag; }
       return tag.split(':')[1].toLowerCase();
     }
 
