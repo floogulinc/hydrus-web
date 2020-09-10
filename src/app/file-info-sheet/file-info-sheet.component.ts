@@ -24,6 +24,7 @@ declare global {
 export class FileInfoSheetComponent {
 
   tagUtils = TagUtils;
+  Object = Object;
 
   constructor(@Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusFile}) { }
 
