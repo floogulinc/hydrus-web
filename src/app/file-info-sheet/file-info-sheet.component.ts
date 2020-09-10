@@ -80,8 +80,7 @@ export class FileInfoSheetComponent {
     this.filesService.getFileAsFile(this.data.file).toPromise().then(file => {
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         return navigator.share({
-          files: [file],
-          title: this.data.file.hash
+          files: [file]
         });
       } else {
         throw new Error('Your browser doesn\'t support sharing this file');
