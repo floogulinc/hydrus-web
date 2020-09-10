@@ -145,4 +145,10 @@ export class HydrusFilesService {
     return this.allTags;
   }
 
+  public getFileAsFile(file: HydrusFile): Observable<File> {
+    return this.api.getFileAsBlob(file.hash).pipe(
+      map(b => new File([b], file.hash + file.ext))
+    );
+  }
+
 }

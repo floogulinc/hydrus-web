@@ -3,11 +3,20 @@
   <mat-list-item role="listitem">
     <mat-icon mat-list-icon>{{fileIcon}}</mat-icon>
     <div mat-line>{{data.file.file_id}}</div>
-    <div mat-line class="metadata-line"><span>{{data.file.mime}}</span> <span>{{data.file.width}}x{{data.file.height}}</span> <span>{{data.file.size | bytes: 2}}</span></div>
+    <div mat-line class="metadata-line"><span>{{data.file.mime}}</span> <span *ngIf="data.file.width && data.file.height">{{data.file.width}}x{{data.file.height}}</span> <span>{{data.file.size | bytes: 2}}</span></div>
   </mat-list-item>
   <mat-list-item role="listitem">
     <mat-icon mat-list-icon>{{data.file.is_inbox ? "inbox" : data.file.is_trashed ? "delete" : "archive"}}</mat-icon>
     <div mat-line>{{data.file.is_inbox ? "In Inbox" : data.file.is_trashed ? "In Trash" : "Archived"}}</div>
+    <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{data.file.file_url}}" title="Open file in new tab">
+      <mat-icon>open_in_new</mat-icon>
+    </a>
+    <button mat-icon-button (click)="saveFile()" title="Download file">
+      <mat-icon>get_app</mat-icon>
+    </button>
+    <button mat-icon-button (click)="shareFile()" title="Share file">
+      <mat-icon>share</mat-icon>
+    </button>
   </mat-list-item>
 </mat-list>
 <mat-expansion-panel *ngIf="data.file.known_urls?.length > 0">
@@ -17,7 +26,7 @@
 
   <mat-nav-list>
     <mat-list-item *ngFor="let url of data.file.known_urls">
-      <a matLine [href]="url" target="_blank" rel="noopener">{{ url }}</a>
+      <a matLine [href]="url" target="_blank" rel="noopener noreferrer">{{ url }}</a>
       <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url)">
         <mat-icon>share</mat-icon>
       </button>
