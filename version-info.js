@@ -7,22 +7,23 @@ const branch = require('git-branch');
 // Mostly from this article: https://medium.com/@amcdnl/version-stamping-your-app-with-the-angular-cli-d563284bb94d
 
 var gitInfo;
-if(process.env.NOW_GITHUB_DEPLOYMENT) {
+if(process.env.VERCEL_GITHUB_DEPLOYMENT) {
     gitInfo = {
-        infotype: "now-github",
+        infotype: "vercel-github",
         gitinfo: {
-            NOW_GITHUB_DEPLOYMENT: process.env.NOW_GITHUB_DEPLOYMENT,
-            NOW_GITHUB_ORG: process.env.NOW_GITHUB_ORG,
-            NOW_GITHUB_REPO: process.env.NOW_GITHUB_REPO,
-            NOW_GITHUB_COMMIT_ORG: process.env.NOW_GITHUB_COMMIT_ORG,
-            NOW_GITHUB_COMMIT_REPO: process.env.NOW_GITHUB_COMMIT_REPO,
-            NOW_GITHUB_COMMIT_REF: process.env.NOW_GITHUB_COMMIT_REF,
-            NOW_GITHUB_COMMIT_SHA: process.env.NOW_GITHUB_COMMIT_SHA,
-            NOW_GITHUB_COMMIT_AUTHOR_LOGIN: process.env.NOW_GITHUB_COMMIT_AUTHOR_LOGIN,
-            NOW_GITHUB_COMMIT_AUTHOR_NAME: process.env.NOW_GITHUB_COMMIT_AUTHOR_NAME,
+            VERCEL_URL: process.env.VERCEL_URL,
+            VERCEL_GITHUB_DEPLOYMENT: process.env.VERCEL_GITHUB_DEPLOYMENT,
+            VERCEL_GITHUB_ORG: process.env.VERCEL_GITHUB_ORG,
+            VERCEL_GITHUB_REPO: process.env.VERCEL_GITHUB_REPO,
+            VERCEL_GITHUB_COMMIT_ORG: process.env.VERCEL_GITHUB_COMMIT_ORG,
+            VERCEL_GITHUB_COMMIT_REPO: process.env.VERCEL_GITHUB_COMMIT_REPO,
+            VERCEL_GITHUB_COMMIT_REF: process.env.VERCEL_GITHUB_COMMIT_REF,
+            VERCEL_GITHUB_COMMIT_SHA: process.env.VERCEL_GITHUB_COMMIT_SHA,
+            VERCEL_GITHUB_COMMIT_AUTHOR_LOGIN: process.env.VERCEL_GITHUB_COMMIT_AUTHOR_LOGIN,
+            VERCEL_GITHUB_COMMIT_AUTHOR_NAME: process.env.VERCEL_GITHUB_COMMIT_AUTHOR_NAME,
         },
-        hash: process.env.NOW_GITHUB_COMMIT_SHA,
-        branch: process.env.NOW_GITHUB_COMMIT_REF
+        hash: process.env.VERCEL_GITHUB_COMMIT_SHA,
+        branch: process.env.VERCEL_GITHUB_COMMIT_REF
     }
 } else {
     gitInfo = {

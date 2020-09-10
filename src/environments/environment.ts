@@ -16,6 +16,7 @@ export const environment = {
       semver: null,
       suffix: 'devsuffix',
       semverString: null,
+      VERCEL_URL: null,
     },
     version: '0.0.0',
     branch: 'devbranch',
