@@ -18,6 +18,8 @@ export class SendComponent implements OnInit {
   // tslint:disable-next-line: max-line-length
   public static urlRegex: RegExp = /([-a-zA-Z0-9^\p{L}\p{C}\u00a1-\uffff@:%_\+.~#?&//=]{2,256}){1}(\.[a-z]{2,4}){1}(\:[0-9]*)?(\/[-a-zA-Z0-9\u00a1-\uffff\(\)@:%,_\+.~#?&//=]*)?([-a-zA-Z0-9\(\)@:%,_\+.~#?&//=]*)?/;
 
+  public saucenaoLoading = false;
+
   constructor(
     private addService: HydrusAddService,
     private route: ActivatedRoute,
@@ -104,12 +106,16 @@ export class SendComponent implements OnInit {
   }
 
   saucenaoLookup() {
+    this.saucenaoLoading = true;
+    this.saucenaoResults = null;
     const lookupUrl = this.sendForm.value.sendUrl;
     this.saucenaoService.search(lookupUrl).subscribe(
       results => {
+        this.saucenaoLoading = false;
         this.saucenaoResults = results;
       },
       err => {
+        this.saucenaoLoading = false;
         this.snackbar.open('Error: ' + err.message, undefined, {
           duration: 5000
         });
