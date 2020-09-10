@@ -91,7 +91,7 @@ export class HydrusApiService {
    * @param file_id the Hydrus ID of the file to get
    * @return the URL of the raw full file referenced by the ID
    */
-  public getFileURL(file_id: number): string {
+  public getFileURLFromId(file_id: number): string {
     return this.getAPIUrl() + 'get_files/file?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
   }
 
@@ -100,8 +100,26 @@ export class HydrusApiService {
    * @param file_id the Hydrus ID of the file to get a thumbnail of
    * @return the URL of the thumbnail for the file referenced by the ID
    */
-  public getThumbnailURL(file_id: number): string {
+  public getThumbnailURLFromId(file_id: number): string {
     return this.getAPIUrl() + 'get_files/thumbnail?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
+  }
+
+  /**
+   * Generates a file's URL from its Hash
+   * @param file_hash the hash of the file to get
+   * @return the URL of the raw full file referenced by the hash
+   */
+  public getFileURLFromHash(file_hash: string): string {
+    return this.getAPIUrl() + 'get_files/file?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
+  }
+
+  /**
+   * Generates a file's thumbnail URL from its hash
+   * @param file_hash the hash of the file to get a thumbnail of
+   * @return the URL of the thumbnail for the file referenced by the hash
+   */
+  public getThumbnailURLFromHash(file_hash: string): string {
+    return this.getAPIUrl() + 'get_files/thumbnail?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
   }
 
   /**

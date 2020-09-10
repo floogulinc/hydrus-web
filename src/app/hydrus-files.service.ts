@@ -93,8 +93,8 @@ export class HydrusFilesService {
     return this.getFileMetadataAPI(fileIds).pipe(
       map(v => v.map(i => ({
         ...i,
-        file_url: this.api.getFileURL(i.file_id),
-        thumbnail_url: this.api.getThumbnailURL(i.file_id),
+        file_url: this.api.getFileURLFromHash(i.hash),
+        thumbnail_url: this.api.getThumbnailURLFromHash(i.hash),
         file_type: this.type(i.mime),
         has_thumbnail: this.hasThumbnail(i.mime)
       }))),
