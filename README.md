@@ -18,7 +18,7 @@ Hydrus web is a web client for [Hydrus](https://hydrusnetwork.github.io/hydrus/)
 
 ### hydrus.app
 
-[hydrus.app](https://hydrus.app/) is the recommended way to use Hydrus Web. It will always be the latest stable version (latest commit on the `master` branch) of Hydrus Web. It is automatically deployed with [ZEIT Now](https://zeit.co/).
+[hydrus.app](https://hydrus.app/) is the recommended way to use Hydrus Web. It will always be the latest stable version (latest commit on the `master` branch) of Hydrus Web. It is automatically deployed with [Vercel](https://vercel.com/).
 
 The latest development build (latest commit on the `dev` branch) can be found at [dev.hydrus.app](https://dev.hydrus.app/).
 
