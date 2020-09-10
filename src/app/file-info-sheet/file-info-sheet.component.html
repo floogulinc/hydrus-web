@@ -14,7 +14,7 @@
     <button mat-icon-button (click)="saveFile()" title="Download file">
       <mat-icon>get_app</mat-icon>
     </button>
-    <button mat-icon-button (click)="shareFile()" title="Share file">
+    <button mat-icon-button *ngIf="navigatorShare && navigatorCanShare" (click)="shareFile()" title="Share file">
       <mat-icon>share</mat-icon>
     </button>
   </mat-list-item>

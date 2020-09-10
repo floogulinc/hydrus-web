@@ -80,7 +80,8 @@ export class FileInfoSheetComponent {
     this.filesService.getFileAsFile(this.data.file).toPromise().then(file => {
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         return navigator.share({
-          files: [file]
+          files: [file],
+          title: this.data.file.hash
         });
       } else {
         throw new Error('Your browser doesn\'t support sharing this file');
@@ -90,9 +91,11 @@ export class FileInfoSheetComponent {
       snackBarRef.dismiss();
     }, error => {
       snackBarRef.dismiss();
-      this.snackbar.open(`Error sharing file: ${error.message}`, undefined, {
-        duration: 10000
-      });
+      if (error.message !== 'Share canceled') {
+        this.snackbar.open(`Error sharing file: ${error.message}`, undefined, {
+          duration: 10000
+        });
+      }
     });
   }
 
