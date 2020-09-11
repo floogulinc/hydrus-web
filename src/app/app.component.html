@@ -1,7 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport mode="over" [autoFocus]="false">
-      mode="over">
-    <mat-toolbar>Menu</mat-toolbar>
+    <mat-toolbar>Hydrus Web</mat-toolbar>
+    <mat-nav-list class="sidenav-list" role="navigation">
       <a mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
         <mat-icon matListIcon>photo</mat-icon>
