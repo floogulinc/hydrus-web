@@ -1,6 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport mode="over" [autoFocus]="false">
-    <mat-toolbar>Hydrus Web</mat-toolbar>
+    <img src="/assets/icon-square.svg" class="sidenav-icon">
     <mat-nav-list class="sidenav-list" role="navigation">
       <a mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
       [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
