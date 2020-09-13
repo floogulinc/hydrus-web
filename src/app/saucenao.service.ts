@@ -103,7 +103,7 @@ export class SaucenaoService {
 
   public filteredSearchResponse(url: string, options?: SacuenaoOptions, minSimilarity: number = 70): Observable<Result[]> {
     return this.searchResponse(url, options).pipe(
-      map(resp => resp.results.filter(({ header: { index_id: id, similarity} }) => !!sites[id] && similarity >= minSimilarity)
+      map(resp => resp.results.filter(({ header: { index_id: id, similarity}}) => !!sites[id] && similarity >= minSimilarity)
       .sort((a, b) => b.header.similarity - a.header.similarity))
     );
   }
@@ -117,7 +117,7 @@ export class SaucenaoService {
           header: { similarity, thumbnail },
         } = result;
 
-        const urls = result.data.ext_urls.map(url => ({
+        const urls = (result.data.ext_urls ?? [url]).map(url => ({
           site: Object.values(sites).find(site => site.urlMatcher.test(url))?.name ?? 'Unknown',
           url
         }));
@@ -133,7 +133,8 @@ export class SaucenaoService {
           raw: result,
           urls
         };
-      }))
+      })),
+      tap(x => console.log(x))
     );
   }
 
