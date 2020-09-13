@@ -1,21 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Result, Response } from 'sagiri/dist/response';
-import sites, { SiteData } from 'sagiri/dist/sites';
+import sites from 'sagiri/dist/sites';
 import { resolveResult } from 'sagiri/dist/util';
 import { SagiriClientError, SagiriServerError } from 'sagiri/dist/errors';
-import { map, tap, catchError } from 'rxjs/operators';
-// import { SagiriResult, Options } from 'sagiri/dist/index';
-
-// from https://github.com/ClarityCafe/Sagiri/blob/master/lib/index.ts#L138-L145
-interface Options {
-  results?: number;
-  mask?: number[];
-  excludeMask?: number[];
-  testMode?: boolean;
-  db?: number;
-}
+import { map, catchError } from 'rxjs/operators';
 
 // from https://github.com/ClarityCafe/Sagiri/blob/master/lib/index.ts#L147-L156
 interface SagiriResult {

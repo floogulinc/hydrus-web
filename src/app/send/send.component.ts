@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HydrusAddService, AddUrlOptions } from '../hydrus-add.service';
-import { Validators, FormControl, FormGroup, AbstractControl } from '@angular/forms';
-import { switchMap, debounceTime, share, throttleTime, tap, skipWhile, filter, catchError } from 'rxjs/operators';
-import { Observable, of, forkJoin } from 'rxjs';
+import { Validators, FormControl, FormGroup } from '@angular/forms';
+import { switchMap, debounceTime, catchError } from 'rxjs/operators';
+import { of, forkJoin } from 'rxjs';
 import { HydrusURLInfo, HydrusURLFiles } from '../hydrus-url';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -50,10 +50,10 @@ export class SendComponent implements OnInit {
       debounceTime(200),
       switchMap(val => val && this.sendUrl.valid ? forkJoin([
         this.addService.getUrlInfo(val).pipe(
-          catchError(e => of(null))
+          catchError(() => of(null))
         ),
         this.addService.getUrlFiles(val).pipe(
-          catchError(e => of(null))
+          catchError(() => of(null))
         )
       ]) : of([null, null])),
     ).subscribe((res) => {
