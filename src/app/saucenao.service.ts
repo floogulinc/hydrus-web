@@ -133,8 +133,7 @@ export class SaucenaoService {
           raw: result,
           urls
         };
-      })),
-      tap(x => console.log(x))
+      }))
     );
   }
 
