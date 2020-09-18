@@ -17,10 +17,6 @@
   width: 256px;
 }
 
-.sidenav .mat-toolbar {
-  background: inherit;
-}
-
 .mat-toolbar.mat-primary {
   position: sticky;
   top: 0;
@@ -28,7 +24,7 @@
 }
 
 .app-title {
-  padding-left: 20px;
+  padding-left: 16px;
 }
 
 .main-toolbar {
@@ -37,6 +33,6 @@
 
 .sidenav-icon {
   display: block;
-  width: 100%;
-  //margin: 16px 16px 0;
+  width: 24px;
+  padding: 4px;
 }
