@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HydrusFilesService } from './hydrus-files.service';
 import { SearchService } from './search.service';
 import { forkJoin, from } from 'rxjs';
-import { map, switchMap, filter, mergeMap, toArray, delay, concatMap, tap, reduce } from 'rxjs/operators';
+import { map, switchMap, filter, mergeMap, toArray, delay, concatMap, tap, reduce, distinct } from 'rxjs/operators';
 import { TagUtils } from './tag-utils';
 import { HydrusFile } from './hydrus-file';
 
@@ -94,8 +94,10 @@ export class ComicsService {
       mergeMap(tag => this.searchService.searchFiles([tag]).pipe(
         tap(() => this.updateLoading(tag)),
         map(files => ({tag, files}))
-      )),
+      )))
+    .pipe(
       filter(({files}) => files.length > 3),
+      distinct(c => c.files.toString()),
       mergeMap(({tag, files}) => this.fileService.getFileMetadata(files).pipe(
         map(fileMetadata => ({
           tag,
