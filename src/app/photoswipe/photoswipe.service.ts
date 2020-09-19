@@ -142,7 +142,9 @@ export class PhotoswipeService {
       this.bottomSheet.open(FileInfoSheetComponent, {
         data: {
           file: item
-        }
+        },
+        panelClass: 'file-info-panel',
+        closeOnNavigation: true
       });
 
     });
