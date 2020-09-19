@@ -90,10 +90,10 @@ body {
   z-index: 10000 !important;
 }
 
-.tag-chip {
+.mat-chip.tag-chip {
   background-color: map-get(
-    map-get($mat-tag-colors, "default-namespace"),
-    "default"
+  map-get($mat-tag-colors, "default-namespace"),
+  "default"
   );
   color: map-get(
     map-get($mat-tag-colors, "default-namespace"),
@@ -120,7 +120,6 @@ body {
     opacity: 0.6;
   }
   height: 100% !important;
-  //color: white;
 }
 
 .toolbar-count {
