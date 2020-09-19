@@ -10,27 +10,29 @@
     </div>
   </div>
   <div>
-    <ul class="mdc-image-list comics-image-list" #container>
-      <li class="mdc-image-list__item grid-item"
-        *ngFor="let comic of (comicsService.comicsFlat | orderBy: ['tag', 'volume'])"
-        title="{{comic.tag}} {{comic.volume}}">
-        <a
-          routerLink="/comics/view"
-          [queryParams]="{title: comic.tag, volume: comic.volume}"
-
-        >
-          <div class="mdc-image-list__image-aspect-container" matBadge="{{comic.numFiles}}" [matBadgeOverlap]="true" matBadgePosition="below">
-            <div class="mdc-image-list__image image-list-image"
-              [ngStyle]="comic.coverFile.has_thumbnail ? {'background-image':'url('+ comic.coverFile.thumbnail_url +')'} : {'background-color' : '#c7c5cb'}"
-              [ngClass]="'file-id-' + comic.coverFile.file_id"></div>
+    <virtual-scroller class="virtual-scroll" #scroll [items]="comicsService.comicsFlat | orderBy: ['tag', 'volume']"
+  [parentScroll]="appComponent.sidenavContent.getElementRef().nativeElement" [bufferAmount]="18">
+      <ul class="mdc-image-list comics-image-list" #container>
+        <li class="mdc-image-list__item grid-item"
+          *ngFor="let comic of scroll.viewPortItems; trackBy: scrollTrackByFunction"
+          title="{{comic.tag}} {{comic.volume}}">
+          <a
+            routerLink="/comics/view"
+            [queryParams]="{title: comic.tag, volume: comic.volume}"
+          >
+            <div class="mdc-image-list__image-aspect-container" matBadge="{{comic.numFiles}}" [matBadgeOverlap]="true" matBadgePosition="below">
+              <div class="mdc-image-list__image image-list-image"
+                [ngStyle]="comic.coverFile.has_thumbnail ? {'background-image':'url('+ comic.coverFile.thumbnail_url +')'} : {'background-color' : '#c7c5cb'}"
+                [ngClass]="'file-id-' + comic.coverFile.file_id"></div>
+            </div>
+          </a>
+          <div class="mdc-image-list__supporting image-grid-supporting-text">
+            <span class="mdc-image-list__label image-label">{{comic.tag.replace(comicsService.titleNamespace + ':', '')}}</span>
+            <span class="mdc-image-list__label image-label">{{comic.volume?.replace('volume:', 'v')}}</span>
           </div>
-        </a>
-        <div class="mdc-image-list__supporting image-grid-supporting-text">
-          <span class="mdc-image-list__label image-label">{{comic.tag.replace(comicsService.titleNamespace + ':', '')}}</span>
-          <span class="mdc-image-list__label image-label">{{comic.volume?.replace('volume:', 'v')}}</span>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </virtual-scroller>
   </div>
 </div>
 

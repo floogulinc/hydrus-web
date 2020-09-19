@@ -6,7 +6,7 @@ import { map, switchMap, filter, mergeMap, toArray, delay, concatMap, tap, reduc
 import { TagUtils } from './tag-utils';
 import { HydrusFile } from './hydrus-file';
 
-interface FlatComic {
+export interface FlatComic {
   tag: string;
   volume?: string;
   coverFile: HydrusFile;
