@@ -3,6 +3,9 @@
   <mat-form-field >
     <mat-label>Title filter</mat-label>
     <input matInput type="text" autocomplete="off" #filter>
+    <button mat-icon-button matSuffix (click)="filter.value = ''" type="button" title="Clear filter">
+      <mat-icon>clear</mat-icon>
+    </button>
   </mat-form-field>
   <div class="loader" *ngIf="comicsService.loadingState.loading">
     <mat-progress-bar [mode]="comicsService.loadingState.barMode" [value]="comicsService.loadingState.total && comicsService.loadingState.progress ? (comicsService.loadingState.progress / comicsService.loadingState.total) * 100 : 0"></mat-progress-bar>
