@@ -3,7 +3,7 @@
   <mat-form-field >
     <mat-label>Title filter</mat-label>
     <input matInput type="text" autocomplete="off" #filter>
-    <button mat-icon-button matSuffix (click)="filter.value = ''" type="button" title="Clear filter">
+    <button mat-icon-button matSuffix (click)="filter.value = ''" type="button" title="Clear filter" [disabled]="filter.value.length === 0">
       <mat-icon>clear</mat-icon>
     </button>
   </mat-form-field>
