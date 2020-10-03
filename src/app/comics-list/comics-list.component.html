@@ -1,5 +1,9 @@
 <div fxLayout="column">
-  <h2 class="mat-display-1">Comics <span class="mat-small">alpha</span></h2>
+  <h2 class="mat-display-1 comics-header">Comics <span class="mat-small">alpha</span></h2>
+  <mat-form-field >
+    <mat-label>Title filter</mat-label>
+    <input matInput type="text" autocomplete="off" #filter>
+  </mat-form-field>
   <div class="loader" *ngIf="comicsService.loadingState.loading">
     <mat-progress-bar [mode]="comicsService.loadingState.barMode" [value]="comicsService.loadingState.total && comicsService.loadingState.progress ? (comicsService.loadingState.progress / comicsService.loadingState.total) * 100 : 0"></mat-progress-bar>
     <div fxLayout='row' fxLayoutAlign="space-between none">
@@ -10,7 +14,7 @@
     </div>
   </div>
   <div>
-    <virtual-scroller class="virtual-scroll" #scroll [items]="comicsService.comicsFlat | orderBy: ['tag', 'volume']"
+    <virtual-scroller class="virtual-scroll" #scroll [items]="comicsService.comicsFlat | filterBy: ['tag']: filter.value | orderBy: ['tag', 'volume']"
   [parentScroll]="appComponent.sidenavContent.getElementRef().nativeElement" [bufferAmount]="18">
       <ul class="mdc-image-list comics-image-list" #container>
         <li class="mdc-image-list__item grid-item"
@@ -37,6 +41,6 @@
 </div>
 
 <app-toolbar-actions>
-  <span class="mat-small toolbar-count">{{this.comicsService.loadingState.loading ?  'loading' : this.comicsService.comicsFlat.length}}</span>
+  <span class="mat-small toolbar-count">{{this.comicsService.loadingState.loading ?  'loading' : scroll.items.length}}</span>
   <button type="button" mat-icon-button aria-label="Refresh" (click)="refreshButton()"><mat-icon>refresh</mat-icon></button>
 </app-toolbar-actions>

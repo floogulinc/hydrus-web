@@ -97,7 +97,7 @@ export class ComicsService {
       )))
     .pipe(
       filter(({files}) => files.length > 3),
-      distinct(c => c.files.toString()),
+      distinct(({files}) => files.toString()),
       mergeMap(({tag, files}) => this.fileService.getFileMetadata(files).pipe(
         map(fileMetadata => ({
           tag,
