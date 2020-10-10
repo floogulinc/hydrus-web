@@ -59,7 +59,8 @@
   </mat-expansion-panel-header>
   <ng-template matExpansionPanelContent>
     <div *ngIf="exifPromise | async as exif">
-      {{exif}}
+      <td-json-formatter [data]="exif" [levelsOpen]="1">
+      </td-json-formatter>
     </div>
   </ng-template>
 </mat-expansion-panel>

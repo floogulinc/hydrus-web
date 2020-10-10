@@ -23,6 +23,22 @@ declare global {
   }
 }
 
+const exifOptions = {
+
+  xmp: true,
+  icc: true,
+  iptc: true,
+  jfif: true, // (jpeg only)
+  ihdr: false, // (png only)
+
+  mergeOutput: false,
+
+  interop: true,
+  // Other TIFF tags
+  makerNote: true,
+  userComment: true,
+}
+
 @Component({
   selector: 'app-file-info-sheet',
   templateUrl: './file-info-sheet.component.html',
@@ -44,7 +60,7 @@ export class FileInfoSheetComponent {
   ) {
 
     this.exifPromise = new Observable(o => {
-      exifr.parse(data.file.file_url).then((d) => {
+      exifr.parse(data.file.file_url, exifOptions).then((d) => {
         o.next(d);
         o.complete();
       }, r => o.error(r));

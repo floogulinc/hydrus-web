@@ -1,6 +1,8 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import "@angular/material/theming";
+@import "~@angular/material/theming";
+
+@import '~@covalent/core/theming/all-theme';
 
 // Plus imports for other components in your app.
 
@@ -50,12 +52,15 @@
   .image-grid-supporting-text {
     color: mat-color($foreground, text) !important;
   }
+
+  @include td-json-formatter-theme($theme);
 }
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($light-theme);
+//@include covalent-theme($light-theme);
 @include app-theming($light-theme);
 
 html,
@@ -69,6 +74,7 @@ body {
 
 @media (prefers-color-scheme: dark) {
   @include angular-material-theme($dark-theme);
+  //@include covalent-theme($dark-theme);
   @include app-theming($dark-theme);
 }
 

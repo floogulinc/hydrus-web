@@ -33,6 +33,7 @@
     "@angular/platform-browser-dynamic": "~9.1.11",
     "@angular/router": "~9.1.11",
     "@angular/service-worker": "~9.1.11",
+    "@covalent/core": "^3.1.0",
     "@material/image-list": "^3.1.0",
     "@ngneat/until-destroy": "^7.3.0",
     "core-js": "^2.6.11",

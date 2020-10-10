@@ -58,6 +58,8 @@ import { ComicComponent } from './comic/comic.component';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 
+import { CovalentJsonFormatterModule } from '@covalent/core/json-formatter';
+
 
 const MAT_MODULES = [
     MatToolbarModule,
@@ -81,6 +83,10 @@ const MAT_MODULES = [
     MatBadgeModule,
     MatMenuModule
 ];
+
+const COVALENT_MODULES = [
+  CovalentJsonFormatterModule
+]
 
 
 @NgModule({
@@ -110,6 +116,7 @@ const MAT_MODULES = [
     FormsModule,
     PortalModule,
     MAT_MODULES,
+    COVALENT_MODULES,
     NgxLocalStorageModule.forRoot({prefix: environment.localStoragePrefix}),
     BrowserAnimationsModule,
     LayoutModule,
