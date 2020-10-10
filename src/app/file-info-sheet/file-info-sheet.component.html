@@ -52,3 +52,14 @@
   </mat-expansion-panel>
   </mat-accordion>
 </div>
+
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    Advanced Metadata
+  </mat-expansion-panel-header>
+  <ng-template matExpansionPanelContent>
+    <div *ngIf="exifPromise | async as exif">
+      {{exif}}
+    </div>
+  </ng-template>
+</mat-expansion-panel>

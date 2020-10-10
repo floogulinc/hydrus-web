@@ -6,6 +6,8 @@ import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { rejects } from 'assert';
+import exifr, { Exifr } from 'exifr';
+import { from, Observable } from 'rxjs';
 
 interface ShareData {
   title?: string;
@@ -31,11 +33,23 @@ export class FileInfoSheetComponent {
   tagUtils = TagUtils;
   Object = Object;
 
+  exifr = exifr;
+
+  exifPromise: Observable<any>;
+
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusFile},
     private filesService: HydrusFilesService,
     private snackbar: MatSnackBar
-  ) { }
+  ) {
+
+    this.exifPromise = new Observable(o => {
+      exifr.parse(data.file.file_url).then((d) => {
+        o.next(d);
+        o.complete();
+      }, r => o.error(r));
+    });
+  }
 
   get fileIcon() {
     switch (this.data.file.file_type) {
