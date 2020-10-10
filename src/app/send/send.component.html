@@ -33,9 +33,42 @@
       formControlName="destPageName" placeholder="" >
     </mat-form-field>
     <div fxLayout="row" fxLayoutAlign="end">
+      <button mat-raised-button color="primary" type="button" [disabled]="sendUrl.invalid" (click)="saucenaoLookup()">SauceNAO Lookup</button>
       <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
     </div>
   </form>
 
-
+  <div *ngIf="saucenaoResults || saucenaoLoading" class="saucenao-results">
+    <h2 class="mat-title">SauceNao Results</h2>
+    <mat-spinner *ngIf="saucenaoLoading" class="saucenao-spinner"></mat-spinner>
+    <div *ngIf="saucenaoResults">
+      <mat-card *ngFor="let result of saucenaoResults" class="saucenao-card">
+        <mat-card-header>
+          <img mat-card-avatar class="saucenao-thumbnail" [src]="result.thumbnail">
+          <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>
+          <mat-card-subtitle>{{result.similarity}}%</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-list class="saucenao-url-list">
+            <mat-list-item *ngFor="let url of result.urls">
+              <div mat-line>{{url.site}}</div>
+              <div mat-line>{{url.url}}</div>
+              <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
+                <mat-icon>open_in_new</mat-icon>
+              </a>
+              <button mat-icon-button (click)="send(url.url)" title="Send to Hydrus">
+                <mat-icon>send</mat-icon>
+              </button>
+            </mat-list-item>
+          </mat-list>
+        </mat-card-content>
+      </mat-card>
+      <mat-card *ngIf="saucenaoResults.length === 0" class="saucenao-card">
+        <mat-card-header>
+          <mat-icon mat-card-avatar>error</mat-icon>
+          <mat-card-title>No results found</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  </div>
 </div>
