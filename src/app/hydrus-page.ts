@@ -6,7 +6,7 @@ export interface HydrusPageSimple {
 
 export interface HydrusPageListItem extends HydrusPageSimple {
   focused: boolean;
-  pages?: HydrusPageListItem[]
+  pages?: HydrusPageListItem[];
 }
 
 export interface HydrusPage extends HydrusPageSimple {
@@ -15,6 +15,6 @@ export interface HydrusPage extends HydrusPageSimple {
     num_files: number;
     hash_ids: number[];
     hashes?: string[];
-  }
+  };
 }
 

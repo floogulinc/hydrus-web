@@ -1,10 +1,10 @@
-<virtual-scroller class="virtual-scroll" #scroll [items]="currentFiles" (vsEnd)="vsEnd($event)"
+<virtual-scroller class="virtual-scroll" #scroll [items]="files" (vsEnd)="vsEnd($event)"
   [parentScroll]="appComponent.sidenavContent.getElementRef().nativeElement" [bufferAmount]="24">
   <ul class="mdc-image-list browse-image-list" #container>
     <li class="mdc-image-list__item grid-item"
       *ngFor="let file of scroll.viewPortItems; trackBy: scrollTrackByFunction">
       <a [href]="file.file_url"
-        (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.currentFiles, file.file_id);">
+        (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.files, file.file_id);">
         <div class="mdc-image-list__image-aspect-container">
           <div class="mdc-image-list__image image-list-image"
             [ngStyle]="file.has_thumbnail ? {'background-image':'url('+ file.thumbnail_url +')'} : {'background-color' : '#c7c5cb'}"
@@ -14,6 +14,3 @@
     </li>
   </ul>
 </virtual-scroller>
-<div *ngIf="loading || currentFiles.length === 0" class="loader">
-  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-</div>

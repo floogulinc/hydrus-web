@@ -5,6 +5,8 @@ import { map, share } from 'rxjs/operators';
 import { MatSidenavContent } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate } from '@angular/service-worker';
+import { environment } from 'src/environments/environment';
+import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +17,8 @@ export class AppComponent implements OnInit {
   title = 'hydrus-web';
 
   public refresh$: Subject<boolean> = new Subject();
+
+  @ViewChild('toolbarActionsPortal', {read: CdkPortalOutlet}) public toolbarActionsPortal: CdkPortalOutlet;
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -28,6 +32,8 @@ export class AppComponent implements OnInit {
   @ViewChild(MatSidenavContent, {static: true})
   public sidenavContent: MatSidenavContent;
 
+  public env = environment;
+
   ngOnInit() {
     this.updates.available.subscribe(event => {
       console.log('current version is', event.current);
@@ -36,7 +42,7 @@ export class AppComponent implements OnInit {
         duration: 10000
       }).onAction().subscribe(() => {
         this.updates.activateUpdate().then(() => document.location.reload());
-      })
+      });
     });
     this.updates.activated.subscribe(event => {
       console.log('old version was', event.previous);

@@ -4,22 +4,23 @@
 
 export const environment = {
   production: false,
-  localStoragePrefix: "hydrus-web-1",
+  localStoragePrefix: 'hydrus-web-1',
   versionInfo: {
-    "infotype": "git-describe",
-    "gitinfo" : {
-      "dirty": false,
-      "raw": "devrawhash",
-      "hash": "devhash",
-      "distance": null,
-      "tag": null,
-      "semver": null,
-      "suffix": "devsuffix",
-      "semverString": null,
+    infotype: 'git-describe',
+    gitinfo : {
+      dirty: false,
+      raw: 'devrawhash',
+      hash: 'devhash',
+      distance: null,
+      tag: null,
+      semver: null,
+      suffix: 'devsuffix',
+      semverString: null,
+      VERCEL_URL: null,
     },
-    "version": "0.0.0",
-    "branch": "devbranch",
-    "hash": "devhash"
+    version: '0.0.0',
+    branch: 'devbranch',
+    hash: 'devhash'
   }
 };
 

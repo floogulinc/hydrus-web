@@ -5,7 +5,8 @@ RUN apk add --no-cache git
 WORKDIR /app
 
 # Install npm dependencies
-COPY package*.json /app/
+COPY patches /app/patches/
+COPY package*.json .npmrc /app/
 RUN npm ci
 
 # Build the Angular project

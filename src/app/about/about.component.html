@@ -1,22 +1,69 @@
 <div fxLayout="column">
-    <h2 class="mat-display-1">About</h2>
-    <div>
-        <p>Hydrus Web {{ env.versionInfo.version }} running on <code>{{doc.location.origin}}</code></p>
-        <p>Git commit: <a [href]="repoURL + '/commit/' + env.versionInfo.hash"><code>{{env.versionInfo.hash}}</code></a></p>
-        <p>Git branch: <code>{{env.versionInfo.branch}}</code></p>
-        <p>Production build: {{env.production}}</p>
-        <p *ngIf="env.versionInfo.infotype == 'now-github'">Deployed on ZEIT Now</p>
-    </div>
-    <div fxLayout="row">
-        <p><a mat-stroked-button [href]="repoURL">GitHub Repository</a></p>
-    </div>
-
-
-    <h2 class="mat-h2">Service Worker</h2>
-    <div>
-        Service Worker: {{this.updates.isEnabled ? "Enabled" : "Disabled" }}
-    </div>
-    <div fxLayout="row">
-        <button [disabled]="!this.updates.isEnabled" mat-stroked-button (click)="updates.checkForUpdate()">Check for Updates</button>
-    </div>
+  <h2 class="mat-display-1">About</h2>
+  <mat-nav-list role="list">
+    <div mat-subheader>General</div>
+    <a mat-list-item role="listitem" [href]="repoURL + '/releases/tag/v' + env.versionInfo.version">
+      <div mat-line>Release Version</div>
+      <div mat-line>Hydrus Web {{ env.versionInfo.version }}</div>
+    </a>
+    <mat-list-item role="listitem">
+      <div mat-line>Running on</div>
+      <div mat-line><code>{{doc.location.origin}}</code></div>
+    </mat-list-item>
+    <a mat-list-item role="listitem" [href]="repoURL">
+      <div mat-line>GitHub Repo</div>
+      <div mat-line><code>floogulinc/hydrus-web</code></div>
+    </a>
+    <a mat-list-item role="listitem" (click)="updates.checkForUpdate()" *ngIf="this.updates.isEnabled">
+      <div mat-line>Check for updates</div>
+    </a>
+    <mat-divider></mat-divider>
+    <div mat-subheader>Debug</div>
+    <a mat-list-item role="listitem" [href]="repoURL + '/commit/' + env.versionInfo.hash">
+      <div mat-line>Git Commit Hash</div>
+      <div mat-line><code>{{env.versionInfo.hash}}</code></div>
+    </a>
+    <mat-list-item role="listitem">
+      <div mat-line>Git Branch</div>
+      <div mat-line><code>{{env.versionInfo.branch}}</code></div>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <div mat-line>{{env.production ? 'Production' : 'Development'}} Build</div>
+    </mat-list-item>
+    <a mat-list-item role="listitem" *ngIf="env.versionInfo.infotype === 'vercel-github'" [href]="'https://' + env.versionInfo.gitinfo.VERCEL_URL + '/_logs'">
+      <div mat-line>Deployed on Vercel</div>
+      <div mat-line><code>{{env.versionInfo.gitinfo.VERCEL_URL}}</code></div>
+    </a>
+    <a mat-list-item role="listitem" (click)="filesService.clearFilesCache()">
+      <div mat-line>Clear session file metadata cache</div>
+      <div mat-line>{{filesService.getFilesCacheSize()}} files cached</div>
+    </a>
+    <a mat-list-item role="listitem" (click)="filesService.clearKnownTags()">
+      <div mat-line>Clear session known tags</div>
+      <div mat-line>{{filesService.getKnownTagsSize()}} tags cached</div>
+    </a>
+    <a mat-list-item role="listitem" (click)="comicsService.clearComics()">
+      <div mat-line>Clear known comics</div>
+      <div mat-line>{{comicsService.comicsFlat.length}} comics cached</div>
+    </a>
+    <mat-list-item role="listitem">
+      <div mat-line>Platform</div>
+      <div mat-line *ngIf="platform.ANDROID">Android</div>
+      <div mat-line *ngIf="platform.IOS">iOS</div>
+      <div mat-line *ngIf="platform.BLINK">Blink</div>
+      <div mat-line *ngIf="platform.EDGE">Edge</div>
+      <div mat-line *ngIf="platform.FIREFOX">Firefox</div>
+      <div mat-line *ngIf="platform.TRIDENT">Trident</div>
+      <div mat-line *ngIf="platform.WEBKIT">WebKit</div>
+    </mat-list-item>
+    <mat-list-item role="listitem">
+      <div mat-line>Service Worker</div>
+      <div mat-line>{{this.updates.isEnabled ? "Enabled" : "Disabled" }}</div>
+    </mat-list-item>
+    <mat-list-item role="listitem" *ngIf="navigator.storage">
+      <div mat-line>Storage</div>
+      <div mat-line>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
+      <div mat-line *ngIf="storageQuota">{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
+    </mat-list-item>
+  </mat-nav-list>
 </div>

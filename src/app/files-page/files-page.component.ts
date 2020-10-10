@@ -1,31 +1,32 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Optional } from '@angular/core';
 import { HydrusPageListItem, HydrusPage,  } from '../hydrus-page';
 import { HydrusPagesService } from '../hydrus-pages.service';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { AppComponent } from '../app.component';
-import { takeUntil } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { PagesComponent } from '../pages/pages.component';
 
+@UntilDestroy()
 @Component({
   selector: 'app-files-page',
   templateUrl: './files-page.component.html',
   styleUrls: ['./files-page.component.scss']
 })
-export class FilesPageComponent implements OnInit, OnDestroy {
+export class FilesPageComponent implements OnInit {
 
   @Input() pageListItem: HydrusPageListItem;
+  @Input() refresh?: Observable<any>;
 
   pageInfo: HydrusPage;
 
-  destroyNotifier$ = new Subject();
-
-  constructor(public pagesService: HydrusPagesService, private appComponent: AppComponent) { }
+  constructor(public pagesService: HydrusPagesService) { }
 
   loadSub: Subscription;
 
   load() {
     this.loadSub?.unsubscribe();
     this.pageInfo = null;
-    this.loadSub = this.pagesService.getPage(this.pageListItem.page_key).pipe(takeUntil(this.destroyNotifier$)).subscribe(
+    this.loadSub = this.pagesService.getPage(this.pageListItem.page_key).pipe(untilDestroyed(this)).subscribe(
       (result) => {
         this.pageInfo = result;
       }
@@ -34,14 +35,13 @@ export class FilesPageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.load();
-    this.appComponent.refresh$.pipe(takeUntil(this.destroyNotifier$)).subscribe(() => {
-      this.load();
-    });
+    if (this.refresh) {
+      this.refresh.pipe(untilDestroyed(this)).subscribe(() => {
+        this.load();
+      });
+    }
   }
 
-  ngOnDestroy() {
-    this.destroyNotifier$.next();
-    this.destroyNotifier$.complete();
-  }
+
 
 }
