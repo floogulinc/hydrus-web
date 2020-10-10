@@ -29,7 +29,7 @@ const exifOptions = {
   icc: true,
   iptc: true,
   jfif: true, // (jpeg only)
-  ihdr: false, // (png only)
+  ihdr: true, // (png only)
 
   mergeOutput: false,
 
