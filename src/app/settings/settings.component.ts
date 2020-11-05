@@ -13,6 +13,8 @@ export class SettingsComponent implements OnInit {
 
   testData: HydrusKeyVerificationData;
 
+  apiErrors;
+
   ngOnInit() {
   }
 
@@ -38,6 +40,7 @@ export class SettingsComponent implements OnInit {
       this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 5000
       });
+      this.apiErrors = JSON.stringify(error);
     });
   }
 
