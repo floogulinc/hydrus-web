@@ -4,6 +4,15 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, tap } from 'rxjs/operators';
 
+function chunk<T>(array: T[], size: number): T[][] {
+  const chunked = [];
+  for (let i = 0; i < array.length; i = i + size) {
+    chunked.push(array.slice(i, i + size));
+  }
+  return chunked;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -83,14 +92,21 @@ export class HydrusFilesService {
     ].includes(mime));
   }
 
+
   private getFileMetadataAPI(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
     // tslint:disable-next-line: no-string-literal
     return this.api.getFileMetadata({ file_ids: JSON.stringify(fileIds) }).pipe(map(val => val['metadata']));
   }
 
+  private getFileMetadataAPIChunked(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
+    return forkJoin(chunk(fileIds, 500).map(ids => this.getFileMetadataAPI(ids))).pipe(
+      map(files => files.flat())
+    );
+  }
+
   private getAndAddMetadata(fileIds: number[]): Observable<HydrusFile[]> {
     if (fileIds.length === 0) { return of([]); }
-    return this.getFileMetadataAPI(fileIds).pipe(
+    return this.getFileMetadataAPIChunked(fileIds).pipe(
       map(v => v.map(i => ({
         ...i,
         file_url: this.api.getFileURLFromHash(i.hash),
