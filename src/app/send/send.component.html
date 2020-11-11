@@ -15,18 +15,6 @@
         URL is required
       </mat-error>
     </mat-form-field>
-    <mat-card *ngIf="this.currentUrlInfo" class="url-info-card">
-      <mat-card-header>
-        <mat-icon mat-card-avatar [color]="this.currentUrlFiles.url_file_statuses[0]?.status === 2 || this.currentUrlInfo.can_parse ? 'none' : 'warn'">
-          {{this.currentUrlFiles.url_file_statuses[0]?.status === 2 ? 'library_add_check' : 'library_add'}}
-        </mat-icon>
-        <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
-        <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content *ngIf="this.currentUrlFiles">
-        {{this.currentUrlFiles.url_file_statuses[0] ? this.currentUrlFiles?.url_file_statuses[0].note : 'Not imported yet'}}
-      </mat-card-content>
-    </mat-card>
     <mat-form-field appearance="outline">
       <mat-label>Destination page name</mat-label>
       <input matInput type="text" autocomplete="off"
@@ -37,6 +25,19 @@
       <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
     </div>
   </form>
+
+  <mat-card *ngIf="this.currentUrlInfo" class="url-info-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar [color]="this.currentUrlFiles.url_file_statuses[0]?.status === 2 || this.currentUrlInfo.can_parse ? 'none' : 'warn'">
+        {{this.currentUrlFiles.url_file_statuses[0]?.status === 2 ? 'library_add_check' : 'library_add'}}
+      </mat-icon>
+      <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
+      <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content *ngIf="this.currentUrlFiles">
+      {{this.currentUrlFiles.url_file_statuses[0] ? this.currentUrlFiles?.url_file_statuses[0].note : 'Not imported yet'}}
+    </mat-card-content>
+  </mat-card>
 
   <div *ngIf="saucenaoResults || saucenaoLoading" class="saucenao-results">
     <h2 class="mat-title">SauceNao Results</h2>
