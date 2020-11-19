@@ -12,6 +12,8 @@ function chunk<T>(array: T[], size: number): T[][] {
   return chunked;
 }
 
+const QUERY_CHUNK_SIZE = 256;
+
 
 @Injectable({
   providedIn: 'root'
@@ -99,7 +101,7 @@ export class HydrusFilesService {
   }
 
   private getFileMetadataAPIChunked(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
-    return forkJoin(chunk(fileIds, 500).map(ids => this.getFileMetadataAPI(ids))).pipe(
+    return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getFileMetadataAPI(ids))).pipe(
       map(files => files.flat())
     );
   }
