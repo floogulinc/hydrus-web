@@ -8,6 +8,7 @@ export const environment = {
   versionInfo: {
     vercel: null,
     version: '0.0.0',
+    tag: 'v0.0.0',
     branch: 'devbranch',
     hash: 'devhash'
   }

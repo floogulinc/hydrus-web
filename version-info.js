@@ -6,6 +6,7 @@ const git = require('git-rev-sync');
 var info = {
   branch: git.branch(),
   hash: git.long(),
+  tag: git.tag(),
   version
 };
 

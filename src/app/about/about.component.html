@@ -2,7 +2,7 @@
   <h2 class="mat-display-1">About</h2>
   <mat-nav-list role="list">
     <div mat-subheader>General</div>
-    <a mat-list-item role="listitem" [href]="repoURL + '/releases/tag/v' + env.versionInfo.version">
+    <a mat-list-item role="listitem" [href]="repoURL + '/releases/tag/' + env.versionInfo.tag">
       <div mat-line>Release Version</div>
       <div mat-line>Hydrus Web {{ env.versionInfo.version }}</div>
     </a>
