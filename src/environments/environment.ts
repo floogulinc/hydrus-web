@@ -6,8 +6,8 @@ export const environment = {
   production: false,
   localStoragePrefix: 'hydrus-web-1',
   versionInfo: {
-    infotype: 'git-describe',
-    gitinfo : {
+    vercel: null,
+    gitInfo : {
       dirty: false,
       raw: 'devrawhash',
       hash: 'devhash',

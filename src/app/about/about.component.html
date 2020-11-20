@@ -30,9 +30,9 @@
     <mat-list-item role="listitem">
       <div mat-line>{{env.production ? 'Production' : 'Development'}} Build</div>
     </mat-list-item>
-    <a mat-list-item role="listitem" *ngIf="env.versionInfo.infotype === 'vercel-github'" [href]="'https://' + env.versionInfo.gitinfo.VERCEL_URL + '/_logs'">
+    <a mat-list-item role="listitem" *ngIf="env.versionInfo.vercel" [href]="'https://' + env.versionInfo.vercel.VERCEL_URL + '/_logs'">
       <div mat-line>Deployed on Vercel</div>
-      <div mat-line><code>{{env.versionInfo.gitinfo.VERCEL_URL}}</code></div>
+      <div mat-line><code>{{env.versionInfo.vercel.VERCEL_URL}}</code></div>
     </a>
     <a mat-list-item role="listitem" (click)="filesService.clearFilesCache()">
       <div mat-line>Clear session file metadata cache</div>
