@@ -3,18 +3,24 @@ const { resolve, relative } = require('path');
 const { writeFileSync } = require('fs-extra');
 const git = require('git-rev-sync');
 
-var info = {
-  branch: git.branch(),
-  hash: git.long(),
-  tag: git.tag(),
-  version
-};
+var info;
 
 if(process.env.VERCEL_GITHUB_DEPLOYMENT) {
   console.log(`Detected GitHub deployment on Vercel. URL: ${process.env.VERCEL_URL}`);
-  info.vercel = {
-    VERCEL_URL: process.env.VERCEL_URL
-  }
+  var info = {
+    branch: process.env.VERCEL_GITHUB_COMMIT_REF,
+    hash: process.env.VERCEL_GITHUB_COMMIT_SHA,
+    version,
+    vercel: {
+      VERCEL_URL: process.env.VERCEL_URL
+    }
+  };
+} else {
+  info = {
+    branch: git.branch(),
+    hash: git.long(),
+    version
+  };
 }
 
 const file = resolve(__dirname, '.', 'src', 'environments', 'version.json');
