@@ -1,19 +1,11 @@
-const { gitDescribeSync } = require('git-describe');
 const { version } = require('./package.json');
 const { resolve, relative } = require('path');
 const { writeFileSync } = require('fs-extra');
-const branch = require('git-branch');
+const git = require('git-rev-sync');
 
-var gitInfo = gitDescribeSync({
-  customArguments: ['--abbrev=40'],
-  dirtyMark: false,
-  dirtySemver: false
-});
-
-info = {
-  gitInfo,
-  branch: branch.sync(),
-  hash: gitInfo.hash.substring(1),
+var info = {
+  branch: git.branch(),
+  hash: git.long(),
   version
 };
 
@@ -27,4 +19,4 @@ if(process.env.VERCEL_GITHUB_DEPLOYMENT) {
 const file = resolve(__dirname, '.', 'src', 'environments', 'version.json');
 writeFileSync(file, JSON.stringify(info, null, 2));
 
-console.log(`Wrote version info ${gitInfo.hash} (branch: ${info.branch}) to ${relative(resolve(__dirname, '..'), file)}`);
+console.log(`Wrote version info ${info.hash} (branch: ${info.branch}) to ${relative(resolve(__dirname, '..'), file)}`);

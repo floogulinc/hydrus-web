@@ -7,17 +7,6 @@ export const environment = {
   localStoragePrefix: 'hydrus-web-1',
   versionInfo: {
     vercel: null,
-    gitInfo : {
-      dirty: false,
-      raw: 'devrawhash',
-      hash: 'devhash',
-      distance: null,
-      tag: null,
-      semver: null,
-      suffix: 'devsuffix',
-      semverString: null,
-      VERCEL_URL: null,
-    },
     version: '0.0.0',
     branch: 'devbranch',
     hash: 'devhash'
