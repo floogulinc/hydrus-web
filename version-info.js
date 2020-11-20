@@ -19,7 +19,8 @@ if(process.env.VERCEL_GITHUB_DEPLOYMENT) {
   info = {
     branch: git.branch(),
     hash: git.long(),
-    version
+    version,
+    vercel: null
   };
 }
 
