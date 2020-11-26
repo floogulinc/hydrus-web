@@ -35,10 +35,10 @@
 </mat-expansion-panel>
 <br>
 
-<div *ngIf="Object.keys(data.file.service_names_to_statuses_to_tags).length > 1">
+<div *ngIf="tags && Object.keys(tags).length > 1">
   <h3 class="mat-subheading-2">Tags</h3>
   <mat-accordion multi>
-  <mat-expansion-panel *ngFor="let service of data.file.service_names_to_statuses_to_tags | keyvalue" >
+  <mat-expansion-panel *ngFor="let service of tags | keyvalue" >
     <mat-expansion-panel-header>
       {{service.key}} ({{service.value[0]?.length}})
     </mat-expansion-panel-header>

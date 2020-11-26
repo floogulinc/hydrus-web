@@ -3,6 +3,7 @@ import { HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, tap } from 'rxjs/operators';
+import { TagUtils } from './tag-utils';
 
 function chunk<T>(array: T[], size: number): T[][] {
   const chunked = [];
@@ -147,11 +148,12 @@ export class HydrusFilesService {
   }
 
   private AddTags(file: HydrusFile) {
-    if (file.service_names_to_statuses_to_tags) {
-      if ('0' in file.service_names_to_statuses_to_tags['all known tags']) {
-        file.service_names_to_statuses_to_tags['all known tags']['0'].forEach((tag) => this.allTags.add(tag));
-      }
-    }
+    TagUtils.AllTagsFromFile(file).forEach((tag) => this.allTags.add(tag));
+    // if (file.service_names_to_statuses_to_tags) {
+    //   if ('0' in file.service_names_to_statuses_to_tags['all known tags']) {
+    //     file.service_names_to_statuses_to_tags['all known tags']['0'].forEach((tag) => this.allTags.add(tag));
+    //   }
+    // }
   }
 
   getKnownTags(): Set<string> {
