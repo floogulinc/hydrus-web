@@ -1,8 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HydrusFileList, HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
-import { Observable, of, iif, forkJoin } from 'rxjs';
+import { HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
+import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
-import { map, switchMap, mergeMap, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { TagUtils } from './tag-utils';
+
+function chunk<T>(array: T[], size: number): T[][] {
+  const chunked = [];
+  for (let i = 0; i < array.length; i = i + size) {
+    chunked.push(array.slice(i, i + size));
+  }
+  return chunked;
+}
+
+const QUERY_CHUNK_SIZE = 256;
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +23,25 @@ export class HydrusFilesService {
 
   constructor(private api: HydrusApiService) { }
 
-  private allFiles : Map<number, HydrusFile> = new Map<number, HydrusFile>();
+  private allFiles: Map<number, HydrusFile> = new Map<number, HydrusFile>();
 
-  private allTags : Set<string> = new Set<string>();
+  private allTags: Set<string> = new Set<string>();
+
+  clearFilesCache(): void {
+    this.allFiles.clear();
+  }
+
+  clearKnownTags(): void {
+    this.allTags.clear();
+  }
+
+  getFilesCacheSize(): number {
+    return this.allFiles.size;
+  }
+
+  getKnownTagsSize(): number {
+    return this.allTags.size;
+  }
 
   type(mime: string): HydrusFileType {
     if ([
@@ -67,86 +95,84 @@ export class HydrusFilesService {
     ].includes(mime));
   }
 
-  private getFileMetadataAPI(file_ids: number[]): Observable<HydrusFileFromAPI[]> {
-    return this.api.getFileMetadata({file_ids: JSON.stringify(file_ids)}).pipe(map(val => val["metadata"]));
+
+  private getFileMetadataAPI(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
+    // tslint:disable-next-line: no-string-literal
+    return this.api.getFileMetadata({ file_ids: JSON.stringify(fileIds) }).pipe(map(val => val['metadata']));
   }
 
-  private getAndAddMetadata(file_ids: number[]) : Observable<HydrusFile[]> {
-    if(file_ids.length == 0) return of([]);
-    return this.getFileMetadataAPI(file_ids).pipe(
+  private getFileMetadataAPIChunked(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
+    return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getFileMetadataAPI(ids))).pipe(
+      map(files => files.flat())
+    );
+  }
+
+  private getAndAddMetadata(fileIds: number[]): Observable<HydrusFile[]> {
+    if (fileIds.length === 0) { return of([]); }
+    return this.getFileMetadataAPIChunked(fileIds).pipe(
       map(v => v.map(i => ({
         ...i,
-        file_url: this.api.getFileURL(i.file_id),
-        thumbnail_url: this.api.getThumbnailURL(i.file_id),
+        file_url: this.api.getFileURLFromHash(i.hash),
+        thumbnail_url: this.api.getThumbnailURLFromHash(i.hash),
         file_type: this.type(i.mime),
         has_thumbnail: this.hasThumbnail(i.mime)
       }))),
       tap(v => this.addFilesAndTags(v)));
+  }
+
+  private addFilesAndTags(files: HydrusFile[]) {
+    files.forEach((file) => {
+      this.allFiles.set(file.file_id, file);
+      this.AddTags(file);
+    });
+  }
+
+  getFileMetadata(fileIds: number[]): Observable<HydrusFile[]> {
+    const existingFiles: HydrusFile[] = [];
+    const filesToGet: number[] = [];
+    for (const id of fileIds) {
+      if (this.allFiles.has(id)) {
+        existingFiles.push(this.allFiles.get(id));
+      } else {
+        filesToGet.push(id);
+      }
     }
+    return forkJoin([of(existingFiles), this.getAndAddMetadata(filesToGet)]).pipe(
+      map(([s1, s2]) => [...s1, ...s2]),
+      map((files) => {
+        return files.sort((a, b) => {
+          return fileIds.indexOf(a.file_id) - fileIds.indexOf(b.file_id);
+        });
+      })
+    );
+  }
 
-    private addFilesAndTags(files: HydrusFile[]) {
-      files.forEach((file) => {
-        this.allFiles.set(file.file_id, file);
-        this.AddTags(file);
-      });
+  private AddTags(file: HydrusFile) {
+    TagUtils.AllTagsFromFile(file).forEach((tag) => this.allTags.add(tag));
+    // if (file.service_names_to_statuses_to_tags) {
+    //   if ('0' in file.service_names_to_statuses_to_tags['all known tags']) {
+    //     file.service_names_to_statuses_to_tags['all known tags']['0'].forEach((tag) => this.allTags.add(tag));
+    //   }
+    // }
+  }
+
+  getKnownTags(): Set<string> {
+    return this.allTags;
+  }
+
+  public getFileAsFile(file: HydrusFile): Observable<File> {
+    return this.api.getFileAsBlob(file.hash).pipe(
+      map(b => new File([b], file.hash + file.ext, {type: this.fixFileType(b.type)}))
+    );
+  }
+
+  // Needed until https://github.com/hydrusnetwork/hydrus/issues/646 is merged
+  private fixFileType(type: string) {
+    if (type === 'image/jpg') {
+      return 'image/jpeg';
+    } else {
+      return type;
     }
+  }
 
-    getFileMetadata(file_ids: number[]) : Observable<HydrusFile[]> {
-      let files : HydrusFile[] = [];
-      let filesToGet: number[] = [];
-      for(let id of file_ids) {
-        if(this.allFiles.has(id)) {
-          files.push(this.allFiles.get(id));
-        } else {
-          filesToGet.push(id);
-        }
-      }
-      return forkJoin(of(files), this.getAndAddMetadata(filesToGet)).pipe(
-        map(([s1, s2]) => [...s1, ...s2]),
-        map((files) => {
-          return files.sort((a,b) => {
-            return file_ids.indexOf(a.file_id) - file_ids.indexOf(b.file_id);
-          })
-        })
-        );
-
-      }
-
-      private AddTags(file: HydrusFile) {
-        if(file.service_names_to_statuses_to_tags){
-          // Object.entries(file.service_names_to_statuses_to_tags).forEach(([key, value]) => {
-          //   if ("0" in value) {
-          //     value["0"].forEach((tag) => this.allTags.add(tag));
-          //   }
-          // })
-          if ("0" in file.service_names_to_statuses_to_tags["all known tags"]) {
-            file.service_names_to_statuses_to_tags["all known tags"]["0"].forEach((tag) => this.allTags.add(tag));
-          }
-        }
-      }
-
-      getKnownTags() : Set<string> {
-        return this.allTags;
-      }
-
-      /*   public getFileMetadata(id: number) : Observable<HydrusFile> {
-
-        return Observable.create((observer) => {
-          observer.next(this.allFiles.get(id));
-          observer.complete();
-        }).pipe(switchMap(val => val == undefined ? ))
-      }
-      */
-      /* public getFile(id: number) : Observable<HydrusFile> {
-        if(this.allFiles[id]) {
-          return of(this.allFiles[id]);
-        } else {
-          return this.getAndAddFile(id);
-        }
-      } */
-
-      /* private getAndAddFile(id: number) : Observable<HydrusFile> {
-
-      } */
-
-    }
+}

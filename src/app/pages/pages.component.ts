@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HydrusPagesService } from '../hydrus-pages.service';
-import { Observable } from 'rxjs';
 import { HydrusPageListItem } from '../hydrus-page';
 import { ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-pages',
@@ -22,13 +22,15 @@ export class PagesComponent implements OnInit {
 
   pages: HydrusPageListItem[] = [];
 
+  public refreshButton$: Subject<boolean> = new Subject();
+
   ngOnInit() {
-    if(this.hydrusApiUrl && this.hydrusApiKey) {
+    if (this.hydrusApiUrl && this.hydrusApiKey) {
       this.pagesService.getAllPages().subscribe(
         (result) => {
           this.pages = result;
         }
-      )
+      );
     }
   }
 

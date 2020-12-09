@@ -1,1 +1,1 @@
-<app-image-list *ngIf="this.pageInfo" [fileIDs]="this.pageInfo.media.hash_ids"></app-image-list>
+<app-image-list-loader [fileIDs]="this.pageInfo ? this.pageInfo.media.hash_ids : []"></app-image-list-loader>

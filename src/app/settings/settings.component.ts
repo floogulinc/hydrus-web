@@ -29,16 +29,16 @@ export class SettingsComponent implements OnInit {
   }
 
   testApi() {
-    this.api.testApi().subscribe((data) => { 
+    this.api.testApi().subscribe((data) => {
       this.snackbar.open(data.human_description, undefined, {
         duration: 5000
       });
     }, (error) => {
       console.log(error);
-      this.snackbar.open("Error: " + error.statusText + " (" + error.status + ")", undefined, {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 5000
       });
-    })
+    });
   }
 
 }

@@ -1,0 +1,39 @@
+diff --git a/node_modules/@types/photoswipe/index.d.ts b/node_modules/@types/photoswipe/index.d.ts
+index 8845060..b92a4ea 100644
+--- a/node_modules/@types/photoswipe/index.d.ts
++++ b/node_modules/@types/photoswipe/index.d.ts
+@@ -61,6 +61,17 @@ declare namespace PhotoSwipe {
+          * Internal property added by PhotoSwipe.
+          */
+         initialPosition?: any;
++
++        /**
++         * Unique picture identifier
++         */
++        pid?: string | number;
++
++        /**
++         * The title of the slide, used by Default PhotoSwipe UI
++         * if you skip it, there won't be any caption
++         */
++        title?: string;
+     }
+ 
+     /**
+@@ -255,6 +266,16 @@ declare namespace PhotoSwipe {
+          */
+         galleryUID?: number;
+ 
++
++        /**
++         * Enables custom IDs for each slide object that are used when forming URL.
++         * If option set set to true, slide objects must have pid (picture identifier) property that can be a string or an integer.
++         *
++         * Default false.
++         */
++        galleryPIDs?: boolean;
++
++
+         /**
+          * Error message when image was not loaded. %url% will be replaced by URL of image.
+          *

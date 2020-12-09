@@ -1,7 +1,6 @@
 import { HydrusApiService } from './hydrus-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SettingsService } from './settings.service';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -14,15 +13,12 @@ export class SearchService {
 
   public searchFiles(tags: string[], options?: {system_inbox?: boolean, system_archive?: boolean}): Observable<number[]> {
     return this.api.searchFiles(
-      JSON.stringify(tags),
+      encodeURIComponent(JSON.stringify(tags)),
       {
-        system_inbox: options && options.system_inbox ? "true" : "false",
-        system_archive: options && options.system_archive ? "true" : "false"
+        system_inbox: options && options.system_inbox ? 'true' : 'false',
+        system_archive: options && options.system_archive ? 'true' : 'false'
       }
+    // tslint:disable-next-line: no-string-literal
     ).pipe(map(a => a['file_ids']));
   }
-  /* search(tags?: string[]) : Observable<number[]> {
-    return this.settings.getApi
-  } */
-
 }

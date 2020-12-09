@@ -29,29 +29,32 @@ export class TagInputComponent implements OnInit {
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
-  constructor(public filesService : HydrusFilesService) {
+  constructor(public filesService: HydrusFilesService) {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(""),
+      startWith(''),
       map((tag: string) => this._filter(tag))
     );
-    
    }
 
   ngOnInit() {
   }
 
   chipInputEvent(event: MatChipInputEvent): void {
-    //if (!this.matAutocomplete.isOpen) {
-      const input = event.input;
-      const value = event.value.toLowerCase(); //Hydrus tags are always lowercase
+    if(this.matAutocomplete.isOpen && this.matAutocomplete.options.some(x => x.active)) {
+      return;
+    }
 
-      this.addSearchTag(value);
+    const input = event.input;
+    const value = event.value.toLowerCase(); // Hydrus tags are always lowercase
 
-      // Reset the input value
-      if (input) {
-        input.value = '';
-      }
-    //}
+    this.addSearchTag(value);
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+
+    this.tagCtrl.setValue(null);
   }
 
   addSearchTag(tag: string) {
@@ -62,7 +65,7 @@ export class TagInputComponent implements OnInit {
 
     this.tags.emit(this.searchTags);
   }
-  
+
 
   removeSearchTag(tag: string): void {
     const index = this.searchTags.indexOf(tag);
@@ -82,10 +85,22 @@ export class TagInputComponent implements OnInit {
 
 
   private _filter(value: string): string[] {
-    const filterValue = value ? value.toLowerCase() : "";
+    let filterValue = value ? value.toLowerCase() : '';
+    const isNegated = filterValue.startsWith('-');
+    if (isNegated) {
+      filterValue = filterValue.substring(1);
+    }
 
-    return Array.from(this.filesService.getKnownTags()).filter(tag => tag.toLowerCase().indexOf(filterValue) === 0).filter(tag => !this.searchTags.includes(tag)).slice(0,25);
+    let results = Array.from(this.filesService.getKnownTags())
+      .filter(tag => tag.toLowerCase().indexOf(filterValue) !== -1)
+      .filter(tag => !this.searchTags.includes(tag)).slice(0, 25);
+
+    if (isNegated) {
+      results = results.map(t => `-${t}`);
+    }
+
+    return results;
   }
-  
+
 
 }

@@ -1,0 +1,36 @@
+.mat-display-1 {
+  margin-bottom: 16px;
+}
+
+.url-info-card {
+  margin-bottom: 24px;
+}
+
+mat-icon.mat-card-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
+.send-button {
+  margin-left: 8px;
+}
+
+.saucenao-thumbnail {
+  border-radius: 4px !important;
+}
+
+.metadata-line span:not(:last-of-type) {
+  margin-right: 20px;
+}
+
+.saucenao-card, .url-info-card {
+  margin-top: 16px;
+}
+
+.saucenao-results {
+  margin-top: 16px;
+}
+.saucenao-spinner {
+  margin: 32px auto 0;
+}

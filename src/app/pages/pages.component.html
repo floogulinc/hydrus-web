@@ -1,4 +1,4 @@
-<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi" class="main-container">
+<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi" >
   <ng-template #recursiveList let-list>
 
   <mat-tab-group animationDuration="0ms" dynamicHeight class="pages-tab-group">
@@ -8,7 +8,7 @@
           <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: page.pages }"></ng-container>
         </div>
         <div *ngIf="page.page_type == 6 || page.page_type == 7 || page.page_type == 3 || page.page_type == 1 || page.page_type == 2">
-          <app-files-page [pageListItem]="page"></app-files-page>
+          <app-files-page [pageListItem]="page" [refresh]="refreshButton$"></app-files-page>
         </div>
       </ng-template>
     </mat-tab>
@@ -30,3 +30,7 @@
     </mat-card-actions>
   </mat-card>
 </ng-template>
+
+<app-toolbar-actions>
+  <button type="button" mat-icon-button aria-label="Refresh" (click)="refreshButton$.next()"><mat-icon>refresh</mat-icon></button>
+</app-toolbar-actions>

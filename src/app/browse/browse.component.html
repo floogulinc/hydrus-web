@@ -1,18 +1,37 @@
-<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi" class="main-container">
-  <div class="search-bar">
-    <app-tag-input (tags)="tagsChanged($event)" class="tag-input"></app-tag-input>
+<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi">
+  <div class="search-bar" fxLayout="row" fxLayoutAlign="space-between center">
+    <app-tag-input fxFlex (tags)="tagsChanged($event)" class="tag-input"></app-tag-input>
+    <button mat-icon-button [matMenuTriggerFor]="filterMenu">
+      <mat-icon>filter_list_alt</mat-icon>
+    </button>
+    <mat-menu  #filterMenu="matMenu">
+      <button mat-menu-item (click)="setFilterOption(FilterOption.none)" [disabled]="filterOption === FilterOption.none">
+        <span>All</span>
+      </button>
+      <button mat-menu-item (click)="setFilterOption(FilterOption.archive)" [disabled]="filterOption === FilterOption.archive">
+        <span>Archive</span>
+      </button>
+      <button mat-menu-item (click)="setFilterOption(FilterOption.inbox)" [disabled]="filterOption === FilterOption.inbox">
+        <span>Inbox</span>
+      </button>
+    </mat-menu>
   </div>
-  <app-image-list [fileIDs]="this.currentSearchIDs" class="app-image-list"></app-image-list>
-  </div>
+  <app-image-list-loader [fileIDs]="this.currentSearchIDs" class="app-image-list"></app-image-list-loader>
+</div>
 
-  <ng-template #noApi>
-    <mat-card>
-      <mat-card-title>Welcome to Hydrus Web</mat-card-title>
-      <mat-card-content>
-        <p>To begin, enter your Hydrus API information in the settings page</p>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button routerLink="/settings">Go to Settings</button>
-      </mat-card-actions>
-    </mat-card>
-  </ng-template>
+<ng-template #noApi>
+  <mat-card>
+    <mat-card-title>Welcome to Hydrus Web</mat-card-title>
+    <mat-card-content>
+      <p>To begin, enter your Hydrus API information in the settings page</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-button routerLink="/settings">Go to Settings</button>
+    </mat-card-actions>
+  </mat-card>
+</ng-template>
+
+<app-toolbar-actions>
+  <span class="mat-small toolbar-count">{{this.currentSearchIDs.length}}</span>
+  <button type="button" mat-icon-button aria-label="Refresh" (click)="refreshButton()"><mat-icon>refresh</mat-icon></button>
+</app-toolbar-actions>

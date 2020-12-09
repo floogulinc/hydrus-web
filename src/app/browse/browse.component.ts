@@ -1,23 +1,25 @@
 import { AppComponent } from './../app.component';
-import { HydrusApiService } from './../hydrus-api.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';
 import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { IPageInfo } from 'ngx-virtual-scroller';
-import { HydrusFile } from '../hydrus-file';
-import { PhotoswipeComponent } from '../photoswipe/photoswipe.component';
+import { Subscription } from 'rxjs';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
+enum FilterOption {
+  archive,
+  inbox,
+  none
+}
 
+@UntilDestroy()
 @Component({
   selector: 'app-browse',
   templateUrl: './browse.component.html',
   styleUrls: ['./browse.component.scss']
 })
-export class BrowseComponent implements OnInit {
+export class BrowseComponent implements OnInit, AfterViewInit {
 
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiUrl: string;
@@ -25,21 +27,32 @@ export class BrowseComponent implements OnInit {
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiKey: string;
 
+  FilterOption = FilterOption;
 
   constructor(private searchService: SearchService, public filesService: HydrusFilesService) { }
 
   currentSearchIDs: number[] = [];
   searchTags: string[] = [];
 
-  searchArchive: boolean = false;
+  searchSub: Subscription;
 
+  filterOption: FilterOption = FilterOption.none;
+
+  setFilterOption(option: FilterOption){
+    this.filterOption = option;
+    this.search();
+  }
 
   ngOnInit() {
+  }
 
+  refreshButton() {
+    this.currentSearchIDs = [];
+    this.search();
   }
 
   ngAfterViewInit() {
-    if(this.hydrusApiUrl && this.hydrusApiKey) {
+    if (this.hydrusApiUrl && this.hydrusApiKey) {
       this.search();
     }
   }
@@ -50,11 +63,18 @@ export class BrowseComponent implements OnInit {
   }
 
   search() {
-    this.searchService.searchFiles(this.searchTags).subscribe((result) => {
+    this.searchSub?.unsubscribe();
+    this.searchSub = this.searchService.searchFiles(
+      this.searchTags,
+      {
+        system_inbox: this.filterOption === FilterOption.inbox,
+        system_archive: this.filterOption === FilterOption.archive
+      }
+    ).pipe(untilDestroyed(this)).subscribe((result) => {
       this.currentSearchIDs = result;
-    }, (error) => {
+    }, () => {
 
-    })
+    });
   }
 
 }

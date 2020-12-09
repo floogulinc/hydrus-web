@@ -27,7 +27,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/manifest.webmanifest",
-              "src/browserconfig.xml"
+              "src/browserconfig.xml",
+              "src/.well-known/assetlinks.json"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -35,7 +36,9 @@
                ]
             },
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/material-design-icons-iconfont/dist/material-design-icons.css",
+              "node_modules/typeface-roboto/index.css"
             ],
             "scripts": [],
             "es5BrowserSupport": true
