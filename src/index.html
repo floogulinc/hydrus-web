@@ -38,10 +38,9 @@
   <script>
     window.RufflePlayer = window.RufflePlayer || {};
     window.RufflePlayer.config = {
-                "public_path": "/assets/ruffle/",
-                "polyfills": []
-                /* ^ Which polyfills should be run. */
-    }
+        "publicPath": "/assets/ruffle/",
+        "polyfills": true, // Whether polyfills should be run.
+    };
     </script>
     <script src="/assets/ruffle/ruffle.js"></script>
 </body>

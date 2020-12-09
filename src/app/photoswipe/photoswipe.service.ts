@@ -135,9 +135,9 @@ export class PhotoswipeService {
         } else if(item.file_type === HydrusFileType.Flash) {
           const flashContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-flash-${pid}`);
           let ruffle = (window as any).RufflePlayer.newest();
-          let player = ruffle.create_player();
+          let player = ruffle.createPlayer();
           flashContainer.prepend(player);
-          player.stream_swf_url(item.file_url);
+          player.load(item.file_url);
           player.className = 'pswp-flash';
         }
       }
