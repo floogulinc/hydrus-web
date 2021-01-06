@@ -56,10 +56,10 @@
       <div mat-line *ngIf="platform.TRIDENT">Trident</div>
       <div mat-line *ngIf="platform.WEBKIT">WebKit</div>
     </mat-list-item>
-    <mat-list-item role="listitem">
+    <a mat-list-item role="listitem" href="/ngsw/state">
       <div mat-line>Service Worker</div>
       <div mat-line>{{this.updates.isEnabled ? "Enabled" : "Disabled" }}</div>
-    </mat-list-item>
+    </a>
     <mat-list-item role="listitem" *ngIf="navigator.storage">
       <div mat-line>Storage</div>
       <div mat-line>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
