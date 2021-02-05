@@ -35,6 +35,7 @@
     "@angular/service-worker": "^9.1.12",
     "@material/image-list": "^3.1.0",
     "@ngneat/until-destroy": "^7.3.2",
+    "array-flat-polyfill": "^1.0.1",
     "core-js": "^2.6.12",
     "file-saver": "^2.0.5",
     "git-rev-sync": "^3.0.1",
