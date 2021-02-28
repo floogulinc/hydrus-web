@@ -57,7 +57,9 @@ export class HydrusFilesService {
     }
     if ([
       'video/mp4',
-      'video/webm'
+      'video/webm',
+      'video/x-matroska',
+      'video/quicktime',
     ].includes(mime)) {
       return HydrusFileType.Video;
     }
