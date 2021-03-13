@@ -31,15 +31,15 @@ export class FileInfoSheetComponent {
   tagUtils = TagUtils;
   Object = Object;
 
-  tags: ServiceNamesToStatusesToTags;
-
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusFile},
     private filesService: HydrusFilesService,
     private snackbar: MatSnackBar
-  ) {
-    this.tags = TagUtils.tagsObjectFromFile(data.file);
-  }
+  ) { }
+
+  tags = Object.entries(TagUtils.tagsObjectFromFile(this.data.file))
+    .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
+    .map(([serviceName, statuses]) => ({serviceName, statuses}));
 
   get fileIcon() {
     switch (this.data.file.file_type) {
