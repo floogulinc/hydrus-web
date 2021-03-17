@@ -11,6 +11,9 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
+        },
+        "@ngxs/schematics:component": {
+          "style": "scss"
         }
       },
       "architect": {
@@ -32,8 +35,8 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                    "node_modules"
-               ]
+                "node_modules"
+              ]
             },
             "styles": [
               "src/styles.scss",
@@ -154,5 +157,8 @@
       }
     }
   },
-  "defaultProject": "hydrus-web"
+  "defaultProject": "hydrus-web",
+  "cli": {
+    "defaultCollection": "@ngxs/schematics"
+  }
 }
