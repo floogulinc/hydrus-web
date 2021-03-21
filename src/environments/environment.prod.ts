@@ -1,4 +1,4 @@
-import { VERSION } from './version';
+import * as VERSION from './version.json';
 
 export const environment = {
   production: true,

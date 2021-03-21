@@ -35,16 +35,16 @@
 </mat-expansion-panel>
 <br>
 
-<div *ngIf="Object.keys(data.file.service_names_to_statuses_to_tags).length > 1">
+<div *ngIf="tags && tags.length > 1">
   <h3 class="mat-subheading-2">Tags</h3>
   <mat-accordion multi>
-  <mat-expansion-panel *ngFor="let service of data.file.service_names_to_statuses_to_tags | keyvalue" >
+  <mat-expansion-panel *ngFor="let service of tags | orderBy: 'serviceName'" >
     <mat-expansion-panel-header>
-      {{service.key}} ({{service.value[0]?.length}})
+      {{service.serviceName}} ({{service.statuses[0].length}})
     </mat-expansion-panel-header>
     <ng-template matExpansionPanelContent>
       <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
-        <mat-chip *ngFor="let tag of (service.value[0] | orderBy)" [selectable]="false" class="tag-chip" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">
+        <mat-chip *ngFor="let tag of (service.statuses[0] | orderBy)" [selectable]="false" class="tag-chip" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">
           {{tag}}
         </mat-chip>
       </mat-chip-list>

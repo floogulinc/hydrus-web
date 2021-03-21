@@ -3,6 +3,18 @@ import { HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, tap } from 'rxjs/operators';
+import { TagUtils } from './tag-utils';
+
+function chunk<T>(array: T[], size: number): T[][] {
+  const chunked = [];
+  for (let i = 0; i < array.length; i = i + size) {
+    chunked.push(array.slice(i, i + size));
+  }
+  return chunked;
+}
+
+const QUERY_CHUNK_SIZE = 256;
+
 
 @Injectable({
   providedIn: 'root'
@@ -45,7 +57,9 @@ export class HydrusFilesService {
     }
     if ([
       'video/mp4',
-      'video/webm'
+      'video/webm',
+      'video/x-matroska',
+      'video/quicktime',
     ].includes(mime)) {
       return HydrusFileType.Video;
     }
@@ -83,14 +97,21 @@ export class HydrusFilesService {
     ].includes(mime));
   }
 
+
   private getFileMetadataAPI(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
     // tslint:disable-next-line: no-string-literal
     return this.api.getFileMetadata({ file_ids: JSON.stringify(fileIds) }).pipe(map(val => val['metadata']));
   }
 
+  private getFileMetadataAPIChunked(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
+    return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getFileMetadataAPI(ids))).pipe(
+      map(files => files.flat())
+    );
+  }
+
   private getAndAddMetadata(fileIds: number[]): Observable<HydrusFile[]> {
     if (fileIds.length === 0) { return of([]); }
-    return this.getFileMetadataAPI(fileIds).pipe(
+    return this.getFileMetadataAPIChunked(fileIds).pipe(
       map(v => v.map(i => ({
         ...i,
         file_url: this.api.getFileURLFromHash(i.hash),
@@ -129,11 +150,12 @@ export class HydrusFilesService {
   }
 
   private AddTags(file: HydrusFile) {
-    if (file.service_names_to_statuses_to_tags) {
-      if ('0' in file.service_names_to_statuses_to_tags['all known tags']) {
-        file.service_names_to_statuses_to_tags['all known tags']['0'].forEach((tag) => this.allTags.add(tag));
-      }
-    }
+    TagUtils.AllTagsFromFile(file).forEach((tag) => this.allTags.add(tag));
+    // if (file.service_names_to_statuses_to_tags) {
+    //   if ('0' in file.service_names_to_statuses_to_tags['all known tags']) {
+    //     file.service_names_to_statuses_to_tags['all known tags']['0'].forEach((tag) => this.allTags.add(tag));
+    //   }
+    // }
   }
 
   getKnownTags(): Set<string> {

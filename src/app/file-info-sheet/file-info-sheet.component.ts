@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { HydrusFile, HydrusFileType } from '../hydrus-file';
+import { HydrusFile, HydrusFileType, ServiceNamesToStatusesToTags } from '../hydrus-file';
 import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { TagUtils } from '../tag-utils';
 import { HydrusFilesService } from '../hydrus-files.service';
@@ -36,6 +36,10 @@ export class FileInfoSheetComponent {
     private filesService: HydrusFilesService,
     private snackbar: MatSnackBar
   ) { }
+
+  tags = Object.entries(TagUtils.tagsObjectFromFile(this.data.file))
+    .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
+    .map(([serviceName, statuses]) => ({serviceName, statuses}));
 
   get fileIcon() {
     switch (this.data.file.file_type) {
