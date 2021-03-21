@@ -6,6 +6,8 @@ import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { Subscription } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { SelectSnapshot, ViewSelectSnapshot } from '@ngxs-labs/select-snapshot';
+import { SettingsState } from '../settings.state';
 
 enum FilterOption {
   archive,
@@ -21,11 +23,13 @@ enum FilterOption {
 })
 export class BrowseComponent implements OnInit, AfterViewInit {
 
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
-  hydrusApiUrl: string;
+  // @ngxLocalStorage({prefix: environment.localStoragePrefix})
+  // hydrusApiUrl: string;
 
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
-  hydrusApiKey: string;
+  // @ngxLocalStorage({prefix: environment.localStoragePrefix})
+  // hydrusApiKey: string;
+
+  @ViewSelectSnapshot(SettingsState.apiConfigured) apiConfigured: boolean | null;
 
   FilterOption = FilterOption;
 
@@ -52,7 +56,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.hydrusApiUrl && this.hydrusApiKey) {
+    if (this.apiConfigured) {
       this.search();
     }
   }

@@ -1,4 +1,4 @@
-<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi">
+<div fxLayout="column" *ngIf="this.apiConfigured; else noApi">
   <div class="search-bar" fxLayout="row" fxLayoutAlign="space-between center">
     <app-tag-input fxFlex (tags)="tagsChanged($event)" class="tag-input"></app-tag-input>
     <button mat-icon-button [matMenuTriggerFor]="filterMenu">

@@ -3,6 +3,10 @@ import { ngxLocalStorage } from 'ngx-localstorage';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { SelectSnapshot } from '@ngxs-labs/select-snapshot';
+import { ApiInfo, SettingsState } from './settings.state';
+
+export const hydrusApiKeyPattern: RegExp = /^([a-fA-F]|[0-9]){64}$/;
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -17,22 +21,24 @@ export interface HydrusKeyVerificationData {
 export class HydrusApiService {
 
 
-  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
-  hydrusApiUrl: string;
+  // @ngxLocalStorage({ prefix: environment.localStoragePrefix })
+  // hydrusApiUrl: string;
 
-  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
-  hydrusApiKey: string;
+  // @ngxLocalStorage({ prefix: environment.localStoragePrefix })
+  // hydrusApiKey: string;
+
+  @SelectSnapshot(SettingsState.apiInfo) apiInfo: ApiInfo | null;
 
   constructor(private http: HttpClient) { }
 
 
   public getAPIUrl(): string {
-    return this.hydrusApiUrl + (this.hydrusApiUrl.endsWith('/') ? '' : '/');
+    return this.apiInfo.url + (this.apiInfo.url.endsWith('/') ? '' : '/');
   }
 
   private getHeaders(): HttpHeaders {
     return new HttpHeaders({
-      'Hydrus-Client-API-Access-Key': this.hydrusApiKey
+      'Hydrus-Client-API-Access-Key': this.apiInfo.key
     });
   }
 
@@ -92,7 +98,7 @@ export class HydrusApiService {
    * @return the URL of the raw full file referenced by the ID
    */
   public getFileURLFromId(file_id: number): string {
-    return this.getAPIUrl() + 'get_files/file?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
+    return this.getAPIUrl() + 'get_files/file?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.apiInfo.key;
   }
 
   /**
@@ -101,7 +107,7 @@ export class HydrusApiService {
    * @return the URL of the thumbnail for the file referenced by the ID
    */
   public getThumbnailURLFromId(file_id: number): string {
-    return this.getAPIUrl() + 'get_files/thumbnail?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
+    return this.getAPIUrl() + 'get_files/thumbnail?file_id=' + file_id + '&Hydrus-Client-API-Access-Key=' + this.apiInfo.key;
   }
 
   /**
@@ -110,7 +116,7 @@ export class HydrusApiService {
    * @return the URL of the raw full file referenced by the hash
    */
   public getFileURLFromHash(file_hash: string): string {
-    return this.getAPIUrl() + 'get_files/file?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
+    return this.getAPIUrl() + 'get_files/file?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.apiInfo.key;
   }
 
   /**
@@ -119,7 +125,7 @@ export class HydrusApiService {
    * @return the URL of the thumbnail for the file referenced by the hash
    */
   public getThumbnailURLFromHash(file_hash: string): string {
-    return this.getAPIUrl() + 'get_files/thumbnail?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
+    return this.getAPIUrl() + 'get_files/thumbnail?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.apiInfo.key;
   }
 
 

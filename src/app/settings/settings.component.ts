@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.service';
+import { hydrusApiKeyPattern, HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.service';
 
 @Component({
   selector: 'app-settings',
@@ -12,6 +13,16 @@ export class SettingsComponent implements OnInit {
   constructor(private snackbar: MatSnackBar, private api: HydrusApiService) { }
 
   testData: HydrusKeyVerificationData;
+
+  apiForm = new FormGroup({
+    url: new FormControl(null, [
+      Validators.required,
+    ]),
+    key: new FormControl(null, [
+      Validators.required,
+      Validators.pattern(hydrusApiKeyPattern)
+    ])
+  });
 
   ngOnInit() {
   }

@@ -57,6 +57,11 @@ import { ComicsListComponent } from './comics-list/comics-list.component';
 import { ComicComponent } from './comic/comic.component';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
+import { NgxsModule } from '@ngxs/store';
+import { SettingsState } from './settings.state';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { NgxsFormPluginModule } from '@ngxs/form-plugin';
+import { NgxsSelectSnapshotModule } from '@ngxs-labs/select-snapshot';
 
 
 const MAT_MODULES = [
@@ -82,6 +87,16 @@ const MAT_MODULES = [
     MatMenuModule
 ];
 
+const NGXS_MODULES = [
+  NgxsModule.forRoot([SettingsState], {
+    developmentMode: !environment.production
+  }),
+  NgxsStoragePluginModule.forRoot({
+    key: ['settings']
+  }),
+  NgxsSelectSnapshotModule.forRoot(),
+  NgxsFormPluginModule.forRoot(),
+];
 
 @NgModule({
   declarations: [
@@ -105,6 +120,7 @@ const MAT_MODULES = [
     BrowserModule,
     AppRoutingModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    NGXS_MODULES,
     HttpClientModule,
     FlexLayoutModule,
     FormsModule,
