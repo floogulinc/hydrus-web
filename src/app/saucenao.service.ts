@@ -50,7 +50,7 @@ export class SaucenaoService {
   constructor(private http: HttpClient) { }
 
   public searchResponse(url: string, options?: SacuenaoOptions): Observable<Response> {
-    return this.http.get<Response>('https://cors-anywhere.herokuapp.com/' + 'https://saucenao.com/search.php?db=999&output_type=2', {
+    return this.http.get<Response>('https://cors-anywhere-floogulinc.herokuapp.com/' + 'https://saucenao.com/search.php?db=999&output_type=2', {
       params: {
         ...defaultSaucenaoOptions,
         ...options,
