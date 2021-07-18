@@ -1,24 +1,3 @@
 {
-  "version": 2,
-  "name": "hydrus-web",
-  "alias": "hydrus.app",
-  "public": true,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*\\..*)",
-      "headers": { "cache-control": "public,max-age=0,must-revalidate" },
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "headers": { "cache-control": "public,max-age=0,must-revalidate" },
-      "dest": "/index.html"
-    }
-  ]
+  "public": true
 }
