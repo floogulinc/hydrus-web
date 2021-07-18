@@ -1,3 +1,9 @@
 {
-  "public": true
+  "public": true,
+  "rewrites": [
+    {
+      "source": "/saucenao-search",
+      "destination": "https://saucenao.com/search.php"
+    }
+  ]
 }
