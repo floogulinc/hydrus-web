@@ -93,7 +93,8 @@ export class HydrusFilesService {
       'video/x-matroska',
       'video/vnd.rn-realvideo',
       'application/vnd.rn-realmedia',
-      'video/webm'
+      'video/webm',
+      'application/x-photoshop'
     ].includes(mime));
   }
 

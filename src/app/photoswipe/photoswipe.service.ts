@@ -63,12 +63,16 @@ export class PhotoswipeService {
         pid: file.file_id
       };
     } else {
-      return {
-        html: `<div class="pswp__error-msg">
-        The file could not be loaded. (type: ${file.mime})
-        </div>`,
-        pid: file.file_id
-      };
+      const html = file.has_thumbnail
+      ? `<div class="pswp__error-msg">
+      <img src="${file.thumbnail_url}" class="pswp-error-thumb">
+      <p>The file could not be loaded. (type: ${file.mime})</p>
+      </div>`
+      : `<div class="pswp__error-msg">
+      The file could not be loaded. (type: ${file.mime})
+      </div>`;
+
+      return {html};
     }
   }
 
