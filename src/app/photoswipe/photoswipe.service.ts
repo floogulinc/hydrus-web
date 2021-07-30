@@ -72,7 +72,10 @@ export class PhotoswipeService {
       The file could not be loaded. (type: ${file.mime})
       </div>`;
 
-      return {html};
+      return {
+        html,
+        pid: file.file_id
+      };
     }
   }
 
