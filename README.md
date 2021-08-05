@@ -38,30 +38,7 @@ You may also want to run [Hydrus on Docker](https://hub.docker.com/r/suika/hydru
 
 Unless you are opening Hydrus Web on the same device the Hydrus client is running on, you will need to make its API available with valid HTTPS. This will likely mean running some form of reverse proxy.
 
-### Caddy
-
-I personally use [Caddy](https://caddyserver.com/) and have a subdomain pointed at my local network address that it can obtain a SSL certificate on with Let's Encrypt. This is what my `Caddyfile` looks like:
-
-```caddyfile
-https://1.8.local.floogulinc.com {
-	proxy / 127.0.0.1:45869 # proxy the Hydrus client API
-	gzip
-	tls {
-		dns cloudflare # Use DNS based verification for Let's Encrypt (need env variables set)
-	}
-}
-```
-
-Here is a different `Caddyfile` that proxies the API to `/hydrus` on a domain with a public IP:
-
-```caddyfile
-https://public.example.com {
-	proxy /hydrus 127.0.0.1:45869 {
-      without /hydrus
-    }
-	gzip
-}
-```
+There is now a guide on [doing this with Caddy, Duck DNS, and Tailscale](https://github.com/floogulinc/hydrus-web/wiki/Accessing-the-Hydrus-API-with-Caddy,-Duck-DNS,-and-Tailscale). There are other methods like using a self-signed CA as well.
 
 ## Development
 
