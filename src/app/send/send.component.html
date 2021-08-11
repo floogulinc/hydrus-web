@@ -28,7 +28,7 @@
 
   <mat-card *ngIf="this.currentUrlInfo" class="url-info-card">
     <mat-card-header>
-      <mat-icon mat-card-avatar [color]="this.currentUrlFiles.url_file_statuses[0]?.status === 2 || this.currentUrlInfo.can_parse ? 'none' : 'warn'">
+      <mat-icon mat-card-avatar [color]="this.currentUrlFiles.url_file_statuses[0]?.status === 2 || this.currentUrlInfo.can_parse ? undefined : 'warn'">
         {{this.currentUrlFiles.url_file_statuses[0]?.status === 2 ? 'library_add_check' : 'library_add'}}
       </mat-icon>
       <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
