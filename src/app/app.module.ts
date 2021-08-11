@@ -57,6 +57,8 @@ import { ComicsListComponent } from './comics-list/comics-list.component';
 import { ComicComponent } from './comic/comic.component';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
+import { AkitaNgDevtools } from '@datorama/akita-ngdevtools';
+import { AkitaNgRouterStoreModule } from '@datorama/akita-ng-router-store';
 
 
 const MAT_MODULES = [
@@ -115,7 +117,9 @@ const MAT_MODULES = [
     LayoutModule,
     ReactiveFormsModule,
     VirtualScrollerModule,
-    NgPipesModule
+    NgPipesModule,
+    environment.production ? [] : AkitaNgDevtools.forRoot(),
+    AkitaNgRouterStoreModule
   ],
   providers: [],
   bootstrap: [AppComponent],
