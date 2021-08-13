@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { combineLatest, Subscription } from 'rxjs';
+import { map, startWith, tap } from 'rxjs/operators';
+import { HydrusApiSettingsQuery, HydrusApiSettingsStore } from '../hydrus-api-settings';
 import { HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -9,27 +15,59 @@ import { HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.servi
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private snackbar: MatSnackBar, private api: HydrusApiService) { }
+  constructor(
+    private snackbar: MatSnackBar,
+    private api: HydrusApiService,
+    public hydrusApiSettingsStore: HydrusApiSettingsStore,
+    public hydrusApiSettingsQuery: HydrusApiSettingsQuery
+  ) { }
 
-  testData: HydrusKeyVerificationData;
+  //testData: HydrusKeyVerificationData;
+
+  apiSettingsForm = new FormGroup({
+    hydrusApiKey: new FormControl(
+      '',
+      [
+        Validators.required
+      ]),
+    hydrusApiUrl: new FormControl(
+      '',
+      [
+        Validators.required
+      ]
+      ),
+  });
+
+
+/*   apiSaved$ = combineLatest([
+    this.apiSettingsForm.valueChanges.pipe(startWith(this.apiSettingsForm.value)),
+    this.hydrusApiSettingsQuery.select()
+  ]).pipe(
+    tap(val => console.log(val)),
+    map(([formSettings, storeSettings]) =>
+      storeSettings.hydrusApiUrl === formSettings.hydrusApiUrl &&
+      storeSettings.hydrusApiKey === formSettings.hydrusApiKey
+    ),
+    tap(val => console.log(`apiSaved ${val}`)),
+  ); */
 
   ngOnInit() {
-  }
-
-  apiUrlStored() {
-    this.snackbar.open('API URL saved', undefined, {
-      duration: 2000
+    this.hydrusApiSettingsQuery.apiInfo$.pipe(untilDestroyed(this)).subscribe(apiSettings => {
+      this.apiSettingsForm.setValue(apiSettings);
+      this.apiSettingsForm.markAsPristine();
     });
   }
 
-  apiKeyStored() {
-    this.snackbar.open('API key saved', undefined, {
+  saveApiSettings() {
+    this.hydrusApiSettingsStore.update(this.apiSettingsForm.value);
+    console.log('API settings saved');
+    this.snackbar.open('API settings saved', undefined, {
       duration: 2000
     });
   }
 
   testApi() {
-    this.api.testApi().subscribe((data) => {
+    this.api.testApiWithInfo(this.apiSettingsForm.value).subscribe((data) => {
       this.snackbar.open(data.human_description, undefined, {
         duration: 5000
       });

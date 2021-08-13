@@ -5,3 +5,9 @@
 .mat-display-1 {
     margin-bottom: 16px;
 }
+
+.form-buttons {
+  :not(:first-child) {
+    margin-left: 8px;
+  }
+}

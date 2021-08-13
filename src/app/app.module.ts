@@ -7,8 +7,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { HttpClientModule } from '@angular/common/http';
 
-import {NgxLocalStorageModule} from 'ngx-localstorage';
-
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { FormsModule } from '@angular/forms';
@@ -112,7 +110,6 @@ const MAT_MODULES = [
     FormsModule,
     PortalModule,
     MAT_MODULES,
-    NgxLocalStorageModule.forRoot({prefix: environment.localStoragePrefix}),
     BrowserAnimationsModule,
     LayoutModule,
     ReactiveFormsModule,

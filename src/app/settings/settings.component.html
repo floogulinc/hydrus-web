@@ -1,17 +1,24 @@
 <div fxLayout="column">
   <h2 class="mat-display-1">Settings</h2>
-  <mat-form-field appearance="outline">
-    <mat-label>Hydrus API URL</mat-label>
-    <input matInput name="hydrusApiUrl" type="url" autocomplete="off"
-    ngxLocalStorage="hydrusApiUrl" lsEvent="input" [lsDebounce]="1000" [lsInitFromStorage]="true" (lsStoredValue)="this.apiUrlStored()"
-    placeholder="https://my.hydrus.api/">
-  </mat-form-field>
-  <mat-form-field appearance="outline">
+  <form [formGroup]="apiSettingsForm" fxLayout="column" (ngSubmit)="saveApiSettings()">
+    <mat-form-field appearance="outline">
+      <mat-label>Hydrus API URL</mat-label>
+      <input matInput name="hydrusApiUrl" type="url" autocomplete="off"
+      formControlName="hydrusApiUrl"
+      placeholder="https://my.hydrus.api/">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Hydrus API Key</mat-label>
-    <input matInput name="hydrusApiKey" type="password" autocomplete="off"
-    ngxLocalStorage="hydrusApiKey" lsEvent="input" [lsDebounce]="1000" [lsInitFromStorage]="true" (lsStoredValue)="this.apiKeyStored()">
-  </mat-form-field>
-  <div fxLayout="row">
-    <button mat-raised-button color="primary" (click)="this.testApi()">Test API</button>
-  </div>
+      <input matInput name="hydrusApiKey" type="password" autocomplete="off"
+      formControlName="hydrusApiKey">
+    </mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="end" class="form-buttons">
+      <button mat-button type="button" (click)="this.testApi()">Test API</button>
+      <button mat-raised-button color="primary" type="submit"
+      [disabled]="!apiSettingsForm.valid || apiSettingsForm.pristine"
+      >
+        Save
+      </button>
+    </div>
+  </form>
 </div>

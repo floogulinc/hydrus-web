@@ -1,11 +1,11 @@
 import { AppComponent } from './../app.component';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';
 import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { Subscription } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { HydrusApiSettingsQuery } from '../hydrus-api-settings';
 
 enum FilterOption {
   archive,
@@ -21,15 +21,13 @@ enum FilterOption {
 })
 export class BrowseComponent implements OnInit, AfterViewInit {
 
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
-  hydrusApiUrl: string;
-
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
-  hydrusApiKey: string;
-
   FilterOption = FilterOption;
 
-  constructor(private searchService: SearchService, public filesService: HydrusFilesService) { }
+  constructor(
+    private searchService: SearchService,
+    public filesService: HydrusFilesService,
+    public apiSettingsQuery: HydrusApiSettingsQuery
+  ) { }
 
   currentSearchIDs: number[] = [];
   searchTags: string[] = [];
@@ -52,9 +50,9 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.hydrusApiUrl && this.hydrusApiKey) {
+    //if (this.hydrusApiUrl && this.hydrusApiKey) {
       this.search();
-    }
+    //}
   }
 
   tagsChanged(tags: string[]) {

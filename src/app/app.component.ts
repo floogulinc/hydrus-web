@@ -7,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
+import { HydrusApiSettingsMigrateService } from './hydrus-api-settings-migrate.service';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit {
   );
 
   constructor(private breakpointObserver: BreakpointObserver, private updates: SwUpdate,
-              private snackBar: MatSnackBar) {}
+              private snackBar: MatSnackBar, private apiSettingsMigrate: HydrusApiSettingsMigrateService) {}
 
   @ViewChild(MatSidenavContent, {static: true})
   public sidenavContent: MatSidenavContent;
@@ -35,6 +36,7 @@ export class AppComponent implements OnInit {
   public env = environment;
 
   ngOnInit() {
+    this.apiSettingsMigrate.migrate();
     this.updates.available.subscribe(event => {
       console.log('current version is', event.current);
       console.log('available version is', event.available);

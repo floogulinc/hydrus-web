@@ -1,4 +1,4 @@
-<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi" >
+<div fxLayout="column" *ngIf="apiSettingsQuery.apiInfoExists$ | async; else noApi" >
   <ng-template #recursiveList let-list>
 
   <mat-tab-group animationDuration="0ms" dynamicHeight class="pages-tab-group">
