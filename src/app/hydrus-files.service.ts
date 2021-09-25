@@ -64,6 +64,14 @@ export class HydrusFilesService {
       return HydrusFileType.Video;
     }
     if ([
+      'audio/mp3',
+      'audio/ogg',
+      'audio/flac',
+      'audio/x-wav',
+    ].includes(mime)) {
+      return HydrusFileType.Audio;
+    }
+    if ([
       'video/x-flv',
       'application/x-shockwave-flash'
     ].includes(mime)) {
