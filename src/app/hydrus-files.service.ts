@@ -102,7 +102,8 @@ export class HydrusFilesService {
       'video/vnd.rn-realvideo',
       'application/vnd.rn-realmedia',
       'video/webm',
-      'application/x-photoshop'
+      'application/x-photoshop',
+      'application/clip'
     ].includes(mime));
   }
 
