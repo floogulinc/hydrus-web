@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { HydrusFile } from '../hydrus-file';
-import { IPageInfo } from '@iharbeck/ngx-virtual-scroller';
+import { IPageInfo } from '@floogulinc/ngx-virtual-scroller';
 
 @Component({
   selector: 'app-image-list-loader',

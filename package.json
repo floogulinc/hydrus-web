@@ -32,7 +32,7 @@
     "@angular/platform-browser-dynamic": "^13.2.1",
     "@angular/router": "^13.2.1",
     "@angular/service-worker": "^13.2.1",
-    "@iharbeck/ngx-virtual-scroller": "^13.0.3",
+    "@floogulinc/ngx-virtual-scroller": "^13.0.3",
     "@material/image-list": "^3.1.0",
     "@ngneat/until-destroy": "^9.0.0",
     "array-flat-polyfill": "^1.0.1",
