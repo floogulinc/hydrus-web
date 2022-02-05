@@ -82,8 +82,7 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-          },
+          "options": {},
           "configurations": {
             "production": {
               "browserTarget": "hydrus-web:build:production"
@@ -117,6 +116,15 @@
               "src/manifest.json"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     },
@@ -143,5 +151,8 @@
       }
     }
   },
-  "defaultProject": "hydrus-web"
+  "defaultProject": "hydrus-web",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
