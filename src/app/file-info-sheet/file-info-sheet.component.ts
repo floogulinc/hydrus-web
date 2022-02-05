@@ -5,7 +5,6 @@ import { TagUtils } from '../tag-utils';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { rejects } from 'assert';
 
 interface ShareData {
   title?: string;
