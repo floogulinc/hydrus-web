@@ -40,7 +40,7 @@
     "file-saver": "^2.0.5",
     "git-rev-sync": "^3.0.1",
     "material-design-icons-iconfont": "^5.0.1",
-    "ngx-localstorage": "^2.4.1",
+    "ngx-localstorage": "^3.4.0",
     "ngx-pipes": "^2.7.5",
     "ngx-virtual-scroller": "^3.0.3",
     "photoswipe": "^4.1.3",
