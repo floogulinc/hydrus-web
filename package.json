@@ -15,9 +15,6 @@
     "now-build": "npm run build -- --configuration production --output-path dist"
   },
   "license": "MIT",
-  "engines": {
-    "node": ">=10.9.0"
-  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^13.2.1",
