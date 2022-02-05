@@ -1,4 +1,5 @@
 // Custom Theming for Angular Material
+@use '~@angular/material' as mat;
 // For more information: https://material.angular.io/guide/theming
 @import "@angular/material/theming";
 
@@ -9,7 +10,7 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 //setting up for future theme options
 @mixin app-theming($theme) {
@@ -25,37 +26,37 @@
 
   @if $is-dark {
     .mat-toolbar.mat-primary {
-      background: mat-color($background, app-bar);
-      color: mat-color($foreground, text);
+      background: mat.get-color-from-palette($background, app-bar);
+      color: mat.get-color-from-palette($foreground, text);
     }
   }
 
   // Define any styles affected by the theme.
   .drawer-list-item-active {
-    background-color: change-color(mat-color($primary), $alpha: 0.15) !important;
-    color: mat-color($primary) !important;
+    background-color: change-color(mat.get-color-from-palette($primary), $alpha: 0.15) !important;
+    color: mat.get-color-from-palette($primary) !important;
     .mat-list-icon {
-      color: mat-color($primary) !important;
+      color: mat.get-color-from-palette($primary) !important;
     }
   }
 
   .sidenav-list {
     .mat-list-icon {
       //color: rgba(0, 0, 0, 0.54);
-      color: mat-color($foreground, icon);
+      color: mat.get-color-from-palette($foreground, icon);
       margin-right: 16px;
     }
   }
 
   .image-grid-supporting-text {
-    color: mat-color($foreground, text) !important;
+    color: mat.get-color-from-palette($foreground, text) !important;
   }
 }
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($light-theme);
+@include mat.all-component-themes($light-theme);
 @include app-theming($light-theme);
 
 html,
@@ -68,7 +69,7 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  @include angular-material-theme($dark-theme);
+  @include mat.all-component-themes($dark-theme);
   @include app-theming($dark-theme);
 }
 

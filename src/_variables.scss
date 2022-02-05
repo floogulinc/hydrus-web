@@ -1,19 +1,20 @@
+@use '~@angular/material' as mat;
 @import '@angular/material/theming';
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$light-primary: mat-palette($mat-indigo);
-$dark-primary: mat-palette($mat-indigo, 200);
-$light-accent: mat-palette($mat-pink, A200, A100, A400);
+$light-primary: mat.define-palette(mat.$indigo-palette);
+$dark-primary: mat.define-palette(mat.$indigo-palette, 200);
+$light-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$light-warn: mat-palette($mat-red);
+$light-warn: mat.define-palette(mat.$red-palette);
 
 // Create the theme object (a Sass map containing all of the palettes).
-$light-theme: mat-light-theme($light-primary, $light-accent, $light-warn);
+$light-theme: mat.define-light-theme($light-primary, $light-accent, $light-warn);
 
-$dark-theme: mat-dark-theme($dark-primary, $light-accent, $light-warn);
+$dark-theme: mat.define-dark-theme($dark-primary, $light-accent, $light-warn);
 
 // Original tag colors from Hydrus source code
 $tag-colors: (
@@ -29,13 +30,13 @@ $tag-colors: (
 );
 
 $mat-tag-colors : (
-    system: mat-palette($mat-orange, 500, 300),
-    meta: mat-palette($mat-grey, 700, 500, 900),
-    creator: mat-palette($mat-red, 500, 300),
-    studio: mat-palette($mat-red, 700, 500, 900),
-    character: mat-palette($mat-green, 500, 300),
-    person: mat-palette($mat-green, 700, 500, 900),
-    series: mat-palette($mat-purple, 500, 300),
-    default-namespace: mat-palette($mat-blue-grey, 500, 300),
-    no-namespace: mat-palette($mat-blue, 500, 300)
+    system: mat.define-palette(mat.$orange-palette, 500, 300),
+    meta: mat.define-palette(mat.$grey-palette, 700, 500, 900),
+    creator: mat.define-palette(mat.$red-palette, 500, 300),
+    studio: mat.define-palette(mat.$red-palette, 700, 500, 900),
+    character: mat.define-palette(mat.$green-palette, 500, 300),
+    person: mat.define-palette(mat.$green-palette, 700, 500, 900),
+    series: mat.define-palette(mat.$purple-palette, 500, 300),
+    default-namespace: mat.define-palette(mat.$blue-grey-palette, 500, 300),
+    no-namespace: mat.define-palette(mat.$blue-palette, 500, 300)
 );
