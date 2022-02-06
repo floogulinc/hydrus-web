@@ -64,6 +64,14 @@ export class HydrusFilesService {
       return HydrusFileType.Video;
     }
     if ([
+      'audio/mp3',
+      'audio/ogg',
+      'audio/flac',
+      'audio/x-wav',
+    ].includes(mime)) {
+      return HydrusFileType.Audio;
+    }
+    if ([
       'video/x-flv',
       'application/x-shockwave-flash'
     ].includes(mime)) {
@@ -93,13 +101,15 @@ export class HydrusFilesService {
       'video/x-matroska',
       'video/vnd.rn-realvideo',
       'application/vnd.rn-realmedia',
-      'video/webm'
+      'video/webm',
+      'application/x-photoshop',
+      'application/clip'
     ].includes(mime));
   }
 
 
   private getFileMetadataAPI(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
-    // tslint:disable-next-line: no-string-literal
+    // eslint-disable-next-line @typescript-eslint/dot-notation
     return this.api.getFileMetadata({ file_ids: JSON.stringify(fileIds) }).pipe(map(val => val['metadata']));
   }
 

@@ -9,7 +9,7 @@ export interface HydrusKeyVerificationData {
   human_description: string;
 }
 
-// tslint:disable: variable-name
+/* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */
 
 @Injectable({
   providedIn: 'root'

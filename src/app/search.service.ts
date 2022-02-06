@@ -18,7 +18,7 @@ export class SearchService {
         system_inbox: options && options.system_inbox ? 'true' : 'false',
         system_archive: options && options.system_archive ? 'true' : 'false'
       }
-    // tslint:disable-next-line: no-string-literal
+    // eslint-disable-next-line @typescript-eslint/dot-notation
     ).pipe(map(a => a['file_ids']));
   }
 }

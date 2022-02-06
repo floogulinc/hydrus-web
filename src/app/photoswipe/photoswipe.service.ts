@@ -62,11 +62,26 @@ export class PhotoswipeService {
         `,
         pid: file.file_id
       };
-    } else {
+    } else if (file.file_type === HydrusFileType.Audio) {
       return {
-        html: `<div class="pswp__error-msg">
-        The file could not be loaded. (type: ${file.mime})
-        </div>`,
+        html: `
+        <div id="pswp-audio-${file.file_id}" class="pswp-audio-container">
+        </div>
+        `,
+        pid: file.file_id
+      };
+    } else {
+      const html = file.has_thumbnail
+      ? `<div class="pswp__error-msg">
+      <img src="${file.thumbnail_url}" class="pswp-error-thumb">
+      <p>The file could not be loaded. (type: ${file.mime})</p>
+      </div>`
+      : `<div class="pswp__error-msg">
+      The file could not be loaded. (type: ${file.mime})
+      </div>`;
+
+      return {
+        html,
         pid: file.file_id
       };
     }
@@ -97,19 +112,31 @@ export class PhotoswipeService {
       });
     };
 
+    const removeAudio = () => {
+      ps.container.querySelectorAll<HTMLVideoElement>('.pswp-audio').forEach((audio) => {
+        audio.pause();
+        audio.removeAttribute('src');
+        audio.load();
+        audio.remove();
+      });
+    };
+
     ps.listen('close', () => {
-      this.psClose$.next();
+      this.psClose$.next(null);
     });
     ps.listen('destroy', () => {
       removeVideos();
+      removeAudio();
     });
     ps.listen('beforeChange', () => {
       removeVideos();
+      removeAudio();
     });
     ps.listen('afterChange', () => {
       if (ps.currItem.html) {
         const pid = (ps.currItem as PhotoSwipe.Item).pid;
         const vidContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-video-${pid}`);
+        const audioContainer = ps.container.querySelector<HTMLDivElement>(`#pswp-audio-${pid}`);
         if (vidContainer) {
           const item = items.find(i => i.file_id === pid);
           const vid = document.createElement('video');
@@ -120,6 +147,15 @@ export class PhotoswipeService {
           vid.loop = true;
           vid.className = 'pswp-video';
           vidContainer.prepend(vid);
+        } else if (audioContainer) {
+          const item = items.find(i => i.file_id === pid);
+          const audio = document.createElement('audio');
+          audio.src = item.file_url;
+          audio.autoplay = true;
+          audio.loop = true;
+          audio.controls = true;
+          audio.className = 'pswp-audio';
+          audioContainer.prepend(audio);
         }
       }
     });

@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { HydrusFile } from '../hydrus-file';
 import { AppComponent } from '../app.component';
-import { IPageInfo } from 'ngx-virtual-scroller';
+import { IPageInfo } from '@floogulinc/ngx-virtual-scroller';
 import { PhotoswipeService } from '../photoswipe/photoswipe.service';
 
 @Component({

@@ -39,6 +39,7 @@ export interface HydrusFileList {
 export enum HydrusFileType {
   Image,
   Video,
+  Audio,
   Flash,
   Unsupported
 }

@@ -15,7 +15,7 @@ import { SaucenaoService, SaucenaoResults } from '../saucenao.service';
 })
 export class SendComponent implements OnInit {
 
-  // tslint:disable-next-line: max-line-length
+  // eslint-disable-next-line max-len
   public static urlRegex: RegExp = /([-a-zA-Z0-9^\p{L}\p{C}\u00a1-\uffff@:%_\+.~#?&//=]{2,256}){1}(\.[a-z]{2,4}){1}(\:[0-9]*)?(\/[-a-zA-Z0-9\u00a1-\uffff\(\)@:%,_\+.~#?&//=]*)?([-a-zA-Z0-9\(\)@:%,_\+.~#?&//=]*)?/;
 
   public saucenaoLoading = false;
