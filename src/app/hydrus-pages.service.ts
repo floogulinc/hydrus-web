@@ -4,7 +4,7 @@ import { HydrusApiService } from './hydrus-api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-// tslint:disable: no-string-literal
+/* eslint-disable @typescript-eslint/dot-notation */
 
 @Injectable({
   providedIn: 'root'

@@ -5,6 +5,7 @@ import { forkJoin, from } from 'rxjs';
 import { map, switchMap, filter, mergeMap, toArray, delay, concatMap, tap, reduce, distinct, retry } from 'rxjs/operators';
 import { TagUtils } from './tag-utils';
 import { HydrusFile } from './hydrus-file';
+import { ProgressBarMode } from '@angular/material/progress-bar';
 
 export interface FlatComic {
   tag: string;
@@ -31,7 +32,7 @@ export class ComicsService {
     loading: boolean,
     progress?: number,
     total?: number,
-    barMode: string,
+    barMode: ProgressBarMode,
     currentTag?: string
   } = {
     loading: false,

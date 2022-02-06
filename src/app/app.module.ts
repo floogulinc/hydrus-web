@@ -41,7 +41,7 @@ import {PortalModule} from '@angular/cdk/portal';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
 import { AboutComponent } from './about/about.component';
 import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
@@ -84,41 +84,40 @@ const MAT_MODULES = [
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    BrowseComponent,
-    SettingsComponent,
-    TagInputComponent,
-    AboutComponent,
-    PhotoswipeComponent,
-    ImageListComponent,
-    PagesComponent,
-    FilesPageComponent,
-    SendComponent,
-    FileInfoSheetComponent,
-    ComicsListComponent,
-    ComicComponent,
-    ImageListLoaderComponent,
-    ToolbarActionsComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    HttpClientModule,
-    FlexLayoutModule,
-    FormsModule,
-    PortalModule,
-    MAT_MODULES,
-    NgxLocalStorageModule.forRoot({prefix: environment.localStoragePrefix}),
-    BrowserAnimationsModule,
-    LayoutModule,
-    ReactiveFormsModule,
-    VirtualScrollerModule,
-    NgPipesModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
-  entryComponents: [PhotoswipeComponent, FileInfoSheetComponent],
+    declarations: [
+        AppComponent,
+        BrowseComponent,
+        SettingsComponent,
+        TagInputComponent,
+        AboutComponent,
+        PhotoswipeComponent,
+        ImageListComponent,
+        PagesComponent,
+        FilesPageComponent,
+        SendComponent,
+        FileInfoSheetComponent,
+        ComicsListComponent,
+        ComicComponent,
+        ImageListLoaderComponent,
+        ToolbarActionsComponent
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+        HttpClientModule,
+        FlexLayoutModule,
+        FormsModule,
+        PortalModule,
+        MAT_MODULES,
+        NgxLocalStorageModule.forRoot({ prefix: environment.localStoragePrefix }),
+        BrowserAnimationsModule,
+        LayoutModule,
+        ReactiveFormsModule,
+        VirtualScrollerModule,
+        NgPipesModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

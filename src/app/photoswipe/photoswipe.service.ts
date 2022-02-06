@@ -122,7 +122,7 @@ export class PhotoswipeService {
     };
 
     ps.listen('close', () => {
-      this.psClose$.next();
+      this.psClose$.next(null);
     });
     ps.listen('destroy', () => {
       removeVideos();

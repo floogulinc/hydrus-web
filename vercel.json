@@ -3,12 +3,6 @@
   "name": "hydrus-web",
   "alias": "hydrus.app",
   "public": true,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build"
-    }
-  ],
   "routes": [
     {
       "src": "/(.*\\..*)",

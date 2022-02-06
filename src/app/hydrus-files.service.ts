@@ -109,7 +109,7 @@ export class HydrusFilesService {
 
 
   private getFileMetadataAPI(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
-    // tslint:disable-next-line: no-string-literal
+    // eslint-disable-next-line @typescript-eslint/dot-notation
     return this.api.getFileMetadata({ file_ids: JSON.stringify(fileIds) }).pipe(map(val => val['metadata']));
   }
 
