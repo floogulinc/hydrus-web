@@ -15,9 +15,6 @@ RUN npm run docker-build
 
 FROM nginx:alpine
 
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
-
 # Copy in nginx config
 COPY nginx/default.conf /etc/nginx/conf.d/
 

@@ -2,12 +2,13 @@ node_modules
 npm-debug.log
 docker-compose*
 .dockerignore
-Dockerfile
+Dockerfile*
 #.git
 #.gitignore
 README.md
 LICENSE
 .vscode
-
+.angular/cache
+.sass-cache
 dist/node_modules
 dist/npm-debug.log
