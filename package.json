@@ -11,8 +11,7 @@
     "postinstall": "patch-package",
     "prebuild": "node version-info.js",
     "postversion": "node version-info.js",
-    "docker-build": "npm run build -- --configuration production --output-path dist",
-    "now-build": "npm run build -- --configuration production --output-path dist"
+    "docker-build": "npm run build"
   },
   "license": "MIT",
   "private": true,
