@@ -19,4 +19,4 @@ FROM nginx:alpine
 COPY nginx/default.conf /etc/nginx/conf.d/
 
 # Copy in the built Angular app from the build stage
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build /app/dist/hydrus-web /usr/share/nginx/html

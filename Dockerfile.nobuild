@@ -4,4 +4,4 @@ FROM nginx:alpine
 COPY nginx/default.conf /etc/nginx/conf.d/
 
 # Copy in the built Angular app
-COPY dist /usr/share/nginx/html
+COPY dist/hydrus-web /usr/share/nginx/html
