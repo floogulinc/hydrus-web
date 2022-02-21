@@ -7,7 +7,7 @@ var info;
 
 if(process.env.VERCEL_GITHUB_DEPLOYMENT) {
   console.log(`Detected GitHub deployment on Vercel. URL: ${process.env.VERCEL_URL}`);
-  var info = {
+  info = {
     branch: process.env.VERCEL_GITHUB_COMMIT_REF,
     hash: process.env.VERCEL_GITHUB_COMMIT_SHA,
     version,
