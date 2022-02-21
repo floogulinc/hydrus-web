@@ -24,7 +24,7 @@ jobs:
 
       - name: Docker meta
         id: docker_meta
-        uses: ocker/metadata-action@v3
+        uses: docker/metadata-action@v3
         with:
           images: |
             ghcr.io/${{ github.repository }}
