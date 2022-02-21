@@ -24,15 +24,11 @@ The latest development build (latest commit on the `dev` branch) can be found at
 
 ### Docker
 
-A [Docker image](https://hub.docker.com/r/floogulinc/hydrus-web) is provided for Hydrus Web. 
-
-```sh
-docker pull floogulinc/hydrus-web
-```
+A [Docker image](https://github.com/floogulinc/hydrus-web/pkgs/container/hydrus-web) is provided for Hydrus Web. 
 
 It hosts Hydrus Web on port 80 using nginx. Hydrus Web needs to be hosted with valid HTTPS unless it is only being used on `localhost`. The Docker image is meant to be used with some proxy that can provide HTTPS (like Caddy or Traefik).
 
-You may also want to run [Hydrus on Docker](https://hub.docker.com/r/suika/hydrus).
+You may also want to run [Hydrus on Docker](https://hydrusnetwork.github.io/hydrus/docker.html).
 
 ## Hydrus API HTTPS
 
