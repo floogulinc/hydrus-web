@@ -2,8 +2,6 @@
 <img src="https://raw.githubusercontent.com/floogulinc/hydrus-web/master/src/assets/icon.svg?sanitize=true" alt="Hydrus Web Icon" width="150"/>
 <h1> Hydrus Web </h1>
 
-[![Docker Hub build](https://img.shields.io/docker/cloud/build/floogulinc/hydrus-web.svg)](https://hub.docker.com/r/floogulinc/hydrus-web/)
-
 Hydrus web is a web client for [Hydrus](https://hydrusnetwork.github.io/hydrus/)
 
 </div>
