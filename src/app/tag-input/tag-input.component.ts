@@ -4,9 +4,10 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
-import { startWith, map } from 'rxjs/operators';
+import { startWith, map, switchMap, skipWhile, debounceTime } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
+import { HydrusTagsService } from '../hydrus-tags.service';
 
 @Component({
   selector: 'app-tag-input',
@@ -35,15 +36,11 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   constructor(
     @Optional() @Self() private controlDir: NgControl,
-    private changeDetectorRef: ChangeDetectorRef,
-    public filesService: HydrusFilesService) {
+    public filesService: HydrusFilesService,
+    public tagsService: HydrusTagsService) {
     if (this.controlDir) {
       this.controlDir.valueAccessor = this
     }
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(''),
-      map((tag: string) => this._filter(tag))
-    );
    }
 
 
@@ -66,7 +63,14 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-
+    this.filteredTags = this.tagCtrl.valueChanges.pipe(
+      //startWith(''),
+      //map((tag: string) => this._filter(tag))
+      skipWhile(search => search.length < 3),
+      debounceTime(500),
+      switchMap(search => this.tagsService.searchTags(search)),
+      map(tags => tags.slice(0, 25).map(t => t.value))
+    );
   }
 
   chipInputEvent(event: MatChipInputEvent): void {

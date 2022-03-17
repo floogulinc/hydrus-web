@@ -196,4 +196,9 @@ export class HydrusApiService {
                           data,
                           {headers: this.getHeaders()});
   }
+
+
+  public searchTags(params: {search: string, tag_service_key?: string, tag_service_name?: string}) {
+    return this.apiGet('add_tags/search_tags', new HttpParams({fromObject: params}));
+  }
 }
