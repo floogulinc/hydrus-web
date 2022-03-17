@@ -1,6 +1,6 @@
 <mat-form-field class="tag-form-field">
     <mat-chip-list #chipList aria-label="Tag Search">
-      <mat-chip *ngFor="let tag of searchTags" [selectable]="false" color="primary"
+      <mat-chip *ngFor="let tag of tags | async" [selectable]="false" color="primary"
                 class="tag-chip"
                [removable]="true" (removed)="removeSearchTag(tag)"
                [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">
@@ -14,7 +14,8 @@
              matChipInputAddOnBlur="false"
              (matChipInputTokenEnd)="chipInputEvent($event)"
              [formControl]="tagCtrl"
-             [matAutocomplete]="auto">
+             [matAutocomplete]="auto"
+             (blur)="onTouched()">
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
       <mat-option *ngFor="let tag of filteredTags | async" [value]="tag" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">

@@ -1,9 +1,9 @@
 import { HydrusFilesService } from './../hydrus-files.service';
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, OnChanges, Optional, Self, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
-import { FormControl } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
   templateUrl: './tag-input.component.html',
   styleUrls: ['./tag-input.component.scss']
 })
-export class TagInputComponent implements OnInit {
+export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   searchTags: string[] = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
@@ -23,20 +23,50 @@ export class TagInputComponent implements OnInit {
   tagCtrl = new FormControl();
   filteredTags: Observable<string[]>;
 
+  //inputControl = new FormControl("", this.validators)
+
+  @Input() placeholder: string
+
   @Output()
   tags = new EventEmitter<string[]>();
 
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
-  constructor(public filesService: HydrusFilesService) {
+  constructor(
+    @Optional() @Self() private controlDir: NgControl,
+    private changeDetectorRef: ChangeDetectorRef,
+    public filesService: HydrusFilesService) {
+    if (this.controlDir) {
+      this.controlDir.valueAccessor = this
+    }
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(''),
       map((tag: string) => this._filter(tag))
     );
    }
 
+
+  writeValue(obj: string[]): void {
+    obj && this.setSearchTags(obj);
+  }
+
+  registerOnChange(fn: any): void {
+    //throw new Error('Method not implemented.');
+    this.tags.subscribe(fn);
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn
+  }
+
+  onTouched() {}
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.tagCtrl.disable() : this.tagCtrl.enable()
+  }
+
   ngOnInit() {
+
   }
 
   chipInputEvent(event: MatChipInputEvent): void {
@@ -65,6 +95,12 @@ export class TagInputComponent implements OnInit {
 
     this.tags.emit(this.searchTags);
   }
+
+  setSearchTags(tags: string[]) {
+    this.searchTags = tags;
+    this.tags.emit(this.searchTags);
+  }
+
 
 
   removeSearchTag(tag: string): void {
