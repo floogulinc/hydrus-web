@@ -38,6 +38,7 @@ import {MatBadgeModule} from '@angular/material/badge';
 import {MatMenuModule} from '@angular/material/menu';
 
 import {PortalModule} from '@angular/cdk/portal';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -109,6 +110,7 @@ const MAT_MODULES = [
         FlexLayoutModule,
         FormsModule,
         PortalModule,
+        ScrollingModule,
         MAT_MODULES,
         NgxLocalStorageModule.forRoot({ prefix: environment.localStoragePrefix }),
         BrowserAnimationsModule,

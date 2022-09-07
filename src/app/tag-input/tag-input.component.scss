@@ -18,3 +18,8 @@
         //color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
     }
 }
+
+.cdk-virtual-scroll-viewport {
+  height: 256px;
+}
+

@@ -140,3 +140,10 @@ body {
 .file-info-panel {
   width: 720px;
 }
+
+.virtual-scroll-viewport-full-width {
+  .cdk-virtual-scroll-content-wrapper {
+    width: 100%;
+  }
+}
+
