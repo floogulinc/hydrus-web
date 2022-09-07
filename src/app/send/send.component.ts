@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HydrusAddService, AddUrlOptions } from '../hydrus-add.service';
-import { Validators, FormControl, FormGroup } from '@angular/forms';
+import { Validators, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 import { switchMap, debounceTime, catchError } from 'rxjs/operators';
 import { of, forkJoin } from 'rxjs';
 import { HydrusURLInfo, HydrusURLFiles } from '../hydrus-url';
@@ -31,12 +31,12 @@ export class SendComponent implements OnInit {
   currentUrlInfo: HydrusURLInfo;
   currentUrlFiles: HydrusURLFiles;
 
-  sendForm = new FormGroup({
-    sendUrl: new FormControl('', [
+  sendForm = new UntypedFormGroup({
+    sendUrl: new UntypedFormControl('', [
       Validators.required,
       Validators.pattern(SendComponent.urlRegex)
     ]),
-    destPageName: new FormControl('')
+    destPageName: new UntypedFormControl('')
   });
 
   get sendUrl() {

@@ -3,7 +3,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { startWith, map } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
@@ -20,7 +20,7 @@ export class TagInputComponent implements OnInit {
 
   tagUtils = TagUtils;
 
-  tagCtrl = new FormControl();
+  tagCtrl = new UntypedFormControl();
   filteredTags: Observable<string[]>;
 
   @Output()
