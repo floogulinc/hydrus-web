@@ -118,7 +118,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.addSearchTag(event.option.viewValue);
+    this.addSearchTag(event.option.value);
     this.tagInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
   }
