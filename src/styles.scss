@@ -140,3 +140,16 @@ body {
 .file-info-panel {
   width: 720px;
 }
+
+.virtual-scroll-viewport-full-width {
+  .cdk-virtual-scroll-content-wrapper {
+    width: 100%;
+  }
+}
+
+
+.cdk-virtual-scroll-content-wrapper {
+  position: inherit !important;
+  top: inherit !important;
+  left: 0;
+}

@@ -4,10 +4,11 @@ import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
-import { startWith, map, switchMap, skipWhile, debounceTime } from 'rxjs/operators';
+import { startWith, map, switchMap, skipWhile, debounceTime, tap, filter } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
+import { HydrusTagSearchTag } from '../hydrus-tags';
 
 @Component({
   selector: 'app-tag-input',
@@ -22,7 +23,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   tagUtils = TagUtils;
 
   tagCtrl = new FormControl();
-  filteredTags: Observable<string[]>;
+  filteredTags: Observable<HydrusTagSearchTag[]>;
 
   //inputControl = new FormControl("", this.validators)
 
@@ -66,10 +67,9 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       //startWith(''),
       //map((tag: string) => this._filter(tag))
-      skipWhile(search => search.length < 3),
       debounceTime(500),
-      switchMap(search => this.tagsService.searchTags(search)),
-      map(tags => tags.slice(0, 25).map(t => t.value))
+      switchMap(search => search && search.length > 3 ? this.tagsService.searchTags(search) : of([])),
+      //map(tags => tags/*. slice(0, 25) */.map(t => t.value))
     );
   }
 
