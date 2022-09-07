@@ -25,22 +25,12 @@ export class HydrusFilesService {
 
   private allFiles: Map<number, HydrusFile> = new Map<number, HydrusFile>();
 
-  private allTags: Set<string> = new Set<string>();
-
   clearFilesCache(): void {
     this.allFiles.clear();
   }
 
-  clearKnownTags(): void {
-    this.allTags.clear();
-  }
-
   getFilesCacheSize(): number {
     return this.allFiles.size;
-  }
-
-  getKnownTagsSize(): number {
-    return this.allTags.size;
   }
 
   type(mime: string): HydrusFileType {
@@ -135,7 +125,6 @@ export class HydrusFilesService {
   private addFilesAndTags(files: HydrusFile[]) {
     files.forEach((file) => {
       this.allFiles.set(file.file_id, file);
-      this.AddTags(file);
     });
   }
 
@@ -159,18 +148,7 @@ export class HydrusFilesService {
     );
   }
 
-  private AddTags(file: HydrusFile) {
-    TagUtils.AllTagsFromFile(file).forEach((tag) => this.allTags.add(tag));
-    // if (file.service_names_to_statuses_to_tags) {
-    //   if ('0' in file.service_names_to_statuses_to_tags['all known tags']) {
-    //     file.service_names_to_statuses_to_tags['all known tags']['0'].forEach((tag) => this.allTags.add(tag));
-    //   }
-    // }
-  }
 
-  getKnownTags(): Set<string> {
-    return this.allTags;
-  }
 
   public getFileAsFile(file: HydrusFile): Observable<File> {
     return this.api.getFileAsBlob(file.hash).pipe(
