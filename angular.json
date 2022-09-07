@@ -124,7 +124,6 @@
       }
     }
   },
-  "defaultProject": "hydrus-web",
   "cli": {
     "schematicCollections": [
       "@angular-eslint/schematics"
