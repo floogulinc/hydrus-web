@@ -1,10 +1,10 @@
 import { HydrusFilesService } from './../hydrus-files.service';
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, OnChanges, Optional, Self, ChangeDetectorRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
-import { UntypedFormControl } from '@angular/forms';
-import { startWith, map, switchMap, skipWhile, debounceTime, tap, filter } from 'rxjs/operators';
+import { ControlValueAccessor, UntypedFormControl } from '@angular/forms';
+import { switchMap, debounceTime } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
