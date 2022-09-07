@@ -3,7 +3,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, 
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
-import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { startWith, map, switchMap, skipWhile, debounceTime, tap, filter } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
@@ -22,7 +22,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   tagUtils = TagUtils;
 
-  tagCtrl = new FormControl();
+  tagCtrl = new UntypedFormControl();
   filteredTags: Observable<HydrusTagSearchTag[]>;
 
   //inputControl = new FormControl("", this.validators)
