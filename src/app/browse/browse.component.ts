@@ -6,6 +6,7 @@ import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { Subscription } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { SettingsService } from '../settings.service';
 
 enum FilterOption {
   archive,
@@ -29,7 +30,13 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
   FilterOption = FilterOption;
 
-  constructor(private searchService: SearchService, public filesService: HydrusFilesService) { }
+  constructor(
+    private searchService: SearchService,
+    public filesService: HydrusFilesService,
+    public settingsService: SettingsService,
+  ) {
+    this.searchTags = [...settingsService.appSettings.browseDefaultSearchTags]
+  }
 
   currentSearchIDs: number[] = [];
   searchTags: string[] = [];
@@ -44,6 +51,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+
   }
 
   refreshButton() {
@@ -52,7 +60,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.hydrusApiUrl && this.hydrusApiKey) {
+    if (this.hydrusApiUrl && this.hydrusApiKey && this.settingsService.appSettings.browseSearchOnLoad) {
       this.search();
     }
   }

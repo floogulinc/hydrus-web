@@ -21,6 +21,7 @@ export class SettingsService {
     this._appSettings = {...defaultAppSettings, ...appSettingsFromStorage};
     this._appSettings$ = new BehaviorSubject(this._appSettings);
     this.appSettings$ = this._appSettings$.asObservable();
+    console.log(this.appSettings);
   }
 
 
@@ -28,10 +29,10 @@ export class SettingsService {
     return this._appSettings;
   }
 
-  public async setAppSettings(newSettings: AppSettings) {
-    this._appSettings = newSettings;
+  public async setAppSettings(newSettings: Partial<AppSettings>) {
+    this._appSettings = {...defaultAppSettings, ...newSettings};
     this._appSettings$.next(this._appSettings);
-    return this.ls.asPromisable().set(this.appSettingsKey, newSettings);
+    return this.ls.asPromisable().set(this.appSettingsKey, this._appSettings);
   }
 
 

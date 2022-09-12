@@ -1,5 +1,5 @@
 import { HydrusFilesService } from './../hydrus-files.service';
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self, ChangeDetectorRef } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { TagUtils } from '../tag-utils';
@@ -27,7 +27,9 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   //inputControl = new FormControl("", this.validators)
 
-  @Input() placeholder: string
+  @Input() placeholder: string;
+
+  @Input() defaultTags: string[];
 
   @Output()
   tags = new EventEmitter<string[]>();
@@ -38,10 +40,19 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   constructor(
     @Optional() @Self() private controlDir: NgControl,
     public filesService: HydrusFilesService,
-    public tagsService: HydrusTagsService) {
+    public tagsService: HydrusTagsService,
+    private cd: ChangeDetectorRef) {
     if (this.controlDir) {
       this.controlDir.valueAccessor = this
     }
+
+    this.filteredTags = this.tagCtrl.valueChanges.pipe(
+      //startWith(''),
+      //map((tag: string) => this._filter(tag))
+      debounceTime(500),
+      switchMap(search => search && search.length > 3 ? this.tagsService.searchTags(search) : of([]))
+      //map(tags => tags/*. slice(0, 25) */.map(t => t.value))
+    );
    }
 
 
@@ -64,13 +75,9 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit() {
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      //startWith(''),
-      //map((tag: string) => this._filter(tag))
-      debounceTime(500),
-      switchMap(search => search && search.length > 3 ? this.tagsService.searchTags(search) : of([])),
-      //map(tags => tags/*. slice(0, 25) */.map(t => t.value))
-    );
+    if(this.defaultTags) {
+      this.searchTags = [...this.defaultTags];
+    }
   }
 
   chipInputEvent(event: MatChipInputEvent): void {
@@ -101,7 +108,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   }
 
   setSearchTags(tags: string[]) {
-    this.searchTags = tags;
+    this.searchTags = [...tags];
     this.tags.emit(this.searchTags);
   }
 

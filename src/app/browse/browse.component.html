@@ -1,6 +1,6 @@
 <div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi">
   <div class="search-bar" fxLayout="row" fxLayoutAlign="space-between center">
-    <app-tag-input fxFlex (tags)="tagsChanged($event)" class="tag-input"></app-tag-input>
+    <app-tag-input fxFlex (tags)="tagsChanged($event)" [defaultTags]="this.settingsService.appSettings.browseDefaultSearchTags" class="tag-input" placeholder="Tag Search"></app-tag-input>
     <button mat-icon-button [matMenuTriggerFor]="filterMenu">
       <mat-icon>filter_list_alt</mat-icon>
     </button>

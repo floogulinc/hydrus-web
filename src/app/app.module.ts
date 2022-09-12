@@ -36,6 +36,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
@@ -80,7 +81,8 @@ const MAT_MODULES = [
     MatExpansionModule,
     MatProgressBarModule,
     MatBadgeModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule
 ];
 
 
