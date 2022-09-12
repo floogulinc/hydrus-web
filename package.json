@@ -42,6 +42,7 @@
     "sagiri": "^3.1.1",
     "tslib": "^2.0.0",
     "typeface-roboto": "0.0.75",
+    "typescript-migration": "^1.1.1",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
