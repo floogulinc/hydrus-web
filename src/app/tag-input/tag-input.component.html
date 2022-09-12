@@ -18,11 +18,19 @@
              (blur)="onTouched()">
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-      <cdk-virtual-scroll-viewport class="virtual-scroll-viewport-full-width"
-        itemSize="48" minBufferPx="256" maxBufferPx="512">
-        <mat-option *cdkVirtualFor="let tag of filteredTags" [value]="tag.value" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag.value)">
-          {{tag.value}} ({{tag.count | number}})
-        </mat-option>
-      </cdk-virtual-scroll-viewport>
+      <ng-container *ngIf="filteredTags | async as tags">
+        <cdk-virtual-scroll-viewport *ngIf="tags.length > 25; else smallAutocomplete"
+          class="virtual-scroll-viewport-full-width"
+          itemSize="48" minBufferPx="256" maxBufferPx="512">
+          <mat-option *cdkVirtualFor="let tag of tags" [value]="tag.value" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag.value)">
+            {{tag.value}} ({{tag.count | number}})
+          </mat-option>
+        </cdk-virtual-scroll-viewport>
+        <ng-template #smallAutocomplete>
+          <mat-option *ngFor="let tag of tags" [value]="tag.value" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag.value)">
+            {{tag.value}} ({{tag.count | number}})
+          </mat-option>
+        </ng-template>
+      </ng-container>
     </mat-autocomplete>
 </mat-form-field>
