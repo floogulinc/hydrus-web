@@ -16,6 +16,7 @@
       </button>
     </mat-menu>
   </div>
+  <mat-progress-bar *ngIf="searching" mode="indeterminate" class="search-progress-bar"></mat-progress-bar>
   <app-image-list-loader [fileIDs]="this.currentSearchIDs" class="app-image-list"></app-image-list-loader>
 </div>
 

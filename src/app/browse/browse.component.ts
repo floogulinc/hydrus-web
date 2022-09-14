@@ -46,6 +46,8 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
   filterOption: FilterOption = FilterOption.none;
 
+  searching = this.settingsService.appSettings.browseSearchOnLoad;
+
   setFilterOption(option: FilterOption){
     this.filterOption = option;
     this.search();
@@ -72,6 +74,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   search() {
+    this.searching = true;
     this.searchSub?.unsubscribe();
     this.searchSub = this.searchService.searchFiles(
       this.searchTags,
@@ -80,9 +83,10 @@ export class BrowseComponent implements OnInit, AfterViewInit {
         system_archive: this.filterOption === FilterOption.archive
       }
     ).pipe(untilDestroyed(this)).subscribe((result) => {
+      this.searching = false;
       this.currentSearchIDs = result;
     }, () => {
-
+      this.searching = false;
     });
   }
 
