@@ -71,7 +71,7 @@ export class HydrusFilesService {
   }
 
   hasThumbnail(mime: string) {
-    return ([
+    /* return ([
       'application/x-shockwave-flash',
       'image/jpeg',
       'image/jpg',
@@ -94,7 +94,8 @@ export class HydrusFilesService {
       'video/webm',
       'application/x-photoshop',
       'application/clip'
-    ].includes(mime));
+    ].includes(mime)); */
+    return true;
   }
 
 
