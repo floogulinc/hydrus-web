@@ -2,13 +2,13 @@ import { HydrusFilesService } from './../hydrus-files.service';
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self, ChangeDetectorRef } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { TagUtils } from '../tag-utils';
+import { TagUtils } from '../utils/tag-utils';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 import { switchMap, debounceTime } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
-import { HydrusTagSearchTag } from '../hydrus-tags';
+import { HydrusSearchTags, HydrusTagSearchTag } from '../hydrus-tags';
 
 @Component({
   selector: 'app-tag-input',
@@ -17,7 +17,7 @@ import { HydrusTagSearchTag } from '../hydrus-tags';
 })
 export class TagInputComponent implements OnInit, ControlValueAccessor {
 
-  searchTags: string[] = [];
+  searchTags: HydrusSearchTags = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
   tagUtils = TagUtils;
@@ -29,10 +29,10 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   @Input() placeholder: string;
 
-  @Input() defaultTags: string[];
+  @Input() defaultTags: HydrusSearchTags;
 
   @Output()
-  tags = new EventEmitter<string[]>();
+  tags = new EventEmitter<HydrusSearchTags>();
 
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -114,12 +114,12 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
 
 
-  removeSearchTag(tag: string): void {
-    const index = this.searchTags.indexOf(tag);
+  removeSearchTag(index: number): void {
+    //const index = this.searchTags.indexOf(tag);
 
-    if (index >= 0) {
-      this.searchTags.splice(index, 1);
-    }
+    //if (index >= 0) {
+    this.searchTags.splice(index, 1);
+    //}
 
     this.tags.emit(this.searchTags);
   }

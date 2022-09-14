@@ -7,6 +7,7 @@ import { HydrusFilesService } from '../hydrus-files.service';
 import { Subscription } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SettingsService } from '../settings.service';
+import { HydrusSearchTags } from '../hydrus-tags';
 
 enum FilterOption {
   archive,
@@ -39,7 +40,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   currentSearchIDs: number[] = [];
-  searchTags: string[] = [];
+  searchTags: HydrusSearchTags = [];
 
   searchSub: Subscription;
 
@@ -65,7 +66,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     }
   }
 
-  tagsChanged(tags: string[]) {
+  tagsChanged(tags: HydrusSearchTags) {
     this.searchTags = tags;
     this.search();
   }

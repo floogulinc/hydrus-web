@@ -1,4 +1,4 @@
-import { HydrusFile, ServiceNamesToStatusesToTags } from './hydrus-file';
+import { HydrusFile, ServiceNamesToStatusesToTags } from '../hydrus-file';
 
 export class TagUtils {
   public static getNamespace(tag: string): string {

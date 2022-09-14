@@ -1,8 +1,10 @@
+import { HydrusSearchTags } from "./hydrus-tags";
+
 export interface AppSettingsV1 {
   version: 1;
 
   browseSearchOnLoad: boolean;
-  browseDefaultSearchTags: string[];
+  browseDefaultSearchTags: HydrusSearchTags;
 }
 
 export type AppSettings = AppSettingsV1;

@@ -2,6 +2,7 @@ import { HydrusApiService } from './hydrus-api.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { HydrusSearchTags } from './hydrus-tags';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class SearchService {
   constructor(private api: HydrusApiService) { }
 
 
-  public searchFiles(tags: string[], options?: {system_inbox?: boolean, system_archive?: boolean}): Observable<number[]> {
+  public searchFiles(tags: HydrusSearchTags, options?: {system_inbox?: boolean, system_archive?: boolean}): Observable<number[]> {
     return this.api.searchFiles(
       encodeURIComponent(JSON.stringify(tags)),
       {

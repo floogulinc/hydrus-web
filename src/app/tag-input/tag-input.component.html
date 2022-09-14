@@ -1,12 +1,22 @@
 <mat-form-field class="tag-form-field">
     <mat-chip-list #chipList [attr.aria-label]="placeholder">
-      <mat-chip *ngFor="let tag of searchTags" [selectable]="false" color="primary"
-                class="tag-chip"
-               [removable]="true" (removed)="removeSearchTag(tag)"
-               [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">
-        {{tag}}
-        <mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
+      <ng-template ngFor let-tag [ngForOf]="searchTags" let-i="index" >
+        <mat-chip *ngIf="tag | isString; else arrayTag" [selectable]="false" color="primary"
+                  class="tag-chip"
+                [removable]="true" (removed)="removeSearchTag(i)"
+                [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace($any(tag))">
+          {{tag}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <ng-template #arrayTag>
+          <mat-chip [selectable]="false" color="primary" class="tag-chip"
+                  [removable]="true" (removed)="removeSearchTag(i)"
+                  >
+            {{$any(tag) | flatten | join:' OR '}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </ng-template>
+      </ng-template>
       <input #tagInput
              [placeholder]="placeholder"
              [matChipInputFor]="chipList"

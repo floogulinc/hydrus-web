@@ -59,6 +59,7 @@ import { ComicsListComponent } from './comics-list/comics-list.component';
 import { ComicComponent } from './comic/comic.component';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
+import { JoinPipe } from './utils/join.pipe';
 
 
 const MAT_MODULES = [
@@ -102,7 +103,8 @@ const MAT_MODULES = [
         ComicsListComponent,
         ComicComponent,
         ImageListLoaderComponent,
-        ToolbarActionsComponent
+        ToolbarActionsComponent,
+        JoinPipe
     ],
     imports: [
         BrowserModule,

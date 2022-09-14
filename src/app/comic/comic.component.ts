@@ -5,7 +5,7 @@ import { SearchService } from '../search.service';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap, map } from 'rxjs/operators';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { TagUtils } from '../tag-utils';
+import { TagUtils } from '../utils/tag-utils';
 
 @Component({
   selector: 'app-comic',
