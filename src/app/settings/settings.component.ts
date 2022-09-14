@@ -50,26 +50,28 @@ export class SettingsComponent implements OnInit {
   });
 
   async submitAppSettings() {
-    const result = await this.settingsService.setAppSettings(this.appSettingsForm.value);
-    if(result) {
+    try {
+      await this.settingsService.setAppSettings(this.appSettingsForm.value);
+      this.appSettingsForm.markAsPristine();
       this.snackbar.open('Settings saved', undefined, {
         duration: 2000
       });
-    } else {
-      this.snackbar.open('Error saving settings', undefined, {
+    } catch (error) {
+      this.snackbar.open(`Error saving settings: ${{error}}`, undefined, {
         duration: 2000
       });
     }
   }
 
   resetAppSettings() {
-    this.appSettingsForm.reset();
+    this.appSettingsForm.patchValue(this.settingsService.appSettings);
+    this.appSettingsForm.markAsPristine();
   }
 
   resetAppSettingsDefault() {
     this.appSettingsForm.patchValue(defaultAppSettings);
   }
 
-  console = console;
+
 
 }

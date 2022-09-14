@@ -35,7 +35,7 @@
               <span>Reset to Defaults</span>
             </button>
           </mat-menu>
-          <button mat-raised-button color="primary" type="submit" [disabled]="!appSettingsForm.valid">Save</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="appSettingsForm.invalid || appSettingsForm.pristine">Save</button>
         </div>
       </div>
     </form>
