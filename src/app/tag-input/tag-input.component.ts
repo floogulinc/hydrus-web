@@ -137,7 +137,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.addSearchTag(event.option.value);
+    const negated = this.tagInput.nativeElement.value.startsWith('-');
+    this.addSearchTag((negated ? '-' : '') + event.option.value);
     this.tagInput.nativeElement.value = '';
     this.tagCtrl.setValue(null);
   }
