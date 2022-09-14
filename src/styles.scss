@@ -139,7 +139,11 @@ body {
 
 .file-info-panel {
   width: 720px;
+  .mat-bottom-sheet-container {
+    min-width: min(100vw, 720px);
+  }
 }
+
 
 .virtual-scroll-viewport-full-width {
   .cdk-virtual-scroll-content-wrapper {
