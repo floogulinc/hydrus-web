@@ -2,7 +2,6 @@ import { HydrusFilesService } from './../hydrus-files.service';
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self, ChangeDetectorRef } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { TagUtils } from '../utils/tag-utils';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 import { switchMap, debounceTime } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
@@ -21,8 +20,6 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   searchTags: HydrusSearchTags = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
-
-  tagUtils = TagUtils;
 
   tagCtrl = new UntypedFormControl();
   filteredTags: Observable<HydrusTagSearchTag[]>;

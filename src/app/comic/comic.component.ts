@@ -5,7 +5,7 @@ import { SearchService } from '../search.service';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap, map } from 'rxjs/operators';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { TagUtils } from '../utils/tag-utils';
+import { getTagValue, namespaceTagFromFile } from '../utils/tag-utils';
 
 @Component({
   selector: 'app-comic',
@@ -28,15 +28,15 @@ export class ComicComponent implements OnInit {
   }
 
   private pageNumberFromFile(file: HydrusFile): string {
-    return TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'page'));
+    return getTagValue(namespaceTagFromFile(file, 'page'));
   }
 
   private volumeNumberFromFile(file: HydrusFile): string {
-    return TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'volume'));
+    return getTagValue(namespaceTagFromFile(file, 'volume'));
   }
 
   private chapterNumberFromFile(file: HydrusFile): string {
-    return TagUtils.getTagValue(TagUtils.namespaceTagFromFile(file, 'chapter'));
+    return getTagValue(namespaceTagFromFile(file, 'chapter'));
   }
 
   ngOnInit(): void {

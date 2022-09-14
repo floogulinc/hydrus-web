@@ -3,7 +3,7 @@ import { HydrusFilesService } from './hydrus-files.service';
 import { SearchService } from './search.service';
 import { forkJoin, from } from 'rxjs';
 import { map, switchMap, filter, mergeMap, toArray, delay, concatMap, tap, reduce, distinct, retry } from 'rxjs/operators';
-import { TagUtils } from './utils/tag-utils';
+import { allTagsFromFile, getNamespace } from './utils/tag-utils';
 import { HydrusFile } from './hydrus-file';
 import { ProgressBarMode } from '@angular/material/progress-bar';
 
@@ -60,8 +60,8 @@ export class ComicsService {
   }
 
   private findCoverFile(files: HydrusFile[]): HydrusFile {
-    let coverFile: HydrusFile = files.find(f => TagUtils.AllTagsFromFile(f).includes('page:0'));
-    if (!coverFile) { coverFile = files.find(f => TagUtils.AllTagsFromFile(f).includes('page:1')); }
+    let coverFile: HydrusFile = files.find(f => allTagsFromFile(f).includes('page:0'));
+    if (!coverFile) { coverFile = files.find(f => allTagsFromFile(f).includes('page:1')); }
     if (!coverFile) { coverFile = files[0]; }
     return coverFile;
   }
@@ -81,9 +81,9 @@ export class ComicsService {
       map(r => [...new Set([].concat(...r))]),
       switchMap(ids => this.fileService.getFileMetadata(ids)),
       map(files => new Set(
-        files.map(f => TagUtils.AllTagsFromFile(f))
+        files.map(f => allTagsFromFile(f))
         .reduce((acc, val) => acc.concat(val), [])
-        .filter(tag => TagUtils.getNamespace(tag) === this.titleNamespace)
+        .filter(tag => getNamespace(tag) === this.titleNamespace)
       )),
       tap(tags => {
         this.loadingState = {
@@ -103,10 +103,10 @@ export class ComicsService {
       mergeMap(({tag, files}) => this.fileService.getFileMetadata(files).pipe(
         map(fileMetadata => ({
           tag,
-          volumes: [...new Set(fileMetadata.map(f => TagUtils.AllTagsFromFile(f)).reduce((acc, val) => acc.concat(val), []))]
-            .filter(t => TagUtils.getNamespace(t) === 'volume')
+          volumes: [...new Set(fileMetadata.map(f => allTagsFromFile(f)).reduce((acc, val) => acc.concat(val), []))]
+            .filter(t => getNamespace(t) === 'volume')
             .map(vtag => {
-              const volumefiles = fileMetadata.filter(f => TagUtils.AllTagsFromFile(f).includes(vtag));
+              const volumefiles = fileMetadata.filter(f => allTagsFromFile(f).includes(vtag));
               return {
                 tag: vtag,
                 coverFile: this.findCoverFile(volumefiles),

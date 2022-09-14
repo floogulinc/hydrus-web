@@ -3,7 +3,6 @@ import { HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, tap } from 'rxjs/operators';
-import { TagUtils } from './utils/tag-utils';
 
 function chunk<T>(array: T[], size: number): T[][] {
   const chunked = [];

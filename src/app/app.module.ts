@@ -61,6 +61,7 @@ import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
 import { OrSearchDialogComponent } from './or-search-dialog/or-search-dialog.component';
+import { TagNamespaceClassPipe } from './utils/tag-utils';
 
 
 const MAT_MODULES = [
@@ -106,7 +107,8 @@ const MAT_MODULES = [
         ImageListLoaderComponent,
         ToolbarActionsComponent,
         JoinPipe,
-        OrSearchDialogComponent
+        OrSearchDialogComponent,
+        TagNamespaceClassPipe
     ],
     imports: [
         BrowserModule,

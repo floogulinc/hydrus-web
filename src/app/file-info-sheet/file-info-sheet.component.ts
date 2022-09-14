@@ -1,10 +1,10 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { HydrusFile, HydrusFileType, ServiceNamesToStatusesToTags } from '../hydrus-file';
 import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
-import { TagUtils } from '../utils/tag-utils';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { tagsObjectFromFile } from '../utils/tag-utils';
 
 interface ShareData {
   title?: string;
@@ -27,7 +27,6 @@ declare global {
 })
 export class FileInfoSheetComponent {
 
-  tagUtils = TagUtils;
   Object = Object;
 
   constructor(
@@ -36,7 +35,7 @@ export class FileInfoSheetComponent {
     private snackbar: MatSnackBar
   ) { }
 
-  tags = Object.entries(TagUtils.tagsObjectFromFile(this.data.file))
+  tags = Object.entries(tagsObjectFromFile(this.data.file))
     .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
     .map(([serviceName, statuses]) => ({serviceName, statuses}));
 
