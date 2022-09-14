@@ -1,4 +1,5 @@
-<mat-form-field class="tag-form-field">
+<mat-form-field class="tag-form-field" appearance="outline">
+  <mat-label>{{placeholder}}</mat-label>
     <mat-chip-list #chipList [attr.aria-label]="placeholder">
       <ng-template ngFor let-tag [ngForOf]="searchTags" let-i="index" >
         <mat-chip *ngIf="tag | isString; else arrayTag" [selectable]="false" color="primary"
@@ -18,7 +19,6 @@
         </ng-template>
       </ng-template>
       <input #tagInput
-             [placeholder]="placeholder"
              [matChipInputFor]="chipList"
              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
              matChipInputAddOnBlur="false"
@@ -43,4 +43,16 @@
         </ng-template>
       </ng-container>
     </mat-autocomplete>
+
+    <button *ngIf="enableOrSearch || enableSystemPredicates" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>add</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button *ngIf="enableOrSearch" type="button" mat-menu-item (click)="orSearchButton()">
+        OR Search
+      </button>
+      <button *ngIf="enableSystemPredicates" type="button" mat-menu-item (click)="systemPredicateButton()">
+        System Predicate
+      </button>
+    </mat-menu>
 </mat-form-field>

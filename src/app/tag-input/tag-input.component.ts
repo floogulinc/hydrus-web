@@ -9,6 +9,8 @@ import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material
 import { Observable, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { HydrusSearchTags, HydrusTagSearchTag } from '../hydrus-tags';
+import { OrSearchDialogComponent } from '../or-search-dialog/or-search-dialog.component';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-tag-input',
@@ -27,6 +29,10 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   //inputControl = new FormControl("", this.validators)
 
+  @Input() enableOrSearch = true;
+
+  @Input() enableSystemPredicates = true;
+
   @Input() placeholder: string;
 
   @Input() defaultTags: HydrusSearchTags;
@@ -41,7 +47,9 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     @Optional() @Self() private controlDir: NgControl,
     public filesService: HydrusFilesService,
     public tagsService: HydrusTagsService,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    public dialog: MatDialog
+  ) {
     if (this.controlDir) {
       this.controlDir.valueAccessor = this
     }
@@ -85,7 +93,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
       return;
     }
 
-    const input = event.input;
+    const input = event.chipInput.inputElement;
     const value = event.value.toLowerCase(); // Hydrus tags are always lowercase
 
     this.addSearchTag(value);
@@ -105,6 +113,13 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     }
 
     this.tags.emit(this.searchTags);
+  }
+
+  addSearchTagsArray(tags: HydrusSearchTags) {
+    if(tags.length > 0) {
+      this.searchTags.push([...tags]);
+      this.tags.emit(this.searchTags);
+    }
   }
 
   setSearchTags(tags: string[]) {
@@ -148,6 +163,26 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   //   return results;
   // }
+
+  orSearchButton() {
+    const dialogRef = this.dialog.open<OrSearchDialogComponent, {}, HydrusSearchTags>(
+      OrSearchDialogComponent,
+      {
+        width: '80vw',
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.addSearchTagsArray(result);
+      }
+    });
+
+  }
+
+  systemPredicateButton() {
+
+  }
 
 
 }

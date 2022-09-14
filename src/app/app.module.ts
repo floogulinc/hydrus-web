@@ -60,6 +60,7 @@ import { ComicComponent } from './comic/comic.component';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
+import { OrSearchDialogComponent } from './or-search-dialog/or-search-dialog.component';
 
 
 const MAT_MODULES = [
@@ -104,7 +105,8 @@ const MAT_MODULES = [
         ComicComponent,
         ImageListLoaderComponent,
         ToolbarActionsComponent,
-        JoinPipe
+        JoinPipe,
+        OrSearchDialogComponent
     ],
     imports: [
         BrowserModule,
