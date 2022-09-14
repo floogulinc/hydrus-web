@@ -9,12 +9,6 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SettingsService } from '../settings.service';
 import { HydrusSearchTags } from '../hydrus-tags';
 
-enum FilterOption {
-  archive,
-  inbox,
-  none
-}
-
 @UntilDestroy()
 @Component({
   selector: 'app-browse',
@@ -29,8 +23,6 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiKey: string;
 
-  FilterOption = FilterOption;
-
   constructor(
     private searchService: SearchService,
     public filesService: HydrusFilesService,
@@ -44,14 +36,9 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
   searchSub: Subscription;
 
-  filterOption: FilterOption = FilterOption.none;
-
   searching = this.settingsService.appSettings.browseSearchOnLoad;
 
-  setFilterOption(option: FilterOption){
-    this.filterOption = option;
-    this.search();
-  }
+
 
   ngOnInit() {
 
@@ -77,11 +64,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     this.searching = true;
     this.searchSub?.unsubscribe();
     this.searchSub = this.searchService.searchFiles(
-      this.searchTags,
-      {
-        system_inbox: this.filterOption === FilterOption.inbox,
-        system_archive: this.filterOption === FilterOption.archive
-      }
+      this.searchTags
     ).pipe(untilDestroyed(this)).subscribe((result) => {
       this.searching = false;
       this.currentSearchIDs = result;

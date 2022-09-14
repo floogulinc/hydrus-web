@@ -44,15 +44,27 @@
       </ng-container>
     </mat-autocomplete>
 
-    <button *ngIf="enableOrSearch || enableSystemPredicates" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <button *ngIf="enableOrSearch || enableSystemPredicates" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="addMenu" aria-label="Example icon-button with a menu">
       <mat-icon>add</mat-icon>
     </button>
-    <mat-menu #menu="matMenu">
+    <mat-menu #addMenu="matMenu">
       <button *ngIf="enableOrSearch" type="button" mat-menu-item (click)="orSearchButton()">
         OR Search
       </button>
-      <button *ngIf="enableSystemPredicates" type="button" mat-menu-item (click)="systemPredicateButton()">
+      <button *ngIf="enableSystemPredicates" type="button" mat-menu-item (click)="systemPredicateButton()" [matMenuTriggerFor]="predicatesMenu">
         System Predicate
+      </button>
+    </mat-menu>
+
+    <mat-menu #predicatesMenu="matMenu">
+      <button type="button" mat-menu-item (click)="addSearchTag('system:everything')">
+        system:everything
+      </button>
+      <button type="button" mat-menu-item (click)="addSearchTag('system:inbox')">
+        system:inbox
+      </button>
+      <button type="button" mat-menu-item (click)="addSearchTag('system:archive')">
+        system:archive
       </button>
     </mat-menu>
 </mat-form-field>
