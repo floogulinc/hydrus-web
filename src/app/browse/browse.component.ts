@@ -61,6 +61,9 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   }
 
   search() {
+    if(!this.settingsService.appSettings.browseSearchWhenEmpty && this.searchTags.length === 0) {
+      return;
+    }
     this.searching = true;
     this.searchSub?.unsubscribe();
     this.searchSub = this.searchService.searchFiles(

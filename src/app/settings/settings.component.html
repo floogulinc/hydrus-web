@@ -21,6 +21,7 @@
     <form [formGroup]="appSettingsForm" (ngSubmit)="submitAppSettings()">
       <div fxLayout="column" class="settings-column">
         <mat-slide-toggle formControlName="browseSearchOnLoad" class="margin-bottom-16">Search immediately on the browse page</mat-slide-toggle>
+        <mat-slide-toggle formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
         <app-tag-input formControlName="browseDefaultSearchTags" placeholder="Browse page default tags" class=""></app-tag-input>
         <div fxLayout="row wrap" fxLayoutAlign="end" class="">
 

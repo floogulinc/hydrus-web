@@ -46,6 +46,7 @@ export class SettingsComponent implements OnInit {
 
   appSettingsForm = new FormGroup({
     browseSearchOnLoad: new FormControl(this.settingsService.appSettings.browseSearchOnLoad, {nonNullable: true}),
+    browseSearchWhenEmpty: new FormControl(this.settingsService.appSettings.browseSearchWhenEmpty, {nonNullable: true}),
     browseDefaultSearchTags: new FormControl(this.settingsService.appSettings.browseDefaultSearchTags, {nonNullable: true}),
   });
 
