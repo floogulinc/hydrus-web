@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from 'ngx-localstorage';
 import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
-import { AppSettings, defaultAppSettings } from './settings';
+import { AppSettings, AppSettingsStorage, defaultAppSettings } from './settings';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,8 @@ export class SettingsService {
   public appSettings$: Observable<AppSettings>;
 
   constructor(private ls: LocalStorageService) {
-    const appSettingsFromStorage = ls.get(this.appSettingsKey) as AppSettings | null;
-    this._appSettings = {...defaultAppSettings, ...appSettingsFromStorage};
+    const {version, ...settings} = ls.get(this.appSettingsKey) as AppSettingsStorage | null || {};
+    this._appSettings = {...defaultAppSettings, ...settings};
     this._appSettings$ = new BehaviorSubject(this._appSettings);
     this.appSettings$ = this._appSettings$.asObservable();
     console.log(this.appSettings);
@@ -29,10 +29,14 @@ export class SettingsService {
     return this._appSettings;
   }
 
+  private async storeAppSettings(settings: AppSettingsStorage) {
+    return this.ls.asPromisable().set(this.appSettingsKey, settings);
+  }
+
   public async setAppSettings(newSettings: Partial<AppSettings>) {
     this._appSettings = {...defaultAppSettings, ...newSettings};
     this._appSettings$.next(this._appSettings);
-    return this.ls.asPromisable().set(this.appSettingsKey, this._appSettings);
+    this.storeAppSettings({version : 1, ...this._appSettings})
   }
 
 

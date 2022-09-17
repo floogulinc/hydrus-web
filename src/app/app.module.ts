@@ -40,6 +40,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -125,7 +126,8 @@ const MAT_MODULES = [
         LayoutModule,
         ReactiveFormsModule,
         VirtualScrollerModule,
-        NgPipesModule
+        NgPipesModule,
+        ClipboardModule
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -6,6 +6,7 @@ export interface AppSettingsV1 {
   browseSearchOnLoad: boolean;
   browseSearchWhenEmpty: boolean;
   browseDefaultSearchTags: HydrusSearchTags;
+  hyshareUrl: string;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -14,5 +15,6 @@ export type AppSettings = Omit<AppSettingsStorage, "version">;
 export const defaultAppSettings: AppSettings = {
   browseSearchOnLoad: true,
   browseSearchWhenEmpty: true,
-  browseDefaultSearchTags: []
+  browseDefaultSearchTags: [],
+  hyshareUrl: ''
 }

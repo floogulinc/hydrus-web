@@ -23,6 +23,11 @@
         <mat-slide-toggle formControlName="browseSearchOnLoad" class="margin-bottom-16">Search immediately on the browse page</mat-slide-toggle>
         <mat-slide-toggle formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
         <app-tag-input formControlName="browseDefaultSearchTags" placeholder="Browse page default tags" class=""></app-tag-input>
+
+        <mat-form-field appearance="outline">
+          <mat-label>hyshare base URL</mat-label>
+          <input matInput type="url" autocomplete="off" formControlName="hyshareUrl" placeholder="https://my.hyshare.url/">
+        </mat-form-field>
         <div fxLayout="row wrap" fxLayoutAlign="end" class="">
 
           <button type="button" mat-icon-button [matMenuTriggerFor]="appSettingsSaveMenu">

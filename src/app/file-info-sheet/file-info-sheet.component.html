@@ -1,54 +1,74 @@
-<h2 mat-dialog-title>File Info</h2>
-<mat-list role="list">
-  <mat-list-item role="listitem">
-    <mat-icon mat-list-icon>{{fileIcon}}</mat-icon>
-    <div mat-line>{{data.file.file_id}}</div>
-    <div mat-line class="metadata-line"><span>{{data.file.mime}}</span> <span *ngIf="data.file.width && data.file.height">{{data.file.width}}x{{data.file.height}}</span> <span>{{data.file.size | bytes: 2}}</span></div>
-  </mat-list-item>
-  <mat-list-item role="listitem">
-    <mat-icon mat-list-icon>{{data.file.is_inbox ? "inbox" : data.file.is_trashed ? "delete" : "archive"}}</mat-icon>
-    <div mat-line>{{data.file.is_inbox ? "In Inbox" : data.file.is_trashed ? "In Trash" : "Archived"}}</div>
-    <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{data.file.file_url}}" title="Open file in new tab">
-      <mat-icon>open_in_new</mat-icon>
-    </a>
+<div fxLayout="row" fxLayoutAlign="space-between center" class="title-row">
+  <h2 mat-dialog-title class="sheet-title">File Info</h2>
+  <div>
     <button mat-icon-button (click)="saveFile()" title="Download file">
       <mat-icon>get_app</mat-icon>
     </button>
     <button mat-icon-button *ngIf="navigatorShare && navigatorCanShare" (click)="shareFile()" title="Share file">
       <mat-icon>share</mat-icon>
     </button>
-  </mat-list-item>
-</mat-list>
-<mat-expansion-panel *ngIf="data.file.known_urls?.length > 0">
-  <mat-expansion-panel-header>
-    Known URLs ({{data.file.known_urls.length}})
-  </mat-expansion-panel-header>
-
-  <mat-nav-list>
-    <mat-list-item *ngFor="let url of data.file.known_urls">
-      <a matLine [href]="url" target="_blank" rel="noopener noreferrer">{{ url }}</a>
-      <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url)">
-        <mat-icon>share</mat-icon>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a mat-menu-item rel="noopener noreferrer" target="_blank" href="{{data.file.file_url}}">
+        <mat-icon>open_in_new</mat-icon>
+        <span>Open file in new tab</span>
+      </a>
+      <button mat-menu-item [cdkCopyToClipboard]="data.file.hash">
+        <mat-icon>content_copy</mat-icon>
+        <span>Copy SHA256 hash</span>
       </button>
+      <button mat-menu-item *ngIf="hyshareUrl" [cdkCopyToClipboard]="hyshareUrl + 'view/' + data.file.hash">
+        <mat-icon>link</mat-icon>
+        <span>Copy hyshare URL</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
+<div>
+  <mat-list role="list">
+    <mat-list-item role="listitem">
+      <mat-icon mat-list-icon>{{fileIcon}}</mat-icon>
+      <div mat-line>{{data.file.file_id}}</div>
+      <div mat-line class="metadata-line"><span>{{data.file.mime}}</span> <span *ngIf="data.file.width && data.file.height">{{data.file.width}}x{{data.file.height}}</span> <span>{{data.file.size | bytes: 2}}</span></div>
     </mat-list-item>
-  </mat-nav-list>
-</mat-expansion-panel>
-<br>
-
-<div *ngIf="tags && tags.length > 1">
-  <h3 class="mat-subheading-2">Tags</h3>
-  <mat-accordion multi>
-  <mat-expansion-panel *ngFor="let service of tags | orderBy: 'serviceName'" >
+    <mat-list-item role="listitem">
+      <mat-icon mat-list-icon>{{data.file.is_inbox ? "inbox" : data.file.is_trashed ? "delete" : "archive"}}</mat-icon>
+      <div mat-line>{{data.file.is_inbox ? "In Inbox" : data.file.is_trashed ? "In Trash" : "Archived"}}</div>
+    </mat-list-item>
+  </mat-list>
+  <mat-expansion-panel *ngIf="data.file.known_urls?.length > 0">
     <mat-expansion-panel-header>
-      {{service.serviceName}} ({{service.statuses[0].length}})
+      Known URLs ({{data.file.known_urls.length}})
     </mat-expansion-panel-header>
-    <ng-template matExpansionPanelContent>
-      <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
-        <mat-chip *ngFor="let tag of (service.statuses[0] | orderBy)" [selectable]="false" class="tag-chip" [ngClass]="tag | tagClass">
-          {{tag}}
-        </mat-chip>
-      </mat-chip-list>
-    </ng-template>
+
+    <mat-nav-list>
+      <mat-list-item *ngFor="let url of data.file.known_urls">
+        <a matLine [href]="url" target="_blank" rel="noopener noreferrer">{{ url }}</a>
+        <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url)">
+          <mat-icon>share</mat-icon>
+        </button>
+      </mat-list-item>
+    </mat-nav-list>
   </mat-expansion-panel>
-  </mat-accordion>
+  <br>
+
+  <div *ngIf="tags && tags.length > 1">
+    <h3 class="mat-subheading-2">Tags</h3>
+    <mat-accordion multi>
+    <mat-expansion-panel *ngFor="let service of tags | orderBy: 'serviceName'" >
+      <mat-expansion-panel-header>
+        {{service.serviceName}} ({{service.statuses[0].length}})
+      </mat-expansion-panel-header>
+      <ng-template matExpansionPanelContent>
+        <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+          <mat-chip *ngFor="let tag of (service.statuses[0] | orderBy)" [selectable]="false" class="tag-chip" [ngClass]="tag | tagClass">
+            {{tag}}
+          </mat-chip>
+        </mat-chip-list>
+      </ng-template>
+    </mat-expansion-panel>
+    </mat-accordion>
+  </div>
 </div>

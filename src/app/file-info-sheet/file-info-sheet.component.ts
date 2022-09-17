@@ -5,6 +5,7 @@ import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
+import { SettingsService } from '../settings.service';
 
 interface ShareData {
   title?: string;
@@ -32,7 +33,8 @@ export class FileInfoSheetComponent {
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusFile},
     private filesService: HydrusFilesService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    public settings: SettingsService,
   ) { }
 
   tags = Object.entries(tagsObjectFromFile(this.data.file))
@@ -55,6 +57,11 @@ export class FileInfoSheetComponent {
 
   navigatorShare = navigator.share;
   navigatorCanShare = navigator.canShare;
+
+  hyshareUrl =
+    this.settings.appSettings.hyshareUrl && !this.settings.appSettings.hyshareUrl.endsWith('/')
+      ? `${this.settings.appSettings.hyshareUrl}/`
+      : this.settings.appSettings.hyshareUrl;
 
   shareUrl(url: string) {
     if (navigator.share) {
