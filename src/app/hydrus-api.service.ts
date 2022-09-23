@@ -50,6 +50,12 @@ export class HydrusApiService {
     });
   }
 
+  private apiPost<T>(path: string, data: any) {
+    return this.http.post<T>(this.getAPIUrl() + path,
+                          data,
+                          {headers: this.getHeaders()});
+  }
+
   public testApi(): Observable<HydrusKeyVerificationData> {
     return this.http.get<HydrusKeyVerificationData>(this.getAPIUrl() + 'verify_access_key', {
       headers: this.getHeaders()
@@ -269,13 +275,57 @@ export class HydrusApiService {
                         show_destination_page?: string,
                         service_names_to_tags?: any}) {
 
-    return this.http.post(this.getAPIUrl() + 'add_urls/add_url',
-                          data,
-                          {headers: this.getHeaders()});
+    return this.apiPost<{human_result_text: string, normalised_url: string}>('add_urls/add_url', data);
   }
 
 
   public searchTags(params: {search: string, tag_service_key?: string, tag_service_name?: string}) {
     return this.apiGet('add_tags/search_tags', new HttpParams({fromObject: params}));
+  }
+
+
+  public deleteFiles(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    file_service_name?: string,
+    file_service_key?: string,
+    reason?: string
+  }) {
+    return this.apiPost<void>('add_files/delete_files', data);
+  }
+
+  public undeleteFiles(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    file_service_name?: string,
+    file_service_key?: string
+  }) {
+    return this.apiPost<void>('add_files/undelete_files', data);
+  }
+
+  public archiveFiles(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    file_service_name?: string,
+    file_service_key?: string
+  }) {
+    return this.apiPost<void>('add_files/archive_files', data);
+  }
+
+  public unarchiveFiles(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    file_service_name?: string,
+    file_service_key?: string
+  }) {
+    return this.apiPost<void>('add_files/unarchive_files', data);
   }
 }

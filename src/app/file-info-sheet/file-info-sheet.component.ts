@@ -1,12 +1,12 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { HydrusFile, HydrusFileType, ServiceNamesToStatusesToTags } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile, HydrusFileType, ServiceNamesToStatusesToTags } from '../hydrus-file';
 import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
-import { map, shareReplay } from 'rxjs';
+import { BehaviorSubject, map, shareReplay, switchMap } from 'rxjs';
 
 interface ShareData {
   title?: string;
@@ -46,21 +46,24 @@ export class FileInfoSheetComponent {
   Object = Object;
 
   constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: {hash: string},
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusBasicFile},
     private filesService: HydrusFilesService,
     private snackbar: MatSnackBar,
     public settings: SettingsService,
   ) { }
 
-  file$ = this.filesService.getFileByHash(this.data.hash).pipe(
+  reload$ = new BehaviorSubject(null);
+
+  file$ = this.reload$.pipe(
+    switchMap(() => this.filesService.getFileByHash(this.data.file.hash)),
     map(file => {
       const tagMapArray = Object.entries(tagsObjectFromFile(file))
-      .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
-      .map(([serviceName, statuses]) => ({serviceName, statuses}));
+        .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
+        .map(([serviceName, statuses]) => ({ serviceName, statuses }));
 
       const fileIcon = getFileIcon(file.file_type);
 
-      const notesMapArray = Object.entries(file.notes).map(([name, value]) => ({name, value}));
+      const notesMapArray = Object.entries(file.notes).map(([name, value]) => ({ name, value }));
 
       return {
         ...file,
@@ -70,11 +73,13 @@ export class FileInfoSheetComponent {
       }
 
     }),
-    shareReplay(1)
+    shareReplay(1),
   )
 
 
-
+  reload() {
+    this.reload$.next(null);
+  }
 
 
   navigatorShare = navigator.share;
@@ -93,9 +98,9 @@ export class FileInfoSheetComponent {
     }
   }
 
-  saveFile(file: HydrusFile) {
+  saveFile() {
     const snackBarRef = this.snackbar.open('Downloading file...');
-    this.filesService.getFileAsFile(file).subscribe(file => {
+    this.filesService.getFileAsFile(this.data.file).subscribe(file => {
       saveAs(file);
       snackBarRef.dismiss();
     }, error => {
@@ -106,9 +111,9 @@ export class FileInfoSheetComponent {
     });
   }
 
-  shareFile(file: HydrusFile) {
+  shareFile() {
     const snackBarRef = this.snackbar.open('Sharing file...');
-    this.filesService.getFileAsFile(file).toPromise().then(file => {
+    this.filesService.getFileAsFile(this.data.file).toPromise().then(file => {
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         return navigator.share({
           files: [file]
@@ -127,6 +132,63 @@ export class FileInfoSheetComponent {
         });
       }
     });
+  }
+
+
+  async deleteFile(){
+    try {
+      await this.filesService.deleteFile(this.data.file.hash).toPromise();
+      this.reload();
+      this.snackbar.open('File sent to trash', undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.snackbar.open(`Error: ${{error}}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async undeleteFile(){
+    try {
+      await this.filesService.undeleteFile(this.data.file.hash).toPromise();
+      this.reload();
+      this.snackbar.open('File removed from trash', undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.snackbar.open(`Error: ${{error}}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async archiveFile(){
+    try {
+      await this.filesService.archiveFile(this.data.file.hash).toPromise();
+      this.reload();
+      this.snackbar.open('File archived', undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.snackbar.open(`Error: ${{error}}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async unarchiveFile(){
+    try {
+      await this.filesService.unarchiveFile(this.data.file.hash).toPromise();
+      this.reload();
+      this.snackbar.open('File moved to inbox', undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.snackbar.open(`Error: ${{error}}`, undefined, {
+        duration: 2000
+      });
+    }
   }
 
 }

@@ -203,4 +203,20 @@ export class HydrusFilesService {
     }
   }
 
+  public deleteFile(hash: string, reason: string = 'Hydrus Web'){
+    return this.api.deleteFiles({hash, reason});
+  }
+
+  public undeleteFile(hash: string){
+    return this.api.undeleteFiles({hash});
+  }
+
+  public archiveFile(hash: string){
+    return this.api.archiveFiles({hash});
+  }
+
+  public unarchiveFile(hash: string){
+    return this.api.unarchiveFiles({hash});
+  }
+
 }

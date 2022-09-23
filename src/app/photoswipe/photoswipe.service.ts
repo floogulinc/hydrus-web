@@ -173,7 +173,7 @@ export class PhotoswipeService {
       const item = items.find(i => i.file_id === pid);
       this.bottomSheet.open(FileInfoSheetComponent, {
         data: {
-          hash: item.hash
+          file: item
         },
         panelClass: 'file-info-panel',
         closeOnNavigation: true
