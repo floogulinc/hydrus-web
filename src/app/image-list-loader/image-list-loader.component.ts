@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { HydrusFile } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile } from '../hydrus-file';
 import { IPageInfo } from '@floogulinc/ngx-virtual-scroller';
 
 @Component({
@@ -17,7 +17,7 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
 
   loading = false;
 
-  currentFiles: HydrusFile[] = [];
+  currentFiles: HydrusBasicFile[] = [];
 
   constructor(public filesService: HydrusFilesService, public cdr: ChangeDetectorRef) { }
 

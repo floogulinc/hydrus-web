@@ -1,50 +1,50 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="title-row">
   <h2 mat-dialog-title class="sheet-title">File Info</h2>
-  <div>
-    <button mat-icon-button (click)="saveFile()" title="Download file">
+  <div *ngIf="file$ | async as file">
+    <button mat-icon-button (click)="saveFile(file)" title="Download file">
       <mat-icon>get_app</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="navigatorShare && navigatorCanShare" (click)="shareFile()" title="Share file">
+    <button mat-icon-button *ngIf="navigatorShare && navigatorCanShare" (click)="shareFile(file)" title="Share file">
       <mat-icon>share</mat-icon>
     </button>
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <a mat-menu-item rel="noopener noreferrer" target="_blank" href="{{data.file.file_url}}">
+      <a mat-menu-item rel="noopener noreferrer" target="_blank" href="{{file.file_url}}">
         <mat-icon>open_in_new</mat-icon>
         <span>Open file in new tab</span>
       </a>
-      <button mat-menu-item [cdkCopyToClipboard]="data.file.hash">
+      <button mat-menu-item [cdkCopyToClipboard]="file.hash">
         <mat-icon>content_copy</mat-icon>
         <span>Copy SHA256 hash</span>
       </button>
-      <button mat-menu-item *ngIf="hyshareUrl" [cdkCopyToClipboard]="hyshareUrl + 'view/' + data.file.hash">
+      <button mat-menu-item *ngIf="hyshareUrl" [cdkCopyToClipboard]="hyshareUrl + 'view/' + file.hash">
         <mat-icon>link</mat-icon>
         <span>Copy hyshare URL</span>
       </button>
     </mat-menu>
   </div>
 </div>
-<div>
+<div *ngIf="file$ | async as file; else noFile">
   <mat-list role="list">
     <mat-list-item role="listitem">
-      <mat-icon mat-list-icon>{{fileIcon}}</mat-icon>
-      <div mat-line>{{data.file.file_id}}</div>
-      <div mat-line class="metadata-line"><span>{{data.file.mime}}</span> <span *ngIf="data.file.width && data.file.height">{{data.file.width}}x{{data.file.height}}</span> <span>{{data.file.size | bytes: 2}}</span></div>
+      <mat-icon mat-list-icon>{{file.fileIcon}}</mat-icon>
+      <div mat-line>{{file.file_id}}</div>
+      <div mat-line class="metadata-line"><span>{{file.mime}}</span> <span *ngIf="file.width && file.height">{{file.width}}x{{file.height}}</span> <span>{{file.size | bytes: 2}}</span></div>
     </mat-list-item>
     <mat-list-item role="listitem">
-      <mat-icon mat-list-icon>{{data.file.is_inbox ? "inbox" : data.file.is_trashed ? "delete" : "archive"}}</mat-icon>
-      <div mat-line>{{data.file.is_inbox ? "In Inbox" : data.file.is_trashed ? "In Trash" : "Archived"}}</div>
+      <mat-icon mat-list-icon>{{file.is_inbox ? "inbox" : file.is_trashed ? "delete" : "archive"}}</mat-icon>
+      <div mat-line>{{file.is_inbox ? "In Inbox" : file.is_trashed ? "In Trash" : "Archived"}}</div>
     </mat-list-item>
   </mat-list>
-  <mat-expansion-panel *ngIf="data.file.known_urls?.length > 0">
+  <mat-expansion-panel *ngIf="file.known_urls?.length > 0">
     <mat-expansion-panel-header>
-      Known URLs ({{data.file.known_urls.length}})
+      Known URLs ({{file.known_urls.length}})
     </mat-expansion-panel-header>
 
     <mat-nav-list>
-      <mat-list-item *ngFor="let url of data.file.known_urls">
+      <mat-list-item *ngFor="let url of file.known_urls">
         <a matLine [href]="url" target="_blank" rel="noopener noreferrer">{{ url }}</a>
         <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url)">
           <mat-icon>share</mat-icon>
@@ -54,10 +54,10 @@
   </mat-expansion-panel>
   <br>
 
-  <div *ngIf="tags && tags.length > 1">
+  <div *ngIf="file.tagMap && file.tagMap.length > 1">
     <h3 class="mat-subheading-2">Tags</h3>
     <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let service of tags | orderBy: 'serviceName'" >
+    <mat-expansion-panel *ngFor="let service of file.tagMap | orderBy: 'serviceName'" >
       <mat-expansion-panel-header>
         {{service.serviceName}} ({{service.statuses[0].length}})
       </mat-expansion-panel-header>
@@ -72,3 +72,6 @@
     </mat-accordion>
   </div>
 </div>
+<ng-template #noFile>
+  <mat-spinner></mat-spinner>
+</ng-template>

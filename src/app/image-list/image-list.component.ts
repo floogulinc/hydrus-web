@@ -8,7 +8,7 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-import { HydrusFile } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile } from '../hydrus-file';
 import { AppComponent } from '../app.component';
 import { IPageInfo } from '@floogulinc/ngx-virtual-scroller';
 import { PhotoswipeService } from '../photoswipe/photoswipe.service';
@@ -21,7 +21,7 @@ import { PhotoswipeService } from '../photoswipe/photoswipe.service';
 })
 export class ImageListComponent implements OnInit, OnChanges {
 
-  @Input() files: HydrusFile[] = [];
+  @Input() files: HydrusBasicFile[] = [];
 
   @Output() scrollEnd: EventEmitter<IPageInfo> = new EventEmitter();
 

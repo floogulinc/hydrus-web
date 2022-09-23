@@ -33,7 +33,6 @@ export interface HydrusBasicFileFromAPI {
 
 export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   known_urls: string[];
-  detailed_known_urls?: HydrusURLInfo[];
   file_services: {
     current?: FileFileServices;
     deleted?: FileFileServices;
@@ -46,14 +45,20 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   is_inbox: boolean;
   is_local: boolean;
   is_trashed: boolean;
-  notes: HydrusNotes;
+
+  notes?: HydrusNotes;
+
+  detailed_known_urls?: HydrusURLInfo[];
 }
 
-export interface HydrusFile extends HydrusFileFromAPI {
-    file_url?: string;
-    thumbnail_url?: string;
-    file_type?: HydrusFileType;
-    has_thumbnail?: boolean;
+export interface HydrusFile extends HydrusFileFromAPI, HydrusBasicFile {
+
+}
+
+export interface HydrusBasicFile extends HydrusBasicFileFromAPI {
+  file_url: string;
+  thumbnail_url: string;
+  file_type: HydrusFileType;
 }
 
 export interface HydrusFileList {
@@ -112,13 +117,3 @@ export function type(mime: string): HydrusFileType {
   return HydrusFileType.Unsupported;
 }
 
-export function serviceNamesToCurrentTags(
-  service_names_to_statuses_to_tags: ServiceNamesToStatusesToTags,
-) {
-  return Object.fromEntries(
-    Object.entries(service_names_to_statuses_to_tags).map(([key, value]) => [
-      key,
-      value[0],
-    ]),
-  );
-}

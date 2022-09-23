@@ -1,4 +1,3 @@
-import { P } from '@angular/cdk/keycodes';
 import { Pipe, PipeTransform } from '@angular/core';
 import { HydrusFile, ServiceNamesToStatusesToTags } from '../hydrus-file';
 
@@ -64,4 +63,15 @@ export class TagNamespaceClassPipe implements PipeTransform {
   transform(tag: string): string {
     return getTagNamespace(tag);
   }
+}
+
+export function serviceNamesToCurrentTags(
+  service_names_to_statuses_to_tags: ServiceNamesToStatusesToTags,
+) {
+  return Object.fromEntries(
+    Object.entries(service_names_to_statuses_to_tags).map(([key, value]) => [
+      key,
+      value[0],
+    ]),
+  );
 }

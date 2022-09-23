@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
+import { map, shareReplay } from 'rxjs';
 
 interface ShareData {
   title?: string;
@@ -21,6 +22,20 @@ declare global {
   }
 }
 
+function getFileIcon(fileType: HydrusFileType) {
+  switch (fileType) {
+    case HydrusFileType.Image: {
+      return 'photo';
+    }
+    case HydrusFileType.Video: {
+      return 'movie';
+    }
+    default: {
+      return 'insert_drive_file';
+    }
+  }
+}
+
 @Component({
   selector: 'app-file-info-sheet',
   templateUrl: './file-info-sheet.component.html',
@@ -31,29 +46,33 @@ export class FileInfoSheetComponent {
   Object = Object;
 
   constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusFile},
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: {hash: string},
     private filesService: HydrusFilesService,
     private snackbar: MatSnackBar,
     public settings: SettingsService,
   ) { }
 
-  tags = Object.entries(tagsObjectFromFile(this.data.file))
-    .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
-    .map(([serviceName, statuses]) => ({serviceName, statuses}));
+  file$ = this.filesService.getFileByHash(this.data.hash).pipe(
+    map(file => {
+      const tagMap = Object.entries(tagsObjectFromFile(file))
+      .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
+      .map(([serviceName, statuses]) => ({serviceName, statuses}));
 
-  get fileIcon() {
-    switch (this.data.file.file_type) {
-      case HydrusFileType.Image: {
-        return 'photo';
+      const fileIcon = getFileIcon(file.file_type);
+
+      return {
+        ...file,
+        tagMap,
+        fileIcon
       }
-      case HydrusFileType.Video: {
-        return 'movie';
-      }
-      default: {
-        return 'insert_drive_file';
-      }
-    }
-  }
+
+    }),
+    shareReplay(1)
+  )
+
+
+
+
 
   navigatorShare = navigator.share;
   navigatorCanShare = navigator.canShare;
@@ -71,9 +90,9 @@ export class FileInfoSheetComponent {
     }
   }
 
-  saveFile() {
+  saveFile(file: HydrusFile) {
     const snackBarRef = this.snackbar.open('Downloading file...');
-    this.filesService.getFileAsFile(this.data.file).subscribe(file => {
+    this.filesService.getFileAsFile(file).subscribe(file => {
       saveAs(file);
       snackBarRef.dismiss();
     }, error => {
@@ -84,9 +103,9 @@ export class FileInfoSheetComponent {
     });
   }
 
-  shareFile() {
+  shareFile(file: HydrusFile) {
     const snackBarRef = this.snackbar.open('Sharing file...');
-    this.filesService.getFileAsFile(this.data.file).toPromise().then(file => {
+    this.filesService.getFileAsFile(file).toPromise().then(file => {
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         return navigator.share({
           files: [file]

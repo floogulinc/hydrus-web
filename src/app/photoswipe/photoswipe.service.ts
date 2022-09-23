@@ -2,7 +2,7 @@ import { Injectable, ApplicationRef, Injector, ComponentFactoryResolver, Compone
 import { PhotoswipeComponent } from './photoswipe.component';
 import * as PhotoSwipe from 'photoswipe';
 import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
-import { HydrusFile, HydrusFileType } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile, HydrusFileType } from '../hydrus-file';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -40,11 +40,11 @@ export class PhotoswipeService {
     this.onMouse$ = fromEvent<MouseEvent>(this.photoswipeComponent.location.nativeElement, 'auxclick');
   }
 
-  getPhotoSwipeItems(items: HydrusFile[]): PhotoSwipe.Item[] {
+  getPhotoSwipeItems(items: HydrusBasicFile[]): PhotoSwipe.Item[] {
     return items.map((i) => this.getPhotoSwipeItem(i));
   }
 
-  getPhotoSwipeItem(file: HydrusFile): PhotoSwipe.Item {
+  getPhotoSwipeItem(file: HydrusBasicFile): PhotoSwipe.Item {
     if (file.file_type === HydrusFileType.Image) {
       return {
         src: file.file_url,
@@ -71,13 +71,9 @@ export class PhotoswipeService {
         pid: file.file_id
       };
     } else {
-      const html = file.has_thumbnail
-      ? `<div class="pswp__error-msg">
+      const html = `<div class="pswp__error-msg">
       <img src="${file.thumbnail_url}" class="pswp-error-thumb">
       <p>The file could not be loaded. (type: ${file.mime})</p>
-      </div>`
-      : `<div class="pswp__error-msg">
-      The file could not be loaded. (type: ${file.mime})
       </div>`;
 
       return {
@@ -87,7 +83,7 @@ export class PhotoswipeService {
     }
   }
 
-  public openPhotoSwipe(items: HydrusFile[], id: number) {
+  public openPhotoSwipe(items: HydrusBasicFile[], id: number) {
     const imgindex = items.findIndex(e => e.file_id === id);
 
     const ps = new PhotoSwipe(this.pspElement.nativeElement, PhotoSwipeUI_Default, this.getPhotoSwipeItems(items),
@@ -177,7 +173,7 @@ export class PhotoswipeService {
       const item = items.find(i => i.file_id === pid);
       this.bottomSheet.open(FileInfoSheetComponent, {
         data: {
-          file: item
+          hash: item.hash
         },
         panelClass: 'file-info-panel',
         closeOnNavigation: true

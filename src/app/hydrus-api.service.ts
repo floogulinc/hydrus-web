@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ngxLocalStorage } from 'ngx-localstorage';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HydrusSortType } from './hydrus-sort-type';
+import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
+import { HydrusSearchTags } from './hydrus-tags';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
   human_description: string;
+}
+
+type AngularHttpParams = HttpParams | {
+  [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
 }
 
 /* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */
@@ -36,8 +43,8 @@ export class HydrusApiService {
     });
   }
 
-  private apiGet(path: string, params?: HttpParams) {
-    return this.http.get(this.getAPIUrl() + path, {
+  private apiGet<T = any>(path: string, params?: AngularHttpParams) {
+    return this.http.get<T>(this.getAPIUrl() + path, {
       params,
       headers: this.getHeaders()
     });
@@ -59,13 +66,44 @@ export class HydrusApiService {
    * @param options.system_archive true or false (optional, defaulting to false)
    * @returns The full list of numerical file ids that match the search.
    */
-  public searchFiles(tags: string, options: { system_inbox?: string, system_archive?: string }) {
+  /* public searchFiles(tags: string, options: { system_inbox?: string, system_archive?: string }) {
     let httpParams: HttpParams = new HttpParams().set('tags', tags);
     if (options) {
       if (options.system_inbox) { httpParams = httpParams.set('system_inbox', options.system_inbox); }
       if (options.system_archive) { httpParams = httpParams.set('system_archive', options.system_archive); }
     }
     return this.apiGet('get_files/search_files', httpParams);
+  } */
+
+
+  /**
+   * GET /get_files/search_files
+   *
+   * Search for the client's files.
+   * @param tags (a list of tags you wish to search for)
+   * @param params additional parameters
+   * @returns The full list of numerical file ids or hashes that match the search.
+   */
+   public searchFiles<Hashes extends boolean, IDs extends boolean>(
+    tags: HydrusSearchTags,
+    params: {
+      file_service_name?: string;
+      file_service_key?: string;
+      tag_service_name?: string;
+      tag_service_key?: string;
+      file_sort_type?: HydrusSortType;
+      file_sort_asc?: boolean;
+      return_hashes?: Hashes;
+      return_file_ids?: IDs;
+    } = {},
+  ): Observable<
+    (Hashes extends true ? { hashes: string[] } : Record<string, never>) &
+      (IDs extends true ? { file_ids: number[] } : Record<string, never>)
+  > {
+    return this.apiGet('get_files/search_files', {
+      tags: JSON.stringify(tags),
+      ...params,
+    });
   }
 
   /**
@@ -77,13 +115,52 @@ export class HydrusApiService {
    * @param params.only_return_identifiers true or false (optional, defaulting to false)
    * @returns  A list of JSON Objects that store a variety of file metadata.
    */
-  public getFileMetadata(params: { file_ids?: string, hashes?: string, only_return_identifiers?: string }) {
+  /* public getFileMetadata(params: { file_ids?: string, hashes?: string, only_return_identifiers?: string }) {
     let httpParams: HttpParams = new HttpParams();
     if (params.file_ids) { httpParams = httpParams.set('file_ids', params.file_ids); }
     if (params.hashes) { httpParams = httpParams.set('hashes', params.hashes); }
     if (params.only_return_identifiers) { httpParams = httpParams.set('only_return_identifiers', params.only_return_identifiers); }
 
     return this.apiGet('get_files/file_metadata', httpParams);
+  } */
+
+
+  /**
+   * GET /get_files/file_metadata
+   *
+   * Get metadata about files in the client.
+   * @param params.file_ids (a list of numerical file ids)
+   * @param params.hashes (a list of hexadecimal SHA256 hashes)
+   * @param params.only_return_identifiers true or false (optional, defaulting to false)
+   * @param params.detailed_url_information true or false (optional, defaulting to false)
+   * @param params.hide_service_names_tags true or false (optional, defaulting to false)
+   * @param params.include_notes true or false (optional, defaulting to false)
+   * @returns  A list of JSON Objects that store a variety of file metadata.
+   */
+   public getFileMetadata<Identifiers extends boolean, Basic extends boolean>(
+    params: ({ hashes: string[] } | { file_ids: number[] }) & {
+      only_return_identifiers?: Identifiers;
+      only_return_basic_information?: Basic;
+      detailed_url_information?: boolean;
+      hide_service_names_tags?: boolean;
+      include_notes?: boolean;
+    },
+  ): Observable<{ metadata: Identifiers extends true ? {file_id: number, hash: string }[] : Basic extends true ? HydrusBasicFileFromAPI[] : HydrusFileFromAPI[] }> {
+    let newParams: AngularHttpParams;
+    if ('hashes' in params) {
+      //this.logger.debug(`getFileMetadata ${params.hashes}`);
+      newParams = {
+        ...params,
+        hashes: JSON.stringify(params.hashes),
+      };
+    } else {
+      //this.logger.debug(`getFileMetadata ${params.file_ids}`);
+      newParams = {
+        ...params,
+        file_ids: JSON.stringify(params.file_ids),
+      };
+    }
+    return this.apiGet('get_files/file_metadata', newParams);
   }
 
   /**
