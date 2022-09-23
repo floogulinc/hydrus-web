@@ -1,4 +1,0 @@
-<div fxLayout="column">
-  <h2 class="mat-display-1">{{(route.queryParams | async).title?.replace('title:', '')}} {{(route.queryParams | async).volume?.replace('volume:', 'v')}}</h2>
-  <app-image-list [files]="this.files$ | async"></app-image-list>
-</div>

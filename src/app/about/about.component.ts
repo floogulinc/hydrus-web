@@ -2,7 +2,6 @@ import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { ComicsService } from '../comics.service';
 import { Platform } from '@angular/cdk/platform';
 
 @Component({
@@ -15,7 +14,6 @@ export class AboutComponent implements OnInit {
   constructor(
     public updates: SwUpdate,
     public filesService: HydrusFilesService,
-    public comicsService: ComicsService,
     public platform: Platform) { }
 
   public doc = document;

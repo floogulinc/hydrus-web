@@ -38,10 +38,6 @@
       <div mat-line>Clear session file metadata cache</div>
       <div mat-line>{{filesService.getFilesCacheSize()}} files cached</div>
     </a>
-    <a mat-list-item role="listitem" (click)="comicsService.clearComics()">
-      <div mat-line>Clear known comics</div>
-      <div mat-line>{{comicsService.comicsFlat.length}} comics cached</div>
-    </a>
     <mat-list-item role="listitem">
       <div mat-line>Platform</div>
       <div mat-line *ngIf="platform.ANDROID">Android</div>

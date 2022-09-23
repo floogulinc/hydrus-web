@@ -56,8 +56,6 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { NgPipesModule } from 'ngx-pipes';
-import { ComicsListComponent } from './comics-list/comics-list.component';
-import { ComicComponent } from './comic/comic.component';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
@@ -103,8 +101,6 @@ const MAT_MODULES = [
         FilesPageComponent,
         SendComponent,
         FileInfoSheetComponent,
-        ComicsListComponent,
-        ComicComponent,
         ImageListLoaderComponent,
         ToolbarActionsComponent,
         JoinPipe,
