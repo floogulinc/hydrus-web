@@ -52,10 +52,9 @@
       </mat-list-item>
     </mat-nav-list>
   </mat-expansion-panel>
-  <br>
 
 
-  <div *ngIf="file.notesMapArray && file.notesMapArray.length >= 1">
+  <div *ngIf="file.notesMapArray && file.notesMapArray.length >= 1" class="notes-section">
     <h3 class="mat-subheading-2">Notes</h3>
     <mat-accordion multi>
     <mat-expansion-panel *ngFor="let note of file.notesMapArray" >
@@ -67,9 +66,8 @@
     </mat-accordion>
   </div>
 
-  <br>
 
-  <div *ngIf="file.tagMapArray && file.tagMapArray.length >= 1">
+  <div *ngIf="file.tagMapArray && file.tagMapArray.length >= 1" class="tags-section">
     <h3 class="mat-subheading-2">Tags</h3>
     <mat-accordion multi>
     <mat-expansion-panel *ngFor="let service of file.tagMapArray | orderBy: 'serviceName'" >
