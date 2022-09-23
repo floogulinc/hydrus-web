@@ -54,16 +54,21 @@ export class FileInfoSheetComponent {
 
   file$ = this.filesService.getFileByHash(this.data.hash).pipe(
     map(file => {
-      const tagMap = Object.entries(tagsObjectFromFile(file))
+      const tagMapArray = Object.entries(tagsObjectFromFile(file))
       .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
       .map(([serviceName, statuses]) => ({serviceName, statuses}));
 
       const fileIcon = getFileIcon(file.file_type);
 
+      const notesMapArray = Object.entries(file.notes).map(([name, value]) => ({name, value}));
+
+      console.log(notesMapArray)
+
       return {
         ...file,
-        tagMap,
-        fileIcon
+        tagMapArray,
+        fileIcon,
+        notesMapArray
       }
 
     }),
