@@ -62,8 +62,6 @@ export class FileInfoSheetComponent {
 
       const notesMapArray = Object.entries(file.notes).map(([name, value]) => ({name, value}));
 
-      console.log(notesMapArray)
-
       return {
         ...file,
         tagMapArray,
