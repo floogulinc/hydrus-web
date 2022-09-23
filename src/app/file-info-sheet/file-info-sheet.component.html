@@ -44,9 +44,9 @@
     </mat-expansion-panel-header>
 
     <mat-nav-list>
-      <mat-list-item *ngFor="let url of file.known_urls">
-        <a matLine [href]="url" target="_blank" rel="noopener noreferrer">{{ url }}</a>
-        <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url)">
+      <mat-list-item *ngFor="let url of file.detailed_known_urls">
+        <a matLine [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
+        <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url.normalised_url)">
           <mat-icon>share</mat-icon>
         </button>
       </mat-list-item>
