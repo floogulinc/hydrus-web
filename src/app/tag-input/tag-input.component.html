@@ -51,20 +51,23 @@
       <button *ngIf="enableOrSearch" type="button" mat-menu-item (click)="orSearchButton()">
         OR Search
       </button>
-      <button *ngIf="enableSystemPredicates" type="button" mat-menu-item (click)="systemPredicateButton()" [matMenuTriggerFor]="predicatesMenu">
+      <button *ngIf="enableSystemPredicates" type="button" mat-menu-item [matMenuTriggerFor]="predicatesMenu">
         System Predicate
       </button>
     </mat-menu>
 
     <mat-menu #predicatesMenu="matMenu">
-      <button type="button" mat-menu-item (click)="addSearchTag('system:everything')">
-        system:everything
-      </button>
-      <button type="button" mat-menu-item (click)="addSearchTag('system:inbox')">
-        system:inbox
-      </button>
-      <button type="button" mat-menu-item (click)="addSearchTag('system:archive')">
-        system:archive
-      </button>
+      <ng-template ngFor let-item [ngForOf]="predicateButtons" let-pred>
+        <button *ngIf="isConvertedPredicateSingle(pred); else subMenuButton" type="button" mat-menu-item (click)="systemPredicateButton(pred.predicate)">{{pred.name}}</button>
+        <ng-template #subMenuButton>
+          <button *ngIf="!isConvertedPredicateSingle(pred)" type="button" mat-menu-item [matMenuTriggerFor]="predicateSubMenu" [matMenuTriggerData]="{predicates: pred.predicates}">{{pred.name}}</button>
+        </ng-template>
+      </ng-template>
+    </mat-menu>
+
+    <mat-menu #predicateSubMenu="matMenu">
+      <ng-template matMenuContent let-predicates="predicates">
+        <button *ngFor="let pred of predicates" mat-menu-item (click)="systemPredicateButton(pred.predicate)">{{pred.name}}</button>
+      </ng-template>
     </mat-menu>
 </mat-form-field>

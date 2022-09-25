@@ -1,6 +1,6 @@
 import { HydrusFilesService } from './../hydrus-files.service';
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self, ChangeDetectorRef } from '@angular/core';
-import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self, ChangeDetectorRef, Predicate } from '@angular/core';
+import {COMMA, E, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 import { switchMap, debounceTime } from 'rxjs/operators';
@@ -10,6 +10,26 @@ import { HydrusTagsService } from '../hydrus-tags.service';
 import { HydrusSearchTags, HydrusTagSearchTag } from '../hydrus-tags';
 import { OrSearchDialogComponent } from '../or-search-dialog/or-search-dialog.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
+import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
+
+function convertPredicate(p: SystemPredicate): ConvertedPredicate {
+  const pred = allSystemPredicates[p];
+  return {
+    predicate: p,
+    name: pred.name,
+  }
+}
+
+interface ConvertedPredicate {
+  predicate: SystemPredicate,
+  name: string
+}
+
+interface ConvertedPredicateGroup {
+  name: string;
+  predicates: ConvertedPredicate[]
+}
 
 @Component({
   selector: 'app-tag-input',
@@ -178,9 +198,43 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   }
 
-  systemPredicateButton() {
-
+  isConvertedPredicateSingle(p: ConvertedPredicate | ConvertedPredicateGroup): p is ConvertedPredicate {
+    return 'predicate' in p;
   }
+
+  systemPredicateButton(pred: SystemPredicate) {
+    console.log(SystemPredicate[pred]);
+    const predicate = allSystemPredicates[pred];
+    if(!predicate.operator && !predicate.units && !predicate.value) {
+      this.addSearchTag(`system:${predicate.name}`);
+    } else {
+      const dialogRef = this.dialog.open<SystemPredicateDialogComponent, {predicate: SystemPredicate}, string>(
+        SystemPredicateDialogComponent,
+        {
+          width: '80vw',
+          data: {predicate: pred},
+        }
+      );
+      dialogRef.afterClosed().subscribe(result => {
+        if(result) {
+          this.addSearchTag(result);
+        }
+      });
+    }
+  }
+
+
+  predicateButtons: (ConvertedPredicateGroup | ConvertedPredicate)[] = predicateGroups.map(p => {
+    const isGroup = 'predicates' in p;
+    if(!isGroup) {
+      return convertPredicate(p.predicate);
+    } else {
+      return {
+        ...p,
+        predicates: p.predicates.map(p => convertPredicate(p))
+      }
+    }
+  })
 
 
 }
