@@ -223,7 +223,7 @@ export class SystemPredicateDialogComponent implements OnInit {
       }
       case Value.DATE_OR_TIME_INTERVAL: {
         if(v.date) {
-          return formatDate(v.date, 'yyyy-LL-dd', this.locale);
+          return formatDate(v.date, 'yyyy-MM-dd', this.locale);
         } else {
           const i = v.interval;
           return `${i.years} years ${i.months} months ${i.days} days ${i.hours} hours`
