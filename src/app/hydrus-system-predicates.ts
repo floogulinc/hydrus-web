@@ -1,3 +1,5 @@
+// Some things from https://github.com/hydrusnetwork/hydrus/blob/master/hydrus/external/SystemPredicateParser.py
+
 export enum SystemPredicate {
   EVERYTHING = 1,
   INBOX,
@@ -110,8 +112,6 @@ export interface Predicate {
 }
 
 // All system predicates
-// A predicate is described by a 4-tuple of (predicate type, operator format, value format, unit format) (use null if some are not applicable)
-// The keys are acceptable predicate names
 export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.EVERYTHING]: { name: 'everything', operator: null, value: null, units: null },
   [SystemPredicate.INBOX]: { name: 'inbox', operator: null, value: null, units: null },

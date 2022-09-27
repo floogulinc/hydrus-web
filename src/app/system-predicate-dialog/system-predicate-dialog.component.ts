@@ -45,87 +45,8 @@ export class SystemPredicateDialogComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    console.log(this.data);
-    console.log(this.predicate);
 
   }
-
-/*   operatorForm() {
-    if(this.predicate.operator) {
-      return {operator: new FormControl(operatorDefaults[this.predicate.operator])}
-    } else {
-      return {};
-    }
-  }
- */
-/*   operatorForm() {
-    const op = this.predicate.operator;
-    if(!op) {
-      return null;
-    }
-    if(op === Operators.TAG_RELATIONAL) {
-      return new FormGroup({
-        tag: new FormControl(''),
-        operator: new FormControl(operatorDefaults[op])
-      })
-    } else {
-      return new FormControl(operatorDefaults[op])
-    }
-  } */
-
-/*   valueFormObject = {
-    [Value.NATURAL]: new FormControl(0),
-    [Value.HASHLIST_WITH_DISTANCE]:
-      new FormGroup({
-        hashes: new FormControl(''),
-        distance: new FormControl(4)
-      }),
-
-    [Value.HASHLIST_WITH_ALGORITHM]:
-      new FormGroup({
-        hashes: new FormControl(''),
-        algorithm: new FormControl('sha256')
-      }),
-
-    [Value.FILETYPE_LIST]:
-      new FormControl(''),
-    [Value.DATE_OR_TIME_INTERVAL]: new FormGroup({
-      date: new FormControl<Date>(null),
-      interval: new FormGroup({
-        years: new FormControl(0),
-        months: new FormControl(0),
-        days: new FormControl(0),
-        hours: new FormControl(0),
-      }),
-    }),
-    [Value.TIME_SEC_MSEC]:
-      new FormGroup({
-        sec: new FormControl(0),
-        msec: new FormControl(0)
-      }),
-
-    [Value.ANY_STRING]:
-      new FormControl(''),
-
-    [Value.TIME_INTERVAL]:
-      new FormGroup({
-        years: new FormControl(0),
-        months: new FormControl(0),
-        days: new FormControl(0),
-        hours: new FormControl(0),
-      }),
-
-    [Value.INTEGER]:
-      new FormControl(0),
-
-    [Value.RATIO]:
-      new FormGroup({
-        left: new FormControl(1),
-        right: new FormControl(1)
-      })
-
-  } */
-
 
   valueForm() {
     switch (this.predicate.value) {
@@ -197,17 +118,12 @@ export class SystemPredicateDialogComponent implements OnInit {
   }
 
   onAddClick(): void {
-    console.log(this.predicateForm.value);
     const tagRelationalOperator = this.predicateForm.value.tagRelationalOperator;
     const operator = this.predicateForm.value.operator;
     const units = this.predicateForm.value.units;
     const value = this.constructValueString();
 
-    console.log([tagRelationalOperator, operator, value, units]);
-
     const finalTag = `system:${this.predicate.name} ` + [tagRelationalOperator, operator, value, units].filter(Boolean).join(' ');
-
-    console.log(finalTag);
 
     this.dialogRef.close(finalTag)
   }

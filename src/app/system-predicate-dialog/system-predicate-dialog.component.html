@@ -30,7 +30,7 @@
 
       <ng-container [ngSwitch]="predicate.value" formGroupName="value">
         <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.NATURAL" class="natural-form">
-          <mat-label>{{predicate.name | ucfirst}}</mat-label>
+          <mat-label>{{predicate.name | ucwords}}</mat-label>
           <input matInput [formControlName]="Value.NATURAL" type="number" min="0">
         </mat-form-field>
         <div *ngSwitchCase="Value.HASHLIST_WITH_DISTANCE" [formGroupName]="Value.HASHLIST_WITH_DISTANCE" class="wide-form form-section">

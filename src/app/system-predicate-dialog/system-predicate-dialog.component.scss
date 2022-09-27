@@ -23,12 +23,10 @@
 }
 
 .wide-form {
-  //width: 100%;
   flex-grow: 1;
   width: 600px;
 }
 .wide-field {
-  //max-width: 600px;
   flex-grow: 1;
 }
 .string-field {
@@ -63,11 +61,3 @@
     width: 120px;
   }
 }
-
-/* $line-height: typography-utils.line-height($typography-config, input);
-$subscript-font-scale: 0.75;
-$subscript-margin-top: math.div(0.5em, $subscript-font-scale);
-$wrapper-padding-bottom: ($subscript-margin-top + $line-height) * $subscript-font-scale;
-
-*/
-
