@@ -1,3 +1,5 @@
+// Based on https://github.com/hydrusnetwork/hydrus/blob/master/hydrus/core/HydrusConstants.py
+
 enum HydrusSpecificFiletype {
   APPLICATION_HYDRUS_CLIENT_COLLECTION = 0,
   IMAGE_JPEG = 1,
