@@ -116,4 +116,3 @@ export function type(mime: string): HydrusFileType {
   }
   return HydrusFileType.Unsupported;
 }
-

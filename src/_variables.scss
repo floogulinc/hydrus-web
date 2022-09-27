@@ -40,3 +40,6 @@ $mat-tag-colors : (
     default-namespace: mat.define-palette(mat.$blue-grey-palette, 500, 300),
     no-namespace: mat.define-palette(mat.$blue-palette, 500, 300)
 );
+
+
+$typography-config: mat-typography-config();

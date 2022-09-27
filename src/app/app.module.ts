@@ -37,6 +37,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSelectModule} from '@angular/material/select';
 
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
@@ -61,6 +64,8 @@ import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.compo
 import { JoinPipe } from './utils/join.pipe';
 import { OrSearchDialogComponent } from './or-search-dialog/or-search-dialog.component';
 import { TagNamespaceClassPipe } from './utils/tag-utils';
+import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 const MAT_MODULES = [
@@ -84,7 +89,11 @@ const MAT_MODULES = [
     MatProgressBarModule,
     MatBadgeModule,
     MatMenuModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatButtonToggleModule,
+    MatSelectModule
 ];
 
 
@@ -105,7 +114,8 @@ const MAT_MODULES = [
         ToolbarActionsComponent,
         JoinPipe,
         OrSearchDialogComponent,
-        TagNamespaceClassPipe
+        TagNamespaceClassPipe,
+        SystemPredicateDialogComponent
     ],
     imports: [
         BrowserModule,
