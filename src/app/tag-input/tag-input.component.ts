@@ -104,7 +104,6 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
       this.searchTags = [...this.defaultTags];
     }
 
-    this.systemPredicateButton(SystemPredicate.FILETYPE);
   }
 
   chipInputEvent(event: MatChipInputEvent): void {

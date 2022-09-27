@@ -5,14 +5,14 @@
     <div class="form-section outer-form-section">
 
       <div *ngIf="predicate.operator === Operators.TAG_RELATIONAL" class="form-section">
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" hideRequiredMarker>
           <mat-label>Namespace</mat-label>
           <input matInput formControlName="tagRelationalOperator" type="text">
         </mat-form-field>
       </div>
 
       <div [ngSwitch]="predicate.operator" *ngIf="this.predicate.operator" class="form-section">
-        <mat-form-field appearance="outline" *ngSwitchCase="Operators.FILESERVICE_STATUS">
+        <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Operators.FILESERVICE_STATUS">
           <mat-label>Status</mat-label>
           <mat-select formControlName="operator">
             <mat-option *ngFor="let op of operatorOptions[predicate.operator]" [value]="op">
@@ -29,28 +29,28 @@
       </div>
 
       <ng-container [ngSwitch]="predicate.value" formGroupName="value">
-        <mat-form-field appearance="outline" *ngSwitchCase="Value.NATURAL" class="natural-form">
-          <mat-label>{{predicate.name}}</mat-label>
-          <input matInput [formControlName]="Value.NATURAL" type="number">
+        <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.NATURAL" class="natural-form">
+          <mat-label>{{predicate.name | ucfirst}}</mat-label>
+          <input matInput [formControlName]="Value.NATURAL" type="number" min="0">
         </mat-form-field>
         <div *ngSwitchCase="Value.HASHLIST_WITH_DISTANCE" [formGroupName]="Value.HASHLIST_WITH_DISTANCE" class="wide-form form-section">
-          <mat-form-field appearance="outline" class="wide-field">
+          <mat-form-field appearance="outline" hideRequiredMarker class="wide-field">
             <mat-label>Hashes</mat-label>
             <input matInput formControlName="hashes" type="text">
             <mat-hint>Space or comma separated</mat-hint>
           </mat-form-field>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Distance</mat-label>
             <input matInput formControlName="distance" type="number">
           </mat-form-field>
         </div>
         <div *ngSwitchCase="Value.HASHLIST_WITH_ALGORITHM" [formGroupName]="Value.HASHLIST_WITH_ALGORITHM" class="wide-form form-section">
-          <mat-form-field appearance="outline" class="wide-field">
+          <mat-form-field appearance="outline" hideRequiredMarker class="wide-field">
             <mat-label>Hashes</mat-label>
             <input matInput formControlName="hashes" type="text">
             <mat-hint>Space or comma separated</mat-hint>
           </mat-form-field>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Algorithm</mat-label>
             <mat-select formControlName="algorithm">
               <mat-option *ngFor="let a of hashAlgorithms" [value]="a">
@@ -59,14 +59,14 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <mat-form-field appearance="outline" *ngSwitchCase="Value.FILETYPE_LIST">
+        <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.FILETYPE_LIST">
           <mat-label>Filetypes</mat-label>
           <mat-select [formControlName]="Value.FILETYPE_LIST" multiple>
             <mat-option *ngFor="let ft of searchFiletypes" [value]="ft.mime">{{ft.name}}</mat-option>
           </mat-select>
         </mat-form-field>
         <div *ngSwitchCase="Value.DATE_OR_TIME_INTERVAL" [formGroupName]="Value.DATE_OR_TIME_INTERVAL" class="date-form">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Date</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="date">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -74,75 +74,77 @@
           </mat-form-field>
           <span class="form-field-spacing">━ OR ━</span>
           <div formGroupName="interval" class="form-section large-time-interval-form">
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" hideRequiredMarker>
               <mat-label>Years</mat-label>
-              <input matInput formControlName="years" type="number">
+              <input matInput formControlName="years" type="number" min="0">
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" hideRequiredMarker>
               <mat-label>Months</mat-label>
-              <input matInput formControlName="months" type="number">
+              <input matInput formControlName="months" type="number" min="0">
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" hideRequiredMarker>
               <mat-label>Days</mat-label>
-              <input matInput formControlName="days" type="number">
+              <input matInput formControlName="days" type="number" min="0">
             </mat-form-field>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" hideRequiredMarker>
               <mat-label>Hours</mat-label>
-              <input matInput formControlName="hours" type="number">
+              <input matInput formControlName="hours" type="number" min="0">
             </mat-form-field>
           </div>
         </div>
         <div *ngSwitchCase="Value.TIME_SEC_MSEC" [formGroupName]="Value.TIME_SEC_MSEC" class="form-section">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Seconds</mat-label>
-            <input matInput formControlName="sec" type="number">
+            <input matInput formControlName="sec" type="number" min="0">
           </mat-form-field>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Milliseconds</mat-label>
-            <input matInput formControlName="msec" type="number">
+            <input matInput formControlName="msec" type="number" min="0">
           </mat-form-field>
         </div>
-        <mat-form-field appearance="outline" *ngSwitchCase="Value.ANY_STRING">
-          <input matInput [formControlName]="Value.ANY_STRING" type="text">
+        <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.ANY_STRING" class="wide-field string-field">
+          <mat-label>{{valueLabels[predicateEnum]}}</mat-label>
+          <input matInput [formControlName]="Value.ANY_STRING"
+          [type]="predicateEnum === SystemPredicate.URL || predicateEnum === SystemPredicate.NO_URL? 'url' : 'text'">
         </mat-form-field>
         <div *ngSwitchCase="Value.TIME_INTERVAL" [formGroupName]="Value.TIME_INTERVAL"
         class="form-section time-interval-form">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Days</mat-label>
             <input matInput formControlName="days" type="number" min="0">
           </mat-form-field>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Hours</mat-label>
             <input matInput formControlName="hours" type="number" min="0">
           </mat-form-field>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Minutes</mat-label>
             <input matInput formControlName="min" type="number" min="0">
           </mat-form-field>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <mat-label>Seconds</mat-label>
             <input matInput formControlName="sec" type="number" min="0">
           </mat-form-field>
         </div>
-        <mat-form-field appearance="outline" *ngSwitchCase="Value.INTEGER" class="integer-form">
+        <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.INTEGER" class="integer-form">
           <mat-label>Value</mat-label>
           <input matInput [formControlName]="Value.INTEGER" type="number">
         </mat-form-field>
         <div *ngSwitchCase="Value.RATIO" [formGroupName]="Value.RATIO"
           class="form-section ratio-form">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <input matInput formControlName="left" type="number" min="1">
           </mat-form-field>
           <span class="form-field-spacing">:</span>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" hideRequiredMarker>
             <input matInput formControlName="right" type="number" min="1">
           </mat-form-field>
         </div>
       </ng-container>
 
       <div *ngIf="this.predicate.units" class="form-section">
-        <mat-form-field appearance="outline" class="unit-form">
-          <mat-label>Units</mat-label>
+        <mat-form-field appearance="outline" hideRequiredMarker class="unit-form">
+          <mat-label>{{this.predicate.units === Units.FILE_RELATIONSHIP_TYPE ? 'Type' : 'Units'}}</mat-label>
           <mat-select formControlName="units">
             <mat-option *ngFor="let u of unitsOptions[predicate.units]" [value]="u">
               {{u}}

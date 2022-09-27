@@ -211,6 +211,20 @@ export const unitDefaults: Record<Units, string> = {
 
 export const hashAlgorithms = ['sha256', 'md5', 'sha1', 'sha512'];
 
+export const valueLabels: Partial<Record<SystemPredicate, string>> = {
+  [SystemPredicate.FILE_SERVICE]: 'File service',
+  [SystemPredicate.URL_REGEX]: 'URL Regex',
+  [SystemPredicate.NO_URL_REGEX]: 'URL Regex',
+  [SystemPredicate.URL]: 'URL',
+  [SystemPredicate.NO_URL]: 'URL',
+  [SystemPredicate.DOMAIN]: 'Domain',
+  [SystemPredicate.NO_DOMAIN]: 'Domain',
+  [SystemPredicate.URL_CLASS]: 'URL Class',
+  [SystemPredicate.NO_URL_CLASS]: 'Url Class',
+  [SystemPredicate.HAS_NOTE_NAME]: 'Note Name',
+  [SystemPredicate.NO_NOTE_NAME]: 'Note Name',
+}
+
 export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } | { predicate: SystemPredicate })[] = [
   { predicate: SystemPredicate.EVERYTHING },
   { predicate: SystemPredicate.INBOX },
