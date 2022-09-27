@@ -2,7 +2,8 @@ import { formatDate } from '@angular/common';
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { allSystemPredicates, operatorDefaults, operatorOptions, Operators, Predicate, SystemPredicate, unitDefaults, Units, unitsOptions, Value } from '../hydrus-system-predicates';
+import { searchFiletypes } from 'src/hydrus-file-mimes';
+import { allSystemPredicates, hashAlgorithms, operatorDefaults, operatorOptions, Operators, Predicate, SystemPredicate, unitDefaults, Units, unitsOptions, Value } from '../hydrus-system-predicates';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class SystemPredicateDialogComponent implements OnInit {
 
   readonly operatorOptions = operatorOptions;
   readonly unitsOptions = unitsOptions;
+  readonly hashAlgorithms = hashAlgorithms;
+  readonly searchFiletypes = searchFiletypes;
 
   public predicate: Predicate = allSystemPredicates[this.data.predicate];
 
@@ -139,7 +142,7 @@ export class SystemPredicateDialogComponent implements OnInit {
         })
       }
       case Value.FILETYPE_LIST: {
-        return new FormControl('')
+        return new FormControl<string[]>([])
       }
       case Value.DATE_OR_TIME_INTERVAL: {
         return new FormGroup({
@@ -219,7 +222,7 @@ export class SystemPredicateDialogComponent implements OnInit {
         return `${v.hashes} with algorithm ${v.algorithm}`
       }
       case Value.FILETYPE_LIST: {
-        return v;
+        return v.join();
       }
       case Value.DATE_OR_TIME_INTERVAL: {
         if(v.date) {

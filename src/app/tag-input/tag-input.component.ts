@@ -103,6 +103,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     if(this.defaultTags) {
       this.searchTags = [...this.defaultTags];
     }
+
+    this.systemPredicateButton(SystemPredicate.FILETYPE);
   }
 
   chipInputEvent(event: MatChipInputEvent): void {
@@ -211,7 +213,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
       const dialogRef = this.dialog.open<SystemPredicateDialogComponent, {predicate: SystemPredicate}, string>(
         SystemPredicateDialogComponent,
         {
-          width: '80vw',
+          //width: '80vw',
           data: {predicate: pred},
         }
       );

@@ -1,0 +1,70 @@
+@use '../../variables' as *;
+//@use '@angular/material/core/typography/typography-utils';
+//@use 'sass:math';
+
+.form-section + .form-section {
+  //margin-left: 8px;
+}
+.form-section > * + * {
+  //margin-left: 8px;
+}
+
+.form-section {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.outer-form-section {
+  justify-content: center;
+  width: 100%;
+}
+
+.wide-form {
+  //width: 100%;
+  flex-grow: 1;
+  width: 600px;
+}
+.wide-field {
+  //max-width: 600px;
+  flex-grow: 1;
+}
+
+.date-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  > .mat-form-field {
+    width: 248px;
+  }
+}
+
+.ratio-form {
+  .mat-form-field {
+    width: 60px;
+  }
+}
+
+.integer-form, .natural-form {
+  width: 200px;
+}
+
+.unit-form {
+  width: 200px;
+}
+
+.time-interval-form, .large-time-interval-form {
+  > .mat-form-field {
+    width: 120px;
+  }
+}
+
+/* $line-height: typography-utils.line-height($typography-config, input);
+$subscript-font-scale: 0.75;
+$subscript-margin-top: math.div(0.5em, $subscript-font-scale);
+$wrapper-padding-bottom: ($subscript-margin-top + $line-height) * $subscript-font-scale;
+
+*/
+
