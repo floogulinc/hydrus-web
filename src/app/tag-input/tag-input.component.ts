@@ -72,11 +72,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     }
 
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      //startWith(''),
-      //map((tag: string) => this._filter(tag))
-      debounceTime(500),
       switchMap(search => search && search.length >= 3 ? this.tagsService.searchTags(search) : of([]))
-      //map(tags => tags/*. slice(0, 25) */.map(t => t.value))
     );
    }
 
