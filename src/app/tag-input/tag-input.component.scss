@@ -1,4 +1,4 @@
-@import '~src/_variables';
+@use 'src/variables' as *;
 
 .tag-form-field{
     width: 100%;

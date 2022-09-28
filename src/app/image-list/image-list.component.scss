@@ -1,4 +1,4 @@
-@import '~src/_variables';
+@use 'src/variables' as *;
 @import "@material/image-list/mdc-image-list";
 
 .image-list-image {
