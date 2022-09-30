@@ -44,7 +44,7 @@
       </ng-container>
     </mat-autocomplete>
 
-    <button *ngIf="enableOrSearch || enableSystemPredicates" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="addMenu" aria-label="Example icon-button with a menu">
+    <button *ngIf="enableOrSearch || enableSystemPredicates" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="addMenu" aria-label="Example icon-button with a menu" (click)="$event.stopPropagation()">
       <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addMenu="matMenu">
