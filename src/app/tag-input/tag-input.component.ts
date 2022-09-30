@@ -1,15 +1,15 @@
 import { HydrusFilesService } from './../hydrus-files.service';
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self, ChangeDetectorRef, Predicate } from '@angular/core';
-import {COMMA, E, ENTER} from '@angular/cdk/keycodes';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self } from '@angular/core';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
-import { switchMap, debounceTime } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { HydrusSearchTags, HydrusTagSearchTag } from '../hydrus-tags';
 import { OrSearchDialogComponent } from '../or-search-dialog/or-search-dialog.component';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
 
@@ -64,7 +64,6 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     @Optional() @Self() private controlDir: NgControl,
     public filesService: HydrusFilesService,
     public tagsService: HydrusTagsService,
-    private cd: ChangeDetectorRef,
     public dialog: MatDialog
   ) {
     if (this.controlDir) {
@@ -72,11 +71,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     }
 
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      //startWith(''),
-      //map((tag: string) => this._filter(tag))
-      debounceTime(500),
       switchMap(search => search && search.length >= 3 ? this.tagsService.searchTags(search) : of([]))
-      //map(tags => tags/*. slice(0, 25) */.map(t => t.value))
     );
    }
 
