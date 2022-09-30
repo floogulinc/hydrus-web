@@ -44,31 +44,8 @@ SORT_FILES_BY_LAST_VIEWED_TIME = HydrusSortType.LastViewedTime,
 SORT_FILES_BY_ARCHIVED_TIMESTAMP = HydrusSortType.ArchivedTimestamp,
 SORT_FILES_BY_HASH = HydrusSortType.Hash;
 
-const SYSTEM_SORT_TYPES = {
-  SORT_FILES_BY_NUM_COLLECTION_FILES,
-  SORT_FILES_BY_HEIGHT,
-  SORT_FILES_BY_WIDTH,
-  SORT_FILES_BY_RATIO,
-  SORT_FILES_BY_NUM_PIXELS,
-  SORT_FILES_BY_DURATION,
-  SORT_FILES_BY_FRAMERATE,
-  SORT_FILES_BY_NUM_FRAMES,
-  SORT_FILES_BY_FILESIZE,
-  SORT_FILES_BY_APPROX_BITRATE,
-  SORT_FILES_BY_HAS_AUDIO,
-  SORT_FILES_BY_MIME,
-  SORT_FILES_BY_RANDOM,
-  SORT_FILES_BY_NUM_TAGS,
-  SORT_FILES_BY_MEDIA_VIEWS,
-  SORT_FILES_BY_MEDIA_VIEWTIME,
-  SORT_FILES_BY_IMPORT_TIME,
-  SORT_FILES_BY_FILE_MODIFIED_TIMESTAMP,
-  SORT_FILES_BY_LAST_VIEWED_TIME,
-  SORT_FILES_BY_ARCHIVED_TIMESTAMP,
-  SORT_FILES_BY_HASH
-}
 
-enum SortMetaType {
+export enum SortMetaType {
   Collections = 'collections',
   Dimensions = 'dimensions',
   Duration = 'duration',
@@ -78,46 +55,47 @@ enum SortMetaType {
   Views = 'views'
 }
 
-/* const sortMetaTypes: SortMetaType[] =  [
-  SortMetaType.Collections,
-  SortMetaType.Dimensions,
-  SortMetaType.Duration,
-  SortMetaType.File,
-  SortMetaType.Tags,
-  SortMetaType.Time,
-  SortMetaType.Views
-]; */
-
 // https://github.com/hydrusnetwork/hydrus/blob/6152573676165e933d152817e031000b16e040ad/hydrus/client/media/ClientMedia.py#L3068
 function canAsc(sortType: HydrusSortType) {
   return ![SORT_FILES_BY_MIME, SORT_FILES_BY_RANDOM, SORT_FILES_BY_HASH].includes(sortType);
 }
 
-const system_sort_type_submetatype_string_lookup: Record<HydrusSortType, SortMetaType> = {
-  [SORT_FILES_BY_NUM_COLLECTION_FILES] : SortMetaType.Collections,
-  [SORT_FILES_BY_HEIGHT] : SortMetaType.Dimensions,
-  [SORT_FILES_BY_NUM_PIXELS] : SortMetaType.Dimensions,
-  [SORT_FILES_BY_RATIO] : SortMetaType.Dimensions,
-  [SORT_FILES_BY_WIDTH] : SortMetaType.Dimensions,
-  [SORT_FILES_BY_DURATION] : SortMetaType.Duration,
-  [SORT_FILES_BY_FRAMERATE] : SortMetaType.Duration,
-  [SORT_FILES_BY_NUM_FRAMES] : SortMetaType.Duration,
-  [SORT_FILES_BY_APPROX_BITRATE] : SortMetaType.File,
-  [SORT_FILES_BY_FILESIZE] : SortMetaType.File,
-  [SORT_FILES_BY_HASH] : SortMetaType.File,
-  [SORT_FILES_BY_MIME] : SortMetaType.File,
-  [SORT_FILES_BY_HAS_AUDIO] : SortMetaType.File,
-  [SORT_FILES_BY_RANDOM] : null,
-  [SORT_FILES_BY_NUM_TAGS] : SortMetaType.Tags,
-  [SORT_FILES_BY_IMPORT_TIME] : SortMetaType.Time,
-  [SORT_FILES_BY_FILE_MODIFIED_TIMESTAMP] : SortMetaType.Time,
-  [SORT_FILES_BY_ARCHIVED_TIMESTAMP] : SortMetaType.Time,
-  [SORT_FILES_BY_LAST_VIEWED_TIME] : SortMetaType.Time,
-  [SORT_FILES_BY_MEDIA_VIEWS] : SortMetaType.Views,
-  [SORT_FILES_BY_MEDIA_VIEWTIME] : SortMetaType.Views
-};
-
-
+const sortMetaTypeGroups: Record<SortMetaType, HydrusSortType[]> = {
+  [SortMetaType.Collections]: [
+    SORT_FILES_BY_NUM_COLLECTION_FILES
+  ],
+  [SortMetaType.Dimensions]: [
+    SORT_FILES_BY_HEIGHT,
+    SORT_FILES_BY_WIDTH,
+    SORT_FILES_BY_RATIO,
+    SORT_FILES_BY_NUM_PIXELS,
+  ],
+  [SortMetaType.Duration]: [
+    SORT_FILES_BY_DURATION,
+    SORT_FILES_BY_FRAMERATE,
+    SORT_FILES_BY_NUM_FRAMES
+  ],
+  [SortMetaType.File]: [
+    SORT_FILES_BY_FILESIZE,
+    SORT_FILES_BY_MIME,
+    SORT_FILES_BY_HASH,
+    SORT_FILES_BY_APPROX_BITRATE,
+    SORT_FILES_BY_HAS_AUDIO
+  ],
+  [SortMetaType.Tags]: [
+    SORT_FILES_BY_NUM_TAGS
+  ],
+  [SortMetaType.Time]: [
+    SORT_FILES_BY_IMPORT_TIME,
+    SORT_FILES_BY_ARCHIVED_TIMESTAMP,
+    SORT_FILES_BY_LAST_VIEWED_TIME,
+    SORT_FILES_BY_FILE_MODIFIED_TIMESTAMP
+  ],
+  [SortMetaType.Views]: [
+    SORT_FILES_BY_MEDIA_VIEWS,
+    SORT_FILES_BY_MEDIA_VIEWTIME,
+  ]
+}
 
 const sort_type_basic_string_lookup: Record<HydrusSortType, string> = {
   [SORT_FILES_BY_DURATION] : 'duration',
@@ -142,18 +120,6 @@ const sort_type_basic_string_lookup: Record<HydrusSortType, string> = {
   [SORT_FILES_BY_MEDIA_VIEWS] : 'media views',
   [SORT_FILES_BY_MEDIA_VIEWTIME] : 'media viewtime'
 }
-
-const sort_type_string_lookup = Object.values(SYSTEM_SORT_TYPES).map(sort_type => {
-  const ms = system_sort_type_submetatype_string_lookup[ sort_type ]
-  const s = sort_type_basic_string_lookup[ sort_type ]
-
-  if (ms === null) {
-    return s;
-  } else {
-    return `${ms}: ${s}`
-  }
-})
-
 
 const SORT_ASC = true, SORT_DESC = false;
 
@@ -181,35 +147,48 @@ const sort_string_lookup: Record<HydrusSortType, [string, string, boolean]> = {
   [ SORT_FILES_BY_MEDIA_VIEWTIME ] : [ 'ascending', 'descending', SORT_DESC ]
 }
 
+interface DisplaySortType {
+  sortType: HydrusSortType;
+  basicString: string;
+  sortOrder: [string, string, boolean];
+  canAsc: boolean;
+}
 
-/* const sortGroups = Object.values(SYSTEM_SORT_TYPES).map(st => ({
-  sortType: st,
-  metaType: system_sort_type_submetatype_string_lookup[st],
-  basicString: sort_type_basic_string_lookup[st],
-  sortOrder: sort_string_lookup[st]
-})).filter(({metaType}) => metaType !== null).reduce((prev, curr) => {
+interface DisplaySortMetaTypeGroup {
+  metaType: SortMetaType;
+  sortTypes: DisplaySortType[];
+}
 
-}, {})
- */
-
-/* const sortGroups = {}
-
-for(let sortType of Object.values(SYSTEM_SORT_TYPES)) {
-  const metaType = system_sort_type_submetatype_string_lookup[sortType];
-  const basicString = sort_type_basic_string_lookup[sortType];
-  if(metaType !== null) {
-    if (sortGroups[metaType]) {
-
-    }
+function processSortType(sortType: HydrusSortType): DisplaySortType {
+  return {
+    sortType,
+    basicString: sort_type_basic_string_lookup[sortType],
+    sortOrder: sort_string_lookup[sortType],
+    canAsc: canAsc(sortType)
   }
 }
- */
-/* const sortGroups = [
-  SortMetaType.Collections,
-  SortMetaType.Dimensions,
-  SortMetaType.Duration,
-  SortMetaType.File,
-  SortMetaType.Tags,
-  SortMetaType.Time,
-  SortMetaType.Views
-] */
+
+function processMetaTypeGroup(metaType: SortMetaType): DisplaySortMetaTypeGroup {
+  const st = sortMetaTypeGroups[metaType];
+  return {
+    metaType,
+    sortTypes: st.map(processSortType)
+  }
+}
+
+export const displaySortGroups = [
+  processMetaTypeGroup(SortMetaType.Dimensions),
+  processMetaTypeGroup(SortMetaType.Duration),
+  processMetaTypeGroup(SortMetaType.File),
+  processSortType(HydrusSortType.Random),
+  processMetaTypeGroup(SortMetaType.Tags),
+  processMetaTypeGroup(SortMetaType.Time),
+  processMetaTypeGroup(SortMetaType.Views)
+]
+
+export function isDisplaySortMetaTypeGroup(g: DisplaySortType | DisplaySortMetaTypeGroup): g is DisplaySortMetaTypeGroup {
+  return 'metaType' in g;
+}
+
+export const defaultSortType = HydrusSortType.ImportTime;
+export const defaultAscending = false;

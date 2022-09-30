@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HydrusSearchTags } from './hydrus-tags';
-import { HydrusSortType } from './hydrus-sort-type';
+import { HydrusSortType } from './hydrus-sort';
 
 @Injectable({
   providedIn: 'root'
