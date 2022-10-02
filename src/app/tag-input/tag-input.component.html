@@ -22,15 +22,19 @@
           </mat-chip>
         </ng-template>
       </ng-template>
-      <input #tagInput
-             [matChipInputFor]="chipList"
-             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-             matChipInputAddOnBlur="false"
-             (matChipInputTokenEnd)="chipInputEvent($event)"
-             [formControl]="tagCtrl"
-             [matAutocomplete]="auto"
-             (blur)="onTouched()"
-             enterkeyhint="done">
+      <input
+        #tagInput
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        matChipInputAddOnBlur="false"
+        (matChipInputTokenEnd)="chipInputEvent($event)"
+        [formControl]="tagCtrl"
+        [matAutocomplete]="auto"
+        (blur)="onTouched()"
+        enterkeyhint="done"
+        autocapitalize="none"
+        autocomplete="off"
+      >
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
       <ng-container *ngIf="filteredTags | async as tags">
