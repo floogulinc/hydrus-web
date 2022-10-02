@@ -25,7 +25,8 @@
              (matChipInputTokenEnd)="chipInputEvent($event)"
              [formControl]="tagCtrl"
              [matAutocomplete]="auto"
-             (blur)="onTouched()">
+             (blur)="onTouched()"
+             enterkeyhint="done">
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
       <ng-container *ngIf="filteredTags | async as tags">
