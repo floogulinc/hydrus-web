@@ -6,14 +6,14 @@
                   class="tag-chip"
                 [removable]="true" (removed)="removeSearchTag(i)"
                 [ngClass]="$any(tag) | tagClass">
-          {{tag}}
+          <div class="tag-chip-text">{{tag}}</div>
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <ng-template #arrayTag>
           <mat-chip [selectable]="false" color="primary" class="tag-chip"
                   [removable]="true" (removed)="removeSearchTag(i)"
                   >
-            {{$any(tag) | flatten | join:' OR '}}
+            <div class="tag-chip-text">{{$any(tag) | flatten | join:' OR '}}</div>
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
         </ng-template>

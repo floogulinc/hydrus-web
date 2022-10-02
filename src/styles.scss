@@ -150,3 +150,20 @@ body {
 .form-field-spacing {
   @extend .mat-form-field-wrapper;
 }
+
+.text-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tag-chip-text {
+  width: calc(100%); // calc is important here, do not use "100%" alone
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tag-chip {
+  width: fit-content;
+  max-width: 100%;
+}
