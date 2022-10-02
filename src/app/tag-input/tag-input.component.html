@@ -7,14 +7,18 @@
                 [removable]="true" (removed)="removeSearchTag(i)"
                 [ngClass]="$any(tag) | tagClass">
           <div class="tag-chip-text">{{tag}}</div>
-          <mat-icon matChipRemove>cancel</mat-icon>
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
         </mat-chip>
         <ng-template #arrayTag>
           <mat-chip [selectable]="false" color="primary" class="tag-chip"
                   [removable]="true" (removed)="removeSearchTag(i)"
                   >
             <div class="tag-chip-text">{{$any(tag) | flatten | join:' OR '}}</div>
-            <mat-icon matChipRemove>cancel</mat-icon>
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
           </mat-chip>
         </ng-template>
       </ng-template>
