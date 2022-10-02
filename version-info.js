@@ -1,7 +1,6 @@
 const { version } = require('./package.json');
 const { resolve, relative } = require('path');
 const { writeFileSync } = require('fs-extra');
-const git = require('git-rev-sync');
 
 var info;
 
@@ -15,7 +14,17 @@ if(process.env.VERCEL_GITHUB_DEPLOYMENT) {
       VERCEL_URL: process.env.VERCEL_URL
     }
   };
+} else if (process.env.GITHUB_ACTIONS) {
+  console.log(`Detected GitHub Actions build`);
+  info = {
+    branch: process.env.GITHUB_REF_NAME,
+    hash: process.env.GITHUB_SHA,
+    version,
+    vercel: null
+  }
 } else {
+  const git = require('git-rev-sync');
+
   info = {
     branch: git.branch(),
     hash: git.long(),
