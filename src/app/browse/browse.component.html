@@ -36,7 +36,7 @@
       <button *ngIf="!isDisplaySortType(sortGroupOrType)" type="button" mat-menu-item [matMenuTriggerFor]="sortGroupSubMenu" [matMenuTriggerData]="{sortGroup: sortGroupOrType}">{{sortGroupOrType.metaType}}</button>
     </ng-template>
   </ng-template>
-  <button *ngIf="sort.sortType !== defaultSort.sortType && sort.sortAsc !== defaultSort.sortAsc" type="button" mat-menu-item (click)="resetSort()">Reset</button>
+  <button *ngIf="!(sort.sortType === defaultSort.sortType && sort.sortAsc === defaultSort.sortAsc)" type="button" mat-menu-item (click)="resetSort()">Reset</button>
 </mat-menu>
 
 <mat-menu #sortGroupSubMenu="matMenu">
