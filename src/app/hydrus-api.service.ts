@@ -3,7 +3,7 @@ import { ngxLocalStorage } from 'ngx-localstorage';
 import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { HydrusSortType } from './hydrus-sort-type';
+import { HydrusSortType } from './hydrus-sort';
 import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
 import { HydrusSearchTags } from './hydrus-tags';
 

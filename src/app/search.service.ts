@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HydrusSearchTags } from './hydrus-tags';
-import { HydrusSortType } from './hydrus-sort-type';
+import { HydrusSortType } from './hydrus-sort';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,6 @@ export class SearchService {
         return_file_ids: true,
         return_hashes: false
       }
-    // eslint-disable-next-line @typescript-eslint/dot-notation
     ).pipe(map(a => a.file_ids));
   }
 }

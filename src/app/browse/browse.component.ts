@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SettingsService } from '../settings.service';
 import { HydrusSearchTags } from '../hydrus-tags';
+import { defaultSort, displaySortGroups, HydrusSortType, isDisplaySortMetaTypeGroup, isDisplaySortType, SortInfo, sortToString } from '../hydrus-sort';
 
 @UntilDestroy()
 @Component({
@@ -38,7 +39,14 @@ export class BrowseComponent implements OnInit, AfterViewInit {
 
   searching = this.settingsService.appSettings.browseSearchOnLoad;
 
+  sort = defaultSort;
 
+
+  displaySortGroups = displaySortGroups;
+  isDisplaySortMetaTypeGroup = isDisplaySortMetaTypeGroup;
+  isDisplaySortType = isDisplaySortType;
+  sortToString = sortToString;
+  defaultSort = defaultSort;
 
   ngOnInit() {
 
@@ -60,6 +68,19 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     this.search();
   }
 
+  setSortInfo(sort: SortInfo) {
+    this.sort = sort;
+    this.search();
+  }
+  setSort(sortType: HydrusSortType, sortAsc: boolean) {
+    this.setSortInfo({sortType, sortAsc});
+  }
+
+
+  resetSort() {
+    this.setSortInfo(defaultSort);
+  }
+
   search() {
     if(!this.settingsService.appSettings.browseSearchWhenEmpty && this.searchTags.length === 0) {
       return;
@@ -67,7 +88,11 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     this.searching = true;
     this.searchSub?.unsubscribe();
     this.searchSub = this.searchService.searchFiles(
-      this.searchTags
+      this.searchTags,
+      {
+        file_sort_type: this.sort.sortType,
+        file_sort_asc: this.sort.sortAsc
+      }
     ).pipe(untilDestroyed(this)).subscribe((result) => {
       this.searching = false;
       this.currentSearchIDs = result;
