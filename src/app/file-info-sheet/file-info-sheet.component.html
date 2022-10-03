@@ -93,7 +93,7 @@
       <ng-template matExpansionPanelContent>
         <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
           <mat-chip *ngFor="let tag of (service.statuses[0] | orderBy)" [selectable]="false" class="tag-chip" [ngClass]="tag | tagClass">
-            {{tag}}
+            <div class="tag-chip-text">{{tag}}</div>
           </mat-chip>
         </mat-chip-list>
       </ng-template>

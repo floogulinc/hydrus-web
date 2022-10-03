@@ -135,7 +135,7 @@ export class SystemPredicateDialogComponent implements OnInit {
         return `${v}`
       }
       case Value.HASHLIST_WITH_DISTANCE: {
-        return `${v.hashes} ${v.distance}`
+        return `${v.hashes} with distance ${v.distance}`
       }
       case Value.HASHLIST_WITH_ALGORITHM: {
         return `${v.hashes} ${v.algorithm}`
@@ -147,18 +147,29 @@ export class SystemPredicateDialogComponent implements OnInit {
         if(v.date) {
           return formatDate(v.date, 'yyyy-MM-dd', this.locale);
         } else {
-          const i = v.interval;
-          return `${i.years} years ${i.months} months ${i.days} days ${i.hours} hours`
+          const {years, months, days, hours} = v.interval;
+          if(years === 0 && months === 0 && days === 0 && hours === 0) {
+            return `0 hours`
+          }
+          return `${years ? years + ' years ' : ''}${months ? months + ' months ' : ''}${days ? days + ' days ' : ''}${hours ? hours + ' hours' : ''}`
         }
       }
       case Value.TIME_SEC_MSEC: {
-        return `${v.sec} seconds ${v.msec} milliseconds`
+        const {sec, msec} = v;
+        if(sec === 0 && msec === 0) {
+          return `0 seconds`
+        }
+        return `${sec ? sec + ' seconds ' : ''}${msec ? msec + ' milliseconds' : ''}`
       }
       case Value.ANY_STRING: {
         return `${v}`
       }
       case Value.TIME_INTERVAL: {
-        return `${v.days} days ${v.hours} hours ${v.min} minutes ${v.sec} seconds`
+        const {days, hours, min, sec} = v;
+        if(days === 0 && hours === 0 && min === 0 && sec === 0) {
+          return `0 seconds`
+        }
+        return `${days ? days + ' days ' : ''}${hours ? hours + ' hours ' : ''}${min ? min + ' minutes ' : ''}${sec ? sec + ' seconds' : ''}`
       }
       case Value.INTEGER: {
         return `${v}`

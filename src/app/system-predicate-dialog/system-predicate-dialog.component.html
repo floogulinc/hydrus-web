@@ -7,7 +7,7 @@
       <div *ngIf="predicate.operator === Operators.TAG_RELATIONAL" class="form-section">
         <mat-form-field appearance="outline" hideRequiredMarker>
           <mat-label>Namespace</mat-label>
-          <input matInput formControlName="tagRelationalOperator" type="text">
+          <input matInput formControlName="tagRelationalOperator" type="text" autocapitalize="none">
         </mat-form-field>
       </div>
 
@@ -36,7 +36,7 @@
         <div *ngSwitchCase="Value.HASHLIST_WITH_DISTANCE" [formGroupName]="Value.HASHLIST_WITH_DISTANCE" class="wide-form form-section">
           <mat-form-field appearance="outline" hideRequiredMarker class="wide-field">
             <mat-label>Hashes</mat-label>
-            <input matInput formControlName="hashes" type="text">
+            <input matInput formControlName="hashes" type="text" autocapitalize="none">
             <mat-hint>Space or comma separated</mat-hint>
           </mat-form-field>
           <mat-form-field appearance="outline" hideRequiredMarker>
@@ -47,7 +47,7 @@
         <div *ngSwitchCase="Value.HASHLIST_WITH_ALGORITHM" [formGroupName]="Value.HASHLIST_WITH_ALGORITHM" class="wide-form form-section">
           <mat-form-field appearance="outline" hideRequiredMarker class="wide-field">
             <mat-label>Hashes</mat-label>
-            <input matInput formControlName="hashes" type="text">
+            <input matInput formControlName="hashes" type="text" autocapitalize="none">
             <mat-hint>Space or comma separated</mat-hint>
           </mat-form-field>
           <mat-form-field appearance="outline" hideRequiredMarker>
@@ -105,7 +105,7 @@
         <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.ANY_STRING" class="wide-field string-field">
           <mat-label>{{valueLabels[predicateEnum]}}</mat-label>
           <input matInput [formControlName]="Value.ANY_STRING"
-          [type]="predicateEnum === SystemPredicate.URL || predicateEnum === SystemPredicate.NO_URL? 'url' : 'text'">
+          [type]="predicateEnum === SystemPredicate.URL || predicateEnum === SystemPredicate.NO_URL? 'url' : 'text'" autocapitalize="none">
         </mat-form-field>
         <div *ngSwitchCase="Value.TIME_INTERVAL" [formGroupName]="Value.TIME_INTERVAL"
         class="form-section time-interval-form">

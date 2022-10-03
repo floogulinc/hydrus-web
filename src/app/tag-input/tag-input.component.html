@@ -6,26 +6,35 @@
                   class="tag-chip"
                 [removable]="true" (removed)="removeSearchTag(i)"
                 [ngClass]="$any(tag) | tagClass">
-          {{tag}}
-          <mat-icon matChipRemove>cancel</mat-icon>
+          <div class="tag-chip-text">{{tag}}</div>
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
         </mat-chip>
         <ng-template #arrayTag>
           <mat-chip [selectable]="false" color="primary" class="tag-chip"
                   [removable]="true" (removed)="removeSearchTag(i)"
                   >
-            {{$any(tag) | flatten | join:' OR '}}
-            <mat-icon matChipRemove>cancel</mat-icon>
+            <div class="tag-chip-text">{{$any(tag) | flatten | join:' OR '}}</div>
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
           </mat-chip>
         </ng-template>
       </ng-template>
-      <input #tagInput
-             [matChipInputFor]="chipList"
-             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-             matChipInputAddOnBlur="false"
-             (matChipInputTokenEnd)="chipInputEvent($event)"
-             [formControl]="tagCtrl"
-             [matAutocomplete]="auto"
-             (blur)="onTouched()">
+      <input
+        #tagInput
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        matChipInputAddOnBlur="false"
+        (matChipInputTokenEnd)="chipInputEvent($event)"
+        [formControl]="tagCtrl"
+        [matAutocomplete]="auto"
+        (blur)="onTouched()"
+        enterkeyhint="done"
+        autocapitalize="none"
+        autocomplete="off"
+      >
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
       <ng-container *ngIf="filteredTags | async as tags">
@@ -44,7 +53,7 @@
       </ng-container>
     </mat-autocomplete>
 
-    <button *ngIf="enableOrSearch || enableSystemPredicates" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="addMenu" aria-label="Example icon-button with a menu">
+    <button *ngIf="enableOrSearch || enableSystemPredicates" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="addMenu" aria-label="Example icon-button with a menu" (click)="$event.stopPropagation()">
       <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addMenu="matMenu">
