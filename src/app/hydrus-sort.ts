@@ -150,6 +150,7 @@ const sort_string_lookup: Record<HydrusSortType, [string, string, boolean]> = {
 interface DisplaySortType {
   sortType: HydrusSortType;
   basicString: string;
+  sortOrder: SortOrderInfo;
   //sortOrder: [string, string, boolean];
   //canAsc: boolean;
 }
@@ -165,6 +166,7 @@ function processSortType(sortType: HydrusSortType): DisplaySortType {
     basicString: sort_type_basic_string_lookup[sortType],
     //sortOrder: sort_string_lookup[sortType],
     //canAsc: canAsc(sortType)
+    sortOrder: getSortOrderInfo(sortType)
   }
 }
 
@@ -197,7 +199,14 @@ export function isDisplaySortType(g: DisplaySortType | DisplaySortMetaTypeGroup)
 export const defaultSortType = HydrusSortType.ImportTime;
 export const defaultAscending = false;
 
-export function getSortOrderInfo(sortType: HydrusSortType) {
+interface SortOrderInfo {
+  ascString: string;
+  descString: string;
+  defaultAsc: boolean;
+  canAsc: boolean;
+}
+
+export function getSortOrderInfo(sortType: HydrusSortType): SortOrderInfo {
   const [ascString, descString, defaultAsc] = sort_string_lookup[sortType];
   return {
     ascString,
@@ -210,4 +219,16 @@ export function getSortOrderInfo(sortType: HydrusSortType) {
 export interface SortInfo {
   sortType: HydrusSortType;
   sortAsc: boolean;
+}
+
+export const defaultSort: SortInfo = {
+  sortType: defaultSortType,
+  sortAsc: defaultAscending
+}
+
+export function sortToString({sortType, sortAsc}: SortInfo) {
+  const name = sort_type_basic_string_lookup[sortType];
+  const orderInfo = getSortOrderInfo(sortType);
+  const orderString = sortAsc ? orderInfo.ascString : orderInfo.descString;
+  return `${name}${orderInfo.canAsc ? ' (' + orderString + ')' : ''}`;
 }
