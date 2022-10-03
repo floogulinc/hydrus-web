@@ -66,6 +66,7 @@ import { OrSearchDialogComponent } from './or-search-dialog/or-search-dialog.com
 import { TagNamespaceClassPipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { SortInputComponent } from './sort-input/sort-input.component';
 
 
 const MAT_MODULES = [
@@ -115,7 +116,8 @@ const MAT_MODULES = [
         JoinPipe,
         OrSearchDialogComponent,
         TagNamespaceClassPipe,
-        SystemPredicateDialogComponent
+        SystemPredicateDialogComponent,
+        SortInputComponent
     ],
     imports: [
         BrowserModule,

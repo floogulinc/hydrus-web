@@ -28,7 +28,6 @@ export class SearchService {
         return_file_ids: true,
         return_hashes: false
       }
-    // eslint-disable-next-line @typescript-eslint/dot-notation
     ).pipe(map(a => a.file_ids));
   }
 }

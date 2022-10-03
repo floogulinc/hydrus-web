@@ -2,6 +2,9 @@
   <div class="search-bar" fxLayout="row" fxLayoutAlign="space-between center">
     <app-tag-input fxFlex (tags)="tagsChanged($event)" [defaultTags]="this.settingsService.appSettings.browseDefaultSearchTags" class="tag-input" placeholder="Tag Search"></app-tag-input>
   </div>
+  <div class="search-bar" fxLayout="row" fxLayoutAlign="space-between center">
+    <app-sort-input></app-sort-input>
+  </div>
   <mat-progress-bar *ngIf="searching" mode="indeterminate" class="search-progress-bar"></mat-progress-bar>
   <app-image-list-loader [fileIDs]="this.currentSearchIDs" class="app-image-list"></app-image-list-loader>
 </div>

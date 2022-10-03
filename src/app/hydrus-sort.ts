@@ -150,8 +150,8 @@ const sort_string_lookup: Record<HydrusSortType, [string, string, boolean]> = {
 interface DisplaySortType {
   sortType: HydrusSortType;
   basicString: string;
-  sortOrder: [string, string, boolean];
-  canAsc: boolean;
+  //sortOrder: [string, string, boolean];
+  //canAsc: boolean;
 }
 
 interface DisplaySortMetaTypeGroup {
@@ -163,8 +163,8 @@ function processSortType(sortType: HydrusSortType): DisplaySortType {
   return {
     sortType,
     basicString: sort_type_basic_string_lookup[sortType],
-    sortOrder: sort_string_lookup[sortType],
-    canAsc: canAsc(sortType)
+    //sortOrder: sort_string_lookup[sortType],
+    //canAsc: canAsc(sortType)
   }
 }
 
@@ -190,5 +190,24 @@ export function isDisplaySortMetaTypeGroup(g: DisplaySortType | DisplaySortMetaT
   return 'metaType' in g;
 }
 
+export function isDisplaySortType(g: DisplaySortType | DisplaySortMetaTypeGroup): g is DisplaySortType {
+  return 'sortType' in g;
+}
+
 export const defaultSortType = HydrusSortType.ImportTime;
 export const defaultAscending = false;
+
+export function getSortOrderInfo(sortType: HydrusSortType) {
+  const [ascString, descString, defaultAsc] = sort_string_lookup[sortType];
+  return {
+    ascString,
+    descString,
+    defaultAsc,
+    canAsc: canAsc(sortType)
+  }
+}
+
+export interface SortInfo {
+  sortType: HydrusSortType;
+  sortAsc: boolean;
+}
