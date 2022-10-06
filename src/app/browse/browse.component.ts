@@ -9,6 +9,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SettingsService } from '../settings.service';
 import { HydrusSearchTags } from '../hydrus-tags';
 import { defaultSort, displaySortGroups, HydrusSortType, isDisplaySortMetaTypeGroup, isDisplaySortType, SortInfo, sortToString } from '../hydrus-sort';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @UntilDestroy()
 @Component({
@@ -28,6 +29,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     private searchService: SearchService,
     public filesService: HydrusFilesService,
     public settingsService: SettingsService,
+    private snackbar: MatSnackBar,
   ) {
     this.searchTags = [...settingsService.appSettings.browseDefaultSearchTags]
   }
@@ -96,8 +98,11 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     ).pipe(untilDestroyed(this)).subscribe((result) => {
       this.searching = false;
       this.currentSearchIDs = result;
-    }, () => {
+    }, (error) => {
       this.searching = false;
+      this.snackbar.open(`Error white searching: ${error.message}`, undefined, {
+        duration: 5000
+      });
     });
   }
 

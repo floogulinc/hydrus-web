@@ -143,7 +143,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${{error}}`, undefined, {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -157,7 +157,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${{error}}`, undefined, {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -171,7 +171,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${{error}}`, undefined, {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -185,7 +185,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${{error}}`, undefined, {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 2000
       });
     }
