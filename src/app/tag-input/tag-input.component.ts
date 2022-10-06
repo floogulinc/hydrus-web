@@ -7,7 +7,7 @@ import { switchMap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
-import { HydrusSearchTags, HydrusTagSearchTag } from '../hydrus-tags';
+import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType } from '../hydrus-tags';
 import { OrSearchDialogComponent } from '../or-search-dialog/or-search-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
@@ -54,6 +54,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   @Input() defaultTags: HydrusSearchTags;
 
+  @Input() displayType: TagDisplayType = 'display';
+
   @Output()
   tags = new EventEmitter<HydrusSearchTags>();
 
@@ -71,7 +73,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     }
 
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      switchMap(search => search && search.length >= 3 ? this.tagsService.searchTags(search) : of([]))
+      switchMap(search => search && search.length >= 3 ? this.tagsService.searchTags(search, this.displayType) : of([]))
     );
    }
 

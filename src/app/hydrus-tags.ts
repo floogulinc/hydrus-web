@@ -5,3 +5,5 @@ export interface HydrusTagSearchTag {
 }
 
 export type HydrusSearchTags = (string | HydrusSearchTags)[];
+
+export type TagDisplayType = 'storage' | 'display';

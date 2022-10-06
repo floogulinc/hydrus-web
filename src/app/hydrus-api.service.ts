@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HydrusSortType } from './hydrus-sort';
 import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
-import { HydrusSearchTags } from './hydrus-tags';
+import { HydrusSearchTags, TagDisplayType } from './hydrus-tags';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -279,7 +279,12 @@ export class HydrusApiService {
   }
 
 
-  public searchTags(params: {search: string, tag_service_key?: string, tag_service_name?: string}) {
+  public searchTags(params: {
+    search: string,
+    tag_service_key?: string,
+    tag_service_name?: string,
+    tag_display_type?: TagDisplayType
+  }) {
     return this.apiGet('add_tags/search_tags', new HttpParams({fromObject: params}));
   }
 

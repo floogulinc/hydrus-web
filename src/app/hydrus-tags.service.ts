@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
-import { HydrusTagSearchTag } from './hydrus-tags';
+import { HydrusTagSearchTag, TagDisplayType } from './hydrus-tags';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +10,8 @@ export class HydrusTagsService {
 
   constructor(private api: HydrusApiService) { }
 
-  searchTags(search: string): Observable<HydrusTagSearchTag[]> {
-    return this.api.searchTags({search}).pipe(map(r => r['tags']));
+  searchTags(search: string, tag_display_type: TagDisplayType = 'storage'): Observable<HydrusTagSearchTag[]> {
+    return this.api.searchTags({search, tag_display_type}).pipe(map(r => r['tags']));
   }
 
 
