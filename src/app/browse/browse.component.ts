@@ -100,7 +100,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
       this.currentSearchIDs = result;
     }, (error) => {
       this.searching = false;
-      this.snackbar.open(`Error white searching: ${error.message}`, undefined, {
+      this.snackbar.open(`Error searching: ${error.message}`, undefined, {
         duration: 5000
       });
     });
