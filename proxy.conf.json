@@ -1,0 +1,10 @@
+{
+  "/__saucenao-search": {
+    "target": "https://saucenao.com/search.php",
+    "secure": false,
+    "pathRewrite": {
+      "^/__saucenao-search": ""
+    },
+    "changeOrigin": true
+  }
+}

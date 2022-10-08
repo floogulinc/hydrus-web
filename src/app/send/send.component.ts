@@ -25,7 +25,7 @@ export class SendComponent implements OnInit {
     private route: ActivatedRoute,
     private snackbar: MatSnackBar,
     private router: Router,
-    private saucenaoService: SaucenaoService
+    public saucenaoService: SaucenaoService
   ) { }
 
   currentUrlInfo: HydrusURLInfo;

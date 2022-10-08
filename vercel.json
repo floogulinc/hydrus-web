@@ -17,7 +17,7 @@
   ],
   "rewrites": [
     {
-      "source": "/saucenao-search",
+      "source": "/__saucenao-search",
       "destination": "https://saucenao.com/search.php"
     }
   ]

@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { Result, Response } from 'sagiri/dist/response';
+import { Result, Response, Indices } from 'sagiri/dist/response';
 import sites from 'sagiri/dist/sites';
 import { resolveResult } from 'sagiri/dist/util';
 import { SagiriClientError, SagiriServerError } from 'sagiri/dist/errors';
 import { map, catchError } from 'rxjs/operators';
+import { SagiriResult } from 'sagiri';
+import { SettingsService } from './settings.service';
 
 // from https://github.com/ClarityCafe/Sagiri/blob/master/lib/index.ts#L147-L156
-interface SagiriResult {
+/* interface SagiriResult {
   url: string;
   site: string;
   index: number;
@@ -17,16 +19,16 @@ interface SagiriResult {
   authorName: string | null;
   authorUrl: string | null;
   raw: Result;
-}
+} */
 
 interface SacuenaoOptions {
-  numres?: string;
-  output_type?: '0' | '2';
+  numres?: number;
+  output_type?: 0 | 2;
   api_key?: string;
-  testmode?: '1' | null;
-  dbmask?: string;
-  dbmaski?: string;
-  db?: string;
+  testmode?: 1 | null;
+  dbmask?: number;
+  dbmaski?: number;
+  db?: number;
 }
 
 export interface SaucenaoResults extends SagiriResult {
@@ -37,9 +39,9 @@ export interface SaucenaoResults extends SagiriResult {
 }
 
 const defaultSaucenaoOptions: SacuenaoOptions = {
-  db: '999',
-  output_type: '2',
-  numres: '5',
+  db: 999,
+  output_type: 2,
+  numres: 5,
 };
 
 @Injectable({
@@ -47,16 +49,29 @@ const defaultSaucenaoOptions: SacuenaoOptions = {
 })
 export class SaucenaoService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private settings: SettingsService) { }
+
+  buildForm(data: SacuenaoOptions & ({url: string} | {file: Blob})): FormData {
+    const form = new FormData();
+    for(const [key, value] of Object.entries(data)) {
+      form.set(key, value);
+    }
+    return form;
+  }
+
+  public get canSaucenao(): boolean {
+    return !!this.settings.appSettings.saucenaoApiKey && !!this.settings.appSettings.saucenaoSearchProxy;
+  }
 
   public searchResponse(url: string, options?: SacuenaoOptions): Observable<Response> {
-    return this.http.get<Response>('https://cors-anywhere-floogulinc.herokuapp.com/' + 'https://saucenao.com/search.php?db=999&output_type=2', {
-      params: {
+    return this.http.post<Response>(this.settings.appSettings.saucenaoSearchProxy,
+    this.buildForm(
+      {
         ...defaultSaucenaoOptions,
         ...options,
+        api_key: this.settings.appSettings.saucenaoApiKey,
         url
-      }
-    }).pipe(
+      })).pipe(
       catchError(err => {
         if(!err.error.header) {
           throw err;
@@ -102,7 +117,7 @@ export class SaucenaoService {
   public search(url: string, options?: SacuenaoOptions): Observable<SaucenaoResults[]> {
     return this.filteredSearchResponse(url, options).pipe(
       map(results => results.map(result => {
-        const { url, name, id, authorName, authorUrl } = resolveResult(result);
+        const { url, name, id, authorName, authorUrl }: { url: string, name: string, id: Indices, authorName: string | null, authorUrl: string | null } = resolveResult(result);
         const {
           header: { similarity, thumbnail },
         } = result;
