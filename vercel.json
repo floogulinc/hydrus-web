@@ -14,5 +14,11 @@
       "headers": { "cache-control": "public,max-age=0,must-revalidate" },
       "dest": "/index.html"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/saucenao-search",
+      "destination": "https://saucenao.com/search.php"
+    }
   ]
 }
