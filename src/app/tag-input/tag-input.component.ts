@@ -8,10 +8,10 @@ import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material
 import { Observable, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType } from '../hydrus-tags';
-import { OrSearchDialogComponent } from '../or-search-dialog/or-search-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
+import { TagInputDialogComponent } from '../or-search-dialog/tag-input-dialog.component';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {
   const pred = allSystemPredicates[p];
@@ -181,12 +181,15 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   // }
 
   orSearchButton() {
-    const dialogRef = this.dialog.open<OrSearchDialogComponent, {}, HydrusSearchTags>(
-      OrSearchDialogComponent,
-      {
-        width: '80vw',
+    const dialogRef = TagInputDialogComponent.open(this.dialog, {
+      width: '80vw',
+      data: {
+        displayType: 'display',
+        enableOrSearch: false,
+        title: 'Add OR Search',
+        submitButtonText: 'Add'
       }
-    );
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {

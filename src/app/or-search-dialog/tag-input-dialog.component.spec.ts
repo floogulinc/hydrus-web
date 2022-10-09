@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrSearchDialogComponent } from './or-search-dialog.component';
+import { TagInputDialogComponent } from './or-search-dialog.component';
 
 describe('OrSearchDialogComponent', () => {
-  let component: OrSearchDialogComponent;
-  let fixture: ComponentFixture<OrSearchDialogComponent>;
+  let component: TagInputDialogComponent;
+  let fixture: ComponentFixture<TagInputDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrSearchDialogComponent ]
+      declarations: [ TagInputDialogComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(OrSearchDialogComponent);
+    fixture = TestBed.createComponent(TagInputDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
