@@ -40,6 +40,7 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSelectModule} from '@angular/material/select';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
@@ -94,7 +95,8 @@ const MAT_MODULES = [
     MatNativeDateModule,
     MatDatepickerModule,
     MatButtonToggleModule,
-    MatSelectModule
+    MatSelectModule,
+    MatTooltipModule
 ];
 
 

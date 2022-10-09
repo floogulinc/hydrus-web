@@ -8,6 +8,9 @@ import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 import { MigrationService } from './migration.service';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CUBE } from './svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -27,8 +30,16 @@ export class AppComponent implements OnInit {
       share()
   );
 
-  constructor(private breakpointObserver: BreakpointObserver, private updates: SwUpdate,
-              private snackBar: MatSnackBar, private migrationService: MigrationService) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private updates: SwUpdate,
+    private snackBar: MatSnackBar,
+    private migrationService: MigrationService,
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer
+  ) {
+    iconRegistry.addSvgIconLiteral('cube', sanitizer.bypassSecurityTrustHtml(CUBE));
+  }
 
   @ViewChild(MatSidenavContent, {static: true})
   public sidenavContent: MatSidenavContent;

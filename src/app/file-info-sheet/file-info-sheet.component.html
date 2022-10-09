@@ -1,10 +1,13 @@
 <div fxLayout="row" fxLayoutAlign="space-between center" class="title-row">
   <h2 mat-dialog-title class="sheet-title">File Info</h2>
   <div *ngIf="data.file as file">
-    <button mat-icon-button (click)="saveFile()" title="Download file">
+    <button mat-icon-button *ngIf="ipfsUrl$ | async as ipfsUrl" [cdkCopyToClipboard]="ipfsUrl" matTooltip="Copy IPFS URL" aria-label="Copy IPFS URL">
+      <mat-icon svgIcon="cube"></mat-icon>
+    </button>
+    <button mat-icon-button (click)="saveFile()" aria-label="Download file" matTooltip="Download file">
       <mat-icon>get_app</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="navigatorShare && navigatorCanShare" (click)="shareFile()" title="Share file">
+    <button mat-icon-button *ngIf="navigatorShare && navigatorCanShare" (click)="shareFile()" aria-label="Share file" matTooltip="Share file">
       <mat-icon>share</mat-icon>
     </button>
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
@@ -22,10 +25,6 @@
       <button mat-menu-item *ngIf="hyshareUrl" [cdkCopyToClipboard]="hyshareUrl + 'view/' + file.hash">
         <mat-icon>link</mat-icon>
         <span>Copy hyshare URL</span>
-      </button>
-      <button mat-menu-item *ngIf="ipfsUrl$ | async as ipfsUrl" [cdkCopyToClipboard]="ipfsUrl">
-        <mat-icon>link</mat-icon>
-        <span>Copy IPFS URL</span>
       </button>
       <button mat-menu-item (click)="reload()">
         <mat-icon>refresh</mat-icon>
