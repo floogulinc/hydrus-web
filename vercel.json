@@ -3,18 +3,6 @@
   "name": "hydrus-web",
   "alias": "hydrus.app",
   "public": true,
-  "routes": [
-    {
-      "src": "/(.*\\..*)",
-      "headers": { "cache-control": "public,max-age=0,must-revalidate" },
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "headers": { "cache-control": "public,max-age=0,must-revalidate" },
-      "dest": "/index.html"
-    }
-  ],
   "rewrites": [
     {
       "source": "/__saucenao-search",
