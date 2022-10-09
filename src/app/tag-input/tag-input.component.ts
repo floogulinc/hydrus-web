@@ -182,13 +182,10 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   orSearchButton() {
     const dialogRef = TagInputDialogComponent.open(this.dialog, {
-      width: '80vw',
-      data: {
-        displayType: 'display',
-        enableOrSearch: false,
-        title: 'Add OR Search',
-        submitButtonText: 'Add'
-      }
+      displayType: 'display',
+      enableOrSearch: false,
+      title: 'Add OR Search',
+      submitButtonText: 'Add'
     });
 
     dialogRef.afterClosed().subscribe(result => {

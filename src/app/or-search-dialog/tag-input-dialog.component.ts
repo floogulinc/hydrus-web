@@ -41,10 +41,17 @@ export class TagInputDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  static open(dialog: MatDialog, config?: MatDialogConfig<TagInputDialogData>) {
+  static open(dialog: MatDialog, data?: Partial<TagInputDialogData>, config?: MatDialogConfig<TagInputDialogData>) {
     return dialog.open<TagInputDialogComponent, TagInputDialogData, HydrusSearchTags>(
       TagInputDialogComponent,
-      config
+      {
+        width: '80vw',
+        data: {
+          ...defaultData,
+          ...data
+        },
+        ...config
+      }
     );
   }
 
