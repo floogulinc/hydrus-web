@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagInputDialogComponent } from './or-search-dialog.component';
+import { TagInputDialogComponent } from './tag-input-dialog.component';
 
 describe('OrSearchDialogComponent', () => {
   let component: TagInputDialogComponent;
