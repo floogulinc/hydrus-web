@@ -9,6 +9,7 @@ export interface AppSettingsV1 {
   hyshareUrl: string;
   saucenaoApiKey: string;
   saucenaoSearchProxy: string;
+  ipfsMultihashUrlPrefix: string;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -20,5 +21,6 @@ export const defaultAppSettings: AppSettings = {
   browseDefaultSearchTags: [],
   hyshareUrl: '',
   saucenaoApiKey: '',
-  saucenaoSearchProxy: '/__saucenao-search'
+  saucenaoSearchProxy: '/__saucenao-search',
+  ipfsMultihashUrlPrefix: 'https://ipfs.io/ipfs/'
 }

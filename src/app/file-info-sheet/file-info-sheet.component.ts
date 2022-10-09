@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
-import { BehaviorSubject, map, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, filter, map, shareReplay, switchMap } from 'rxjs';
 
 interface ShareData {
   title?: string;
@@ -74,6 +74,11 @@ export class FileInfoSheetComponent {
 
     }),
     shareReplay(1),
+  )
+
+  ipfsUrl$ = this.file$.pipe(
+    filter(file => file.ipfs_multihashes && Object.values(file.ipfs_multihashes).length > 0),
+    map(file => `${this.settings.appSettings.ipfsMultihashUrlPrefix}${Object.values(file.ipfs_multihashes)[0]}`)
   )
 
 

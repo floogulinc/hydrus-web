@@ -49,6 +49,8 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   notes?: HydrusNotes;
 
   detailed_known_urls?: HydrusURLInfo[];
+
+  ipfs_multihashes?: Record<string, string>;
 }
 
 export interface HydrusFile extends HydrusFileFromAPI, HydrusBasicFile {

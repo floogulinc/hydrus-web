@@ -48,12 +48,17 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>SauceNAO API Key</mat-label>
+          <mat-label>IPFS multihash URL prefix</mat-label>
+          <input matInput type="url" autocomplete="off" formControlName="ipfsMultihashUrlPrefix">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>SauceNAO API key</mat-label>
           <input matInput type="password" autocomplete="off" formControlName="saucenaoApiKey">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>SauceNAO Search Proxy URL</mat-label>
+          <mat-label>SauceNAO search proxy URL</mat-label>
           <input matInput type="text" autocomplete="off" formControlName="saucenaoSearchProxy">
         </mat-form-field>
         <div fxLayout="row wrap" fxLayoutAlign="end" class="">

@@ -23,6 +23,10 @@
         <mat-icon>link</mat-icon>
         <span>Copy hyshare URL</span>
       </button>
+      <button mat-menu-item *ngIf="ipfsUrl$ | async as ipfsUrl" [cdkCopyToClipboard]="ipfsUrl">
+        <mat-icon>link</mat-icon>
+        <span>Copy IPFS URL</span>
+      </button>
       <button mat-menu-item (click)="reload()">
         <mat-icon>refresh</mat-icon>
         <span>Refresh</span>
