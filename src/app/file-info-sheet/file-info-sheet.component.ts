@@ -7,6 +7,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
 import { BehaviorSubject, filter, map, shareReplay, switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
+import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
+import { SaucenaoService } from '../saucenao.service';
 
 interface ShareData {
   title?: string;
@@ -50,6 +53,8 @@ export class FileInfoSheetComponent {
     private filesService: HydrusFilesService,
     private snackbar: MatSnackBar,
     public settings: SettingsService,
+    private dialog: MatDialog,
+    private saucenaoService: SaucenaoService
   ) { }
 
   reload$ = new BehaviorSubject(null);
@@ -136,6 +141,25 @@ export class FileInfoSheetComponent {
           duration: 10000
         });
       }
+    });
+  }
+
+  canSaucenao = this.saucenaoService.canSaucenao && this.saucenaoService.validSaucenaoMime(this.data.file.mime);
+
+  saucenaoLookup() {
+    const snackBarRef = this.snackbar.open('Preparing search...');
+    this.filesService.getFileAsFile(this.data.file).subscribe(file => {
+      SaucenaoDialogComponent.open(this.dialog, {
+        urlOrFile: {
+          file
+        }
+      })
+      snackBarRef.dismiss();
+    }, error => {
+      snackBarRef.dismiss();
+      this.snackbar.open(`Error downloading file: ${error.message}`, undefined, {
+        duration: 10000
+      });
     });
   }
 

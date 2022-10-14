@@ -68,6 +68,7 @@ import { TagNamespaceClassPipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SortInputComponent } from './sort-input/sort-input.component';
+import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.component';
 
 
 const MAT_MODULES = [
@@ -119,7 +120,8 @@ const MAT_MODULES = [
         TagInputDialogComponent,
         TagNamespaceClassPipe,
         SystemPredicateDialogComponent,
-        SortInputComponent
+        SortInputComponent,
+        SaucenaoDialogComponent
     ],
     imports: [
         BrowserModule,

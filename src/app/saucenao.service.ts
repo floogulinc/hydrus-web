@@ -31,6 +31,8 @@ interface SacuenaoOptions {
   db?: number;
 }
 
+export type SaucenaoUrlorFile = {url: string} | {file: Blob};
+
 export interface SaucenaoResults extends SagiriResult {
   urls: {
     site: string;
@@ -51,7 +53,7 @@ export class SaucenaoService {
 
   constructor(private http: HttpClient, private settings: SettingsService) { }
 
-  buildForm(data: SacuenaoOptions & ({url: string} | {file: Blob})): FormData {
+  buildForm(data: SacuenaoOptions & SaucenaoUrlorFile): FormData {
     const form = new FormData();
     for(const [key, value] of Object.entries(data)) {
       form.set(key, value);
@@ -63,14 +65,25 @@ export class SaucenaoService {
     return !!this.settings.appSettings.saucenaoApiKey && !!this.settings.appSettings.saucenaoSearchProxy;
   }
 
-  public searchResponse(url: string, options?: SacuenaoOptions): Observable<Response> {
+  public validSaucenaoMime(mime: string) {
+    return ([
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/gif',
+      'image/bmp',
+      'image/webp'
+    ].includes(mime));
+  }
+
+  public searchResponse(urlOrFile: SaucenaoUrlorFile, options?: SacuenaoOptions): Observable<Response> {
     return this.http.post<Response>(this.settings.appSettings.saucenaoSearchProxy,
     this.buildForm(
       {
         ...defaultSaucenaoOptions,
         ...options,
         api_key: this.settings.appSettings.saucenaoApiKey,
-        url
+        ...urlOrFile
       })).pipe(
       catchError(err => {
         if(!err.error.header) {
@@ -106,16 +119,16 @@ export class SaucenaoService {
     );
   }
 
-  public filteredSearchResponse(url: string, options?: SacuenaoOptions, minSimilarity: number = 70): Observable<Result[]> {
-    return this.searchResponse(url, options).pipe(
+  public filteredSearchResponse(urlOrFile: SaucenaoUrlorFile, options?: SacuenaoOptions, minSimilarity: number = 70): Observable<Result[]> {
+    return this.searchResponse(urlOrFile, options).pipe(
       map(resp => resp.results.filter(({ header: { index_id: id, similarity}}) => !!sites[id] && similarity >= minSimilarity)
       .sort((a, b) => b.header.similarity - a.header.similarity))
     );
   }
 
   // Adapted from https://github.com/ClarityCafe/Sagiri
-  public search(url: string, options?: SacuenaoOptions): Observable<SaucenaoResults[]> {
-    return this.filteredSearchResponse(url, options).pipe(
+  public search(urlOrFile: SaucenaoUrlorFile, options?: SacuenaoOptions): Observable<SaucenaoResults[]> {
+    return this.filteredSearchResponse(urlOrFile, options).pipe(
       map(results => results.map(result => {
         const { url, name, id, authorName, authorUrl }: { url: string, name: string, id: Indices, authorName: string | null, authorUrl: string | null } = resolveResult(result);
         const {

@@ -26,6 +26,10 @@
         <mat-icon>link</mat-icon>
         <span>Copy hyshare URL</span>
       </button>
+      <button mat-menu-item *ngIf="canSaucenao" (click)="saucenaoLookup()">
+        <mat-icon>search</mat-icon>
+        <span>SauceNAO lookup</span>
+      </button>
       <button mat-menu-item (click)="reload()">
         <mat-icon>refresh</mat-icon>
         <span>Refresh</span>

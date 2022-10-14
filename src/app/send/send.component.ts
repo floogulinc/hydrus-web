@@ -7,6 +7,8 @@ import { HydrusURLInfo, HydrusURLFiles } from '../hydrus-url';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SaucenaoService, SaucenaoResults } from '../saucenao.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 
 @Component({
   selector: 'app-send',
@@ -25,6 +27,7 @@ export class SendComponent implements OnInit {
     private route: ActivatedRoute,
     private snackbar: MatSnackBar,
     private router: Router,
+    public dialog: MatDialog,
     public saucenaoService: SaucenaoService
   ) { }
 
@@ -106,7 +109,7 @@ export class SendComponent implements OnInit {
   }
 
   saucenaoLookup() {
-    this.saucenaoLoading = true;
+    /* this.saucenaoLoading = true;
     this.saucenaoResults = null;
     const lookupUrl = this.sendForm.value.sendUrl;
     this.saucenaoService.search(lookupUrl).subscribe(
@@ -120,7 +123,17 @@ export class SendComponent implements OnInit {
           duration: 5000
         });
         console.log(err);
-      });
+      }); */
+    const addUrlOptions: AddUrlOptions = {};
+    if (this.sendForm.value.destPageName !== '') {
+      addUrlOptions.destination_page_name = this.sendForm.value.destPageName;
+    }
+    SaucenaoDialogComponent.open(this.dialog, {
+      urlOrFile: {
+        url: this.sendForm.value.sendUrl
+      },
+      addUrlOptions
+    })
   }
 
 }
