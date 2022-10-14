@@ -139,11 +139,21 @@ export class HydrusFilesService {
   }
 
   private processFileFromAPI(file: HydrusFileFromAPI): HydrusFile {
+    const importTimes = file.file_services.current
+              ? Object.values(file.file_services.current)
+                  .filter((x) => !!x.time_imported)
+                  .map((x) => x.time_imported)
+              : [];
+
+    const firstImportTime =
+      importTimes.length > 0 ? new Date(Math.min(...importTimes) * 1000) : undefined;
+
     return {
       ...file,
       file_url: this.api.getFileURLFromHash(file.hash),
       thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
       file_type: this.type(file.mime),
+      time_imported: firstImportTime
     }
   }
 
