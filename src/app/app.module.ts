@@ -41,6 +41,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatTableModule} from '@angular/material/table';
 
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
@@ -68,6 +69,7 @@ import { TagNamespaceClassPipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SortInputComponent } from './sort-input/sort-input.component';
+import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
 
 
 const MAT_MODULES = [
@@ -96,7 +98,8 @@ const MAT_MODULES = [
     MatDatepickerModule,
     MatButtonToggleModule,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatTableModule
 ];
 
 
@@ -119,7 +122,8 @@ const MAT_MODULES = [
         TagInputDialogComponent,
         TagNamespaceClassPipe,
         SystemPredicateDialogComponent,
-        SortInputComponent
+        SortInputComponent,
+        MrBonesDialogComponent
     ],
     imports: [
         BrowserModule,

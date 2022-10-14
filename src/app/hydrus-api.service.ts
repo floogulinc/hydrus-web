@@ -6,6 +6,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HydrusSortType } from './hydrus-sort';
 import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
 import { HydrusSearchTags, TagDisplayType } from './hydrus-tags';
+import { HydrusBonedStats } from './hydrus-mr-bones';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -332,5 +333,9 @@ export class HydrusApiService {
     file_service_key?: string
   }) {
     return this.apiPost<void>('add_files/unarchive_files', data);
+  }
+
+  public mrBones() {
+    return this.apiGet<{boned_stats: HydrusBonedStats}>('manage_database/mr_bones');
   }
 }

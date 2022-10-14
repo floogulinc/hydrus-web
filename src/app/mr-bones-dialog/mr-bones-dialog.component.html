@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Review your fate</h1>
+<div mat-dialog-content>
+  <div *ngIf="bones$ | async as bones; else loading">
+    <div *ngIf="bones.stats as stats; else nothing">
+      <div *ngIf="stats.boned; else notBoned">
+        <img src="/assets/boned.jpg">
+      </div>
+      <ng-template #notBoned>
+        <p>CONGRATULATIONS. YOU APPEAR TO BE UNBONED, BUT REMAIN EVER VIGILANT</p>
+      </ng-template>
+    </div>
+    <ng-template #nothing>
+      <p>You have yet to board the ride.</p>
+    </ng-template>
+  </div>
+  <ng-template #loading>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+</div>

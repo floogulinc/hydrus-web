@@ -17,6 +17,9 @@
     <a mat-list-item role="listitem" (click)="updates.checkForUpdate()" *ngIf="this.updates.isEnabled">
       <div mat-line>Check for updates</div>
     </a>
+    <a mat-list-item role="listitem" (click)="boned()">
+      <div mat-line>How boned am I?</div>
+    </a>
     <mat-divider></mat-divider>
     <div mat-subheader>Debug</div>
     <a mat-list-item role="listitem" [href]="repoURL + '/commit/' + env.versionInfo.hash">
