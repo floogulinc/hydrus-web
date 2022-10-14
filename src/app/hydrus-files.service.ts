@@ -91,7 +91,8 @@ export class HydrusFilesService {
         only_return_basic_information: false,
         detailed_url_information: true,
         include_notes: true
-      }
+      },
+      true
     ).pipe(map(val => val.metadata));
   }
 
