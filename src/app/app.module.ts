@@ -70,6 +70,7 @@ import { SystemPredicateDialogComponent } from './system-predicate-dialog/system
 import { MatNativeDateModule } from '@angular/material/core';
 import { SortInputComponent } from './sort-input/sort-input.component';
 import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
+import { ByteSizePipe } from './byte-size.pipe';
 
 
 const MAT_MODULES = [
@@ -123,7 +124,8 @@ const MAT_MODULES = [
         TagNamespaceClassPipe,
         SystemPredicateDialogComponent,
         SortInputComponent,
-        MrBonesDialogComponent
+        MrBonesDialogComponent,
+        ByteSizePipe
     ],
     imports: [
         BrowserModule,
