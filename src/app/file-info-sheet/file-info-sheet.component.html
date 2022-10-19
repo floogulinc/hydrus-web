@@ -38,7 +38,7 @@
     <mat-list-item role="listitem">
       <mat-icon mat-list-icon>{{file.fileIcon}}</mat-icon>
       <div mat-line>{{file.file_id}}</div>
-      <div mat-line class="metadata-line"><span>{{file.mime}}</span> <span *ngIf="file.width && file.height">{{file.width}}x{{file.height}}</span> <span>{{file.size | bytes: 2}}</span></div>
+      <div mat-line class="metadata-line"><span>{{file.mime}}</span> <span *ngIf="file.width && file.height">{{file.width}}x{{file.height}}</span> <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span></div>
     </mat-list-item>
     <mat-list-item role="listitem">
       <mat-icon mat-list-icon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
