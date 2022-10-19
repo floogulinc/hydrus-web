@@ -11,7 +11,7 @@
       <div class="table-container">
         <table mat-table [dataSource]="stats.table">
 
-          <ng-container matColumnDef="label">
+          <ng-container matColumnDef="label" sticky>
             <th mat-header-cell *matHeaderCellDef></th>
             <td mat-cell *matCellDef="let element">{{element.label}}:</td>
           </ng-container>
