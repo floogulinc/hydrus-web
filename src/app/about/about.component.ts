@@ -38,7 +38,9 @@ export class AboutComponent implements OnInit {
   }
 
   boned() {
-    this.dialog.open(MrBonesDialogComponent);
+    this.dialog.open(MrBonesDialogComponent, {
+      maxWidth: '95vw'
+    });
   }
 
 }
