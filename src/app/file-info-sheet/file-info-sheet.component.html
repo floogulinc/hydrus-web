@@ -42,11 +42,12 @@
     <mat-list-item role="listitem">
       <mat-icon mat-list-icon>{{file.fileIcon}}</mat-icon>
       <div mat-line>{{file.file_id}}</div>
-      <div mat-line class="metadata-line"><span>{{file.mime}}</span> <span *ngIf="file.width && file.height">{{file.width}}x{{file.height}}</span> <span>{{file.size | bytes: 2}}</span></div>
+      <div mat-line class="metadata-line"><span>{{file.mime}}</span> <span *ngIf="file.width && file.height">{{file.width}}x{{file.height}}</span> <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span></div>
     </mat-list-item>
     <mat-list-item role="listitem">
       <mat-icon mat-list-icon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
       <div mat-line>{{file.is_trashed ? "In Trash" + (file.is_inbox ? " (Inbox)" : " (Archived)") : file.is_inbox ? "In Inbox" : "Archived"}}</div>
+      <div mat-line *ngIf="file.time_imported"><span [matTooltip]="file.time_imported | date:'yyyy-MM-dd HH:mm:ss'" matTooltipPosition="above">Imported {{file.time_imported | timeAgo}}</span></div>
       <button mat-icon-button (click)="archiveFile()" title="Archive" *ngIf="file.is_inbox">
         <mat-icon>archive</mat-icon>
       </button>

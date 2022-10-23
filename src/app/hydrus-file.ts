@@ -54,7 +54,7 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
 }
 
 export interface HydrusFile extends HydrusFileFromAPI, HydrusBasicFile {
-
+  time_imported?: Date;
 }
 
 export interface HydrusBasicFile extends HydrusBasicFileFromAPI {

@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { Platform } from '@angular/cdk/platform';
+import { MatDialog } from '@angular/material/dialog';
+import { MrBonesDialogComponent } from '../mr-bones-dialog/mr-bones-dialog.component';
 
 @Component({
   selector: 'app-about',
@@ -14,7 +16,8 @@ export class AboutComponent implements OnInit {
   constructor(
     public updates: SwUpdate,
     public filesService: HydrusFilesService,
-    public platform: Platform) { }
+    public platform: Platform,
+    private dialog: MatDialog) { }
 
   public doc = document;
 
@@ -32,6 +35,12 @@ export class AboutComponent implements OnInit {
       navigator.storage.estimate().then(quota => this.storageQuota = quota);
       navigator.storage.persisted().then(persisted => this.storagePersisted = persisted);
     }
+  }
+
+  boned() {
+    this.dialog.open(MrBonesDialogComponent, {
+      maxWidth: '95vw'
+    });
   }
 
 }
