@@ -2,6 +2,11 @@
 // Custom Theming for Angular Material
 @use '@angular/material' as mat;
 
+@import "@fontsource/roboto/300.css";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
+
+@import 'material-icons/iconfont/filled.css';
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
