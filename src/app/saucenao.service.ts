@@ -22,12 +22,12 @@ import { SettingsService } from './settings.service';
 } */
 
 interface SacuenaoOptions {
-  numres?: number;
   output_type?: 0 | 2;
   api_key?: string;
-  testmode?: 1 | null;
-  dbmask?: number;
-  dbmaski?: number;
+}
+
+interface SaucenaoQuery {
+  numres?: number;
   db?: number;
 }
 
@@ -40,10 +40,9 @@ export interface SaucenaoResults extends SagiriResult {
   }[];
 }
 
-const defaultSaucenaoOptions: SacuenaoOptions = {
+const defaultSaucenaoQuery: SaucenaoQuery = {
   db: 999,
-  output_type: 2,
-  numres: 5,
+  //numres: 5,
 };
 
 @Injectable({
@@ -76,15 +75,20 @@ export class SaucenaoService {
     ].includes(mime));
   }
 
-  public searchResponse(urlOrFile: SaucenaoUrlorFile, options?: SacuenaoOptions): Observable<Response> {
+  public searchResponse(urlOrFile: SaucenaoUrlorFile, queryOptions?: SaucenaoQuery): Observable<Response> {
     return this.http.post<Response>(this.settings.appSettings.saucenaoSearchProxy,
     this.buildForm(
       {
-        ...defaultSaucenaoOptions,
-        ...options,
+        output_type: 2,
         api_key: this.settings.appSettings.saucenaoApiKey,
         ...urlOrFile
-      })).pipe(
+      }),
+    {
+      params: {
+        ...defaultSaucenaoQuery,
+        ...queryOptions,
+      }
+    }).pipe(
       catchError(err => {
         if(!err.error.header) {
           throw err;
@@ -119,16 +123,16 @@ export class SaucenaoService {
     );
   }
 
-  public filteredSearchResponse(urlOrFile: SaucenaoUrlorFile, options?: SacuenaoOptions, minSimilarity: number = 70): Observable<Result[]> {
-    return this.searchResponse(urlOrFile, options).pipe(
+  public filteredSearchResponse(urlOrFile: SaucenaoUrlorFile, queryOptions?: SaucenaoQuery, minSimilarity: number = 70): Observable<Result[]> {
+    return this.searchResponse(urlOrFile, queryOptions).pipe(
       map(resp => resp.results.filter(({ header: { index_id: id, similarity}}) => !!sites[id] && similarity >= minSimilarity)
       .sort((a, b) => b.header.similarity - a.header.similarity))
     );
   }
 
   // Adapted from https://github.com/ClarityCafe/Sagiri
-  public search(urlOrFile: SaucenaoUrlorFile, options?: SacuenaoOptions): Observable<SaucenaoResults[]> {
-    return this.filteredSearchResponse(urlOrFile, options).pipe(
+  public search(urlOrFile: SaucenaoUrlorFile, queryOptions?: SaucenaoQuery): Observable<SaucenaoResults[]> {
+    return this.filteredSearchResponse(urlOrFile, queryOptions).pipe(
       map(results => results.map(result => {
         const { url, name, id, authorName, authorUrl }: { url: string, name: string, id: Indices, authorName: string | null, authorUrl: string | null } = resolveResult(result);
         const {
