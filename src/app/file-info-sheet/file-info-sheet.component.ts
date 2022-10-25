@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { HydrusBasicFile, HydrusFile, HydrusFileType, ServiceNamesToStatusesToTags } from '../hydrus-file';
+import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { HydrusBasicFile, HydrusFileType } from '../hydrus-file';
 import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
@@ -11,19 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
 
-interface ShareData {
-  title?: string;
-  text?: string;
-  url?: string;
-  files?: File[];
-}
 
-declare global {
-  interface Navigator {
-      share(data?: ShareData): Promise<void>;
-      canShare(data?: ShareData): boolean;
-  }
-}
 
 function getFileIcon(fileType: HydrusFileType) {
   switch (fileType) {
@@ -42,11 +30,10 @@ function getFileIcon(fileType: HydrusFileType) {
 @Component({
   selector: 'app-file-info-sheet',
   templateUrl: './file-info-sheet.component.html',
-  styleUrls: ['./file-info-sheet.component.scss']
+  styleUrls: ['./file-info-sheet.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileInfoSheetComponent {
-
-  Object = Object;
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusBasicFile},
