@@ -49,6 +49,9 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { LetModule } from '@rx-angular/template/let';
+import { PushModule } from '@rx-angular/template/push';
+
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
 import { AboutComponent } from './about/about.component';
 import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
@@ -145,7 +148,9 @@ const MAT_MODULES = [
         ReactiveFormsModule,
         VirtualScrollerModule,
         NgPipesModule,
-        ClipboardModule
+        ClipboardModule,
+        LetModule,
+        PushModule
     ],
     providers: [],
     bootstrap: [AppComponent]
