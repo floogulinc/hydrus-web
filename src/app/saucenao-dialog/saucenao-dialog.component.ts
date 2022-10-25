@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, tap } from 'rxjs';
 import { AddUrlOptions, HydrusAddService } from '../hydrus-add.service';
 import { SaucenaoService, SaucenaoResults, SaucenaoUrlorFile } from '../saucenao.service';
 
@@ -33,6 +33,7 @@ export class SaucenaoDialogComponent implements OnInit {
   }
 
   saucenaoResults$: Observable<SaucenaoResults[]> = this.saucenaoService.search(this.data.urlOrFile).pipe(
+    tap(console.log),
     catchError((err, caught) => {
       this.snackbar.open('Error: ' + err.message, undefined, {
         duration: 5000
@@ -58,7 +59,7 @@ export class SaucenaoDialogComponent implements OnInit {
     return dialog.open<SaucenaoDialogComponent, SaucenaoDialogData, undefined>(
       SaucenaoDialogComponent,
       {
-        width: '80vw',
+        maxWidth: '95vw',
         data,
         ...config
       }

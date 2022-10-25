@@ -109,10 +109,10 @@ export class SendComponent implements OnInit {
   }
 
   saucenaoLookup() {
-    /* this.saucenaoLoading = true;
+    this.saucenaoLoading = true;
     this.saucenaoResults = null;
     const lookupUrl = this.sendForm.value.sendUrl;
-    this.saucenaoService.search(lookupUrl).subscribe(
+    this.saucenaoService.search({url: lookupUrl}).subscribe(
       results => {
         this.saucenaoLoading = false;
         this.saucenaoResults = results;
@@ -123,8 +123,8 @@ export class SendComponent implements OnInit {
           duration: 5000
         });
         console.log(err);
-      }); */
-    const addUrlOptions: AddUrlOptions = {};
+      });
+    /* const addUrlOptions: AddUrlOptions = {};
     if (this.sendForm.value.destPageName !== '') {
       addUrlOptions.destination_page_name = this.sendForm.value.destPageName;
     }
@@ -133,7 +133,7 @@ export class SendComponent implements OnInit {
         url: this.sendForm.value.sendUrl
       },
       addUrlOptions
-    })
+    }) */
   }
 
 }

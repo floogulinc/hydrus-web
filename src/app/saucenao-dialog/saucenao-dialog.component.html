@@ -1,13 +1,13 @@
 <h1 mat-dialog-title>SauceNAO Lookup</h1>
 <div mat-dialog-content>
   <div *ngIf="saucenaoResults$ | async as saucenaoResults; else loading">
-    <mat-card *ngFor="let result of saucenaoResults" class="saucenao-card">
+    <div *ngFor="let result of saucenaoResults" class="saucenao-card">
       <mat-card-header>
         <img mat-card-avatar class="saucenao-thumbnail" [src]="result.thumbnail">
         <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>
         <mat-card-subtitle>{{result.similarity}}%</mat-card-subtitle>
       </mat-card-header>
-      <mat-card-content>
+
         <mat-list class="saucenao-url-list">
           <mat-list-item *ngFor="let url of result.urls">
             <div mat-line>{{url.site}}</div>
@@ -20,8 +20,8 @@
             </button>
           </mat-list-item>
         </mat-list>
-      </mat-card-content>
-    </mat-card>
+
+    </div>
     <mat-card *ngIf="saucenaoResults.length === 0" class="saucenao-card">
       <mat-card-header>
         <mat-icon mat-card-avatar>error</mat-icon>
