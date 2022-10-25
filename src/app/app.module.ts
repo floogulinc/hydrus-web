@@ -69,6 +69,7 @@ import { TagNamespaceClassPipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SortInputComponent } from './sort-input/sort-input.component';
+import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.component';
 import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
 import { ByteSizePipe } from './byte-size.pipe';
 
@@ -124,6 +125,7 @@ const MAT_MODULES = [
         TagNamespaceClassPipe,
         SystemPredicateDialogComponent,
         SortInputComponent,
+        SaucenaoDialogComponent,
         MrBonesDialogComponent,
         ByteSizePipe
     ],

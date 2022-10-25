@@ -21,7 +21,7 @@
       formControlName="destPageName" placeholder="" >
     </mat-form-field>
     <div fxLayout="row" fxLayoutAlign="end">
-      <button mat-raised-button color="primary" type="button" [disabled]="sendUrl.invalid" *ngIf="saucenaoService.canSaucenao" (click)="saucenaoLookup()">SauceNAO Lookup</button>
+      <button mat-raised-button type="button" [disabled]="sendUrl.invalid || saucenaoLoading" *ngIf="saucenaoService.canSaucenao" (click)="saucenaoLookup()">SauceNAO Lookup</button>
       <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
     </div>
   </form>
