@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnChanges } from '@angular/core';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { HydrusBasicFile, HydrusFile } from '../hydrus-file';
+import { HydrusBasicFile } from '../hydrus-file';
 import { IPageInfo } from '@floogulinc/ngx-virtual-scroller';
 
 @Component({
@@ -13,7 +13,7 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
 
   @Input() fileIDs: number[] = [];
 
-  @Input() loadAtOnce = 48;
+  @Input() loadAtOnce = 256;
 
   loading = false;
 
