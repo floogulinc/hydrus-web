@@ -54,7 +54,6 @@ import { PushModule } from '@rx-angular/template/push';
 
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
 import { AboutComponent } from './about/about.component';
-import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
 import { FilesPageComponent } from './files-page/files-page.component';
@@ -115,7 +114,6 @@ const MAT_MODULES = [
         SettingsComponent,
         TagInputComponent,
         AboutComponent,
-        PhotoswipeComponent,
         ImageListComponent,
         PagesComponent,
         FilesPageComponent,

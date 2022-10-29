@@ -11,7 +11,7 @@ import {
 import { HydrusBasicFile, HydrusFile } from '../hydrus-file';
 import { AppComponent } from '../app.component';
 import { IPageInfo } from '@floogulinc/ngx-virtual-scroller';
-import { PhotoswipeService } from '../photoswipe/photoswipe.service';
+import { PhotoswipeService } from '../photoswipe.service';
 
 @Component({
   selector: 'app-image-list',
