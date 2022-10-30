@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HydrusBasicFile, HydrusFileType } from './hydrus-file';
-
 import PhotoSwipe, { PhotoSwipeOptions, SlideData } from 'photoswipe';
 import { Platform } from '@angular/cdk/platform';
 import Content from 'photoswipe/dist/types/slide/content';
 import Slide from 'photoswipe/dist/types/slide/slide';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { Location } from '@angular/common';
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -21,20 +20,22 @@ export class PhotoswipeService {
   constructor(
     public platform: Platform,
     private bottomSheet: MatBottomSheet,
-    private overlayContainer: OverlayContainer
+    private location: Location
   ) { }
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
     const imgindex = items.findIndex(e => e.file_id === id);
 
-    console.log(document.getElementById('photoswipe-container'));
-
     const options: PhotoSwipeOptions = {
       index: imgindex,
       bgOpacity: 1,
       clickToCloseNonZoomable: false,
-      hideAnimationDuration: 0,
-      showAnimationDuration: 0,
+      showHideAnimationType: 'none',
+      arrowPrev: false,
+      arrowNext: false,
+      zoom: false,
+      //secondaryZoomLevel: 1,
+      maxZoomLevel: 2,
     }
 
     const pswp = new PhotoSwipe(options);
@@ -54,34 +55,25 @@ export class PhotoswipeService {
       return useContentPlaceholder;
     });
 
-    pswp.on('appendHeavy', (e) => {
-      if (isContentType(e.slide, 'video') && !e.slide.isActive) {
-        console.log('video!');
-        e.preventDefault();
-      }
-    });
+/*     const _getVerticalDragRatio = (panY) => {
+      return (panY - pswp.currSlide.bounds.center.y)
+              / (pswp.viewportSize.y / 3);
+    } */
 
-    pswp.on('contentAppend', (e) => {
-      if (isContentType(e.content, 'video')) {
-        e.preventDefault();
-        e.content.isAttached = true;
-        e.content.appendImage();
+/*     pswp.on('verticalDrag', (e) => {
+      // triggered when using vertical drag to close gesture
+      // can be default prevented
+      console.log('verticalDrag', e.panY);
+      //pswp.element.classList.add('pswp--ui-visible')
+      const drag = 1 - Math.abs(_getVerticalDragRatio(e.panY));
+      console.log(drag);
+      if(pswp.element.classList.contains('pswp--ui-visible') && drag < 0.95) {
+        pswp.element.classList.remove('pswp--ui-visible')
+      } else if (!pswp.element.classList.contains('pswp--ui-visible') && drag >= 0.95) {
+        pswp.element.classList.add('pswp--ui-visible')
       }
-    });
+    }); */
 
-    pswp.on('contentActivate', ({content}) => {
-      if (isContentType(content, 'video') && content.element) {
-        const element = content.element as HTMLVideoElement
-        element.play();
-      }
-    });
-
-    pswp.on('contentDeactivate', ({content}) => {
-      if (isContentType(content, 'video') && content.element) {
-        const element = content.element as HTMLVideoElement
-        element.pause();
-      }
-    });
 
     pswp.on('wheel', (e) => {
       const event = e.originalEvent;
@@ -102,26 +94,44 @@ export class PhotoswipeService {
           pswp.close();
         }
       };
+
     });
 
 
     pswp.on('uiRegister', () => {
       pswp.ui.registerElement({
         name: 'download-button',
-        order: 8,
+        order: 15,
         isButton: true,
         tagName: 'button',
-
         html: '<span class="mat-icon material-icons">info_outlined</span>',
-
-        onInit: (el, pswp) => {
-
-        },
         onClick: (event, el, pswp) => {
           const file = pswp.currSlide.data.file as HydrusBasicFile;
           this.openFileInfoSheet(file);
         }
       });
+
+      pswp.ui.registerElement({
+        name: 'zoom-level-indicator',
+        order: 6,
+        className: 'pswp__counter',
+        onInit: (el, pswp) => {
+          pswp.on('zoomPanUpdate', (e) => {
+            if (e.slide === pswp.currSlide) {
+              if(pswp.currSlide.isZoomable()) {
+                el.innerText = `${Math.round(pswp.currSlide.currZoomLevel * 100)}%`;
+              } else {
+                el.innerText = '';
+              }
+
+            }
+          });
+        }
+      });
+    });
+
+    pswp.addFilter('uiElement', (element, data) => {
+      return element;
     });
 
 
@@ -129,86 +139,165 @@ export class PhotoswipeService {
     pswp.on('contentLoad', (e) => {
       const { content, isLazy } = e;
       const file = content.data.file as HydrusBasicFile;
-      console.log(e);
 
-      if(isContentType(content, 'video')) {
+       if(isContentType(content, 'video')) {
         e.preventDefault();
 
         content.state = 'loading';
 
-        console.log('test')
-        //content.element = document.createElement('div');
-        //content.element.className = 'pswp-video-container';
+        content.element = document.createElement('div');
+        content.element.className = 'pswp-video-container';
+        const img = document.createElement('img');
+        img.src = file.thumbnail_url;
+        img.className = 'pswp-video-placeholder'
+        content.element.append(img);
+      } else if(isContentType(content, 'audio')) {
+        e.preventDefault();
 
+        content.state = 'loading';
+
+        content.element = document.createElement('div');
+        content.element.className = 'pswp-audio-container';
+      } else if (isContentType(content, 'unsupported')) {
+        e.preventDefault();
+        content.element = document.createElement('div');
+        content.element.className = 'pswp__content pswp__error-msg-container';
+
+        const errorMsgEl = document.createElement('div');
+        errorMsgEl.className = 'pswp__error-msg';
+        content.element.appendChild(errorMsgEl);
+
+        const img = document.createElement('img');
+        img.src = file.thumbnail_url;
+        img.className = 'pswp-error-thumb';
+        errorMsgEl.appendChild(img);
+
+        const errorMsgText = document.createElement('div');
+        errorMsgText.innerText = `Unsupported Filetype (${file.mime})`;
+        errorMsgText.className = 'pswp-error-text';
+        errorMsgEl.appendChild(errorMsgText);
+
+      }
+
+    });
+
+    pswp.on('contentActivate', ({content}) => {
+      if (isContentType(content, 'video') && content.element) {
+        //const element = content.element as HTMLVideoElement
+        const file = content.data.file as HydrusBasicFile;
+        //element.play();
         const vid = document.createElement('video');
         vid.src = file.file_url;
-        //vid.autoplay = true;
+        vid.autoplay = true;
         vid.controls = !this.platform.FIREFOX;
         vid.poster = file.thumbnail_url;
         vid.loop = true;
-        vid.className = 'pswp-video';
+        vid.className = 'pswp-video pswp-media';
 
-        content.element = vid;
+        content.element.prepend(vid);
+        vid.onloadeddata = (e) => {
+          content.onLoaded();
+        }
+      } else if (isContentType(content, 'audio') && content.element) {
+        //const element = content.element as HTMLVideoElement
+        const file = content.data.file as HydrusBasicFile;
+        //element.play();
+        const audio = document.createElement('audio');
+        audio.src = file.file_url;
+        audio.autoplay = true;
+        audio.loop = true;
+        audio.controls = true;
+        audio.className = 'pswp-audio pswp-media';
 
-        content.onLoaded();
+        content.element.prepend(audio);
+        audio.onloadeddata = (e) => {
+          content.onLoaded();
+        }
       }
-      /* if (content.type === 'google-map') {
-        // prevent the deafult behavior
-        e.preventDefault();
-
-        // Create a container for iframe
-        // and assign it to the `content.element` property
-        content.element = document.createElement('div');
-        content.element.className = 'pswp__google-map-container';
-
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('allowfullscreen', '');
-        iframe.src = content.data.googleMapUrl;
-        content.element.appendChild(iframe);
-      } */
     });
 
+    pswp.on('appendHeavy', (e) => {
+
+    });
+
+    pswp.on('contentAppend', (e) => {
+
+    });
+
+
+    const handleDestroyMedia = (content: Content) => {
+      if ((isContentType(content, 'video') || isContentType(content, 'audio')) && content.element) {
+        content.element.querySelectorAll<HTMLMediaElement>('.pswp-media').forEach(media => {
+          media.pause();
+          media.removeAttribute('src');
+          media.load();
+          media.remove();
+        })
+      }
+    }
+
+    pswp.on('contentDeactivate', ({content}) => {
+      handleDestroyMedia(content);
+    });
+
+    pswp.on('contentRemove', ({content}) => {
+      handleDestroyMedia(content);
+    });
+
+    pswp.on('contentDestroy', ({content}) => {
+
+    });
+
+    const locSub = this.location.subscribe(e => {
+      pswp.close();
+    });
+
+    pswp.on('close', () => {
+      this.location.replaceState(this.location.path());
+      locSub.unsubscribe();
+    });
+
+    pswp.on('destroy', () => {
+
+    });
+
+    this.location.go(this.location.path() + '#pswp');
 
     pswp.init();
   }
 
-  getPhotoSwipeItem(file: HydrusBasicFile): SlideData {
-    if (file.file_type === HydrusFileType.Image) {
-      return {
-        src: file.file_url,
-        msrc: file.thumbnail_url,
-        width: file.width,
-        height: file.height,
-        file
-      };
-    } else if (file.file_type === HydrusFileType.Video) {
-      return {
-        html: `
-        <div id="pswp-video-${file.file_id}" class="pswp-video-container">
-        <img src="${file.thumbnail_url}" class="pswp-video-placeholder">
-        </div>
-        `,
-        file,
-        type: 'video',
-      };
-    } else if (file.file_type === HydrusFileType.Audio) {
-      return {
-        html: `
-        <div id="pswp-audio-${file.file_id}" class="pswp-audio-container">
-        </div>
-        `,
-        file
-      };
-    } else {
-      const html = `<div class="pswp__error-msg">
-      <img src="${file.thumbnail_url}" class="pswp-error-thumb">
-      <p>The file could not be loaded. (type: ${file.mime})</p>
-      </div>`;
 
-      return {
-        html,
-        file
-      };
+
+  getPhotoSwipeItem(file: HydrusBasicFile): SlideData {
+
+    switch(file.file_type) {
+      case HydrusFileType.Image: {
+        return {
+          src: file.file_url,
+          msrc: file.thumbnail_url,
+          width: file.width,
+          height: file.height,
+          file
+        };
+      }
+      case HydrusFileType.Video: {
+        return {
+          file,
+          type: 'video',
+        };
+      }
+      case HydrusFileType.Audio: {
+        return {
+          file,
+          type: 'audio'
+        };
+      }
+      default: {
+        return {
+          type: 'unsupported',
+          file
+        };
+      }
     }
   }
 

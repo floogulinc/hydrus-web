@@ -14,6 +14,49 @@
   --pswp-root-z-index: 1000
 }
 
+.pswp-video-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.pswp-video {
+  width: 100%;
+  height: 100%;
+  &:focus {
+    outline: none;
+  }
+}
+
+.pswp-audio-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.pswp-video-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pswp-video ~ .pswp-video-placeholder {
+  display: none;
+}
+
+.pswp-error-text {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.pswp-error-thumb {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
