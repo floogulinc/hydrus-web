@@ -314,14 +314,17 @@ export class PhotoswipeService {
 
     pswp.on('close', () => {
       locSub.unsubscribe();
-      this.location.replaceState(this.location.path());
+      if(window.history.state.pswp) {
+        window.history.back();
+      }
     });
 
     /* pswp.on('destroy', () => {
 
     }); */
 
-    this.location.go(this.location.path() + '#pswp');
+    //this.location.go(this.location.path() + '#pswp');
+    window.history.pushState({pswp: true}, '');
 
     pswp.init();
   }
