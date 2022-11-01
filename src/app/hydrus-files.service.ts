@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, HydrusFileType } from './hydrus-file';
+import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, HydrusFileType, type } from './hydrus-file';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, tap } from 'rxjs/operators';
@@ -31,45 +31,6 @@ export class HydrusFilesService {
   getFilesCacheSize(): number {
     return this.allFiles.size;
   }
-
-  type(mime: string): HydrusFileType {
-    if ([
-      'image/jpeg',
-      'image/jpg',
-      'image/png',
-      'image/apng',
-      'image/gif',
-      'image/bmp',
-      'image/webp'
-    ].includes(mime)) {
-      return HydrusFileType.Image;
-    }
-    if ([
-      'video/mp4',
-      'video/webm',
-      'video/x-matroska',
-      'video/quicktime',
-    ].includes(mime)) {
-      return HydrusFileType.Video;
-    }
-    if ([
-      'audio/mp3',
-      'audio/ogg',
-      'audio/flac',
-      'audio/x-wav',
-    ].includes(mime)) {
-      return HydrusFileType.Audio;
-    }
-    if ([
-      'video/x-flv',
-      'application/x-shockwave-flash'
-    ].includes(mime)) {
-      return HydrusFileType.Flash;
-    }
-    return HydrusFileType.Unsupported;
-  }
-
-
 
   private getFileMetadataAPI(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
     return this.api.getFileMetadata(
@@ -153,7 +114,7 @@ export class HydrusFilesService {
       ...file,
       file_url: this.api.getFileURLFromHash(file.hash),
       thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
-      file_type: this.type(file.mime),
+      file_type: type(file.mime),
       time_imported: firstImportTime
     }
   }
@@ -163,7 +124,7 @@ export class HydrusFilesService {
       ...file,
       file_url: this.api.getFileURLFromHash(file.hash),
       thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
-      file_type: this.type(file.mime),
+      file_type: type(file.mime),
     }
   }
 

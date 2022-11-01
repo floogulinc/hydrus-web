@@ -8,6 +8,91 @@
 
 @import 'material-icons/iconfont/filled.css';
 
+@import 'photoswipe/dist/photoswipe.css';
+
+.pswp {
+  --pswp-root-z-index: 1000
+}
+
+.pswp-video-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.pswp-video {
+  width: 100%;
+  height: 100%;
+  &:focus {
+    outline: none;
+  }
+}
+
+.pswp-audio-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.pswp-audio {
+  width: 80%;
+}
+
+.pswp-video-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pswp-video ~ .pswp-video-placeholder {
+  display: none;
+}
+
+.pswp-error-text {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.pswp-error-thumb {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.pswp__button {
+  width: 40px;
+  .material-icons {
+    color: var(--pswp-icon-color);
+    text-shadow: 1px 1px 3px var(--pswp-icon-color-secondary);
+  }
+}
+
+.pswp__button--custom-close {
+  //margin-right: 16px;
+}
+
+.pswp__counter {
+  margin-left: 0px;
+}
+
+.pswp__zoom-level {
+  height: 30px;
+  margin: 15px 0 0 16px;
+  font-size: 14px;
+  line-height: 30px;
+  color: var(--pswp-icon-color);
+  text-shadow: 1px 1px 3px var(--pswp-icon-color-secondary);
+  opacity: 0.85;
+}
+
+.pswp__top-bar {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
@@ -172,3 +257,4 @@ body {
   width: fit-content;
   max-width: 100%;
 }
+

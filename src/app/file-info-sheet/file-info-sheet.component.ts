@@ -10,6 +10,7 @@ import { BehaviorSubject, filter, map, shareReplay, switchMap } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
+import { HydrusFileDownloadService } from '../hydrus-file-download.service';
 
 
 
@@ -41,7 +42,8 @@ export class FileInfoSheetComponent {
     private snackbar: MatSnackBar,
     public settings: SettingsService,
     private dialog: MatDialog,
-    private saucenaoService: SaucenaoService
+    private saucenaoService: SaucenaoService,
+    public downloadService: HydrusFileDownloadService
   ) { }
 
   reload$ = new BehaviorSubject(null);
@@ -80,7 +82,6 @@ export class FileInfoSheetComponent {
 
 
   navigatorShare = navigator.share;
-  navigatorCanShare = navigator.canShare;
 
   hyshareUrl =
     this.settings.appSettings.hyshareUrl && !this.settings.appSettings.hyshareUrl.endsWith('/')
@@ -96,39 +97,11 @@ export class FileInfoSheetComponent {
   }
 
   saveFile() {
-    const snackBarRef = this.snackbar.open('Downloading file...');
-    this.filesService.getFileAsFile(this.data.file).subscribe(file => {
-      saveAs(file);
-      snackBarRef.dismiss();
-    }, error => {
-      snackBarRef.dismiss();
-      this.snackbar.open(`Error downloading file: ${error.message}`, undefined, {
-        duration: 10000
-      });
-    });
+    this.downloadService.saveFile(this.data.file);
   }
 
   shareFile() {
-    const snackBarRef = this.snackbar.open('Sharing file...');
-    this.filesService.getFileAsFile(this.data.file).toPromise().then(file => {
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        return navigator.share({
-          files: [file]
-        });
-      } else {
-        throw new Error('Your browser doesn\'t support sharing this file');
-      }
-    })
-    .then(() => {
-      snackBarRef.dismiss();
-    }, error => {
-      snackBarRef.dismiss();
-      if (error.message !== 'Share canceled') {
-        this.snackbar.open(`Error sharing file: ${error.message}`, undefined, {
-          duration: 10000
-        });
-      }
-    });
+    this.downloadService.shareFile(this.data.file);
   }
 
   canSaucenao = this.saucenaoService.canSaucenao && this.saucenaoService.validSaucenaoMime(this.data.file.mime);
