@@ -53,12 +53,12 @@ export class PhotoswipeService {
       return this.getPhotoSwipeItem(items[index]);
     });
 
-    pswp.addFilter('useContentPlaceholder', (useContentPlaceholder, content) => {
+/*     pswp.addFilter('useContentPlaceholder', (useContentPlaceholder, content) => {
       if(isContentType(content, 'video')) {
         //return true;
       }
       return useContentPlaceholder;
-    });
+    }); */
 
 /*     const _getVerticalDragRatio = (panY) => {
       return (panY - pswp.currSlide.bounds.center.y)
@@ -304,9 +304,9 @@ export class PhotoswipeService {
       handleDestroyMedia(content);
     });
 
-    pswp.on('contentDestroy', ({content}) => {
+    /* pswp.on('contentDestroy', ({content}) => {
 
-    });
+    }); */
 
     const locSub = this.location.subscribe(e => {
       pswp.close();
@@ -317,9 +317,9 @@ export class PhotoswipeService {
       this.location.replaceState(this.location.path());
     });
 
-    pswp.on('destroy', () => {
+    /* pswp.on('destroy', () => {
 
-    });
+    }); */
 
     this.location.go(this.location.path() + '#pswp');
 
