@@ -36,6 +36,8 @@ export class PhotoswipeService {
       zoom: false,
       //secondaryZoomLevel: 1,
       maxZoomLevel: 2,
+      tapAction: null,
+      errorMsg: 'The file cannot be loaded'
     }
 
     const pswp = new PhotoSwipe(options);
@@ -100,7 +102,7 @@ export class PhotoswipeService {
 
     pswp.on('uiRegister', () => {
       pswp.ui.registerElement({
-        name: 'download-button',
+        name: 'info',
         order: 15,
         isButton: true,
         tagName: 'button',
@@ -198,6 +200,9 @@ export class PhotoswipeService {
         vid.onloadeddata = (e) => {
           content.onLoaded();
         }
+        vid.onerror = (e) => {
+          content.onError();
+        }
       } else if (isContentType(content, 'audio') && content.element) {
         //const element = content.element as HTMLVideoElement
         const file = content.data.file as HydrusBasicFile;
@@ -213,7 +218,31 @@ export class PhotoswipeService {
         audio.onloadeddata = (e) => {
           content.onLoaded();
         }
+        audio.onerror = (e) => {
+          content.onError();
+        }
       }
+    });
+
+    pswp.addFilter('contentErrorElement', (contentErrorElement, content) => {
+
+      const file = content.data.file as HydrusBasicFile;
+
+      const errorMsgEl = document.createElement('div');
+      errorMsgEl.className = 'pswp__error-msg';
+      content.element.appendChild(errorMsgEl);
+
+      const img = document.createElement('img');
+      img.src = file.thumbnail_url;
+      img.className = 'pswp-error-thumb';
+      errorMsgEl.appendChild(img);
+
+      const errorMsgText = document.createElement('div');
+      errorMsgText.innerText = `The file cannot be loaded (${file.mime})`;
+      errorMsgText.className = 'pswp-error-text';
+      errorMsgEl.appendChild(errorMsgText);
+
+      return errorMsgEl;
     });
 
     pswp.on('appendHeavy', (e) => {
@@ -253,8 +282,8 @@ export class PhotoswipeService {
     });
 
     pswp.on('close', () => {
-      this.location.replaceState(this.location.path());
       locSub.unsubscribe();
+      this.location.replaceState(this.location.path());
     });
 
     pswp.on('destroy', () => {
