@@ -39,7 +39,7 @@ export class PhotoswipeService {
       close: false,
       //secondaryZoomLevel: 1,
       maxZoomLevel: 2,
-      tapAction: null,
+      //tapAction: null,
       errorMsg: 'The file cannot be loaded',
     }
 
@@ -90,6 +90,12 @@ export class PhotoswipeService {
         pswp.prev();
       } else if (event.deltaY > 0) { // wheel down
         pswp.next();
+      }
+    });
+
+    pswp.on('tapAction', (e) => {
+      if(!pswp.currSlide.content.isImageContent()) {
+        e.preventDefault();
       }
     });
 
