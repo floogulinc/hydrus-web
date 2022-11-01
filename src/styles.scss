@@ -62,11 +62,35 @@
   display: block;
 }
 
-.pswp__button--info {
-  span {
+.pswp__button {
+  width: 40px;
+  .material-icons {
     color: var(--pswp-icon-color);
     text-shadow: 1px 1px 3px var(--pswp-icon-color-secondary);
   }
+}
+
+.pswp__button--custom-close {
+  //margin-right: 16px;
+}
+
+.pswp__counter {
+  margin-left: 0px;
+}
+
+.pswp__zoom-level {
+  height: 30px;
+  margin: 15px 0 0 16px;
+  font-size: 14px;
+  line-height: 30px;
+  color: var(--pswp-icon-color);
+  text-shadow: 1px 1px 3px var(--pswp-icon-color-secondary);
+  opacity: 0.85;
+}
+
+.pswp__top-bar {
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 // Include the common styles for Angular Material. We include this here so that you only

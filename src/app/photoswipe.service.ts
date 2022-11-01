@@ -7,6 +7,7 @@ import Slide from 'photoswipe/dist/types/slide/slide';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
 import { Location } from '@angular/common';
+import { HydrusFileDownloadService } from './hydrus-file-download.service';
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -20,7 +21,8 @@ export class PhotoswipeService {
   constructor(
     public platform: Platform,
     private bottomSheet: MatBottomSheet,
-    private location: Location
+    private location: Location,
+    private downloadService: HydrusFileDownloadService
   ) { }
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
@@ -34,10 +36,11 @@ export class PhotoswipeService {
       arrowPrev: false,
       arrowNext: false,
       zoom: false,
+      close: false,
       //secondaryZoomLevel: 1,
       maxZoomLevel: 2,
       tapAction: null,
-      errorMsg: 'The file cannot be loaded'
+      errorMsg: 'The file cannot be loaded',
     }
 
     const pswp = new PhotoSwipe(options);
@@ -114,9 +117,44 @@ export class PhotoswipeService {
       });
 
       pswp.ui.registerElement({
+        name: 'custom-close',
+        order: 20,
+        isButton: true,
+        tagName: 'button',
+        html: '<span class="mat-icon material-icons">close</span>',
+        onClick: 'close'
+      });
+
+      pswp.ui.registerElement({
+        name: 'download',
+        order: 13,
+        isButton: true,
+        tagName: 'button',
+        html: '<span class="mat-icon material-icons">get_app</span>',
+        onClick: (event, el, pswp) => {
+          const file = pswp.currSlide.data.file as HydrusBasicFile;
+          this.downloadService.saveFile(file);
+        }
+      });
+
+      if(this.downloadService.canShare) {
+        pswp.ui.registerElement({
+          name: 'share',
+          order: 14,
+          isButton: true,
+          tagName: 'button',
+          html: '<span class="mat-icon material-icons">share</span>',
+          onClick: (event, el, pswp) => {
+            const file = pswp.currSlide.data.file as HydrusBasicFile;
+            this.downloadService.shareFile(file);
+          }
+        });
+      }
+
+      pswp.ui.registerElement({
         name: 'zoom-level-indicator',
         order: 6,
-        className: 'pswp__counter',
+        className: 'pswp__zoom-level',
         onInit: (el, pswp) => {
           pswp.on('zoomPanUpdate', (e) => {
             if (e.slide === pswp.currSlide) {
@@ -185,9 +223,7 @@ export class PhotoswipeService {
 
     pswp.on('contentActivate', ({content}) => {
       if (isContentType(content, 'video') && content.element) {
-        //const element = content.element as HTMLVideoElement
         const file = content.data.file as HydrusBasicFile;
-        //element.play();
         const vid = document.createElement('video');
         vid.src = file.file_url;
         vid.autoplay = true;
@@ -195,32 +231,28 @@ export class PhotoswipeService {
         vid.poster = file.thumbnail_url;
         vid.loop = true;
         vid.className = 'pswp-video pswp-media';
-
-        content.element.prepend(vid);
         vid.onloadeddata = (e) => {
           content.onLoaded();
         }
         vid.onerror = (e) => {
           content.onError();
         }
+        content.element.prepend(vid);
       } else if (isContentType(content, 'audio') && content.element) {
-        //const element = content.element as HTMLVideoElement
         const file = content.data.file as HydrusBasicFile;
-        //element.play();
         const audio = document.createElement('audio');
         audio.src = file.file_url;
         audio.autoplay = true;
         audio.loop = true;
         audio.controls = true;
         audio.className = 'pswp-audio pswp-media';
-
-        content.element.prepend(audio);
         audio.onloadeddata = (e) => {
           content.onLoaded();
         }
         audio.onerror = (e) => {
           content.onError();
         }
+        content.element.prepend(audio);
       }
     });
 
@@ -252,7 +284,6 @@ export class PhotoswipeService {
     pswp.on('contentAppend', (e) => {
 
     });
-
 
     const handleDestroyMedia = (content: Content) => {
       if ((isContentType(content, 'video') || isContentType(content, 'audio')) && content.element) {

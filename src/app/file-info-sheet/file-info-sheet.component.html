@@ -7,7 +7,7 @@
     <button mat-icon-button (click)="saveFile()" aria-label="Download file" matTooltip="Download file">
       <mat-icon>get_app</mat-icon>
     </button>
-    <button mat-icon-button *ngIf="navigatorShare && navigatorCanShare" (click)="shareFile()" aria-label="Share file" matTooltip="Share file">
+    <button mat-icon-button *ngIf="downloadService.canShare" (click)="shareFile()" aria-label="Share file" matTooltip="Share file">
       <mat-icon>share</mat-icon>
     </button>
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
