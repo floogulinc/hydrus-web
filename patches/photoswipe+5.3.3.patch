@@ -1,0 +1,20 @@
+diff --git a/node_modules/photoswipe/dist/photoswipe.esm.js b/node_modules/photoswipe/dist/photoswipe.esm.js
+index 35d3c3f..330a4d5 100644
+--- a/node_modules/photoswipe/dist/photoswipe.esm.js
++++ b/node_modules/photoswipe/dist/photoswipe.esm.js
+@@ -2057,12 +2057,14 @@ class Gestures {
+    * @param {PointerEvent} e
+    */
+   onPointerMove(e) {
+-    e.preventDefault(); // always preventDefault move event
++    //e.preventDefault(); // always preventDefault move event
+ 
+     if (!this._numActivePoints) {
+       return;
+     }
+ 
++    e.preventDefault();
++
+     this._updatePoints(e, 'move');
+ 
+     if (this.pswp.dispatch('pointerMove', { originalEvent: e }).defaultPrevented) {

@@ -108,6 +108,8 @@ export class PhotoswipeService {
 
     });
 
+    // disable focus trap
+    pswp.keyboard._onFocusIn = (e) => {};
 
     pswp.on('uiRegister', () => {
       pswp.ui.registerElement({
