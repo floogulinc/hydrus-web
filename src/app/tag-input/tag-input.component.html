@@ -63,7 +63,7 @@
       <button *ngIf="enableSystemPredicates" type="button" mat-menu-item [matMenuTriggerFor]="predicatesMenu">
         System Predicate
       </button>
-      <button *ngIf="enableFavorites" type="button" mat-menu-item [matMenuTriggerFor]="favoriteTagsMenu">
+      <button *ngIf="enableFavorites && favoriteTags.length > 0" type="button" mat-menu-item [matMenuTriggerFor]="favoriteTagsMenu">
         Favorite Tags
       </button>
     </mat-menu>
