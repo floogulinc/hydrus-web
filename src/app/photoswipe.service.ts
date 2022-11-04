@@ -8,6 +8,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
 import { Location } from '@angular/common';
 import { HydrusFileDownloadService } from './hydrus-file-download.service';
+import { take } from 'rxjs';
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -120,7 +121,17 @@ export class PhotoswipeService {
         html: '<span class="mat-icon material-icons">info_outlined</span>',
         onClick: (event, el, pswp) => {
           const file = pswp.currSlide.data.file as HydrusBasicFile;
-          this.openFileInfoSheet(file);
+          this.bottomSheet.open(FileInfoSheetComponent, {
+            data: {
+              file
+            },
+            panelClass: 'file-info-panel',
+            closeOnNavigation: true
+          }).afterDismissed().pipe(take(1)).subscribe(res => {
+            if(res) {
+              pswp.close();
+            }
+          });
         }
       });
 
@@ -167,7 +178,9 @@ export class PhotoswipeService {
           pswp.on('zoomPanUpdate', (e) => {
             if (e.slide === pswp.currSlide) {
               if(pswp.currSlide.isZoomable()) {
-                el.innerText = `${Math.round(pswp.currSlide.currZoomLevel * 100)}%`;
+                const pixelRatioZoom = window.devicePixelRatio && window.devicePixelRatio === 1 ? '' :
+                  ` (${Math.round(pswp.currSlide.currZoomLevel * window.devicePixelRatio * 100)}%)`;
+                el.innerText = `${Math.round(pswp.currSlide.currZoomLevel * 100)}%${pixelRatioZoom}`;
               } else {
                 el.innerText = '';
               }
@@ -372,13 +385,4 @@ export class PhotoswipeService {
     }
   }
 
-  openFileInfoSheet(file: HydrusBasicFile) {
-    this.bottomSheet.open(FileInfoSheetComponent, {
-      data: {
-        file
-      },
-      panelClass: 'file-info-panel',
-      closeOnNavigation: true
-    });
-  }
 }

@@ -66,7 +66,7 @@ import { NgPipesModule } from 'ngx-pipes';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
-import { TagInputDialogComponent } from './or-search-dialog/tag-input-dialog.component';
+import { TagInputDialogComponent } from './tag-input-dialog/tag-input-dialog.component';
 import { TagNamespaceClassPipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
 import { MatNativeDateModule } from '@angular/material/core';

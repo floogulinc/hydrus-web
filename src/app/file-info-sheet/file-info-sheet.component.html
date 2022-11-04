@@ -26,6 +26,10 @@
         <mat-icon>link</mat-icon>
         <span>Copy hyshare URL</span>
       </button>
+      <button mat-menu-item (click)="searchSimilarFiles()">
+        <mat-icon>image_search</mat-icon>
+        <span>Search for similar files</span>
+      </button>
       <button mat-menu-item *ngIf="canSaucenao" (click)="saucenaoLookup()">
         <mat-icon>search</mat-icon>
         <span>SauceNAO lookup</span>
@@ -100,7 +104,14 @@
       </mat-expansion-panel-header>
       <ng-template matExpansionPanelContent>
         <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
-          <mat-chip *ngFor="let tag of (service.statuses[0] | orderBy)" [selectable]="false" class="tag-chip" [ngClass]="tag | tagClass">
+          <mat-chip
+            *ngFor="let tag of (service.statuses[0] | orderBy)"
+            [selectable]="false"
+            class="tag-chip"
+            [ngClass]="tag | tagClass"
+            [matMenuTriggerFor]="tagMenu"
+            [matMenuTriggerData]="{tag}"
+          >
             <div class="tag-chip-text">{{tag}}</div>
           </mat-chip>
         </mat-chip-list>
@@ -109,6 +120,25 @@
     </mat-accordion>
   </div>
 </div>
+
+<mat-menu #tagMenu="matMenu">
+  <ng-template matMenuContent let-tag="tag">
+    <button mat-menu-item [cdkCopyToClipboard]="tag">
+      <mat-icon>content_copy</mat-icon>
+      <span>Copy tag</span>
+    </button>
+    <button mat-menu-item (click)="searchTags([tag])">
+      <mat-icon>search</mat-icon>
+      <span>Search tag</span>
+    </button>
+    <button mat-menu-item (click)="addSearchTags([tag])" *ngIf="isBrowse">
+      <mat-icon>search</mat-icon>
+      <span>Add tag to search</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
 <ng-template #noFile>
   <mat-spinner></mat-spinner>
 </ng-template>
+

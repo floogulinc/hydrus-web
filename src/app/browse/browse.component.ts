@@ -1,16 +1,17 @@
 import { AppComponent } from './../app.component';
-import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';
 import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, shareReplay, startWith, Subject, Subscription, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, shareReplay, startWith, Subject, Subscription, switchMap, take, tap } from 'rxjs';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { SettingsService } from '../settings.service';
 import { HydrusSearchTags } from '../hydrus-tags';
 import { defaultSort, displaySortGroups, HydrusSortType, isDisplaySortMetaTypeGroup, isDisplaySortType, SortInfo, sortToString } from '../hydrus-sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @UntilDestroy()
 @Component({
@@ -19,7 +20,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./browse.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BrowseComponent implements OnInit, AfterViewInit {
+export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ngxLocalStorage({prefix: environment.localStoragePrefix})
   hydrusApiUrl: string;
@@ -32,13 +33,16 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     public filesService: HydrusFilesService,
     public settingsService: SettingsService,
     private snackbar: MatSnackBar,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
   }
 
-  tagsFormControl = new FormControl<HydrusSearchTags>(this.settingsService.appSettings.browseDefaultSearchTags);
+  tagsFormControl = new FormControl<HydrusSearchTags>([]);
 
   searchTags$ = this.tagsFormControl.valueChanges.pipe(
-    startWith(this.tagsFormControl.value)
+    tap(console.log),
+    shareReplay(1)
   );
 
   sort$ = new BehaviorSubject(defaultSort);
@@ -55,6 +59,7 @@ export class BrowseComponent implements OnInit, AfterViewInit {
   defaultSort = defaultSort;
 
   currentSearch$: Observable<number[]> = combineLatest([this.searchTags$, this.sort$, this.refresh$]).pipe(
+    tap(console.log),
     filter(([searchTags]) => this.settingsService.appSettings.browseSearchWhenEmpty || searchTags.length > 0),
     tap(() => this.searching$.next(true)),
     switchMap(([searchTags, sort]) => this.searchService.searchFiles(
@@ -79,8 +84,21 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     map(s => s.length)
   )
 
-  ngOnInit() {
+  firstParams = true;
 
+  ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      if (params.has('tags')) {
+        this.tagsFormControl.setValue(JSON.parse(params.get('tags')))
+        this.router.navigate(['/browse'], { replaceUrl: true });
+      } else if (params.has('addTags')) {
+        this.tagsFormControl.setValue([...this.tagsFormControl.value, ...JSON.parse(params.get('addTags'))])
+        this.router.navigate(['/browse'], { replaceUrl: true });
+      } else if (this.firstParams) {
+        this.tagsFormControl.setValue(this.settingsService.appSettings.browseDefaultSearchTags);
+      }
+      this.firstParams = false;
+    });
   }
 
 
@@ -88,6 +106,12 @@ export class BrowseComponent implements OnInit, AfterViewInit {
     if (this.hydrusApiUrl && this.hydrusApiKey && this.settingsService.appSettings.browseSearchOnLoad) {
       this.refresh$.next(null);
     }
+  }
+
+  tagsSub = this.searchTags$.subscribe();
+
+  ngOnDestroy() {
+    this.tagsSub.unsubscribe();
   }
 
 /*   tagsChanged(tags: HydrusSearchTags) {

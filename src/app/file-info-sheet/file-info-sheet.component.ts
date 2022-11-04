@@ -1,16 +1,18 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { HydrusBasicFile, HydrusFileType } from '../hydrus-file';
-import {MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
+import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
 import { BehaviorSubject, filter, map, shareReplay, switchMap } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
 import { HydrusFileDownloadService } from '../hydrus-file-download.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HydrusSearchTags } from '../hydrus-tags';
 
 
 
@@ -38,13 +40,18 @@ export class FileInfoSheetComponent {
 
   constructor(
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusBasicFile},
+    private dialogRef: MatBottomSheetRef<FileInfoSheetComponent>,
     private filesService: HydrusFilesService,
     private snackbar: MatSnackBar,
     public settings: SettingsService,
     private dialog: MatDialog,
     private saucenaoService: SaucenaoService,
-    public downloadService: HydrusFileDownloadService
-  ) { }
+    public downloadService: HydrusFileDownloadService,
+    private router: Router,
+  ) {
+   }
+
+  isBrowse = this.router.isActive('/', {paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'})
 
   reload$ = new BehaviorSubject(null);
 
@@ -178,6 +185,22 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     }
+  }
+
+  searchTags(tags: HydrusSearchTags) {
+    this.router.navigate(['/'], {queryParams: {'tags': JSON.stringify(tags)}});
+    this.dialogRef.dismiss(true)
+  }
+
+  addSearchTags(tags: HydrusSearchTags) {
+    this.router.navigate(['/'], {queryParams: {'addTags': JSON.stringify(tags)}});
+    this.dialogRef.dismiss(true);
+  }
+
+  searchSimilarFiles() {
+    const tag = `system:similar to ${this.data.file.hash} distance 4`;
+    this.router.navigate(['/'], {queryParams: {'tags': JSON.stringify([tag])}});
+    this.dialogRef.dismiss(true);
   }
 
 }

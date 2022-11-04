@@ -11,7 +11,7 @@ import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType } from '../hydrus-
 import { MatDialog } from '@angular/material/dialog';
 import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
-import { TagInputDialogComponent } from '../or-search-dialog/tag-input-dialog.component';
+import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {
   const pred = allSystemPredicates[p];
@@ -79,7 +79,10 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
 
   writeValue(obj: string[]): void {
-    obj && this.setSearchTags(obj);
+    if(!obj) {
+      return;
+    }
+    this.searchTags = [...obj];
   }
 
   registerOnChange(fn: any): void {
@@ -201,7 +204,6 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   }
 
   systemPredicateButton(pred: SystemPredicate) {
-    console.log(SystemPredicate[pred]);
     const predicate = allSystemPredicates[pred];
     if(!predicate.operator && !predicate.units && !predicate.value) {
       this.addSearchTag(`system:${predicate.name}`);
