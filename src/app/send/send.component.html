@@ -40,9 +40,14 @@
           <div mat-line class="file-note">{{file.note}}</div>
         </mat-list-item>
       </mat-list>
-      <app-image-list [files]="currentUrlBasicFileInfo$ | async"></app-image-list>
     </mat-card-content>
   </mat-card>
+
+  <div *ngIf="currentUrlBasicFileInfo$ | async as currentUrlBasicFiles">
+    <h2 class="mat-title">Current URL files</h2>
+    <app-image-list [files]="currentUrlBasicFiles"></app-image-list>
+  </div>
+
 
   <div *ngIf="saucenaoResults || saucenaoLoading" class="saucenao-results">
     <h2 class="mat-title">SauceNao Results</h2>

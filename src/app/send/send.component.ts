@@ -71,8 +71,8 @@ export class SendComponent implements OnInit, OnDestroy {
   );
 
   currentUrlBasicFileInfo$ = this.currentUrlFiles$.pipe(
-    map(({url_file_statuses}) => url_file_statuses.filter(f => f.status === 2).map(f => f.hash)),
-    switchMap(hashes => this.fileService.getBasicFilesByHash(hashes))
+    map(v => v ? v.url_file_statuses.filter(f => f.status === 2).map(f => f.hash) : []),
+    switchMap(hashes => hashes.length > 0 ? this.fileService.getBasicFilesByHash(hashes) : of(null))
   )
 
   urlFormInfoSub = this.urlFormInfo.subscribe();
