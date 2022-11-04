@@ -41,12 +41,12 @@
         <cdk-virtual-scroll-viewport *ngIf="tags.length > 25; else smallAutocomplete"
           class="virtual-scroll-viewport-full-width"
           itemSize="48" minBufferPx="256" maxBufferPx="512">
-          <mat-option *cdkVirtualFor="let tag of tags" [value]="tag.value" [ngClass]="tag.value | tagClass">
+          <mat-option *cdkVirtualFor="let tag of tags" [value]="tag.value" [ngClass]="tag.value | tagClass" class="tag-color">
             {{tag.value}} ({{tag.count | number}})
           </mat-option>
         </cdk-virtual-scroll-viewport>
         <ng-template #smallAutocomplete>
-          <mat-option *ngFor="let tag of tags" [value]="tag.value" [ngClass]="tag.value | tagClass">
+          <mat-option *ngFor="let tag of tags" [value]="tag.value" [ngClass]="tag.value | tagClass" class="tag-color">
             {{tag.value}} ({{tag.count | number}})
           </mat-option>
         </ng-template>
@@ -63,6 +63,9 @@
       <button *ngIf="enableSystemPredicates" type="button" mat-menu-item [matMenuTriggerFor]="predicatesMenu">
         System Predicate
       </button>
+      <button *ngIf="enableFavorites" type="button" mat-menu-item [matMenuTriggerFor]="favoriteTagsMenu">
+        Favorite Tags
+      </button>
     </mat-menu>
 
     <mat-menu #predicatesMenu="matMenu">
@@ -77,6 +80,12 @@
     <mat-menu #predicateSubMenu="matMenu">
       <ng-template matMenuContent let-predicates="predicates">
         <button *ngFor="let pred of predicates" mat-menu-item (click)="systemPredicateButton(pred.predicate)">{{pred.name}}</button>
+      </ng-template>
+    </mat-menu>
+
+    <mat-menu #favoriteTagsMenu="matMenu">
+      <ng-template matMenuContent>
+        <button *ngFor="let tag of favoriteTags" class="tag-color" [ngClass]="(tag | isString) ? ($any(tag)  | tagClass) : ''" mat-menu-item (click)="addSearchTags([tag])">{{(tag | isString) ? tag : ($any(tag) | flatten | join:' OR ')}}</button>
       </ng-template>
     </mat-menu>
 </mat-form-field>

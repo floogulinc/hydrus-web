@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
+import { SettingsService } from '../settings.service';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {
   const pred = allSystemPredicates[p];
@@ -50,6 +51,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   @Input() enableSystemPredicates = true;
 
+  @Input() enableFavorites = true;
+
   @Input() placeholder: string;
 
   @Input() defaultTags: HydrusSearchTags;
@@ -66,7 +69,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     @Optional() @Self() private controlDir: NgControl,
     public filesService: HydrusFilesService,
     public tagsService: HydrusTagsService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public settingsService: SettingsService
   ) {
     if (this.controlDir) {
       this.controlDir.valueAccessor = this
@@ -76,6 +80,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
       switchMap(search => search && search.length >= 3 ? this.tagsService.searchTags(search, this.displayType) : of([]))
     );
    }
+
+  favoriteTags = this.settingsService.appSettings.favoriteTags;
 
 
   writeValue(obj: string[]): void {
@@ -133,12 +139,13 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     this.tags.emit(this.searchTags);
   }
 
-  addSearchTagsArray(tags: HydrusSearchTags) {
+  addSearchTags(tags: HydrusSearchTags) {
     if(tags.length > 0) {
-      this.searchTags.push([...tags]);
+      this.searchTags.push(...tags);
       this.tags.emit(this.searchTags);
     }
   }
+
 
   setSearchTags(tags: string[]) {
     this.searchTags = [...tags];
@@ -193,7 +200,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
-        this.addSearchTagsArray(result);
+        this.addSearchTags([result]);
       }
     });
 

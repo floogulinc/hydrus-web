@@ -6,6 +6,7 @@ export interface AppSettingsV1 {
   browseSearchOnLoad: boolean;
   browseSearchWhenEmpty: boolean;
   browseDefaultSearchTags: HydrusSearchTags;
+  favoriteTags: HydrusSearchTags;
   hyshareUrl: string;
   saucenaoApiKey: string;
   saucenaoSearchProxy: string;
@@ -19,6 +20,7 @@ export const defaultAppSettings: AppSettings = {
   browseSearchOnLoad: true,
   browseSearchWhenEmpty: true,
   browseDefaultSearchTags: [],
+  favoriteTags: [],
   hyshareUrl: '',
   saucenaoApiKey: '',
   saucenaoSearchProxy: '/__saucenao-search',

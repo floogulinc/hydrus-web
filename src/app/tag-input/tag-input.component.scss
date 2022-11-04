@@ -1,22 +1,5 @@
-@use 'src/variables' as *;
-
 .tag-form-field{
     width: 100%;
-}
-
-.mat-option {
-    color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
-    //color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
-    @each $tag, $palette in $mat-tag-colors {
-        &.tag-namespace-#{$tag} {
-            color: map-get($palette, "default");
-            //color: map-get($palette, "default-contrast");
-        }
-    }
-    &.tag-namespace- {
-        color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
-        //color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
-    }
 }
 
 .cdk-virtual-scroll-viewport {

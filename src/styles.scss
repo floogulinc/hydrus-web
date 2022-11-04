@@ -210,6 +210,21 @@ body {
   height: 100% !important;
 }
 
+.tag-color {
+  color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
+  //color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
+  @each $tag, $palette in $mat-tag-colors {
+      &.tag-namespace-#{$tag} {
+          color: map-get($palette, "default");
+          //color: map-get($palette, "default-contrast");
+      }
+  }
+  &.tag-namespace- {
+      color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
+      //color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
+  }
+}
+
 .toolbar-count {
   padding-left: 4px;
   padding-right: 4px;
