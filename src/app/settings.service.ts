@@ -21,7 +21,6 @@ export class SettingsService {
     this._appSettings = {...defaultAppSettings, ...settings};
     this._appSettings$ = new BehaviorSubject(this._appSettings);
     this.appSettings$ = this._appSettings$.asObservable();
-    console.log(this.appSettings);
   }
 
 

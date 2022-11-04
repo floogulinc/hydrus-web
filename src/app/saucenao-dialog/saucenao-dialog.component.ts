@@ -33,7 +33,6 @@ export class SaucenaoDialogComponent implements OnInit {
   }
 
   saucenaoResults$: Observable<SaucenaoResults[]> = this.saucenaoService.search(this.data.urlOrFile).pipe(
-    tap(console.log),
     catchError((err, caught) => {
       this.snackbar.open('Error: ' + err.message, undefined, {
         duration: 5000

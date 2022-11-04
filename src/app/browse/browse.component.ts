@@ -41,7 +41,6 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
   tagsFormControl = new FormControl<HydrusSearchTags>([]);
 
   searchTags$ = this.tagsFormControl.valueChanges.pipe(
-    tap(console.log),
     shareReplay(1)
   );
 
@@ -59,7 +58,6 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
   defaultSort = defaultSort;
 
   currentSearch$: Observable<number[]> = combineLatest([this.searchTags$, this.sort$, this.refresh$]).pipe(
-    tap(console.log),
     filter(([searchTags]) => this.settingsService.appSettings.browseSearchWhenEmpty || searchTags.length > 0),
     tap(() => this.searching$.next(true)),
     switchMap(([searchTags, sort]) => this.searchService.searchFiles(

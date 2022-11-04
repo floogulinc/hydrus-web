@@ -100,7 +100,6 @@ export class MrBonesDialogComponent implements OnInit {
       }
 
     }),
-    tap(console.log)
   )
 
 }
