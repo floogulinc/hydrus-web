@@ -176,6 +176,10 @@ export class HydrusFilesService {
     );
   }
 
+  public getThumbAsBlob(file: HydrusBasicFileFromAPI): Observable<Blob> {
+    return this.api.getThumbAsBlob(file.hash)
+  }
+
   // Needed until https://github.com/hydrusnetwork/hydrus/issues/646 is merged
   private fixFileType(type: string) {
     if (type === 'image/jpg') {

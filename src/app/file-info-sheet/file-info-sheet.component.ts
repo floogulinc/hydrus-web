@@ -115,7 +115,7 @@ export class FileInfoSheetComponent {
 
   saucenaoLookup() {
     const snackBarRef = this.snackbar.open('Preparing search...');
-    this.filesService.getFileAsFile(this.data.file).subscribe(file => {
+    this.filesService.getThumbAsBlob(this.data.file).subscribe(file => {
       SaucenaoDialogComponent.open(this.dialog, {
         urlOrFile: {
           file
