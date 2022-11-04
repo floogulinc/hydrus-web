@@ -26,16 +26,21 @@
     </div>
   </form>
 
-  <mat-card *ngIf="this.currentUrlInfo" class="url-info-card">
-    <mat-card-header>
-      <mat-icon mat-card-avatar [color]="this.currentUrlFiles.url_file_statuses[0]?.status === 2 || this.currentUrlInfo.can_parse ? 'none' : 'warn'">
-        {{this.currentUrlFiles.url_file_statuses[0]?.status === 2 ? 'library_add_check' : 'library_add'}}
-      </mat-icon>
-      <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
-      <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content *ngIf="this.currentUrlFiles">
-      {{this.currentUrlFiles.url_file_statuses[0] ? this.currentUrlFiles?.url_file_statuses[0].note : 'Not imported yet'}}
+  <mat-card *ngIf="currentUrlInfo$ | async as currentUrlInfo" class="url-info-card">
+    <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
+    <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
+    <mat-card-content *ngIf="currentUrlFiles$ | async as currentUrlFiles">
+      <mat-list>
+        <mat-list-item *ngIf="this.currentUrlFiles.url_file_statuses.length === 0">
+          Not yet imported
+        </mat-list-item>
+        <mat-list-item *ngFor="let file of this.currentUrlFiles.url_file_statuses" class="file-list-item">
+          <mat-icon *ngIf="file.status === 2" matListIcon>check</mat-icon>
+          <mat-icon *ngIf="file.status === 3" matListIcon>delete</mat-icon>
+          <div mat-line class="file-note">{{file.note}}</div>
+        </mat-list-item>
+      </mat-list>
+      <app-image-list [files]="currentUrlBasicFileInfo$ | async"></app-image-list>
     </mat-card-content>
   </mat-card>
 
@@ -45,7 +50,7 @@
     <div *ngIf="saucenaoResults">
       <mat-card *ngFor="let result of saucenaoResults" class="saucenao-card">
         <mat-card-header>
-          <img mat-card-avatar class="saucenao-thumbnail" [src]="result.thumbnail">
+          <img mat-card-avatar class="thumbnail" [src]="result.thumbnail">
           <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>
           <mat-card-subtitle>{{result.similarity}}%</mat-card-subtitle>
         </mat-card-header>

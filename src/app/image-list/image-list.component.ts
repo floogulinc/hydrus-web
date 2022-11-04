@@ -31,6 +31,8 @@ export class ImageListComponent implements OnInit, OnChanges {
     public cdr: ChangeDetectorRef
     ) { }
 
+  scrollElement = this.appComponent.sidenavContent.getElementRef().nativeElement
+
   ngOnInit() {
 
   }
@@ -45,7 +47,7 @@ export class ImageListComponent implements OnInit, OnChanges {
     }
   }
 
-  public scrollTrackByFunction(index: number, file: HydrusFile): number {
+  public scrollTrackByFunction(index: number, file: HydrusBasicFile): number {
     return file.file_id;
   }
 

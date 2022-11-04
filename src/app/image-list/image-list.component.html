@@ -1,5 +1,5 @@
 <virtual-scroller class="virtual-scroll" #scroll [items]="files" (vsEnd)="vsEnd($event)"
-  [parentScroll]="appComponent.sidenavContent.getElementRef().nativeElement" [bufferAmount]="24">
+  [parentScroll]="scrollElement" [bufferAmount]="24">
   <ul class="mdc-image-list browse-image-list" #container>
     <li class="mdc-image-list__item grid-item"
       *ngFor="let file of scroll.viewPortItems; trackBy: scrollTrackByFunction">

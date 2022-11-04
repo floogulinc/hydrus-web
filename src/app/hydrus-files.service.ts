@@ -61,6 +61,10 @@ export class HydrusFilesService {
     return this.api.getFileMetadata({ file_ids: fileIds, only_return_identifiers: false, only_return_basic_information: true }).pipe(map(val => val.metadata));
   }
 
+  private getBasicFileMetadataHashAPI(fileHashes: string[]): Observable<HydrusBasicFileFromAPI[]> {
+    return this.api.getFileMetadata({ hashes: fileHashes, only_return_identifiers: false, only_return_basic_information: true }).pipe(map(val => val.metadata));
+  }
+
   private getFileMetadataAPIChunked(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
     return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getBasicFileMetadataAPI(ids))).pipe(
       map(files => files.flat())
@@ -137,6 +141,12 @@ export class HydrusFilesService {
   public getBasicFilesById(fileIds: number[]): Observable<HydrusBasicFile[]> {
     if (fileIds.length === 0) { return of([]); }
     return this.getBasicFileMetadataAPI(fileIds).pipe(
+      map(v => v.map(i => this.processBasicFileFromAPI(i))));
+  }
+
+  public getBasicFilesByHash(fileHashes: string[]): Observable<HydrusBasicFile[]> {
+    if (fileHashes.length === 0) { return of([]); }
+    return this.getBasicFileMetadataHashAPI(fileHashes).pipe(
       map(v => v.map(i => this.processBasicFileFromAPI(i))));
   }
 
