@@ -26,6 +26,7 @@ export class AboutComponent implements OnInit {
   public repoURL = 'https://github.com/floogulinc/hydrus-web';
 
   public navigator = navigator;
+  public window = window;
 
   public storageQuota: StorageEstimate;
   public storagePersisted: boolean;
