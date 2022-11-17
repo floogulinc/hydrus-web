@@ -29,7 +29,7 @@
     "@angular/service-worker": "^15.0.0",
     "@floogulinc/ngx-virtual-scroller": "15.0.0",
     "@fontsource/roboto": "^4.5.8",
-    "@material/image-list": "^14.0.0",
+    "@material/image-list": "^15.0.0-canary.ecfee946f.0",
     "@ngneat/until-destroy": "^9.2.2",
     "@rx-angular/cdk": "^1.0.0-rc.3",
     "@rx-angular/template": "^1.0.0-rc.4",
