@@ -60,7 +60,7 @@ import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.compon
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { NgPipesModule } from 'ngx-pipes';
+import { NgPipesModule } from '@floogulinc/ngx-pipes';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
