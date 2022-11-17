@@ -97,7 +97,7 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core($typography-config);
+@include mat.core();
 
 //setting up for future theme options
 @mixin app-theming($theme) {
@@ -140,10 +140,9 @@
   }
 }
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
+@include mat.core-theme($light-theme);
 @include mat.all-legacy-component-themes($light-theme);
+
 @include app-theming($light-theme);
 
 html,
