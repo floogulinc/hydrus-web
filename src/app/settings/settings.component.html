@@ -1,6 +1,6 @@
 <mat-tab-group mat-align-tabs="center" dynamicHeight>
   <mat-tab label="API Configuration">
-    <div fxLayout="column" class="settings-column">
+    <div class="settings-column">
       <mat-form-field appearance="outline">
         <mat-label>Hydrus API URL</mat-label>
         <input
@@ -30,14 +30,14 @@
           (lsStoredValue)="this.apiKeyStored()"
         >
       </mat-form-field>
-      <div fxLayout="row" class="test-button-container">
+      <div class="button-row">
         <button mat-raised-button color="primary" (click)="this.testApi()">Test API</button>
       </div>
     </div>
   </mat-tab>
   <mat-tab label="App Settings">
     <form [formGroup]="appSettingsForm" (ngSubmit)="submitAppSettings()" autocomplete="off">
-      <div fxLayout="column" class="settings-column">
+      <div class="settings-column">
         <mat-slide-toggle formControlName="browseSearchOnLoad" class="margin-bottom-16">Search immediately on the browse page</mat-slide-toggle>
         <mat-slide-toggle formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
         <app-tag-input formControlName="browseDefaultSearchTags" placeholder="Browse page default search" class=""></app-tag-input>
@@ -61,7 +61,7 @@
           <mat-label>SauceNAO search proxy URL</mat-label>
           <input matInput type="text" autocomplete="off" formControlName="saucenaoSearchProxy">
         </mat-form-field>
-        <div fxLayout="row wrap" fxLayoutAlign="end" class="">
+        <div class="button-row">
 
           <button type="button" mat-icon-button [matMenuTriggerFor]="appSettingsSaveMenu">
             <mat-icon>more_vert</mat-icon>

@@ -1,6 +1,6 @@
-<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi">
-  <div class="search-bar" fxLayout="row" fxLayoutAlign="space-between center">
-    <app-tag-input fxFlex [formControl]="tagsFormControl" class="tag-input" placeholder="Tag Search"></app-tag-input>
+<div *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi">
+  <div class="search-bar">
+    <app-tag-input [formControl]="tagsFormControl" class="tag-input" placeholder="Tag Search"></app-tag-input>
   </div>
   <mat-progress-bar *ngIf="searching$ | push" mode="indeterminate" class="search-progress-bar"></mat-progress-bar>
   <ng-container *rxLet="currentSearch$ as search">

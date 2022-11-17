@@ -40,7 +40,7 @@
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span class="app-title">Hydrus Web <span class="mat-small" *ngIf="env.versionInfo?.branch !== 'master'">{{env.versionInfo?.branch}}</span></span>
-      <span fxFlex="1 1 auto"></span>
+      <span class="toolbar-spacer"></span>
       <ng-template cdkPortalOutlet #toolbarActionsPortal></ng-template>
     </mat-toolbar>
     <div class="main-content mat-typography">

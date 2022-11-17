@@ -13,9 +13,10 @@ mat-divider {
 
 .settings-column {
   margin-top: 8px;
+  flex-direction: column;
+  display: flex;
 }
 
 .margin-bottom-16 {
   margin-bottom: 16px;
 }
-
