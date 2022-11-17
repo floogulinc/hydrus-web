@@ -143,7 +143,7 @@
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include mat.all-component-themes($light-theme);
+@include mat.all-legacy-component-themes($light-theme);
 @include app-theming($light-theme);
 
 html,
@@ -156,7 +156,7 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  @include mat.all-component-themes($dark-theme);
+  @include mat.all-legacy-component-themes($dark-theme);
   @include app-theming($dark-theme);
 }
 
