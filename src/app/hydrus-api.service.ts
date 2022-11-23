@@ -7,6 +7,7 @@ import { HydrusSortType } from './hydrus-sort';
 import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
 import { HydrusSearchTags, TagDisplayType } from './hydrus-tags';
 import { HydrusBonedStats } from './hydrus-mr-bones';
+import { HydrusServiceInfo } from './hydrus-services';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -351,5 +352,9 @@ export class HydrusApiService {
 
   public mrBones() {
     return this.apiGet<{boned_stats: HydrusBonedStats}>('manage_database/mr_bones');
+  }
+
+  public getServices(): Observable<HydrusServiceInfo> {
+    return this.apiGet<HydrusServiceInfo>('get_services');
   }
 }

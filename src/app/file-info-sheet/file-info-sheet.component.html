@@ -98,14 +98,14 @@
   <div *ngIf="file.tagMapArray && file.tagMapArray.length >= 1" class="tags-section">
     <h3 class="mat-subheading-2">Tags</h3>
     <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let service of file.tagMapArray | orderBy: 'serviceName'" >
+    <mat-expansion-panel *ngFor="let service of file.tagMapArray | orderBy: 'serviceName' | orderBy: '-serviceType'" >
       <mat-expansion-panel-header>
-        {{service.serviceName}} ({{service.statuses[0].length}})
+        {{service.serviceName}} ({{service.tags.length}})
       </mat-expansion-panel-header>
       <ng-template matExpansionPanelContent>
         <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
           <mat-chip
-            *ngFor="let tag of (service.statuses[0] | orderBy)"
+            *ngFor="let tag of (service.tags | orderBy)"
             [selectable]="false"
             class="tag-chip"
             [ngClass]="tag | tagClass"

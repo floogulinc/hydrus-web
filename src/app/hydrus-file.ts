@@ -1,9 +1,20 @@
+import { HydrusServiceType, service_string_lookup } from "./hydrus-services";
 import { HydrusURLInfo } from "./hydrus-url";
 
 export interface ServiceNamesToStatusesToTags {
-  [service: string]: {
-    [status: string]: string[];
-  };
+  [service: string]: StatusesToTags;
+}
+
+export interface StatusesToTags {
+  [status: string]: string[];
+}
+
+export interface HydrusFileService {
+  name: string;
+  type: HydrusServiceType;
+  type_pretty: string;
+  time_imported?: number;
+  time_deleted?: number;
 }
 
 export interface FileFileServices {
@@ -15,6 +26,16 @@ export interface FileFileServices {
 
 export interface HydrusNotes {
   [name: string]: string;
+}
+
+export type HydrusTagServiceType = HydrusServiceType.TAG_REPOSITORY | HydrusServiceType.LOCAL_TAG | HydrusServiceType.COMBINED_TAG;
+
+export interface HydrusTagService {
+  name: string;
+  type: HydrusTagServiceType;
+  type_pretty: string,
+  storage_tags: StatusesToTags,
+  display_tags: StatusesToTags
 }
 
 export interface HydrusBasicFileFromAPI {
@@ -38,15 +59,19 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
     deleted?: FileFileServices;
   };
   time_modified: number;
-  service_names_to_statuses_to_tags: ServiceNamesToStatusesToTags;
-  service_names_to_statuses_to_display_tags: ServiceNamesToStatusesToTags;
-  service_keys_to_statuses_to_tags: ServiceNamesToStatusesToTags;
-  service_keys_to_statuses_to_display_tags: ServiceNamesToStatusesToTags;
+  service_names_to_statuses_to_tags?: ServiceNamesToStatusesToTags;
+  service_names_to_statuses_to_display_tags?: ServiceNamesToStatusesToTags;
+  service_keys_to_statuses_to_tags?: ServiceNamesToStatusesToTags;
+  service_keys_to_statuses_to_display_tags?: ServiceNamesToStatusesToTags;
   is_inbox: boolean;
   is_local: boolean;
   is_trashed: boolean;
 
   notes?: HydrusNotes;
+
+  tags: {
+    [serviceKey: string]: HydrusTagService
+  }
 
   detailed_known_urls?: HydrusURLInfo[];
 

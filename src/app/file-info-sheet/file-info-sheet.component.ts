@@ -1,5 +1,5 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
-import { HydrusBasicFile, HydrusFileType } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagServiceType } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
@@ -55,12 +55,22 @@ export class FileInfoSheetComponent {
 
   reload$ = new BehaviorSubject(null);
 
+  processTags(file: HydrusFile): {serviceName: string, serviceType?: HydrusTagServiceType, tags: string[]}[] {
+    if('tags' in file) {
+      return Object.entries(file.tags)
+        .filter(([serviceKey, s]) => s.display_tags[0] && s.display_tags[0].length > 0)
+        .map(([serviceKey, s]) => ({serviceName: s.name, serviceType: s.type, tags: s.display_tags[0]}));
+    } else {
+      return Object.entries(tagsObjectFromFile(file))
+      .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
+      .map(([serviceName, statuses]) => ({ serviceName, tags: statuses[0] }))
+    }
+  }
+
   file$ = this.reload$.pipe(
     switchMap(() => this.filesService.getFileByHash(this.data.file.hash)),
     map(file => {
-      const tagMapArray = Object.entries(tagsObjectFromFile(file))
-        .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
-        .map(([serviceName, statuses]) => ({ serviceName, statuses }));
+      const tagMapArray = this.processTags(file);
 
       const fileIcon = getFileIcon(file.file_type);
 
