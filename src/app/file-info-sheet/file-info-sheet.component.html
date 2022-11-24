@@ -95,7 +95,7 @@
   </div>
 
 
-  <div *ngIf="file.displayTags && file.displayTags.length >= 1" class="tags-section">
+  <div *ngIf="file.displayTags" class="tags-section">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="tags-header">
       <h3 class="mat-subheading-2">Tags</h3>
       <mat-slide-toggle labelPosition="before" [(ngModel)]="showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
@@ -125,6 +125,9 @@
       </ng-template>
     </mat-expansion-panel>
     </mat-accordion>
+    <mat-card *ngIf="!showStorageTags && file.displayTags.length < 1">
+      <mat-card-content>No Tags</mat-card-content>
+    </mat-card>
   </div>
 </div>
 
