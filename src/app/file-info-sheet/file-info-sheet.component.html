@@ -98,7 +98,7 @@
   <div *ngIf="file.tagMapArray && file.tagMapArray.length >= 1" class="tags-section">
     <h3 class="mat-subheading-2">Tags</h3>
     <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let service of file.tagMapArray | orderBy: 'serviceName' | orderBy: '-serviceType'" >
+    <mat-expansion-panel *ngFor="let service of file.tagMapArray | orderBy: 'serviceName' | orderBy: '-serviceType'; trackBy: trackByTagService" >
       <mat-expansion-panel-header>
         {{service.serviceName}} ({{service.tags.length}})
       </mat-expansion-panel-header>

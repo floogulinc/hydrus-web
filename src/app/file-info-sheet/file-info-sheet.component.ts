@@ -6,7 +6,7 @@ import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
-import { BehaviorSubject, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
@@ -31,6 +31,13 @@ function getFileIcon(fileType: HydrusFileType) {
       return 'insert_drive_file';
     }
   }
+}
+
+interface tagServiceItem {
+  serviceName: string,
+  serviceType?: HydrusTagServiceType,
+  serviceKey?: string,
+  tags: string[]
 }
 
 @Component({
@@ -61,12 +68,7 @@ export class FileInfoSheetComponent {
 
   reload$ = new BehaviorSubject(null);
 
-  processTags(file: HydrusFile): {
-    serviceName: string,
-    serviceType?: HydrusTagServiceType,
-    serviceKey?: string,
-    tags: string[]
-  }[] {
+  processTags(file: HydrusFile): tagServiceItem[] {
     if ('tags' in file) {
       return Object.entries(file.tags)
         .filter(([serviceKey, s]) => s.display_tags[0] && s.display_tags[0].length > 0)
@@ -106,6 +108,10 @@ export class FileInfoSheetComponent {
 
   reload() {
     this.reload$.next(null);
+  }
+
+  trackByTagService(index: number, item: tagServiceItem) {
+    return item.serviceKey ?? item.serviceName;
   }
 
 
