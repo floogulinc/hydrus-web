@@ -5,6 +5,8 @@ import { HydrusSearchTags, TagDisplayType } from '../hydrus-tags';
 interface TagInputDialogData {
   displayType: TagDisplayType;
   enableOrSearch: boolean;
+  enableSystemPredicates: boolean;
+  enableFavorites: boolean;
   title: string;
   submitButtonText: string;
 }
@@ -12,6 +14,8 @@ interface TagInputDialogData {
 const defaultData: TagInputDialogData = {
   displayType: 'display',
   enableOrSearch: true,
+  enableSystemPredicates: true,
+  enableFavorites: true,
   title: 'Tags',
   submitButtonText: 'OK'
 }
@@ -27,7 +31,7 @@ export class TagInputDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<TagInputDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {displayType: TagDisplayType, enableOrSearch: boolean, title: string, submitButtonText: string}
+    @Inject(MAT_DIALOG_DATA) public data: TagInputDialogData
   ) {
     if(!data) {
       this.data = defaultData;

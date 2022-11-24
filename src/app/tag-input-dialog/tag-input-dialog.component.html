@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
 <div fxFlex>
-  <app-tag-input [(ngModel)]="tags" [enableOrSearch]="data.enableOrSearch" [displayType]="data.displayType" placeholder="Tags"></app-tag-input>
+  <app-tag-input [(ngModel)]="tags" [enableOrSearch]="data.enableOrSearch" [enableSystemPredicates]="data.enableSystemPredicates" [enableFavorites]="data.enableFavorites" [displayType]="data.displayType" placeholder="Tags"></app-tag-input>
 </div>
 </div>
 <div mat-dialog-actions align="end">
