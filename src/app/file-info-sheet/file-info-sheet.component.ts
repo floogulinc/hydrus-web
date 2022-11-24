@@ -33,11 +33,11 @@ function getFileIcon(fileType: HydrusFileType) {
   }
 }
 
-interface tagServiceItem {
-  serviceName: string,
-  serviceType?: HydrusTagServiceType,
-  serviceKey?: string,
-  tags: string[]
+interface TagServiceItem {
+  serviceName: string;
+  tags: string[];
+  serviceType?: HydrusTagServiceType;
+  serviceKey?: string;
 }
 
 @Component({
@@ -68,22 +68,31 @@ export class FileInfoSheetComponent {
 
   reload$ = new BehaviorSubject(null);
 
-  processTags(file: HydrusFile): tagServiceItem[] {
+  processTags(file: HydrusFile): {
+    displayTags: TagServiceItem[],
+    storageTags?: TagServiceItem[]
+  } {
     if ('tags' in file) {
-      return Object.entries(file.tags)
-        .filter(([serviceKey, s]) => s.display_tags[0] && s.display_tags[0].length > 0)
-        .map(([serviceKey, s]) => ({ serviceName: s.name, serviceType: s.type, serviceKey, tags: s.display_tags[0] }));
+      return {
+        displayTags: Object.entries(file.tags)
+          .filter(([serviceKey, s]) => s.display_tags[0] && s.display_tags[0].length > 0)
+          .map(([serviceKey, s]) => ({ serviceKey, serviceName: s.name, serviceType: s.type, tags: s.display_tags[0] })),
+        storageTags: Object.entries(file.tags)
+          .map(([serviceKey, s]) => ({ serviceKey, serviceName: s.name, serviceType: s.type, tags: s.storage_tags[0] ?? [] }))
+      }
     } else {
-      return Object.entries(tagsObjectFromFile(file))
-        .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
-        .map(([serviceName, statuses]) => ({ serviceName, tags: statuses[0] }))
+      return {
+        displayTags: Object.entries(tagsObjectFromFile(file))
+          .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
+          .map(([serviceName, statuses]) => ({ serviceName, tags: statuses[0] }))
+      }
     }
   }
 
   file$ = this.reload$.pipe(
     switchMap(() => this.filesService.getFileByHash(this.data.file.hash)),
     map(file => {
-      const tagMapArray = this.processTags(file);
+      const tags = this.processTags(file);
 
       const fileIcon = getFileIcon(file.file_type);
 
@@ -91,7 +100,7 @@ export class FileInfoSheetComponent {
 
       return {
         ...file,
-        tagMapArray,
+        ...tags,
         fileIcon,
         notesMapArray
       }
@@ -105,12 +114,14 @@ export class FileInfoSheetComponent {
     map(file => `${this.settings.appSettings.ipfsMultihashUrlPrefix}${Object.values(file.ipfs_multihashes)[0]}`)
   )
 
+  showStorageTags = false;
+
 
   reload() {
     this.reload$.next(null);
   }
 
-  trackByTagService(index: number, item: tagServiceItem) {
+  trackByTagService(index: number, item: TagServiceItem) {
     return item.serviceKey ?? item.serviceName;
   }
 
