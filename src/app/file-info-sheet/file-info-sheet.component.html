@@ -110,11 +110,15 @@
             class="tag-chip"
             [ngClass]="tag | tagClass"
             [matMenuTriggerFor]="tagMenu"
-            [matMenuTriggerData]="{tag}"
+            [matMenuTriggerData]="{tag, service: {serviceType: service.serviceType, serviceKey: service.serviceKey}}"
           >
             <div class="tag-chip-text">{{tag}}</div>
           </mat-chip>
         </mat-chip-list>
+
+        <mat-action-row *ngIf="service.serviceType && service.serviceType === LocalTagService">
+          <button mat-button (click)="addTagsDialog(service.serviceKey, service.serviceName)">Add Tags</button>
+        </mat-action-row>
       </ng-template>
     </mat-expansion-panel>
     </mat-accordion>
@@ -122,7 +126,7 @@
 </div>
 
 <mat-menu #tagMenu="matMenu">
-  <ng-template matMenuContent let-tag="tag">
+  <ng-template matMenuContent let-tag="tag" let-service="service">
     <button mat-menu-item [cdkCopyToClipboard]="tag">
       <mat-icon>content_copy</mat-icon>
       <span>Copy tag</span>
@@ -134,6 +138,10 @@
     <button mat-menu-item (click)="addSearchTags([tag])" *ngIf="isBrowse">
       <mat-icon>search</mat-icon>
       <span>Add tag to search</span>
+    </button>
+    <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="service.serviceType && service.serviceType === LocalTagService">
+      <mat-icon>delete</mat-icon>
+      <span>Delete Tag</span>
     </button>
   </ng-template>
 </mat-menu>

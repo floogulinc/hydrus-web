@@ -1,18 +1,21 @@
 import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
-import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagServiceType } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagService, HydrusTagServiceType } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
-import { BehaviorSubject, filter, map, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
 import { HydrusFileDownloadService } from '../hydrus-file-download.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HydrusSearchTags } from '../hydrus-tags';
+import { HydrusTagsService } from '../hydrus-tags.service';
+import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
+import { HydrusServiceType } from '../hydrus-services';
 
 
 
@@ -42,6 +45,7 @@ export class FileInfoSheetComponent {
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: {file: HydrusBasicFile},
     private dialogRef: MatBottomSheetRef<FileInfoSheetComponent>,
     private filesService: HydrusFilesService,
+    private tagsService: HydrusTagsService,
     private snackbar: MatSnackBar,
     public settings: SettingsService,
     private dialog: MatDialog,
@@ -51,19 +55,26 @@ export class FileInfoSheetComponent {
   ) {
    }
 
+  LocalTagService = HydrusServiceType.LOCAL_TAG;
+
   isBrowse = this.router.isActive('/', {paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'})
 
   reload$ = new BehaviorSubject(null);
 
-  processTags(file: HydrusFile): {serviceName: string, serviceType?: HydrusTagServiceType, tags: string[]}[] {
-    if('tags' in file) {
+  processTags(file: HydrusFile): {
+    serviceName: string,
+    serviceType?: HydrusTagServiceType,
+    serviceKey?: string,
+    tags: string[]
+  }[] {
+    if ('tags' in file) {
       return Object.entries(file.tags)
         .filter(([serviceKey, s]) => s.display_tags[0] && s.display_tags[0].length > 0)
-        .map(([serviceKey, s]) => ({serviceName: s.name, serviceType: s.type, tags: s.display_tags[0]}));
+        .map(([serviceKey, s]) => ({ serviceName: s.name, serviceType: s.type, serviceKey, tags: s.display_tags[0] }));
     } else {
       return Object.entries(tagsObjectFromFile(file))
-      .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
-      .map(([serviceName, statuses]) => ({ serviceName, tags: statuses[0] }))
+        .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
+        .map(([serviceName, statuses]) => ({ serviceName, tags: statuses[0] }))
     }
   }
 
@@ -185,7 +196,7 @@ export class FileInfoSheetComponent {
 
   async unarchiveFile(){
     try {
-      await this.filesService.unarchiveFile(this.data.file.hash).toPromise();
+      await firstValueFrom(this.filesService.unarchiveFile(this.data.file.hash));
       this.reload();
       this.snackbar.open('File moved to inbox', undefined, {
         duration: 2000
@@ -211,6 +222,52 @@ export class FileInfoSheetComponent {
     const tag = `system:similar to ${this.data.file.hash} distance 4`;
     this.router.navigate(['/'], {queryParams: {'tags': JSON.stringify([tag])}});
     this.dialogRef.dismiss(true);
+  }
+
+  async deleteTag(tag: string, serviceKey: string) {
+    try {
+      await firstValueFrom(this.tagsService.deleteTagsFromLocalService(this.data.file.hash, [tag], serviceKey));
+      this.reload();
+      const snackbarRef = this.snackbar.open('Tag deleted', 'Undo', {
+        duration: 5000
+      });
+      snackbarRef.onAction().subscribe(() => {
+        this.addTags([tag], serviceKey);
+      })
+    } catch (error) {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async addTagsDialog(serviceKey: string, serviceName: string) {
+    const dialog = TagInputDialogComponent.open(this.dialog, {
+      displayType: 'display',
+      enableOrSearch: false,
+      enableSystemPredicates: false,
+      title: `Add tags to ${serviceName}`,
+      submitButtonText: 'Add',
+    })
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if (dialogResult) {
+      const tags = dialogResult.flat() as string[];
+      return this.addTags(tags, serviceKey);
+    }
+  }
+
+  async addTags(tags: string[], serviceKey: string) {
+    try {
+      await firstValueFrom(this.tagsService.addTagsToService(this.data.file.hash, tags, serviceKey));
+      this.reload();
+      this.snackbar.open(`Tag${tags.length === 1 ? '' : 's'} added`, undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
+        duration: 2000
+      });
+    }
   }
 
 }

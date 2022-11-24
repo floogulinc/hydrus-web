@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HydrusSortType } from './hydrus-sort';
 import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
-import { HydrusSearchTags, TagDisplayType } from './hydrus-tags';
+import { HydrusSearchTags, ServiceNamesOrKeysToActionsToTags, ServiceNamesOrKeysToTags, TagDisplayType } from './hydrus-tags';
 import { HydrusBonedStats } from './hydrus-mr-bones';
 import { HydrusServiceInfo } from './hydrus-services';
 
@@ -356,5 +356,18 @@ export class HydrusApiService {
 
   public getServices(): Observable<HydrusServiceInfo> {
     return this.apiGet<HydrusServiceInfo>('get_services');
+  }
+
+  public addTags(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    service_names_to_tags?: ServiceNamesOrKeysToTags,
+    service_keys_to_tags?: ServiceNamesOrKeysToTags,
+    service_names_to_actions_to_tags?: ServiceNamesOrKeysToActionsToTags,
+    service_keys_to_actions_to_tags?: ServiceNamesOrKeysToActionsToTags
+  }) {
+    return this.apiPost<void>('add_tags/add_tags', data);
   }
 }

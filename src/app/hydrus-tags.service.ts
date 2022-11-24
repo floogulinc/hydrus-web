@@ -14,5 +14,29 @@ export class HydrusTagsService {
     return this.api.searchTags({search, tag_display_type}).pipe(map(r => r['tags']));
   }
 
+  addTagsToService(hash: string, tags: string[], serviceKey: string) {
+    return this.api.addTags(
+      {
+        hash,
+        service_keys_to_tags: {
+          [serviceKey]: tags
+        }
+      }
+    )
+  }
+
+  deleteTagsFromLocalService(hash: string, tags: string[], serviceKey: string) {
+    return this.api.addTags(
+      {
+        hash,
+        service_keys_to_actions_to_tags: {
+          [serviceKey]: {
+            "1": tags
+          }
+        }
+      }
+    )
+  }
+
 
 }
