@@ -8,6 +8,7 @@ import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
 import { HydrusSearchTags, ServiceNamesOrKeysToActionsToTags, ServiceNamesOrKeysToTags, TagDisplayType } from './hydrus-tags';
 import { HydrusBonedStats } from './hydrus-mr-bones';
 import { HydrusServiceInfo } from './hydrus-services';
+import { HydrusAddURLResponse, HydrusURLFiles, HydrusURLInfo, HydrusURLServiceNamesToTags } from './hydrus-url';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -262,7 +263,7 @@ export class HydrusApiService {
    * @param url (the url you want to ask about)
    */
   public getUrlFiles(url: string) {
-    return this.apiGet('add_urls/get_url_files', new HttpParams().set('url', url));
+    return this.apiGet<HydrusURLFiles>('add_urls/get_url_files', {url});
   }
 
   /**
@@ -272,7 +273,7 @@ export class HydrusApiService {
    * @param url (the url you want to ask about)
    */
   public getUrlInfo(url: string) {
-    return this.apiGet('add_urls/get_url_info', new HttpParams().set('url', url));
+    return this.apiGet<HydrusURLInfo>('add_urls/get_url_info', {url});
   }
 
   /**
@@ -289,11 +290,23 @@ export class HydrusApiService {
                         destination_page_key?: string,
                         destination_page_name?: string,
                         show_destination_page?: string,
-                        service_names_to_tags?: any}) {
-
-    return this.apiPost<{human_result_text: string, normalised_url: string}>('add_urls/add_url', data);
+                        service_names_to_tags?: HydrusURLServiceNamesToTags}) {
+    return this.apiPost<HydrusAddURLResponse>('add_urls/add_url', data);
   }
 
+
+  public associateUrls(data: {
+    url_to_add?: string,
+    urls_to_add?: string[],
+    url_to_delete?: string,
+    urls_to_delete?: string[],
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[]
+  }) {
+    return this.apiPost<void>('add_urls/associate_url', data);
+  }
 
   public searchTags(params: {
     search: string,

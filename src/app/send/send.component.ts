@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { HydrusAddService, AddUrlOptions } from '../hydrus-add.service';
+import { HydrusUrlService, AddUrlOptions } from '../hydrus-url.service';
 import { Validators, UntypedFormControl, UntypedFormGroup, FormControl, FormGroup } from '@angular/forms';
 import { switchMap, debounceTime, catchError, shareReplay, tap, startWith, map } from 'rxjs/operators';
 import { of, forkJoin, combineLatest } from 'rxjs';
@@ -25,7 +25,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public saucenaoLoading = false;
 
   constructor(
-    private addService: HydrusAddService,
+    private addService: HydrusUrlService,
     private route: ActivatedRoute,
     private snackbar: MatSnackBar,
     private router: Router,

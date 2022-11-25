@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, Observable, tap } from 'rxjs';
-import { AddUrlOptions, HydrusAddService } from '../hydrus-add.service';
+import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
 import { SaucenaoService, SaucenaoResults, SaucenaoUrlorFile } from '../saucenao.service';
 
 interface SaucenaoDialogData {
@@ -21,7 +21,7 @@ export class SaucenaoDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<SaucenaoDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: SaucenaoDialogData,
     public saucenaoService: SaucenaoService,
-    private addService: HydrusAddService,
+    private addService: HydrusUrlService,
     private snackbar: MatSnackBar
   ) { }
 

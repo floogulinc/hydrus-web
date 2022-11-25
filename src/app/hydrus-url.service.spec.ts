@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HydrusAddService } from './hydrus-add.service';
+import { HydrusUrlService } from './hydrus-url.service';
 
 describe('HydrusAddService', () => {
-  let service: HydrusAddService;
+  let service: HydrusUrlService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(HydrusAddService);
+    service = TestBed.inject(HydrusUrlService);
   });
 
   it('should be created', () => {

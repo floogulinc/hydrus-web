@@ -13,22 +13,32 @@ export interface AddUrlOptions {
 @Injectable({
   providedIn: 'root'
 })
-export class HydrusAddService {
+export class HydrusUrlService {
 
   constructor(private api: HydrusApiService) { }
 
-  public getUrlInfo(url: string): Observable<HydrusURLInfo> {
-    return this.api.getUrlInfo(url) as Observable<HydrusURLInfo>;
+  public getUrlInfo(url: string) {
+    return this.api.getUrlInfo(url);
   }
 
-  public getUrlFiles(url: string): Observable<HydrusURLFiles> {
-    return this.api.getUrlFiles(url) as Observable<HydrusURLFiles>;
+  public getUrlFiles(url: string) {
+    return this.api.getUrlFiles(url);
   }
 
   public addUrl(url: string, options?: AddUrlOptions): Observable<HydrusAddURLResponse> {
-
     return this.api.addUrl({url, ...options}) as Observable<HydrusAddURLResponse>;
   }
 
+  public associateUrl(hash: string, url: string) {
+    return this.api.associateUrls({url_to_add: url, hash});
+  }
+
+  public deleteUrl(hash: string, url: string) {
+    return this.api.associateUrls({url_to_delete: url, hash});
+  }
+
+  public replaceUrl(hash: string, oldUrl: string, newUrl: string) {
+    return this.api.associateUrls({url_to_delete: oldUrl, url_to_add: newUrl, hash});
+  }
 
 }
