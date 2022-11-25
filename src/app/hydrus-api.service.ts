@@ -383,4 +383,20 @@ export class HydrusApiService {
   }) {
     return this.apiPost<void>('add_tags/add_tags', data);
   }
+
+  public setNotes(data: {
+    notes: Record<string, string>,
+    hash?: string,
+    file_id?: number
+  }) {
+    return this.apiPost<void>('add_notes/set_notes', data);
+  }
+
+  public deleteNotes(data: {
+    note_names: string[],
+    hash?: string,
+    file_id?: number
+  }) {
+    return this.apiPost<void>('add_notes/delete_notes', data);
+  }
 }
