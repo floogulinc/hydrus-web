@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.service';
+import { HydrusVersionService } from '../hydrus-version.service';
 import { defaultAppSettings, AppSettings } from '../settings';
 import { SettingsService } from '../settings.service';
 
@@ -16,6 +17,7 @@ export class SettingsComponent implements OnInit {
     private settings: SettingsService,
     private snackbar: MatSnackBar,
     private api: HydrusApiService,
+    private hydrusVersionService: HydrusVersionService,
   ) { }
 
   testData: HydrusKeyVerificationData;
@@ -37,6 +39,8 @@ export class SettingsComponent implements OnInit {
 
   testApi() {
     this.api.testApi().subscribe((data) => {
+      console.log(data);
+      this.hydrusVersionService.checkHydrusVersion();
       this.snackbar.open(data.human_description, undefined, {
         duration: 5000
       });

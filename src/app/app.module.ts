@@ -74,6 +74,7 @@ import { SortInputComponent } from './sort-input/sort-input.component';
 import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.component';
 import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
 import { ByteSizePipe } from './byte-size.pipe';
+import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-version-dialog.component';
 
 
 const MAT_MODULES = [
@@ -128,7 +129,8 @@ const MAT_MODULES = [
         SortInputComponent,
         SaucenaoDialogComponent,
         MrBonesDialogComponent,
-        ByteSizePipe
+        ByteSizePipe,
+        HydrusVersionDialogComponent
     ],
     imports: [
         BrowserModule,

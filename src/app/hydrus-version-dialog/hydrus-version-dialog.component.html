@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>Outdated Hydrus</h1>
+<div mat-dialog-content>
+  <p>Hydrus Web requires a newer version of the Hydrus client.</p>
+  <p>
+    You appear to be running Hydrus {{data.hydrus_version}}.
+    Hydrus Web requires at least Hydrus {{requiredVersion}}.
+  </p>
+  <p>
+    You can download the latest version of Hydrus <a href="https://github.com/hydrusnetwork/hydrus/releases/latest">here</a>.
+  </p>
+  <div *ngIf="pastVersion">
+    <mat-divider></mat-divider>
+    <p>
+      Alternatively, you can use a previous version of Hydrus Web. The most recent Hydrus Web for your version of Hydrus is {{pastVersion.name}}.
+    </p>
+    <p *ngIf="pastVersion.releaseUrl">
+      Information about the release is <a [href]="pastVersion.releaseUrl">here</a>.
+    </p>
+    <p>
+      It is available hosted at <a [href]="pastVersion.hostedUrl">{{pastVersion.hostedUrl}}</a>
+    </p>
+    <p *ngIf="pastVersion.dockerUrl">
+      The Docker image can be found <a [href]="pastVersion.dockerUrl">here</a>.
+    </p>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close cdkFocusInitial>OK</button>
+</div>

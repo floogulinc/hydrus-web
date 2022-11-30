@@ -5,6 +5,7 @@ import { HydrusFilesService } from '../hydrus-files.service';
 import { Platform } from '@angular/cdk/platform';
 import { MatDialog } from '@angular/material/dialog';
 import { MrBonesDialogComponent } from '../mr-bones-dialog/mr-bones-dialog.component';
+import { HydrusVersionService } from '../hydrus-version.service';
 
 @Component({
   selector: 'app-about',
@@ -17,7 +18,8 @@ export class AboutComponent implements OnInit {
     public updates: SwUpdate,
     public filesService: HydrusFilesService,
     public platform: Platform,
-    private dialog: MatDialog) { }
+    private dialog: MatDialog,
+    public hydrusVersion: HydrusVersionService) { }
 
   public doc = document;
 

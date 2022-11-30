@@ -9,6 +9,7 @@ import { HydrusSearchTags, ServiceNamesOrKeysToActionsToTags, ServiceNamesOrKeys
 import { HydrusBonedStats } from './hydrus-mr-bones';
 import { HydrusServiceInfo } from './hydrus-services';
 import { HydrusAddURLResponse, HydrusURLFiles, HydrusURLInfo, HydrusURLServiceNamesToTags } from './hydrus-url';
+import { HydrusVersionResponse } from './hydrus-version';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -399,4 +400,10 @@ export class HydrusApiService {
   }) {
     return this.apiPost<void>('add_notes/delete_notes', data);
   }
+
+  public getApiVersion() {
+    return this.apiGet<HydrusVersionResponse>('api_version');
+  }
+
+
 }

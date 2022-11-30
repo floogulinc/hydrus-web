@@ -11,6 +11,7 @@ import { MigrationService } from './migration.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CUBE } from './svg-icons';
+import { HydrusVersionService } from './hydrus-version.service';
 
 @Component({
   selector: 'app-root',
@@ -35,8 +36,9 @@ export class AppComponent implements OnInit {
     private updates: SwUpdate,
     private snackBar: MatSnackBar,
     private migrationService: MigrationService,
-    iconRegistry: MatIconRegistry,
-    sanitizer: DomSanitizer
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer,
+    private hydrusVersionService: HydrusVersionService
   ) {
     iconRegistry.addSvgIconLiteral('cube', sanitizer.bypassSecurityTrustHtml(CUBE));
   }
