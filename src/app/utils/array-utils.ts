@@ -24,3 +24,6 @@ export function chunk<T>(array: T[], size: number): T[][] {
 export function trackByIndex(index: number, item: any) {
   return index;
 }
+
+
+export type RecursiveArray<T> = (T | RecursiveArray<T>)[];

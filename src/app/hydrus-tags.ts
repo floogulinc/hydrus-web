@@ -1,10 +1,11 @@
+import { RecursiveArray } from "./utils/array-utils";
 
 export interface HydrusTagSearchTag {
   value: string,
   count: number
 }
 
-export type HydrusSearchTags = (string | HydrusSearchTags)[];
+export type HydrusSearchTags = RecursiveArray<string>;
 
 export type TagDisplayType = 'storage' | 'display';
 

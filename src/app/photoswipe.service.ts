@@ -9,6 +9,7 @@ import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.compon
 import { Location } from '@angular/common';
 import { HydrusFileDownloadService } from './hydrus-file-download.service';
 import { take } from 'rxjs';
+import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -237,6 +238,18 @@ export class PhotoswipeService {
         errorMsgText.innerText = `Unsupported Filetype (${file.mime})`;
         errorMsgText.className = 'pswp-error-text';
         errorMsgEl.appendChild(errorMsgText);
+
+        if(canOpenInPhotopea(file)) {
+          const photopeaButton = document.createElement('a');
+          photopeaButton.innerText = 'Open file in Photopea';
+          photopeaButton.href = getPhotopeaUrlForFile(file);
+          photopeaButton.target = '_blank';
+          photopeaButton.className = 'mat-raised-button mat-button-base';
+          const buttonContainer = document.createElement('div');
+          buttonContainer.className = 'pswp-error-text';
+          errorMsgEl.appendChild(buttonContainer);
+          buttonContainer.appendChild(photopeaButton);
+        }
 
       }
 
