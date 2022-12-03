@@ -32,7 +32,7 @@
     "@fontsource/roboto": "^4.5.8",
     "@material/image-list": "^3.1.0",
     "@ngneat/until-destroy": "^9.2.2",
-    "@rx-angular/cdk": "^1.0.0-rc.2",
+    "@rx-angular/cdk": "^1.0.0-rc.3",
     "@rx-angular/template": "^1.0.0-rc.3",
     "@s-libs/ng-core": "^14.1.0",
     "@types/byte-size": "^8.1.0",
