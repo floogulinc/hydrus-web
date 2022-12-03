@@ -30,7 +30,7 @@
     "@angular/service-worker": "^14.2.7",
     "@floogulinc/ngx-virtual-scroller": "14.0.5",
     "@fontsource/roboto": "^4.5.8",
-    "@material/image-list": "^3.1.0",
+    "@material/image-list": "^14.0.0",
     "@ngneat/until-destroy": "^9.2.2",
     "@rx-angular/cdk": "^1.0.0-rc.2",
     "@rx-angular/template": "^1.0.0-rc.3",
