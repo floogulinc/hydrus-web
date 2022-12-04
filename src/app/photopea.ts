@@ -50,7 +50,9 @@ export function canOpenInPhotopea(file: HydrusBasicFile) {
     'image/bmp',
     'image/webp',
     'application/x-photoshop',
-    'application/clip'
+    'application/clip',
+    'image/tiff',
+    'image/x-icon'
   ].includes(file.mime)
 }
 
