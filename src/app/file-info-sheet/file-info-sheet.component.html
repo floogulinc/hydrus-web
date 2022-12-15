@@ -82,7 +82,7 @@
   </mat-expansion-panel>
 
 
-  <div class="notes-section">
+  <div class="notes-section" *ngIf="file.notesMapArray">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
       <h3 class="mat-subheading-2">Notes</h3>
       <button mat-icon-button (click)="addNoteDialog()" matTooltip="Add note"><mat-icon>note_add</mat-icon></button>

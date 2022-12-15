@@ -24,10 +24,13 @@ import { HydrusNotesService } from '../hydrus-notes.service';
 function getFileIcon(fileType: HydrusFileType) {
   switch (fileType) {
     case HydrusFileType.Image: {
-      return 'photo';
+      return 'image';
     }
     case HydrusFileType.Video: {
       return 'movie';
+    }
+    case HydrusFileType.Audio: {
+      return 'music_note';
     }
     default: {
       return 'insert_drive_file';
@@ -99,7 +102,7 @@ export class FileInfoSheetComponent {
 
       const fileIcon = getFileIcon(file.file_type);
 
-      const notesMapArray = Object.entries(file.notes).map(([name, value]) => ({ name, value }));
+      const notesMapArray = file.notes ? Object.entries(file.notes).map(([name, value]) => ({ name, value })) : [];
 
       return {
         ...file,
