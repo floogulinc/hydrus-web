@@ -82,7 +82,7 @@
   </mat-expansion-panel>
 
 
-  <div *ngIf="file.notesMapArray && file.notesMapArray.length >= 1" class="notes-section">
+  <div class="notes-section">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
       <h3 class="mat-subheading-2">Notes</h3>
       <button mat-icon-button (click)="addNoteDialog()"><mat-icon>note_add</mat-icon></button>
@@ -99,6 +99,9 @@
       </mat-action-row>
     </mat-expansion-panel>
     </mat-accordion>
+    <mat-card *ngIf="file.notesMapArray.length < 1">
+      <mat-card-content>No Notes</mat-card-content>
+    </mat-card>
   </div>
 
 
