@@ -52,16 +52,16 @@
       <mat-icon mat-list-icon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
       <div mat-line>{{file.is_trashed ? "In Trash" + (file.is_inbox ? " (Inbox)" : " (Archived)") : file.is_inbox ? "In Inbox" : "Archived"}}</div>
       <div mat-line *ngIf="file.time_imported"><span [matTooltip]="file.time_imported | date:'yyyy-MM-dd HH:mm:ss'" matTooltipPosition="above">Imported {{file.time_imported | timeAgo}}</span></div>
-      <button mat-icon-button (click)="archiveFile()" title="Archive" *ngIf="file.is_inbox">
+      <button mat-icon-button (click)="archiveFile()" matTooltip="Archive" *ngIf="file.is_inbox">
         <mat-icon>archive</mat-icon>
       </button>
-      <button mat-icon-button (click)="unarchiveFile()" title="Return to inbox" *ngIf="!file.is_inbox">
+      <button mat-icon-button (click)="unarchiveFile()" matTooltip="Return to inbox" *ngIf="!file.is_inbox">
         <mat-icon>move_to_inbox</mat-icon>
       </button>
-      <button mat-icon-button (click)="deleteFile()" title="Send to trash" *ngIf="!file.is_trashed">
+      <button mat-icon-button (click)="deleteFile()" matTooltip="Send to trash" *ngIf="!file.is_trashed">
         <mat-icon>delete</mat-icon>
       </button>
-      <button mat-icon-button (click)="undeleteFile()" title="Undelete" *ngIf="file.is_trashed">
+      <button mat-icon-button (click)="undeleteFile()" matTooltip="Undelete" *ngIf="file.is_trashed">
         <mat-icon>restore_from_trash</mat-icon>
       </button>
     </mat-list-item>
@@ -85,7 +85,7 @@
   <div class="notes-section">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
       <h3 class="mat-subheading-2">Notes</h3>
-      <button mat-icon-button (click)="addNoteDialog()"><mat-icon>note_add</mat-icon></button>
+      <button mat-icon-button (click)="addNoteDialog()" matTooltip="Add note"><mat-icon>note_add</mat-icon></button>
     </div>
     <mat-accordion multi>
     <mat-expansion-panel *ngFor="let note of file.notesMapArray; trackBy: trackByNote" >
@@ -94,8 +94,8 @@
       </mat-expansion-panel-header>
       <p class="note-content" [innerText]="note.value"></p>
       <mat-action-row>
-        <button mat-icon-button (click)="deleteNote(note.name, note.value)"><mat-icon>delete</mat-icon></button>
-        <button mat-icon-button (click)="editNoteDialog(note.name, note.value)"><mat-icon>edit</mat-icon></button>
+        <button mat-icon-button matTooltip="Delete note" (click)="deleteNote(note.name, note.value)"><mat-icon>delete</mat-icon></button>
+        <button mat-icon-button matTooltip="Edit note" (click)="editNoteDialog(note.name, note.value)"><mat-icon>edit</mat-icon></button>
       </mat-action-row>
     </mat-expansion-panel>
     </mat-accordion>
