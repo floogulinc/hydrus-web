@@ -10,6 +10,7 @@ import { Location } from '@angular/common';
 import { HydrusFileDownloadService } from './hydrus-file-download.service';
 import { take } from 'rxjs';
 import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
+import { SettingsService } from './settings.service';
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -24,7 +25,8 @@ export class PhotoswipeService {
     public platform: Platform,
     private bottomSheet: MatBottomSheet,
     private location: Location,
-    private downloadService: HydrusFileDownloadService
+    private downloadService: HydrusFileDownloadService,
+    private settingsService: SettingsService
   ) { }
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
@@ -239,7 +241,7 @@ export class PhotoswipeService {
         errorMsgText.className = 'pswp-error-text';
         errorMsgEl.appendChild(errorMsgText);
 
-        if(canOpenInPhotopea(file)) {
+        if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
           const photopeaButton = document.createElement('a');
           photopeaButton.innerText = 'Open file in Photopea';
           photopeaButton.href = getPhotopeaUrlForFile(file);
