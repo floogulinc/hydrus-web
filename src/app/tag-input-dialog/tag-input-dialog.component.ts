@@ -41,15 +41,12 @@ export class TagInputDialogComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
   static open(dialog: MatDialog, data?: Partial<TagInputDialogData>, config?: MatDialogConfig<TagInputDialogData>) {
     return dialog.open<TagInputDialogComponent, TagInputDialogData, HydrusSearchTags>(
       TagInputDialogComponent,
       {
-        width: '80vw',
+        maxWidth: '648px',
+        width: '90vw',
         data: {
           ...defaultData,
           ...data

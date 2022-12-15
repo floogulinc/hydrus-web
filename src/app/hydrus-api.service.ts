@@ -10,6 +10,7 @@ import { HydrusBonedStats } from './hydrus-mr-bones';
 import { HydrusServiceInfo } from './hydrus-services';
 import { HydrusAddURLResponse, HydrusURLFiles, HydrusURLInfo, HydrusURLServiceNamesToTags } from './hydrus-url';
 import { HydrusVersionResponse } from './hydrus-version';
+import { HydrusNoteImportConflicts } from './hydrus-notes';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -388,7 +389,10 @@ export class HydrusApiService {
   public setNotes(data: {
     notes: Record<string, string>,
     hash?: string,
-    file_id?: number
+    file_id?: number,
+    merge_cleverly?: boolean,
+    extend_existing_note_if_possible?: boolean
+    conflict_resolution?: HydrusNoteImportConflicts
   }) {
     return this.apiPost<void>('add_notes/set_notes', data);
   }

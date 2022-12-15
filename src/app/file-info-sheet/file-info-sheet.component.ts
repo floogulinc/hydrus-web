@@ -16,6 +16,8 @@ import { HydrusSearchTags } from '../hydrus-tags';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
 import { HydrusServiceType } from '../hydrus-services';
+import { NoteEditDialogComponent } from '../note-edit-dialog/note-edit-dialog.component';
+import { HydrusNotesService } from '../hydrus-notes.service';
 
 
 
@@ -59,6 +61,7 @@ export class FileInfoSheetComponent {
     private saucenaoService: SaucenaoService,
     public downloadService: HydrusFileDownloadService,
     private router: Router,
+    private notesService: HydrusNotesService
   ) {
    }
 
@@ -123,6 +126,10 @@ export class FileInfoSheetComponent {
 
   trackByTagService(index: number, item: TagServiceItem) {
     return item.serviceKey ?? item.serviceName;
+  }
+
+  trackByNote(index: number, item: { name: string, value: string }) {
+    return item.name;
   }
 
 
@@ -280,6 +287,73 @@ export class FileInfoSheetComponent {
       this.snackbar.open(`Tag${tags.length === 1 ? '' : 's'} added`, undefined, {
         duration: 2000
       });
+    } catch (error) {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async addNoteDialog() {
+    const dialog = NoteEditDialogComponent.open(this.dialog);
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if(dialogResult) {
+      try {
+        await firstValueFrom(this.notesService.addNote(this.data.file.hash, dialogResult.noteName, dialogResult.noteContent));
+        this.reload();
+        this.snackbar.open(`Note added`, undefined, {
+          duration: 2000
+        });
+      } catch (error) {
+        this.snackbar.open(`Error: ${error.message}`, undefined, {
+          duration: 2000
+        });
+      }
+    }
+  }
+
+  async editNoteDialog(noteName: string, noteContent: string) {
+    const dialog = NoteEditDialogComponent.open(this.dialog, {noteName, noteContent});
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if(dialogResult) {
+      if(dialogResult.noteName !== noteName) {
+        try {
+          await firstValueFrom(this.notesService.deleteNote(this.data.file.hash, noteName))
+        } catch (error) {
+          this.snackbar.open(`Error: ${error.message}`, undefined, {
+            duration: 2000
+          });
+          return;
+        }
+      }
+      return this.setNote(dialogResult.noteName, dialogResult.noteContent, 'Note Edited')
+    }
+  }
+
+  async setNote(noteName: string, noteContent: string, message: string) {
+    try {
+      await firstValueFrom(this.notesService.setNote(this.data.file.hash, noteName, noteContent));
+      this.reload();
+      this.snackbar.open(message, undefined, {
+        duration: 2000
+      });
+    } catch(error) {
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async deleteNote(noteName: string, noteContent: string) {
+    try {
+      await firstValueFrom(this.notesService.deleteNote(this.data.file.hash, noteName))
+      this.reload();
+      const snackbarRef = this.snackbar.open('Note deleted', 'Undo', {
+        duration: 5000
+      });
+      snackbarRef.onAction().subscribe(() => {
+        this.setNote(noteName, noteContent, 'Note Restored')
+      })
     } catch (error) {
       this.snackbar.open(`Error: ${error.message}`, undefined, {
         duration: 2000

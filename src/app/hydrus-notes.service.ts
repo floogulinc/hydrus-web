@@ -12,9 +12,12 @@ export class HydrusNotesService {
     return this.api.setNotes({hash, notes: {[noteName]: noteContent}});
   }
 
+  public addNote(hash: string, noteName: string, noteContent: string) {
+    return this.api.setNotes({hash, notes: {[noteName]: noteContent}, merge_cleverly: true})
+  }
+
   public deleteNote(hash: string, noteName: string) {
     return this.api.deleteNotes({hash, note_names: [noteName]});
   }
-
 
 }

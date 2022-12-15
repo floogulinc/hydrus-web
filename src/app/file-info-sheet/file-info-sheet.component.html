@@ -83,20 +83,27 @@
 
 
   <div *ngIf="file.notesMapArray && file.notesMapArray.length >= 1" class="notes-section">
-    <h3 class="mat-subheading-2">Notes</h3>
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
+      <h3 class="mat-subheading-2">Notes</h3>
+      <button mat-icon-button (click)="addNoteDialog()"><mat-icon>note_add</mat-icon></button>
+    </div>
     <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let note of file.notesMapArray" >
+    <mat-expansion-panel *ngFor="let note of file.notesMapArray; trackBy: trackByNote" >
       <mat-expansion-panel-header>
         {{note.name}}
       </mat-expansion-panel-header>
       <p class="note-content" [innerText]="note.value"></p>
+      <mat-action-row>
+        <button mat-icon-button (click)="deleteNote(note.name, note.value)"><mat-icon>delete</mat-icon></button>
+        <button mat-icon-button (click)="editNoteDialog(note.name, note.value)"><mat-icon>edit</mat-icon></button>
+      </mat-action-row>
     </mat-expansion-panel>
     </mat-accordion>
   </div>
 
 
   <div *ngIf="file.displayTags" class="tags-section">
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="tags-header">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
       <h3 class="mat-subheading-2">Tags</h3>
       <mat-slide-toggle labelPosition="before" [(ngModel)]="showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
     </div>

@@ -46,6 +46,7 @@ import {MatTableModule} from '@angular/material/table';
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {ClipboardModule} from '@angular/cdk/clipboard';
+import {TextFieldModule} from '@angular/cdk/text-field';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -75,6 +76,7 @@ import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.compo
 import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
 import { ByteSizePipe } from './byte-size.pipe';
 import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-version-dialog.component';
+import { NoteEditDialogComponent } from './note-edit-dialog/note-edit-dialog.component';
 
 
 const MAT_MODULES = [
@@ -130,7 +132,8 @@ const MAT_MODULES = [
         SaucenaoDialogComponent,
         MrBonesDialogComponent,
         ByteSizePipe,
-        HydrusVersionDialogComponent
+        HydrusVersionDialogComponent,
+        NoteEditDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -141,6 +144,7 @@ const MAT_MODULES = [
         FormsModule,
         PortalModule,
         ScrollingModule,
+        TextFieldModule,
         MAT_MODULES,
         NgxLocalStorageModule.forRoot({ prefix: environment.localStoragePrefix }),
         BrowserAnimationsModule,

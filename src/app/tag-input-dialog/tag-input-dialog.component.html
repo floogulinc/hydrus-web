@@ -5,6 +5,6 @@
 </div>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button mat-dialog-close>Cancel</button>
   <button mat-button [mat-dialog-close]="tags" [disabled]="tags.length < 1">{{data.submitButtonText}}</button>
 </div>

@@ -1,3 +1,4 @@
+import { HydrusNotes } from "./hydrus-notes";
 import { HydrusServiceType, service_string_lookup } from "./hydrus-services";
 import { HydrusURLInfo } from "./hydrus-url";
 
@@ -22,10 +23,6 @@ export interface FileFileServices {
     time_imported?: number;
     time_deleted?: number;
   };
-}
-
-export interface HydrusNotes {
-  [name: string]: string;
 }
 
 export type HydrusTagServiceType = HydrusServiceType.TAG_REPOSITORY | HydrusServiceType.LOCAL_TAG | HydrusServiceType.COMBINED_TAG;
