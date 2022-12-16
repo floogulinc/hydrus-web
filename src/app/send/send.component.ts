@@ -25,7 +25,7 @@ export class SendComponent implements OnInit, OnDestroy {
   public saucenaoLoading = false;
 
   constructor(
-    private addService: HydrusUrlService,
+    private urlService: HydrusUrlService,
     private route: ActivatedRoute,
     private snackbar: MatSnackBar,
     private router: Router,
@@ -56,7 +56,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
   currentUrlInfo$ = this.urlFormInfo.pipe(
     debounceTime(200),
-    switchMap(({value, status}) => value && status === 'VALID' ? this.addService.getUrlInfo(value).pipe(
+    switchMap(({value, status}) => value && status === 'VALID' ? this.urlService.getUrlInfo(value).pipe(
       catchError(() => of(null))
     ): of(null)),
     shareReplay(1)
@@ -64,7 +64,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
   currentUrlFiles$ = this.urlFormInfo.pipe(
     debounceTime(200),
-    switchMap(({value, status}) => value && status === 'VALID' ? this.addService.getUrlFiles(value).pipe(
+    switchMap(({value, status}) => value && status === 'VALID' ? this.urlService.getUrlFiles(value).pipe(
       catchError(() => of(null))
     ): of(null)),
     shareReplay(1)
@@ -108,7 +108,7 @@ export class SendComponent implements OnInit, OnDestroy {
     if (this.sendForm.value.destPageName !== '') {
       options.destination_page_name = this.sendForm.value.destPageName;
     }
-    this.addService.addUrl(url, options).subscribe(res => {
+    this.urlService.addUrl(url, options).subscribe(res => {
       this.snackbar.open(res.human_result_text, undefined, {
         duration: 5000
       });
