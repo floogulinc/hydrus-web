@@ -11,6 +11,7 @@ import { HydrusServiceInfo } from './hydrus-services';
 import { HydrusAddURLResponse, HydrusURLFiles, HydrusURLInfo, HydrusURLServiceNamesToTags } from './hydrus-url';
 import { HydrusVersionResponse } from './hydrus-version';
 import { HydrusNoteImportConflicts } from './hydrus-notes';
+import { HydrusAddFileResponse } from './hydrus-upload.service';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -407,6 +408,18 @@ export class HydrusApiService {
 
   public getApiVersion() {
     return this.apiGet<HydrusVersionResponse>('api_version');
+  }
+
+  public addFile(file: Blob) {
+    return this.http.post<HydrusAddFileResponse>(
+      this.getAPIUrl() + 'add_files/add_file',
+      file,
+      {
+        headers: this.getHeaders(),
+        reportProgress: true,
+        observe: 'events'
+      }
+    );
   }
 
 
