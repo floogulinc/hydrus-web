@@ -108,10 +108,10 @@
   <div *ngIf="file.displayTags" class="tags-section">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
       <h3 class="mat-subheading-2">Tags</h3>
-      <mat-slide-toggle labelPosition="before" [(ngModel)]="showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
+      <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
     </div>
     <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let service of (showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; trackBy: trackByTagService" >
+    <mat-expansion-panel *ngFor="let service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; trackBy: trackByTagService" >
       <mat-expansion-panel-header>
         {{service.serviceName}} ({{service.tags.length}})
       </mat-expansion-panel-header>
@@ -129,13 +129,13 @@
           </mat-chip>
         </mat-chip-list>
 
-        <mat-action-row *ngIf="showStorageTags && service.serviceType && service.serviceType === LocalTagService">
+        <mat-action-row *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
           <button mat-button (click)="addTagsDialog(service.serviceKey, service.serviceName)">Add Tags</button>
         </mat-action-row>
       </ng-template>
     </mat-expansion-panel>
     </mat-accordion>
-    <mat-card *ngIf="!showStorageTags && file.displayTags.length < 1">
+    <mat-card *ngIf="!fileInfoSheetService.showStorageTags && file.displayTags.length < 1">
       <mat-card-content>No Tags</mat-card-content>
     </mat-card>
   </div>
@@ -155,7 +155,7 @@
       <mat-icon>search</mat-icon>
       <span>Add tag to search</span>
     </button>
-    <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="showStorageTags && service.serviceType && service.serviceType === LocalTagService">
+    <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
       <mat-icon>delete</mat-icon>
       <span>Delete Tag</span>
     </button>

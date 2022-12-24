@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy, Injectable } from '@angular/core';
 import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagService, HydrusTagServiceType } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
@@ -45,6 +45,17 @@ interface TagServiceItem {
   serviceKey?: string;
 }
 
+@Injectable({
+  providedIn: 'root'
+})
+class FileInfoSheetService {
+
+  constructor() { }
+
+  public showStorageTags = false;
+}
+
+
 @Component({
   selector: 'app-file-info-sheet',
   templateUrl: './file-info-sheet.component.html',
@@ -64,7 +75,8 @@ export class FileInfoSheetComponent {
     private saucenaoService: SaucenaoService,
     public downloadService: HydrusFileDownloadService,
     private router: Router,
-    private notesService: HydrusNotesService
+    private notesService: HydrusNotesService,
+    public fileInfoSheetService: FileInfoSheetService
   ) {
    }
 
@@ -119,8 +131,6 @@ export class FileInfoSheetComponent {
     filter(file => file.ipfs_multihashes && Object.values(file.ipfs_multihashes).length > 0),
     map(file => `${this.settings.appSettings.ipfsMultihashUrlPrefix}${Object.values(file.ipfs_multihashes)[0]}`)
   )
-
-  showStorageTags = false;
 
 
   reload() {
