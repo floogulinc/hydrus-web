@@ -246,19 +246,19 @@ export class FileInfoSheetComponent {
   }
 
   searchTags(tags: HydrusSearchTags) {
+    this.dialogRef.dismiss(true);
     this.router.navigate(['/'], {queryParams: {'tags': JSON.stringify(tags)}});
-    this.dialogRef.dismiss(true)
   }
 
   addSearchTags(tags: HydrusSearchTags) {
-    this.router.navigate(['/'], {queryParams: {'addTags': JSON.stringify(tags)}});
     this.dialogRef.dismiss(true);
+    this.router.navigate(['/'], {queryParams: {'addTags': JSON.stringify(tags)}});
   }
 
   searchSimilarFiles() {
+    this.dialogRef.dismiss(true);
     const tag = `system:similar to ${this.data.file.hash} distance 4`;
     this.router.navigate(['/'], {queryParams: {'tags': JSON.stringify([tag])}});
-    this.dialogRef.dismiss(true);
   }
 
   async deleteTag(tag: string, serviceKey: string) {

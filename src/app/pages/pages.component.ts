@@ -22,8 +22,6 @@ export class PagesComponent implements OnInit {
 
   pages: HydrusPageListItem[] = [];
 
-  public refreshButton$: Subject<boolean> = new Subject();
-
   ngOnInit() {
     if (this.hydrusApiUrl && this.hydrusApiKey) {
       this.pagesService.getAllPages().subscribe(

@@ -78,3 +78,9 @@ $header-size: 40px !default;
   // in IE, but we're using it as a progressive enhancement.
   object-fit: cover;
 }
+
+mat-icon.mat-card-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}

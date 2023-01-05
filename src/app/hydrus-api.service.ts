@@ -255,8 +255,13 @@ export class HydrusApiService {
   public getPageInfo(page_key: string, simple?: string) {
     let httpParams: HttpParams = new HttpParams().set('page_key', page_key);
     if (simple) { httpParams = httpParams.set('simple', simple); }
-    return this.apiGet('manage_pages/get_page_info', httpParams);
+    return this.apiGet('manage_pages/get_page_info', httpParams, true);
   }
+
+  public refreshPage(page_key: string) {
+    return this.apiPost<{page_key: string}>('manage_pages/refresh_page', {page_key});
+  }
+
 
   /**
    * GET /add_urls/get_url_files

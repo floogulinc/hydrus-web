@@ -4,8 +4,6 @@ import { HydrusApiService } from './hydrus-api.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-/* eslint-disable @typescript-eslint/dot-notation */
-
 @Injectable({
   providedIn: 'root'
 })
@@ -19,6 +17,10 @@ export class HydrusPagesService {
 
   getPage(pageKey: string): Observable<HydrusPage> {
     return this.api.getPageInfo(pageKey, 'true').pipe(map(val => val['page_info']));
+  }
+
+  refreshPage(pageKey: string) {
+    return this.api.refreshPage(pageKey);
   }
 
 }
