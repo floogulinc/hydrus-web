@@ -12,6 +12,7 @@ import { defaultSort, displaySortGroups, HydrusSortType, isDisplaySortMetaTypeGr
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HydrusApiSettingsService } from '../hydrus-api-settings.service';
 
 @UntilDestroy()
 @Component({
@@ -22,12 +23,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
-  hydrusApiUrl: string;
-
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
-  hydrusApiKey: string;
-
   constructor(
     private searchService: SearchService,
     public filesService: HydrusFilesService,
@@ -35,6 +30,7 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router,
+    public apiSettings: HydrusApiSettingsService
   ) {
   }
 
@@ -101,7 +97,7 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngAfterViewInit() {
-    if (this.hydrusApiUrl && this.hydrusApiKey && this.settingsService.appSettings.browseSearchOnLoad) {
+    if (this.apiSettings.apiSet && this.settingsService.appSettings.browseSearchOnLoad) {
       this.refresh$.next(null);
     }
   }

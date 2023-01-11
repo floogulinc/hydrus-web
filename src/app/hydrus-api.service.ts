@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ngxLocalStorage } from 'ngx-localstorage';
 import { map, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HydrusSortType } from './hydrus-sort';
 import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
@@ -11,6 +9,7 @@ import { HydrusServiceInfo } from './hydrus-services';
 import { HydrusAddURLResponse, HydrusURLFiles, HydrusURLInfo, HydrusURLServiceNamesToTags } from './hydrus-url';
 import { HydrusVersionResponse } from './hydrus-version';
 import { HydrusNoteImportConflicts } from './hydrus-notes';
+import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
@@ -28,15 +27,15 @@ type AngularHttpParams = HttpParams | {
 })
 export class HydrusApiService {
 
+  constructor(private http: HttpClient, private apiSettings: HydrusApiSettingsService) { }
 
-  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
-  hydrusApiUrl: string;
+  private get hydrusApiUrl() {
+    return this.apiSettings.hydrusApiUrl;
+  }
 
-  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
-  hydrusApiKey: string;
-
-  constructor(private http: HttpClient) { }
-
+  private get hydrusApiKey() {
+    return this.apiSettings.hydrusApiKey;
+  }
 
   public getAPIUrl(): string {
     return this.hydrusApiUrl + (this.hydrusApiUrl.endsWith('/') ? '' : '/');

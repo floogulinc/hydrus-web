@@ -35,7 +35,6 @@ export class AppComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private updates: SwUpdate,
     private snackBar: MatSnackBar,
-    private migrationService: MigrationService,
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer,
     private hydrusVersionService: HydrusVersionService
@@ -49,7 +48,6 @@ export class AppComponent implements OnInit {
   public env = environment;
 
   ngOnInit() {
-    this.migrationService.migrateLocalStorage();
     this.updates.available.subscribe(event => {
       console.log('current version is', event.current);
       console.log('available version is', event.available);
