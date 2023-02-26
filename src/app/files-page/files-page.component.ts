@@ -32,7 +32,7 @@ export class FilesPageComponent implements OnInit {
   public refreshPageButton$: Subject<boolean> = new Subject();
 
   public canRefreshInHydrus$ = this.versionService.hydrusVersion$.pipe(
-    map(v => v && v.hydrus_version >= 512),
+    map(v => v && v.hydrus_version >= 514),
   )
 
   load() {

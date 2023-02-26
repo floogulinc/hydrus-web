@@ -1,11 +1,31 @@
+export enum HydrusPageType {
+  GalleryDownloader = 1,
+  SimpleDownloader = 2,
+  HardDriveImport = 3,
+  Petitions = 5,
+  FileSearch = 6,
+  URLDownloader = 7,
+  Duplicates = 8,
+  ThreadWatcher = 9,
+  PageOfPages = 10,
+}
+
+export enum HydrusPageState {
+  Ready = 0,
+  Initializing = 1,
+  Loading = 2,
+  Cancelled = 3,
+}
+
 export interface HydrusPageSimple {
   name: string;
   page_key: string;
-  page_type: 1 | 2 | 3 | 5 | 6 | 7 | 8 | 9 | 10;
+  page_type: HydrusPageType;
+  page_state: HydrusPageState;
 }
 
 export interface HydrusPageListItem extends HydrusPageSimple {
-  focused: boolean;
+  selected: boolean;
   pages?: HydrusPageListItem[];
 }
 
