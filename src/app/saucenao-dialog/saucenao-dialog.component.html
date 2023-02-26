@@ -1,15 +1,13 @@
 <h1 mat-dialog-title>SauceNAO Lookup</h1>
 <div mat-dialog-content>
   <div *ngIf="saucenaoResults$ | async as saucenaoResults; else loading">
-    <div *ngFor="let result of saucenaoResults" class="saucenao-card">
-      <div class="mat-card-header">
-        <img class="mat-card-avatar saucenao-thumbnail" [src]="result.thumbnail">
-        <div class="mat-card-header-text">
-          <h2 class="mat-card-title">{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</h2>
-          <h3 class="mat-card-subtitle">{{result.similarity}}%</h3>
-        </div>
-      </div>
-
+    <mat-card *ngFor="let result of saucenaoResults" class="saucenao-card mat-elevation-z0">
+      <mat-card-header>
+        <img mat-card-avatar class="thumbnail" [src]="result.thumbnail">
+        <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>
+        <mat-card-subtitle>{{result.similarity}}%</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
         <mat-list class="saucenao-url-list">
           <mat-list-item *ngFor="let url of result.urls">
             <div mat-line>{{url.site}}</div>
@@ -22,14 +20,14 @@
             </button>
           </mat-list-item>
         </mat-list>
-
-    </div>
-    <div *ngIf="saucenaoResults.length === 0" class="saucenao-card">
-      <div class="mat-card-header">
-        <mat-icon class="mat-card-avatar">error</mat-icon>
-        <h2 class="mat-card-title">No results found</h2>
-      </div>
-    </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="saucenaoResults.length === 0" class="saucenao-card mat-elevation-z0">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>error</mat-icon>
+        <mat-card-title>No results found</mat-card-title>
+      </mat-card-header>
+    </mat-card>
   </div>
   <ng-template #loading>
     <mat-spinner class="saucenao-spinner"></mat-spinner>
