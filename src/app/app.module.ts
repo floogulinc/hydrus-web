@@ -77,6 +77,7 @@ import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.compon
 import { ByteSizePipe } from './byte-size.pipe';
 import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-version-dialog.component';
 import { NoteEditDialogComponent } from './note-edit-dialog/note-edit-dialog.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 const MAT_MODULES = [
@@ -133,7 +134,8 @@ const MAT_MODULES = [
         MrBonesDialogComponent,
         ByteSizePipe,
         HydrusVersionDialogComponent,
-        NoteEditDialogComponent
+        NoteEditDialogComponent,
+        WelcomeComponent
     ],
     imports: [
         BrowserModule,

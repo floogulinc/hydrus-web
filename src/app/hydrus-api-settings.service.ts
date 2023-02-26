@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ngxLocalStorage } from 'ngx-localstorage';
+import { LocalStorageService, ngxLocalStorage } from 'ngx-localstorage';
 import { environment } from 'src/environments/environment';
 import { MigrationService } from './migration.service';
 
@@ -8,7 +8,7 @@ import { MigrationService } from './migration.service';
 })
 export class HydrusApiSettingsService {
 
-  constructor(private migrationService: MigrationService) {
+  constructor(private migrationService: MigrationService, private ls: LocalStorageService) {
     this.setup();
   }
 
@@ -23,7 +23,7 @@ export class HydrusApiSettingsService {
   hydrusApiKey: string;
 
   public get apiSet() {
-    return this.hydrusApiUrl && this.hydrusApiKey;
+    return !!this.hydrusApiUrl && !!this.hydrusApiKey;
   }
 
 }

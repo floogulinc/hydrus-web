@@ -1,18 +1,14 @@
-import { AppComponent } from './../app.component';
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { ngxLocalStorage } from 'ngx-localstorage';
-import { environment } from 'src/environments/environment';
 import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, shareReplay, startWith, Subject, Subscription, switchMap, take, tap } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, shareReplay, Subject, switchMap, tap } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { SettingsService } from '../settings.service';
 import { HydrusSearchTags } from '../hydrus-tags';
 import { defaultSort, displaySortGroups, HydrusSortType, isDisplaySortMetaTypeGroup, isDisplaySortType, SortInfo, sortToString } from '../hydrus-sort';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HydrusApiSettingsService } from '../hydrus-api-settings.service';
 
 @UntilDestroy()
 @Component({
@@ -30,8 +26,7 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
     private snackbar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router,
-    public apiSettings: HydrusApiSettingsService
-  ) {
+    ) {
   }
 
   tagsFormControl = new FormControl<HydrusSearchTags>([]);
@@ -97,7 +92,7 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   ngAfterViewInit() {
-    if (this.apiSettings.apiSet && this.settingsService.appSettings.browseSearchOnLoad) {
+    if (this.settingsService.appSettings.browseSearchOnLoad) {
       this.refresh$.next(null);
     }
   }

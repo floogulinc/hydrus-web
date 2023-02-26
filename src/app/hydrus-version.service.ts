@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, catchError, map, NEVER, of, retry, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, of, retry, shareReplay, switchMap } from 'rxjs';
 import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 import { HydrusApiService } from './hydrus-api.service';
 import { requiredVersion } from './hydrus-version';

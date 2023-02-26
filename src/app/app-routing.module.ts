@@ -5,13 +5,16 @@ import { BrowseComponent } from './browse/browse.component';
 import { AboutComponent } from './about/about.component';
 import { PagesComponent } from './pages/pages.component';
 import { SendComponent } from './send/send.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { HydrusApiSettingsGuard } from './hydrus-api-settings.guard';
 
 const routes: Routes = [
-  {path: '', component: BrowseComponent, pathMatch: 'full'},
-  {path: 'pages', component: PagesComponent},
-  {path: 'send', component: SendComponent},
+  {path: '', component: BrowseComponent, pathMatch: 'full', canActivate: [HydrusApiSettingsGuard]},
+  {path: 'pages', component: PagesComponent, canActivate: [HydrusApiSettingsGuard]},
+  {path: 'send', component: SendComponent, canActivate: [HydrusApiSettingsGuard]},
   {path: 'settings', component: SettingsComponent},
   {path: 'about', component: AboutComponent},
+  {path: 'welcome', component: WelcomeComponent},
   {path: '**', redirectTo: '/'}
 ];
 

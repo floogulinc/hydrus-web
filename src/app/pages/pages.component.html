@@ -1,4 +1,4 @@
-<div fxLayout="column" *ngIf="apiSettings.apiSet; else noApi" >
+<div fxLayout="column">
   <ng-template #recursiveList let-list>
 
   <mat-tab-group animationDuration="0ms" dynamicHeight class="pages-tab-group">
@@ -18,15 +18,3 @@
 
   <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: this.pages }"></ng-container>
 </div>
-
-<ng-template #noApi>
-  <mat-card>
-    <mat-card-title>Welcome to Hydrus Web</mat-card-title>
-    <mat-card-content>
-      <p>To begin, enter your Hydrus API information in the settings page</p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button routerLink="/settings">Go to Settings</button>
-    </mat-card-actions>
-  </mat-card>
-</ng-template>
