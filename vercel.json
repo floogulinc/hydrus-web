@@ -3,16 +3,10 @@
   "name": "hydrus-web",
   "alias": "hydrus.app",
   "public": true,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*\\..*)",
-      "headers": { "cache-control": "public,max-age=0,must-revalidate" },
-      "dest": "/$1"
-    },
-    {
-      "src": "/(.*)",
-      "headers": { "cache-control": "public,max-age=0,must-revalidate" },
-      "dest": "/index.html"
+      "source": "/__saucenao-search",
+      "destination": "https://saucenao.com/search.php"
     }
   ]
 }

@@ -36,14 +36,25 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatBadgeModule} from '@angular/material/badge';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {MatSelectModule} from '@angular/material/select';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatTableModule} from '@angular/material/table';
 
 import {PortalModule} from '@angular/cdk/portal';
+import {ScrollingModule} from '@angular/cdk/scrolling';
+import {ClipboardModule} from '@angular/cdk/clipboard';
+import {TextFieldModule} from '@angular/cdk/text-field';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { LetModule } from '@rx-angular/template/let';
+import { PushModule } from '@rx-angular/template/push';
+
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
 import { AboutComponent } from './about/about.component';
-import { PhotoswipeComponent } from './photoswipe/photoswipe.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
 import { FilesPageComponent } from './files-page/files-page.component';
@@ -53,10 +64,20 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { NgPipesModule } from 'ngx-pipes';
-import { ComicsListComponent } from './comics-list/comics-list.component';
-import { ComicComponent } from './comic/comic.component';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
+import { JoinPipe } from './utils/join.pipe';
+import { TagInputDialogComponent } from './tag-input-dialog/tag-input-dialog.component';
+import { TagNamespaceClassPipe } from './utils/tag-utils';
+import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { SortInputComponent } from './sort-input/sort-input.component';
+import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.component';
+import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
+import { ByteSizePipe } from './byte-size.pipe';
+import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-version-dialog.component';
+import { NoteEditDialogComponent } from './note-edit-dialog/note-edit-dialog.component';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 
 const MAT_MODULES = [
@@ -79,7 +100,14 @@ const MAT_MODULES = [
     MatExpansionModule,
     MatProgressBarModule,
     MatBadgeModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSlideToggleModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
+    MatButtonToggleModule,
+    MatSelectModule,
+    MatTooltipModule,
+    MatTableModule
 ];
 
 
@@ -90,16 +118,24 @@ const MAT_MODULES = [
         SettingsComponent,
         TagInputComponent,
         AboutComponent,
-        PhotoswipeComponent,
         ImageListComponent,
         PagesComponent,
         FilesPageComponent,
         SendComponent,
         FileInfoSheetComponent,
-        ComicsListComponent,
-        ComicComponent,
         ImageListLoaderComponent,
-        ToolbarActionsComponent
+        ToolbarActionsComponent,
+        JoinPipe,
+        TagInputDialogComponent,
+        TagNamespaceClassPipe,
+        SystemPredicateDialogComponent,
+        SortInputComponent,
+        SaucenaoDialogComponent,
+        MrBonesDialogComponent,
+        ByteSizePipe,
+        HydrusVersionDialogComponent,
+        NoteEditDialogComponent,
+        WelcomeComponent
     ],
     imports: [
         BrowserModule,
@@ -109,13 +145,18 @@ const MAT_MODULES = [
         FlexLayoutModule,
         FormsModule,
         PortalModule,
+        ScrollingModule,
+        TextFieldModule,
         MAT_MODULES,
         NgxLocalStorageModule.forRoot({ prefix: environment.localStoragePrefix }),
         BrowserAnimationsModule,
         LayoutModule,
         ReactiveFormsModule,
         VirtualScrollerModule,
-        NgPipesModule
+        NgPipesModule,
+        ClipboardModule,
+        LetModule,
+        PushModule
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -1,16 +1,104 @@
+@use "variables" as *;
 // Custom Theming for Angular Material
 @use '@angular/material' as mat;
-// For more information: https://material.angular.io/guide/theming
-@import "@angular/material/theming";
 
-// Plus imports for other components in your app.
+@import "@fontsource/roboto/300.css";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
 
-@import "~src/_variables";
+@import 'material-icons/iconfont/filled.css';
+
+@import 'photoswipe/dist/photoswipe.css';
+
+.pswp {
+  --pswp-root-z-index: 1000
+}
+
+.pswp-video-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.pswp-video {
+  width: 100%;
+  height: 100%;
+  &:focus {
+    outline: none;
+  }
+}
+
+.pswp-audio-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.pswp-audio {
+  width: 80%;
+}
+
+.pswp-video-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pswp-video ~ .pswp-video-placeholder {
+  display: none;
+}
+
+.pswp-error-text {
+  margin-top: 8px;
+  text-align: center;
+  display: block;
+}
+
+.pswp-error-thumb {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.pswp__button {
+  width: 40px;
+  .material-icons {
+    color: var(--pswp-icon-color);
+    text-shadow: 1px 1px 3px var(--pswp-icon-color-secondary);
+  }
+}
+
+.pswp__button--custom-close {
+  //margin-right: 16px;
+}
+
+.pswp__counter {
+  margin-left: 0px;
+}
+
+.pswp__zoom-level {
+  height: 30px;
+  margin: 15px 0 0 16px;
+  font-size: 14px;
+  line-height: 30px;
+  color: var(--pswp-icon-color);
+  text-shadow: 1px 1px 3px var(--pswp-icon-color-secondary);
+  opacity: 0.85;
+	user-select: none;
+}
+
+.pswp__top-bar {
+  padding-left: 16px;
+  padding-right: 16px;
+}
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat.core();
+@include mat-core($typography-config);
 
 //setting up for future theme options
 @mixin app-theming($theme) {
@@ -123,6 +211,21 @@ body {
   height: 100% !important;
 }
 
+.tag-color {
+  color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
+  //color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
+  @each $tag, $palette in $mat-tag-colors {
+      &.tag-namespace-#{$tag} {
+          color: map-get($palette, "default");
+          //color: map-get($palette, "default-contrast");
+      }
+  }
+  &.tag-namespace- {
+      color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
+      //color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
+  }
+}
+
 .toolbar-count {
   padding-left: 4px;
   padding-right: 4px;
@@ -139,4 +242,36 @@ body {
 
 .file-info-panel {
   width: 720px;
+  .mat-bottom-sheet-container {
+    min-width: min(100vw, 720px);
+  }
 }
+
+
+.virtual-scroll-viewport-full-width {
+  .cdk-virtual-scroll-content-wrapper {
+    width: 100%;
+  }
+}
+
+.form-field-spacing {
+  @extend .mat-form-field-wrapper;
+}
+
+.text-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.tag-chip-text {
+  width: calc(100%); // calc is important here, do not use "100%" alone
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tag-chip {
+  width: fit-content;
+  max-width: 100%;
+}
+

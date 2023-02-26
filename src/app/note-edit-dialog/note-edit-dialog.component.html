@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>{{addMode ? 'Add' : 'Edit'}} Note</h1>
+<form [formGroup]="noteForm" (ngSubmit)="submitNote()" autocomplete="off">
+  <div mat-dialog-content>
+    <div fxLayout="column">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="noteName">
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Content</mat-label>
+        <textarea
+          matInput
+          formControlName="noteContent"
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="3"
+          cdkAutosizeMaxRows="10"
+          class="note-content"
+        ></textarea>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-button type="submit" [disabled]="noteForm.invalid || noteForm.pristine">{{addMode ? 'Add' : 'Save'}}</button>
+  </div>
+</form>

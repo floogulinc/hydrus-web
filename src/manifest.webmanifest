@@ -68,18 +68,6 @@
       ]
     },
     {
-      "name": "View Comics",
-      "short_name": "Comics",
-      "description": "View comics from Hydrus",
-      "url": "/comics",
-      "icons": [
-        {
-          "src": "/assets/shortcuts/collections_bookmark_indigo_192.png",
-          "sizes": "192x192"
-        }
-      ]
-    },
-    {
       "name": "Send to Hydrus",
       "short_name": "Send",
       "description": "Send URLs to Hydrus",

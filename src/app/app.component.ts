@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
 import { map, share } from 'rxjs/operators';
@@ -8,6 +8,10 @@ import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 import { MigrationService } from './migration.service';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { CUBE } from './svg-icons';
+import { HydrusVersionService } from './hydrus-version.service';
 
 @Component({
   selector: 'app-root',
@@ -27,8 +31,16 @@ export class AppComponent implements OnInit {
       share()
   );
 
-  constructor(private breakpointObserver: BreakpointObserver, private updates: SwUpdate,
-              private snackBar: MatSnackBar, private migrationService: MigrationService) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private updates: SwUpdate,
+    private snackBar: MatSnackBar,
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer,
+    private hydrusVersionService: HydrusVersionService
+  ) {
+    iconRegistry.addSvgIconLiteral('cube', sanitizer.bypassSecurityTrustHtml(CUBE));
+  }
 
   @ViewChild(MatSidenavContent, {static: true})
   public sidenavContent: MatSidenavContent;
@@ -36,7 +48,6 @@ export class AppComponent implements OnInit {
   public env = environment;
 
   ngOnInit() {
-    this.migrationService.migrateLocalStorage();
     this.updates.available.subscribe(event => {
       console.log('current version is', event.current);
       console.log('available version is', event.available);

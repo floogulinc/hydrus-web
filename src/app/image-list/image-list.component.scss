@@ -1,4 +1,4 @@
-@import '~src/_variables';
+@use 'src/variables' as *;
 @import "@material/image-list/mdc-image-list";
 
 .image-list-image {
@@ -7,14 +7,9 @@
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-size: cover !important;
-  animation: fadeIn ease 500ms;
   background-color: #c7c5cb;
 }
 
-@keyframes fadeIn {
-  0% {opacity:0;}
-  100% {opacity:1;}
-}
 
 .browse-image-list {
   //@include mdc-image-list-aspect(1.5); // Images are 3:2

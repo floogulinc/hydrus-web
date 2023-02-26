@@ -1,37 +1,56 @@
-<div fxLayout="column" *ngIf="this.hydrusApiUrl && this.hydrusApiKey; else noApi">
+<div fxLayout="column">
   <div class="search-bar" fxLayout="row" fxLayoutAlign="space-between center">
-    <app-tag-input fxFlex (tags)="tagsChanged($event)" class="tag-input"></app-tag-input>
-    <button mat-icon-button [matMenuTriggerFor]="filterMenu">
-      <mat-icon>filter_list_alt</mat-icon>
-    </button>
-    <mat-menu  #filterMenu="matMenu">
-      <button mat-menu-item (click)="setFilterOption(FilterOption.none)" [disabled]="filterOption === FilterOption.none">
-        <span>All</span>
-      </button>
-      <button mat-menu-item (click)="setFilterOption(FilterOption.archive)" [disabled]="filterOption === FilterOption.archive">
-        <span>Archive</span>
-      </button>
-      <button mat-menu-item (click)="setFilterOption(FilterOption.inbox)" [disabled]="filterOption === FilterOption.inbox">
-        <span>Inbox</span>
-      </button>
-    </mat-menu>
+    <app-tag-input fxFlex [formControl]="tagsFormControl" class="tag-input" placeholder="Tag Search"></app-tag-input>
   </div>
-  <app-image-list-loader [fileIDs]="this.currentSearchIDs" class="app-image-list"></app-image-list-loader>
+  <mat-progress-bar *ngIf="searching$ | push" mode="indeterminate" class="search-progress-bar"></mat-progress-bar>
+  <ng-container *rxLet="currentSearch$ as search">
+    <app-image-list-loader *ngIf="search.length > 0" [fileIDs]="search" class="app-image-list"></app-image-list-loader>
+    <div *ngIf="search.length === 0 && (searching$ | push) === false">
+      <mat-card>
+        <mat-card-title>No Search Results</mat-card-title>
+      </mat-card>
+    </div>
+  </ng-container>
 </div>
 
-<ng-template #noApi>
-  <mat-card>
-    <mat-card-title>Welcome to Hydrus Web</mat-card-title>
-    <mat-card-content>
-      <p>To begin, enter your Hydrus API information in the settings page</p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-button routerLink="/settings">Go to Settings</button>
-    </mat-card-actions>
-  </mat-card>
-</ng-template>
+<ng-container *rxLet="sort$ as sort">
+  <app-toolbar-actions>
+    <span class="mat-small toolbar-count">{{searchTotal$ | async}}</span>
+    <button type="button" mat-icon-button aria-label="Refresh" (click)="refresh$.next($event)"><mat-icon>refresh</mat-icon></button>
+    <button mat-icon-button [matMenuTriggerFor]="sortMenu" aria-label="Sort">
+      <mat-icon>sort</mat-icon>
+    </button>
+  </app-toolbar-actions>
 
-<app-toolbar-actions>
-  <span class="mat-small toolbar-count">{{this.currentSearchIDs.length}}</span>
-  <button type="button" mat-icon-button aria-label="Refresh" (click)="refreshButton()"><mat-icon>refresh</mat-icon></button>
-</app-toolbar-actions>
+  <mat-menu #sortMenu="matMenu">
+    <button mat-menu-item disabled>{{sortToString(sort)}}</button>
+    <ng-template ngFor [ngForOf]="displaySortGroups" let-sortGroupOrType>
+      <button *ngIf="isDisplaySortType(sortGroupOrType) && !sortGroupOrType.sortOrder.canAsc; else subMenuButton" type="button" mat-menu-item [disabled]="sort.sortType === sortGroupOrType.sortType" (click)="setSort(sortGroupOrType.sortType, sortGroupOrType.sortOrder.defaultAsc)">{{sortGroupOrType.basicString}}</button>
+      <ng-template #subMenuButton>
+        <button *ngIf="isDisplaySortType(sortGroupOrType)" type="button" mat-menu-item [matMenuTriggerFor]="sortTypeSubMenu" [matMenuTriggerData]="{sortType: sortGroupOrType}">{{sortGroupOrType.basicString}}</button>
+        <button *ngIf="!isDisplaySortType(sortGroupOrType)" type="button" mat-menu-item [matMenuTriggerFor]="sortGroupSubMenu" [matMenuTriggerData]="{sortGroup: sortGroupOrType}">{{sortGroupOrType.metaType}}</button>
+      </ng-template>
+    </ng-template>
+    <button *ngIf="!(sort.sortType === defaultSort.sortType && sort.sortAsc === defaultSort.sortAsc)" type="button" mat-menu-item (click)="resetSort()">Reset</button>
+  </mat-menu>
+
+  <mat-menu #sortGroupSubMenu="matMenu">
+    <ng-template matMenuContent let-sortGroup="sortGroup">
+      <ng-template ngFor [ngForOf]="sortGroup.sortTypes" let-sortType>
+        <button *ngIf="!sortType.sortOrder.canAsc; else subSubMenuButton" type="button" mat-menu-item [disabled]="sort.sortType === sortType.sortType" (click)="setSort(sortType.sortType, sortType.sortOrder.defaultAsc)">{{sortType.basicString}}</button>
+        <ng-template #subSubMenuButton>
+          <button type="button" mat-menu-item [matMenuTriggerFor]="sortTypeSubMenu" [matMenuTriggerData]="{sortType: sortType}">{{sortType.basicString}}</button>
+        </ng-template>
+      </ng-template>
+    </ng-template>
+  </mat-menu>
+
+  <mat-menu #sortTypeSubMenu="matMenu">
+    <ng-template matMenuContent let-sortType="sortType">
+      <button type="button" mat-menu-item [disabled]="sort.sortType === sortType.sortType && sort.sortAsc" (click)="setSort(sortType.sortType, true)">{{sortType.sortOrder.ascString}}</button>
+      <button type="button" mat-menu-item [disabled]="sort.sortType === sortType.sortType && !sort.sortAsc" (click)="setSort(sortType.sortType, false)">{{sortType.sortOrder.descString}}</button>
+    </ng-template>
+  </mat-menu>
+</ng-container>
+
+

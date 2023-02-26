@@ -1,80 +1,146 @@
-import { AppComponent } from './../app.component';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ngxLocalStorage } from 'ngx-localstorage';
-import { environment } from 'src/environments/environment';
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { Subscription } from 'rxjs';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-
-enum FilterOption {
-  archive,
-  inbox,
-  none
-}
+import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, shareReplay, Subject, switchMap, tap } from 'rxjs';
+import { UntilDestroy } from '@ngneat/until-destroy';
+import { SettingsService } from '../settings.service';
+import { HydrusSearchTags } from '../hydrus-tags';
+import { defaultSort, displaySortGroups, HydrusSortType, isDisplaySortMetaTypeGroup, isDisplaySortType, SortInfo, sortToString } from '../hydrus-sort';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @UntilDestroy()
 @Component({
   selector: 'app-browse',
   templateUrl: './browse.component.html',
-  styleUrls: ['./browse.component.scss']
+  styleUrls: ['./browse.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BrowseComponent implements OnInit, AfterViewInit {
+export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
-  hydrusApiUrl: string;
-
-  @ngxLocalStorage({prefix: environment.localStoragePrefix})
-  hydrusApiKey: string;
-
-  FilterOption = FilterOption;
-
-  constructor(private searchService: SearchService, public filesService: HydrusFilesService) { }
-
-  currentSearchIDs: number[] = [];
-  searchTags: string[] = [];
-
-  searchSub: Subscription;
-
-  filterOption: FilterOption = FilterOption.none;
-
-  setFilterOption(option: FilterOption){
-    this.filterOption = option;
-    this.search();
+  constructor(
+    private searchService: SearchService,
+    public filesService: HydrusFilesService,
+    public settingsService: SettingsService,
+    private snackbar: MatSnackBar,
+    private route: ActivatedRoute,
+    private router: Router,
+    ) {
   }
+
+  tagsFormControl = new FormControl<HydrusSearchTags>([]);
+
+  searchTags$ = this.tagsFormControl.valueChanges.pipe(
+    shareReplay(1)
+  );
+
+  sort$ = new BehaviorSubject(defaultSort);
+  searching$ = new BehaviorSubject(this.settingsService.appSettings.browseSearchOnLoad);
+
+  refresh$ = new Subject();
+
+
+
+  displaySortGroups = displaySortGroups;
+  isDisplaySortMetaTypeGroup = isDisplaySortMetaTypeGroup;
+  isDisplaySortType = isDisplaySortType;
+  sortToString = sortToString;
+  defaultSort = defaultSort;
+
+  currentSearch$: Observable<number[]> = combineLatest([this.searchTags$, this.sort$, this.refresh$]).pipe(
+    filter(([searchTags]) => this.settingsService.appSettings.browseSearchWhenEmpty || searchTags.length > 0),
+    tap(() => this.searching$.next(true)),
+    switchMap(([searchTags, sort]) => this.searchService.searchFiles(
+      searchTags,
+      {
+        file_sort_type: sort.sortType,
+        file_sort_asc: sort.sortAsc
+      }
+    ).pipe(
+      catchError(error => {
+        this.snackbar.open(`Error searching: ${error.message}`, undefined, {
+          duration: 5000
+        })
+        return of([]);
+      }),
+    )),
+    tap(() => this.searching$.next(false)),
+    shareReplay(1),
+  )
+
+  searchTotal$ = this.currentSearch$.pipe(
+    map(s => s.length)
+  )
+
+  firstParams = true;
 
   ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      if (params.has('tags')) {
+        this.tagsFormControl.setValue(JSON.parse(params.get('tags')))
+        this.router.navigate(['/browse'], { replaceUrl: true });
+      } else if (params.has('addTags')) {
+        this.tagsFormControl.setValue([...this.tagsFormControl.value, ...JSON.parse(params.get('addTags'))])
+        this.router.navigate(['/browse'], { replaceUrl: true });
+      } else if (this.firstParams) {
+        this.tagsFormControl.setValue(this.settingsService.appSettings.browseDefaultSearchTags);
+      }
+      this.firstParams = false;
+    });
   }
 
-  refreshButton() {
-    this.currentSearchIDs = [];
-    this.search();
-  }
 
   ngAfterViewInit() {
-    if (this.hydrusApiUrl && this.hydrusApiKey) {
-      this.search();
+    if (this.settingsService.appSettings.browseSearchOnLoad) {
+      this.refresh$.next(null);
     }
   }
 
-  tagsChanged(tags: string[]) {
-    this.searchTags = tags;
-    this.search();
+  tagsSub = this.searchTags$.subscribe();
+
+  ngOnDestroy() {
+    this.tagsSub.unsubscribe();
   }
 
-  search() {
+/*   tagsChanged(tags: HydrusSearchTags) {
+    console.log(tags);
+    this.searchTags$.next(tags);
+  } */
+
+  setSortInfo(sort: SortInfo) {
+    this.sort$.next(sort);
+  }
+  setSort(sortType: HydrusSortType, sortAsc: boolean) {
+    this.setSortInfo({sortType, sortAsc});
+  }
+
+
+  resetSort() {
+    this.setSortInfo(defaultSort);
+  }
+
+/*   search() {
+    if(!this.settingsService.appSettings.browseSearchWhenEmpty && this.searchTags.length === 0) {
+      return;
+    }
+    this.searching = true;
     this.searchSub?.unsubscribe();
     this.searchSub = this.searchService.searchFiles(
       this.searchTags,
       {
-        system_inbox: this.filterOption === FilterOption.inbox,
-        system_archive: this.filterOption === FilterOption.archive
+        file_sort_type: this.sort.sortType,
+        file_sort_asc: this.sort.sortAsc
       }
     ).pipe(untilDestroyed(this)).subscribe((result) => {
+      this.searching = false;
       this.currentSearchIDs = result;
-    }, () => {
-
+    }, (error) => {
+      this.searching = false;
+      this.snackbar.open(`Error searching: ${error.message}`, undefined, {
+        duration: 5000
+      });
     });
-  }
+  } */
 
 }

@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+<div fxFlex>
+  <app-tag-input [(ngModel)]="tags" [enableOrSearch]="data.enableOrSearch" [enableSystemPredicates]="data.enableSystemPredicates" [enableFavorites]="data.enableFavorites" [displayType]="data.displayType" placeholder="Tags"></app-tag-input>
+</div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="tags" [disabled]="tags.length < 1">{{data.submitButtonText}}</button>
+</div>

@@ -1,24 +1,91 @@
-<mat-form-field class="tag-form-field">
-    <mat-chip-list #chipList aria-label="Tag Search">
-      <mat-chip *ngFor="let tag of searchTags" [selectable]="false" color="primary"
-                class="tag-chip"
-               [removable]="true" (removed)="removeSearchTag(tag)"
-               [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">
-        {{tag}}
-        <mat-icon matChipRemove>cancel</mat-icon>
-      </mat-chip>
-      <input #tagInput
-             placeholder="Tag Search"
-             [matChipInputFor]="chipList"
-             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-             matChipInputAddOnBlur="false"
-             (matChipInputTokenEnd)="chipInputEvent($event)"
-             [formControl]="tagCtrl"
-             [matAutocomplete]="auto">
+<mat-form-field class="tag-form-field" appearance="outline">
+  <mat-label>{{placeholder}}</mat-label>
+    <mat-chip-list #chipList [attr.aria-label]="placeholder">
+      <ng-template ngFor let-tag [ngForOf]="searchTags" let-i="index" >
+        <mat-chip *ngIf="tag | isString; else arrayTag" [selectable]="false" color="primary"
+                  class="tag-chip"
+                [removable]="true" (removed)="removeSearchTag(i)"
+                [ngClass]="$any(tag) | tagClass">
+          <div class="tag-chip-text">{{tag}}</div>
+          <button matChipRemove>
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+        <ng-template #arrayTag>
+          <mat-chip [selectable]="false" color="primary" class="tag-chip"
+                  [removable]="true" (removed)="removeSearchTag(i)"
+                  >
+            <div class="tag-chip-text">{{$any(tag) | flatten | join:' OR '}}</div>
+            <button matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+        </ng-template>
+      </ng-template>
+      <input
+        #tagInput
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        matChipInputAddOnBlur="false"
+        (matChipInputTokenEnd)="chipInputEvent($event)"
+        [formControl]="tagCtrl"
+        [matAutocomplete]="auto"
+        (blur)="onTouched()"
+        enterkeyhint="done"
+        autocapitalize="none"
+        autocomplete="off"
+      >
     </mat-chip-list>
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-      <mat-option *ngFor="let tag of filteredTags | async" [value]="tag" [ngClass]="'tag-namespace-' + this.tagUtils.getNamespaceNoSpace(tag)">
-        {{tag}}
-      </mat-option>
+      <ng-container *ngIf="filteredTags | async as tags">
+        <cdk-virtual-scroll-viewport *ngIf="tags.length > 25; else smallAutocomplete"
+          class="virtual-scroll-viewport-full-width"
+          itemSize="48" minBufferPx="256" maxBufferPx="512">
+          <mat-option *cdkVirtualFor="let tag of tags" [value]="tag.value" [ngClass]="tag.value | tagClass" class="tag-color">
+            {{tag.value}} ({{tag.count | number}})
+          </mat-option>
+        </cdk-virtual-scroll-viewport>
+        <ng-template #smallAutocomplete>
+          <mat-option *ngFor="let tag of tags" [value]="tag.value" [ngClass]="tag.value | tagClass" class="tag-color">
+            {{tag.value}} ({{tag.count | number}})
+          </mat-option>
+        </ng-template>
+      </ng-container>
     </mat-autocomplete>
+
+    <button *ngIf="enableOrSearch || enableSystemPredicates || enableFavorites" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="addMenu" (click)="$event.stopPropagation()">
+      <mat-icon>add</mat-icon>
+    </button>
+    <mat-menu #addMenu="matMenu">
+      <button *ngIf="enableOrSearch" type="button" mat-menu-item (click)="orSearchButton()">
+        OR Search
+      </button>
+      <button *ngIf="enableSystemPredicates" type="button" mat-menu-item [matMenuTriggerFor]="predicatesMenu">
+        System Predicate
+      </button>
+      <button *ngIf="enableFavorites && favoriteTags.length > 0" type="button" mat-menu-item [matMenuTriggerFor]="favoriteTagsMenu">
+        Favorite Tags
+      </button>
+    </mat-menu>
+
+    <mat-menu #predicatesMenu="matMenu">
+      <ng-template ngFor [ngForOf]="predicateButtons" let-pred>
+        <button *ngIf="isConvertedPredicateSingle(pred); else subMenuButton" type="button" mat-menu-item (click)="systemPredicateButton(pred.predicate)">{{pred.name}}</button>
+        <ng-template #subMenuButton>
+          <button *ngIf="!isConvertedPredicateSingle(pred)" type="button" mat-menu-item [matMenuTriggerFor]="predicateSubMenu" [matMenuTriggerData]="{predicates: pred.predicates}">{{pred.name}}</button>
+        </ng-template>
+      </ng-template>
+    </mat-menu>
+
+    <mat-menu #predicateSubMenu="matMenu">
+      <ng-template matMenuContent let-predicates="predicates">
+        <button *ngFor="let pred of predicates" mat-menu-item (click)="systemPredicateButton(pred.predicate)">{{pred.name}}</button>
+      </ng-template>
+    </mat-menu>
+
+    <mat-menu #favoriteTagsMenu="matMenu">
+      <ng-template matMenuContent>
+        <button *ngFor="let tag of favoriteTags" class="tag-color" [ngClass]="(tag | isString) ? ($any(tag)  | tagClass) : ''" mat-menu-item (click)="addSearchTags([tag])">{{(tag | isString) ? tag : ($any(tag) | flatten | join:' OR ')}}</button>
+      </ng-template>
+    </mat-menu>
 </mat-form-field>

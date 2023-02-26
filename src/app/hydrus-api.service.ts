@@ -1,12 +1,23 @@
 import { Injectable } from '@angular/core';
-import { ngxLocalStorage } from 'ngx-localstorage';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HydrusSortType } from './hydrus-sort';
+import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
+import { HydrusSearchTags, ServiceNamesOrKeysToActionsToTags, ServiceNamesOrKeysToTags, TagDisplayType } from './hydrus-tags';
+import { HydrusBonedStats } from './hydrus-mr-bones';
+import { HydrusServiceInfo } from './hydrus-services';
+import { HydrusAddURLResponse, HydrusURLFiles, HydrusURLInfo, HydrusURLServiceNamesToTags } from './hydrus-url';
+import { HydrusVersionResponse } from './hydrus-version';
+import { HydrusNoteImportConflicts } from './hydrus-notes';
+import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 
 export interface HydrusKeyVerificationData {
   basic_permissions: number[];
   human_description: string;
+}
+
+type AngularHttpParams = HttpParams | {
+  [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
 }
 
 /* eslint-disable @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match */
@@ -16,31 +27,40 @@ export interface HydrusKeyVerificationData {
 })
 export class HydrusApiService {
 
+  constructor(private http: HttpClient, private apiSettings: HydrusApiSettingsService) { }
 
-  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
-  hydrusApiUrl: string;
+  private get hydrusApiUrl() {
+    return this.apiSettings.hydrusApiUrl;
+  }
 
-  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
-  hydrusApiKey: string;
-
-  constructor(private http: HttpClient) { }
-
+  private get hydrusApiKey() {
+    return this.apiSettings.hydrusApiKey;
+  }
 
   public getAPIUrl(): string {
     return this.hydrusApiUrl + (this.hydrusApiUrl.endsWith('/') ? '' : '/');
   }
 
-  private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
+  private getHeaders() {
+    return {
       'Hydrus-Client-API-Access-Key': this.hydrusApiKey
+    };
+  }
+
+  private apiGet<T = any>(path: string, params?: AngularHttpParams, noCache = false) {
+    const cacheHeaders = noCache ? {
+      'Cache-Control': 'no-cache'
+    } : {};
+    return this.http.get<T>(this.getAPIUrl() + path, {
+      params,
+      headers: {...this.getHeaders(), ...cacheHeaders}
     });
   }
 
-  private apiGet(path: string, params?: HttpParams) {
-    return this.http.get(this.getAPIUrl() + path, {
-      params,
-      headers: this.getHeaders()
-    });
+  private apiPost<T>(path: string, data: any) {
+    return this.http.post<T>(this.getAPIUrl() + path,
+                          data,
+                          {headers: this.getHeaders()});
   }
 
   public testApi(): Observable<HydrusKeyVerificationData> {
@@ -59,13 +79,44 @@ export class HydrusApiService {
    * @param options.system_archive true or false (optional, defaulting to false)
    * @returns The full list of numerical file ids that match the search.
    */
-  public searchFiles(tags: string, options: { system_inbox?: string, system_archive?: string }) {
+  /* public searchFiles(tags: string, options: { system_inbox?: string, system_archive?: string }) {
     let httpParams: HttpParams = new HttpParams().set('tags', tags);
     if (options) {
       if (options.system_inbox) { httpParams = httpParams.set('system_inbox', options.system_inbox); }
       if (options.system_archive) { httpParams = httpParams.set('system_archive', options.system_archive); }
     }
     return this.apiGet('get_files/search_files', httpParams);
+  } */
+
+
+  /**
+   * GET /get_files/search_files
+   *
+   * Search for the client's files.
+   * @param tags (a list of tags you wish to search for)
+   * @param params additional parameters
+   * @returns The full list of numerical file ids or hashes that match the search.
+   */
+   public searchFiles<Hashes extends boolean, IDs extends boolean>(
+    tags: HydrusSearchTags,
+    params: {
+      file_service_name?: string;
+      file_service_key?: string;
+      tag_service_name?: string;
+      tag_service_key?: string;
+      file_sort_type?: HydrusSortType;
+      file_sort_asc?: boolean;
+      return_hashes?: Hashes;
+      return_file_ids?: IDs;
+    } = {},
+  ): Observable<
+    (Hashes extends true ? { hashes: string[] } : Record<string, never>) &
+      (IDs extends true ? { file_ids: number[] } : Record<string, never>)
+  > {
+    return this.apiGet('get_files/search_files', {
+      tags: JSON.stringify(tags),
+      ...params,
+    });
   }
 
   /**
@@ -77,13 +128,53 @@ export class HydrusApiService {
    * @param params.only_return_identifiers true or false (optional, defaulting to false)
    * @returns  A list of JSON Objects that store a variety of file metadata.
    */
-  public getFileMetadata(params: { file_ids?: string, hashes?: string, only_return_identifiers?: string }) {
+  /* public getFileMetadata(params: { file_ids?: string, hashes?: string, only_return_identifiers?: string }) {
     let httpParams: HttpParams = new HttpParams();
     if (params.file_ids) { httpParams = httpParams.set('file_ids', params.file_ids); }
     if (params.hashes) { httpParams = httpParams.set('hashes', params.hashes); }
     if (params.only_return_identifiers) { httpParams = httpParams.set('only_return_identifiers', params.only_return_identifiers); }
 
     return this.apiGet('get_files/file_metadata', httpParams);
+  } */
+
+
+  /**
+   * GET /get_files/file_metadata
+   *
+   * Get metadata about files in the client.
+   * @param params.file_ids (a list of numerical file ids)
+   * @param params.hashes (a list of hexadecimal SHA256 hashes)
+   * @param params.only_return_identifiers true or false (optional, defaulting to false)
+   * @param params.detailed_url_information true or false (optional, defaulting to false)
+   * @param params.hide_service_names_tags true or false (optional, defaulting to false)
+   * @param params.include_notes true or false (optional, defaulting to false)
+   * @returns  A list of JSON Objects that store a variety of file metadata.
+   */
+   public getFileMetadata<Identifiers extends boolean, Basic extends boolean>(
+    params: ({ hashes: string[] } | { file_ids: number[] }) & {
+      only_return_identifiers?: Identifiers;
+      only_return_basic_information?: Basic;
+      detailed_url_information?: boolean;
+      hide_service_names_tags?: boolean;
+      include_notes?: boolean;
+    },
+    noCache = false
+  ): Observable<{ metadata: Identifiers extends true ? {file_id: number, hash: string }[] : Basic extends true ? HydrusBasicFileFromAPI[] : HydrusFileFromAPI[] }> {
+    let newParams: AngularHttpParams;
+    if ('hashes' in params) {
+      //this.logger.debug(`getFileMetadata ${params.hashes}`);
+      newParams = {
+        ...params,
+        hashes: JSON.stringify(params.hashes),
+      };
+    } else {
+      //this.logger.debug(`getFileMetadata ${params.file_ids}`);
+      newParams = {
+        ...params,
+        file_ids: JSON.stringify(params.file_ids),
+      };
+    }
+    return this.apiGet('get_files/file_metadata', newParams, noCache);
   }
 
   /**
@@ -133,6 +224,16 @@ export class HydrusApiService {
     );
   }
 
+  public getThumbAsBlob(file_hash: string): Observable<Blob> {
+    return this.http.get(
+      this.getAPIUrl() + 'get_files/thumbnail?hash=' + file_hash,
+      {
+        headers: this.getHeaders(),
+        responseType: 'blob'
+      },
+    );
+  }
+
 
   /**
    * GET /manage_pages/get_pages
@@ -153,8 +254,13 @@ export class HydrusApiService {
   public getPageInfo(page_key: string, simple?: string) {
     let httpParams: HttpParams = new HttpParams().set('page_key', page_key);
     if (simple) { httpParams = httpParams.set('simple', simple); }
-    return this.apiGet('manage_pages/get_page_info', httpParams);
+    return this.apiGet('manage_pages/get_page_info', httpParams, true);
   }
+
+  public refreshPage(page_key: string) {
+    return this.apiPost<{page_key: string}>('manage_pages/refresh_page', {page_key});
+  }
+
 
   /**
    * GET /add_urls/get_url_files
@@ -163,7 +269,7 @@ export class HydrusApiService {
    * @param url (the url you want to ask about)
    */
   public getUrlFiles(url: string) {
-    return this.apiGet('add_urls/get_url_files', new HttpParams().set('url', url));
+    return this.apiGet<HydrusURLFiles>('add_urls/get_url_files', {url});
   }
 
   /**
@@ -173,7 +279,7 @@ export class HydrusApiService {
    * @param url (the url you want to ask about)
    */
   public getUrlInfo(url: string) {
-    return this.apiGet('add_urls/get_url_info', new HttpParams().set('url', url));
+    return this.apiGet<HydrusURLInfo>('add_urls/get_url_info', {url});
   }
 
   /**
@@ -190,10 +296,122 @@ export class HydrusApiService {
                         destination_page_key?: string,
                         destination_page_name?: string,
                         show_destination_page?: string,
-                        service_names_to_tags?: any}) {
-
-    return this.http.post(this.getAPIUrl() + 'add_urls/add_url',
-                          data,
-                          {headers: this.getHeaders()});
+                        service_names_to_tags?: HydrusURLServiceNamesToTags}) {
+    return this.apiPost<HydrusAddURLResponse>('add_urls/add_url', data);
   }
+
+
+  public associateUrls(data: {
+    url_to_add?: string,
+    urls_to_add?: string[],
+    url_to_delete?: string,
+    urls_to_delete?: string[],
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[]
+  }) {
+    return this.apiPost<void>('add_urls/associate_url', data);
+  }
+
+  public searchTags(params: {
+    search: string,
+    tag_service_key?: string,
+    tag_service_name?: string,
+    tag_display_type?: TagDisplayType
+  }) {
+    return this.apiGet('add_tags/search_tags', new HttpParams({fromObject: params}));
+  }
+
+
+  public deleteFiles(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    file_service_name?: string,
+    file_service_key?: string,
+    reason?: string
+  }) {
+    return this.apiPost<void>('add_files/delete_files', data);
+  }
+
+  public undeleteFiles(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    file_service_name?: string,
+    file_service_key?: string
+  }) {
+    return this.apiPost<void>('add_files/undelete_files', data);
+  }
+
+  public archiveFiles(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    file_service_name?: string,
+    file_service_key?: string
+  }) {
+    return this.apiPost<void>('add_files/archive_files', data);
+  }
+
+  public unarchiveFiles(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    file_service_name?: string,
+    file_service_key?: string
+  }) {
+    return this.apiPost<void>('add_files/unarchive_files', data);
+  }
+
+  public mrBones() {
+    return this.apiGet<{boned_stats: HydrusBonedStats}>('manage_database/mr_bones');
+  }
+
+  public getServices(): Observable<HydrusServiceInfo> {
+    return this.apiGet<HydrusServiceInfo>('get_services');
+  }
+
+  public addTags(data: {
+    hash?: string,
+    hashes?: string[],
+    file_id?: number,
+    file_ids?: number[],
+    service_names_to_tags?: ServiceNamesOrKeysToTags,
+    service_keys_to_tags?: ServiceNamesOrKeysToTags,
+    service_names_to_actions_to_tags?: ServiceNamesOrKeysToActionsToTags,
+    service_keys_to_actions_to_tags?: ServiceNamesOrKeysToActionsToTags
+  }) {
+    return this.apiPost<void>('add_tags/add_tags', data);
+  }
+
+  public setNotes(data: {
+    notes: Record<string, string>,
+    hash?: string,
+    file_id?: number,
+    merge_cleverly?: boolean,
+    extend_existing_note_if_possible?: boolean
+    conflict_resolution?: HydrusNoteImportConflicts
+  }) {
+    return this.apiPost<void>('add_notes/set_notes', data);
+  }
+
+  public deleteNotes(data: {
+    note_names: string[],
+    hash?: string,
+    file_id?: number
+  }) {
+    return this.apiPost<void>('add_notes/delete_notes', data);
+  }
+
+  public getApiVersion() {
+    return this.apiGet<HydrusVersionResponse>('api_version');
+  }
+
+
 }

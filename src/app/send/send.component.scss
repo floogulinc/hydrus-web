@@ -16,7 +16,7 @@ mat-icon.mat-card-avatar {
   margin-left: 8px;
 }
 
-.saucenao-thumbnail {
+.thumbnail {
   border-radius: 4px !important;
 }
 
@@ -33,4 +33,13 @@ mat-icon.mat-card-avatar {
 }
 .saucenao-spinner {
   margin: 32px auto 0;
+}
+
+.file-note {
+  white-space: normal !important;
+}
+
+.file-list-item {
+  height: auto !important;
+  margin-bottom: 16px;
 }

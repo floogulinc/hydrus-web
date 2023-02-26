@@ -1,14 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { Result, Response } from 'sagiri/dist/response';
+import { Result, Response, Indices } from 'sagiri/dist/response';
 import sites from 'sagiri/dist/sites';
 import { resolveResult } from 'sagiri/dist/util';
 import { SagiriClientError, SagiriServerError } from 'sagiri/dist/errors';
 import { map, catchError } from 'rxjs/operators';
+import { SagiriResult } from 'sagiri';
+import { SettingsService } from './settings.service';
 
 // from https://github.com/ClarityCafe/Sagiri/blob/master/lib/index.ts#L147-L156
-interface SagiriResult {
+/* interface SagiriResult {
   url: string;
   site: string;
   index: number;
@@ -17,17 +19,19 @@ interface SagiriResult {
   authorName: string | null;
   authorUrl: string | null;
   raw: Result;
-}
+} */
 
 interface SacuenaoOptions {
-  numres?: string;
-  output_type?: '0' | '2';
+  output_type?: 0 | 2;
   api_key?: string;
-  testmode?: '1' | null;
-  dbmask?: string;
-  dbmaski?: string;
-  db?: string;
 }
+
+interface SaucenaoQuery {
+  numres?: number;
+  db?: number;
+}
+
+export type SaucenaoUrlorFile = {url: string} | {file: Blob};
 
 export interface SaucenaoResults extends SagiriResult {
   urls: {
@@ -36,10 +40,9 @@ export interface SaucenaoResults extends SagiriResult {
   }[];
 }
 
-const defaultSaucenaoOptions: SacuenaoOptions = {
-  db: '999',
-  output_type: '2',
-  numres: '5',
+const defaultSaucenaoQuery: SaucenaoQuery = {
+  db: 999,
+  //numres: 5,
 };
 
 @Injectable({
@@ -47,14 +50,43 @@ const defaultSaucenaoOptions: SacuenaoOptions = {
 })
 export class SaucenaoService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private settings: SettingsService) { }
 
-  public searchResponse(url: string, options?: SacuenaoOptions): Observable<Response> {
-    return this.http.get<Response>('https://cors-anywhere-floogulinc.herokuapp.com/' + 'https://saucenao.com/search.php?db=999&output_type=2', {
+  buildForm(data: SacuenaoOptions & SaucenaoUrlorFile): FormData {
+    const form = new FormData();
+    for(const [key, value] of Object.entries(data)) {
+      form.set(key, value);
+    }
+    return form;
+  }
+
+  public get canSaucenao(): boolean {
+    return !!this.settings.appSettings.saucenaoApiKey && !!this.settings.appSettings.saucenaoSearchProxy;
+  }
+
+  public validSaucenaoMime(mime: string) {
+    return ([
+      'image/jpeg',
+      'image/jpg',
+      'image/png',
+      'image/gif',
+      'image/bmp',
+      'image/webp'
+    ].includes(mime));
+  }
+
+  public searchResponse(urlOrFile: SaucenaoUrlorFile, queryOptions?: SaucenaoQuery): Observable<Response> {
+    return this.http.post<Response>(this.settings.appSettings.saucenaoSearchProxy,
+    this.buildForm(
+      {
+        output_type: 2,
+        api_key: this.settings.appSettings.saucenaoApiKey,
+        ...urlOrFile
+      }),
+    {
       params: {
-        ...defaultSaucenaoOptions,
-        ...options,
-        url
+        ...defaultSaucenaoQuery,
+        ...queryOptions,
       }
     }).pipe(
       catchError(err => {
@@ -91,18 +123,18 @@ export class SaucenaoService {
     );
   }
 
-  public filteredSearchResponse(url: string, options?: SacuenaoOptions, minSimilarity: number = 70): Observable<Result[]> {
-    return this.searchResponse(url, options).pipe(
+  public filteredSearchResponse(urlOrFile: SaucenaoUrlorFile, queryOptions?: SaucenaoQuery, minSimilarity: number = 70): Observable<Result[]> {
+    return this.searchResponse(urlOrFile, queryOptions).pipe(
       map(resp => resp.results.filter(({ header: { index_id: id, similarity}}) => !!sites[id] && similarity >= minSimilarity)
       .sort((a, b) => b.header.similarity - a.header.similarity))
     );
   }
 
   // Adapted from https://github.com/ClarityCafe/Sagiri
-  public search(url: string, options?: SacuenaoOptions): Observable<SaucenaoResults[]> {
-    return this.filteredSearchResponse(url, options).pipe(
+  public search(urlOrFile: SaucenaoUrlorFile, queryOptions?: SaucenaoQuery): Observable<SaucenaoResults[]> {
+    return this.filteredSearchResponse(urlOrFile, queryOptions).pipe(
       map(results => results.map(result => {
-        const { url, name, id, authorName, authorUrl } = resolveResult(result);
+        const { url, name, id, authorName, authorUrl }: { url: string, name: string, id: Indices, authorName: string | null, authorUrl: string | null } = resolveResult(result);
         const {
           header: { similarity, thumbnail },
         } = result;
