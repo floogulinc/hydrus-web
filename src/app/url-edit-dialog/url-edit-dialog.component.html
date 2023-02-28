@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>{{data.url ? 'Edit' : 'Add'}} URL</h1>
+<form [formGroup]="urlForm" (ngSubmit)="submitUrl()" autocomplete="off">
+  <div mat-dialog-content>
+    <div fxLayout="column">
+      <mat-form-field appearance="fill">
+        <mat-label>URL</mat-label>
+        <input matInput formControlName="url" type="url">
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-button type="submit" [disabled]="urlForm.invalid || urlForm.pristine">{{data.url ? 'Save' : 'Add'}}</button>
+  </div>
+</form>

@@ -53,7 +53,7 @@
       </ng-container>
     </mat-autocomplete>
 
-    <button *ngIf="enableOrSearch || enableSystemPredicates || enableFavorites" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="addMenu" (click)="$event.stopPropagation()">
+    <button *ngIf="enableOrSearch || enableSystemPredicates || (enableFavorites && favoriteTags.length > 0)" type="button" mat-icon-button matSuffix [matMenuTriggerFor]="addMenu" (click)="$event.stopPropagation()">
       <mat-icon>add</mat-icon>
     </button>
     <mat-menu #addMenu="matMenu">
