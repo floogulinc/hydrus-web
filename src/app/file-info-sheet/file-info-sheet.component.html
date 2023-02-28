@@ -66,7 +66,7 @@
       </button>
     </mat-list-item>
   </mat-list>
-  <mat-expansion-panel *ngIf="file.known_urls?.length > 0">
+  <mat-expansion-panel>
     <mat-expansion-panel-header>
       Known URLs ({{file.known_urls.length}})
     </mat-expansion-panel-header>
@@ -77,8 +77,14 @@
         <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url.normalised_url)">
           <mat-icon>share</mat-icon>
         </button>
+        <button mat-icon-button [matMenuTriggerFor]="urlMenu" [matMenuTriggerData]="{url}" aria-label="More options">
+          <mat-icon>more_vert</mat-icon>
+        </button>
       </mat-list-item>
     </mat-nav-list>
+    <mat-action-row>
+      <button mat-button (click)="addUrlDialog()">Add URL</button>
+    </mat-action-row>
   </mat-expansion-panel>
 
 
@@ -158,6 +164,23 @@
     <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
       <mat-icon>delete</mat-icon>
       <span>Delete Tag</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #urlMenu="matMenu">
+  <ng-template matMenuContent let-url="url">
+    <button mat-menu-item [cdkCopyToClipboard]="url.normalised_url">
+      <mat-icon>content_copy</mat-icon>
+      <span>Copy URL</span>
+    </button>
+    <button mat-menu-item (click)="editUrlDialog(url.normalised_url)">
+      <mat-icon>edit</mat-icon>
+      <span>Edit URL</span>
+    </button>
+    <button mat-menu-item (click)="deleteUrl(url.normalised_url)">
+      <mat-icon>delete</mat-icon>
+      <span>Delete URL</span>
     </button>
   </ng-template>
 </mat-menu>
