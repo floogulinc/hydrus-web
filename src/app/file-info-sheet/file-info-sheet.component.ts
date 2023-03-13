@@ -18,6 +18,8 @@ import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.co
 import { HydrusServiceType } from '../hydrus-services';
 import { NoteEditDialogComponent } from '../note-edit-dialog/note-edit-dialog.component';
 import { HydrusNotesService } from '../hydrus-notes.service';
+import { HydrusUrlService } from '../hydrus-url.service';
+import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component';
 
 
 
@@ -76,7 +78,8 @@ export class FileInfoSheetComponent {
     public downloadService: HydrusFileDownloadService,
     private router: Router,
     private notesService: HydrusNotesService,
-    public fileInfoSheetService: FileInfoSheetService
+    public fileInfoSheetService: FileInfoSheetService,
+    private urlService: HydrusUrlService
   ) {
    }
 
@@ -197,7 +200,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -211,7 +214,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -225,7 +228,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -239,7 +242,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -272,7 +275,7 @@ export class FileInfoSheetComponent {
         this.addTags([tag], serviceKey);
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -301,7 +304,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -318,7 +321,7 @@ export class FileInfoSheetComponent {
           duration: 2000
         });
       } catch (error) {
-        this.snackbar.open(`Error: ${error.message}`, undefined, {
+        this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
           duration: 2000
         });
       }
@@ -333,7 +336,7 @@ export class FileInfoSheetComponent {
         try {
           await firstValueFrom(this.notesService.deleteNote(this.data.file.hash, noteName))
         } catch (error) {
-          this.snackbar.open(`Error: ${error.message}`, undefined, {
+          this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
             duration: 2000
           });
           return;
@@ -351,7 +354,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch(error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -368,9 +371,71 @@ export class FileInfoSheetComponent {
         this.setNote(noteName, noteContent, 'Note Restored')
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
+    }
+  }
+
+  async addUrl(url: string) {
+    try {
+      await firstValueFrom(this.urlService.associateUrl(this.data.file.hash, url));
+      this.reload();
+      this.snackbar.open(`URL added`, undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      console.log(error);
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async addUrlDialog() {
+    const dialog = UrlEditDialogComponent.open(this.dialog);
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if(dialogResult) {
+      return this.addUrl(dialogResult.url);
+    }
+  }
+
+  async deleteUrl(url: string) {
+    try {
+      await firstValueFrom(this.urlService.deleteUrl(this.data.file.hash, url));
+      this.reload();
+      const snackbarRef = this.snackbar.open('URL deleted', 'Undo', {
+        duration: 5000
+      });
+      snackbarRef.onAction().subscribe(() => {
+        this.addUrl(url);
+      })
+    } catch (error) {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async editUrl(oldUrl: string, newUrl: string) {
+    try {
+      await firstValueFrom(this.urlService.replaceUrl(this.data.file.hash, oldUrl, newUrl));
+      this.reload();
+      this.snackbar.open(`URL edited`, undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async editUrlDialog(url: string) {
+    const dialog = UrlEditDialogComponent.open(this.dialog, {url});
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if(dialogResult) {
+      return this.editUrl(url, dialogResult.url);
     }
   }
 
