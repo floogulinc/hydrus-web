@@ -18,7 +18,7 @@ import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.co
 import { HydrusServiceType } from '../hydrus-services';
 import { NoteEditDialogComponent } from '../note-edit-dialog/note-edit-dialog.component';
 import { HydrusNotesService } from '../hydrus-notes.service';
-import { HydrusUrlService } from '../hydrus-url.service';
+import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
 import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component';
 
 
@@ -175,12 +175,17 @@ export class FileInfoSheetComponent {
   canSaucenao = this.saucenaoService.canSaucenao && this.saucenaoService.validSaucenaoMime(this.data.file.mime);
 
   saucenaoLookup() {
+    const addUrlOptions: AddUrlOptions = {};
+    if (this.settings.appSettings.sendDefaultPage !== '') {
+      addUrlOptions.destination_page_name = this.settings.appSettings.sendDefaultPage;
+    }
     const snackBarRef = this.snackbar.open('Preparing search...');
     this.filesService.getThumbAsBlob(this.data.file).subscribe(file => {
       SaucenaoDialogComponent.open(this.dialog, {
         urlOrFile: {
           file
-        }
+        },
+        addUrlOptions
       })
       snackBarRef.dismiss();
     }, error => {
