@@ -12,6 +12,8 @@ export interface AppSettingsV1 {
   saucenaoSearchProxy: string;
   ipfsMultihashUrlPrefix: string;
   photopeaIntegration: boolean;
+  sendDefaultPage: string;
+  sendResetFormAfterSend: boolean;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -26,5 +28,7 @@ export const defaultAppSettings: AppSettings = {
   saucenaoApiKey: '',
   saucenaoSearchProxy: '/__saucenao-search',
   ipfsMultihashUrlPrefix: 'https://ipfs.io/ipfs/',
-  photopeaIntegration: false
+  photopeaIntegration: false,
+  sendDefaultPage: '',
+  sendResetFormAfterSend: true,
 }
