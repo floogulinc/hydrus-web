@@ -53,7 +53,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
   urlFormInfo = combineLatest([this.sendUrl.valueChanges, this.sendUrl.statusChanges]).pipe(
     map(([value, status]) => ({value, status})),
-     shareReplay(1)
+    shareReplay(1)
   )
 
   currentUrlInfo$ = this.urlFormInfo.pipe(
@@ -86,17 +86,23 @@ export class SendComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       if (params.has('url')) {
-        this.sendUrl.setValue(params.get('url'));
-        this.sendUrl.markAsTouched();
+        this.setUrlValueFromQuery(params.get('url'));
       } else {
         const possibleParams = ['text', 'title'];
         const param = possibleParams.find(p => params.has(p) && urlRegex.test(params.get(p)));
         if (param) {
-          this.sendUrl.setValue(params.get(param).match(urlRegex)[0]);
-          this.sendUrl.markAsTouched();
+          this.setUrlValueFromQuery(params.get(param).match(urlRegex)[0]);
         }
       }
     });
+  }
+
+  setUrlValueFromQuery(url: string) {
+    if(this.settings.appSettings.sendFixDiscordUrls) {
+      url = url.replace('https://media.discordapp.net', 'https://cdn.discordapp.com');
+    }
+    this.sendUrl.setValue(url);
+    this.sendUrl.markAsTouched();
   }
 
   resetForm() {

@@ -14,6 +14,7 @@ export interface AppSettingsV1 {
   photopeaIntegration: boolean;
   sendDefaultPage: string;
   sendResetFormAfterSend: boolean;
+  sendFixDiscordUrls: boolean;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -31,4 +32,5 @@ export const defaultAppSettings: AppSettings = {
   photopeaIntegration: false,
   sendDefaultPage: '',
   sendResetFormAfterSend: true,
+  sendFixDiscordUrls: false,
 }
