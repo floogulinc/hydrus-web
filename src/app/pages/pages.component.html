@@ -2,7 +2,12 @@
   <ng-template #recursiveList let-list>
 
   <mat-tab-group animationDuration="0ms" dynamicHeight class="pages-tab-group">
-    <mat-tab *ngFor="let page of list" [label]="page.name">
+    <mat-tab *ngFor="let page of list">
+      <ng-template mat-tab-label>
+        <div [matTooltip]="page.name" class="mat-tab-label-content">
+          <span class="pages-tab-label-text">{{page.name}}</span>
+        </div>
+      </ng-template>
       <ng-template matTabContent>
         <div *ngIf="page.pages && page.pages.length > 0">
           <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: page.pages }"></ng-container>
