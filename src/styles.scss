@@ -275,3 +275,15 @@ body {
   max-width: 100%;
 }
 
+
+.pages-tab-group {
+  .mat-tab-label {
+    max-width: 48px;
+
+    .mat-tab-label-content {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
