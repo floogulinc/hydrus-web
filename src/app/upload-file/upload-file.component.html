@@ -1,0 +1,22 @@
+
+<div fxLayout="column">
+  <h2 class="mat-display-1">Upload to Hydrus</h2>
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" fxLayout="column">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Select files</mat-label>
+      <ngx-mat-file-input #fileInput formControlName="fileInput" [multiple]="true"></ngx-mat-file-input>
+      <mat-icon matSuffix *ngIf="fileInput.empty">folder</mat-icon>
+      <button mat-icon-button matSuffix *ngIf="!fileInput.empty" (click)="fileInput.clear($event)">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-checkbox formControlName="addFilenameTag">Add filename tag</mat-checkbox>
+
+    <div fxLayout="row" fxLayoutAlign="end">
+      <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="uploadForm.invalid">Upload to Hydrus</button>
+    </div>
+  </form>
+
+
+</div>

@@ -42,6 +42,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTableModule} from '@angular/material/table';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
@@ -52,6 +53,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { LetModule } from '@rx-angular/template/let';
 import { PushModule } from '@rx-angular/template/push';
+
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
 import { AboutComponent } from './about/about.component';
@@ -79,6 +82,7 @@ import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-ver
 import { NoteEditDialogComponent } from './note-edit-dialog/note-edit-dialog.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { UrlEditDialogComponent } from './url-edit-dialog/url-edit-dialog.component';
+import { UploadFileComponent } from './upload-file/upload-file.component';
 
 
 const MAT_MODULES = [
@@ -108,7 +112,8 @@ const MAT_MODULES = [
     MatButtonToggleModule,
     MatSelectModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    MatCheckboxModule
 ];
 
 
@@ -137,7 +142,8 @@ const MAT_MODULES = [
         HydrusVersionDialogComponent,
         NoteEditDialogComponent,
         WelcomeComponent,
-        UrlEditDialogComponent
+        UrlEditDialogComponent,
+        UploadFileComponent
     ],
     imports: [
         BrowserModule,
@@ -158,7 +164,8 @@ const MAT_MODULES = [
         NgPipesModule,
         ClipboardModule,
         LetModule,
-        PushModule
+        PushModule,
+        MaterialFileInputModule
     ],
     providers: [],
     bootstrap: [AppComponent]
