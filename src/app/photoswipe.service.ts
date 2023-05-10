@@ -112,6 +112,12 @@ export class PhotoswipeService {
 
     });
 
+    pswp.on('keydown', (e) => {
+      if (this.bottomSheet._openedBottomSheetRef) {
+        e.preventDefault();
+      }
+    });
+
     // disable focus trap
     pswp.keyboard._onFocusIn = (e) => {};
 

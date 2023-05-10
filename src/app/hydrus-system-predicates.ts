@@ -24,6 +24,7 @@ export enum SystemPredicate {
   FILETYPE,
   HASH,
   MOD_DATE,
+  ARCHIVED_DATE,
   LAST_VIEWED_TIME,
   TIME_IMPORTED,
   DURATION,
@@ -135,7 +136,8 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.LIMIT]: { name: 'limit', operator: Operators.ONLY_EQUAL, value: Value.NATURAL, units: null },
   [SystemPredicate.FILETYPE]: { name: 'filetype', operator: Operators.ONLY_EQUAL, value: Value.FILETYPE_LIST, units: null },
   [SystemPredicate.HASH]: { name: 'hash', operator: Operators.EQUAL, value: Value.HASHLIST_WITH_ALGORITHM, units: null },
-  [SystemPredicate.MOD_DATE]: { name: 'modified date', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
+  [SystemPredicate.ARCHIVED_DATE]: { name: 'archived time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
+  [SystemPredicate.MOD_DATE]: { name: 'modified date', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },  // TODO: change to `modified time` when required hydrus version >= 525
   [SystemPredicate.LAST_VIEWED_TIME]: { name: 'last viewed time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
   [SystemPredicate.TIME_IMPORTED]: { name: 'import time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
   [SystemPredicate.DURATION]: { name: 'duration', operator: Operators.RELATIONAL, value: Value.TIME_SEC_MSEC, units: null },
@@ -323,7 +325,8 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
     predicates: [
       SystemPredicate.TIME_IMPORTED,
       SystemPredicate.MOD_DATE,
-      SystemPredicate.LAST_VIEWED_TIME
+      SystemPredicate.LAST_VIEWED_TIME,
+      SystemPredicate.ARCHIVED_DATE
     ]
   }
 ];

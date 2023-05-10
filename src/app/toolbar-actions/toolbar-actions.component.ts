@@ -22,7 +22,9 @@ export class ToolbarActionsComponent implements OnInit, OnDestroy, AfterViewInit
   }
 
   ngOnDestroy(): void {
-    this.appComponent.toolbarActionsPortal.detach();
+    if(this.appComponent.toolbarActionsPortal.portal === this.portal) {
+      this.appComponent.toolbarActionsPortal.detach();
+    }
   }
 
 }

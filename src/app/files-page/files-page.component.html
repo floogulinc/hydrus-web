@@ -1,1 +1,11 @@
 <app-image-list-loader [fileIDs]="this.pageInfo ? this.pageInfo.media.hash_ids : []"></app-image-list-loader>
+<app-toolbar-actions>
+  <span class="mat-small toolbar-count">{{this.pageInfo?.media?.num_files}}</span>
+  <button type="button" mat-icon-button aria-label="Refresh" (click)="refreshButton$.next(null)"><mat-icon>refresh</mat-icon></button>
+  <button type="button" mat-icon-button [matMenuTriggerFor]="filesPageToolbarmenu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #filesPageToolbarmenu="matMenu">
+    <button type="button" mat-menu-item [disabled]="(this.canRefreshInHydrus$ | async) === false" (click)="refreshPageButton$.next(null)"><mat-icon>update</mat-icon>Refresh page in Hydrus</button>
+  </mat-menu>
+</app-toolbar-actions>

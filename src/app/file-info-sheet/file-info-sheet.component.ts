@@ -1,4 +1,4 @@
-import { Component, Inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Inject, ChangeDetectionStrategy, Injectable } from '@angular/core';
 import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagService, HydrusTagServiceType } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
@@ -18,6 +18,8 @@ import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.co
 import { HydrusServiceType } from '../hydrus-services';
 import { NoteEditDialogComponent } from '../note-edit-dialog/note-edit-dialog.component';
 import { HydrusNotesService } from '../hydrus-notes.service';
+import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
+import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component';
 
 
 
@@ -45,6 +47,17 @@ interface TagServiceItem {
   serviceKey?: string;
 }
 
+@Injectable({
+  providedIn: 'root'
+})
+class FileInfoSheetService {
+
+  constructor() { }
+
+  public showStorageTags = false;
+}
+
+
 @Component({
   selector: 'app-file-info-sheet',
   templateUrl: './file-info-sheet.component.html',
@@ -64,7 +77,9 @@ export class FileInfoSheetComponent {
     private saucenaoService: SaucenaoService,
     public downloadService: HydrusFileDownloadService,
     private router: Router,
-    private notesService: HydrusNotesService
+    private notesService: HydrusNotesService,
+    public fileInfoSheetService: FileInfoSheetService,
+    private urlService: HydrusUrlService
   ) {
    }
 
@@ -120,8 +135,6 @@ export class FileInfoSheetComponent {
     map(file => `${this.settings.appSettings.ipfsMultihashUrlPrefix}${Object.values(file.ipfs_multihashes)[0]}`)
   )
 
-  showStorageTags = false;
-
 
   reload() {
     this.reload$.next(null);
@@ -162,12 +175,17 @@ export class FileInfoSheetComponent {
   canSaucenao = this.saucenaoService.canSaucenao && this.saucenaoService.validSaucenaoMime(this.data.file.mime);
 
   saucenaoLookup() {
+    const addUrlOptions: AddUrlOptions = {};
+    if (this.settings.appSettings.sendDefaultPage !== '') {
+      addUrlOptions.destination_page_name = this.settings.appSettings.sendDefaultPage;
+    }
     const snackBarRef = this.snackbar.open('Preparing search...');
     this.filesService.getThumbAsBlob(this.data.file).subscribe(file => {
       SaucenaoDialogComponent.open(this.dialog, {
         urlOrFile: {
           file
-        }
+        },
+        addUrlOptions
       })
       snackBarRef.dismiss();
     }, error => {
@@ -187,7 +205,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -201,7 +219,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -215,7 +233,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -229,26 +247,26 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
   }
 
   searchTags(tags: HydrusSearchTags) {
+    this.dialogRef.dismiss(true);
     this.router.navigate(['/'], {queryParams: {'tags': JSON.stringify(tags)}});
-    this.dialogRef.dismiss(true)
   }
 
   addSearchTags(tags: HydrusSearchTags) {
-    this.router.navigate(['/'], {queryParams: {'addTags': JSON.stringify(tags)}});
     this.dialogRef.dismiss(true);
+    this.router.navigate(['/'], {queryParams: {'addTags': JSON.stringify(tags)}});
   }
 
   searchSimilarFiles() {
+    this.dialogRef.dismiss(true);
     const tag = `system:similar to ${this.data.file.hash} distance 4`;
     this.router.navigate(['/'], {queryParams: {'tags': JSON.stringify([tag])}});
-    this.dialogRef.dismiss(true);
   }
 
   async deleteTag(tag: string, serviceKey: string) {
@@ -262,7 +280,7 @@ export class FileInfoSheetComponent {
         this.addTags([tag], serviceKey);
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -291,7 +309,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -308,7 +326,7 @@ export class FileInfoSheetComponent {
           duration: 2000
         });
       } catch (error) {
-        this.snackbar.open(`Error: ${error.message}`, undefined, {
+        this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
           duration: 2000
         });
       }
@@ -323,7 +341,7 @@ export class FileInfoSheetComponent {
         try {
           await firstValueFrom(this.notesService.deleteNote(this.data.file.hash, noteName))
         } catch (error) {
-          this.snackbar.open(`Error: ${error.message}`, undefined, {
+          this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
             duration: 2000
           });
           return;
@@ -341,7 +359,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch(error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
     }
@@ -358,9 +376,71 @@ export class FileInfoSheetComponent {
         this.setNote(noteName, noteContent, 'Note Restored')
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
+    }
+  }
+
+  async addUrl(url: string) {
+    try {
+      await firstValueFrom(this.urlService.associateUrl(this.data.file.hash, url));
+      this.reload();
+      this.snackbar.open(`URL added`, undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      console.log(error);
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async addUrlDialog() {
+    const dialog = UrlEditDialogComponent.open(this.dialog);
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if(dialogResult) {
+      return this.addUrl(dialogResult.url);
+    }
+  }
+
+  async deleteUrl(url: string) {
+    try {
+      await firstValueFrom(this.urlService.deleteUrl(this.data.file.hash, url));
+      this.reload();
+      const snackbarRef = this.snackbar.open('URL deleted', 'Undo', {
+        duration: 5000
+      });
+      snackbarRef.onAction().subscribe(() => {
+        this.addUrl(url);
+      })
+    } catch (error) {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async editUrl(oldUrl: string, newUrl: string) {
+    try {
+      await firstValueFrom(this.urlService.replaceUrl(this.data.file.hash, oldUrl, newUrl));
+      this.reload();
+      this.snackbar.open(`URL edited`, undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  async editUrlDialog(url: string) {
+    const dialog = UrlEditDialogComponent.open(this.dialog, {url});
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if(dialogResult) {
+      return this.editUrl(url, dialogResult.url);
     }
   }
 

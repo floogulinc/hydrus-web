@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { HydrusApiService } from '../hydrus-api.service';
 import { HydrusFilesService } from '../hydrus-files.service';
+import { SettingsService } from '../settings.service';
 
 // eslint-disable-next-line max-len
 const urlRegex: RegExp = /([-a-zA-Z0-9^\p{L}\p{C}\u00a1-\uffff@:%_\+.~#?&//=]{2,256}){1}(\.[a-z]{2,4}){1}(\:[0-9]*)?(\/[-a-zA-Z0-9\u00a1-\uffff\(\)@:%,_\+.~#?&//=]*)?([-a-zA-Z0-9\(\)@:%,_\+.~#?&//=]*)?/;
@@ -32,7 +33,8 @@ export class SendComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     public saucenaoService: SaucenaoService,
     public apiService: HydrusApiService,
-    public fileService: HydrusFilesService
+    public fileService: HydrusFilesService,
+    public settings: SettingsService,
   ) { }
 
   sendForm = new FormGroup({
@@ -40,7 +42,7 @@ export class SendComponent implements OnInit, OnDestroy {
       Validators.required,
       Validators.pattern(urlRegex)
     ]),
-    destPageName: new FormControl('')
+    destPageName: new FormControl(this.settings.appSettings.sendDefaultPage)
   });
 
   get sendUrl() {
@@ -51,7 +53,7 @@ export class SendComponent implements OnInit, OnDestroy {
 
   urlFormInfo = combineLatest([this.sendUrl.valueChanges, this.sendUrl.statusChanges]).pipe(
     map(([value, status]) => ({value, status})),
-     shareReplay(1)
+    shareReplay(1)
   )
 
   currentUrlInfo$ = this.urlFormInfo.pipe(
@@ -84,17 +86,23 @@ export class SendComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.queryParamMap.subscribe(params => {
       if (params.has('url')) {
-        this.sendUrl.setValue(params.get('url'));
-        this.sendUrl.markAsTouched();
+        this.setUrlValueFromQuery(params.get('url'));
       } else {
         const possibleParams = ['text', 'title'];
         const param = possibleParams.find(p => params.has(p) && urlRegex.test(params.get(p)));
         if (param) {
-          this.sendUrl.setValue(params.get(param).match(urlRegex)[0]);
-          this.sendUrl.markAsTouched();
+          this.setUrlValueFromQuery(params.get(param).match(urlRegex)[0]);
         }
       }
     });
+  }
+
+  setUrlValueFromQuery(url: string) {
+    if(this.settings.appSettings.sendFixDiscordUrls) {
+      url = url.replace('https://media.discordapp.net', 'https://cdn.discordapp.com');
+    }
+    this.sendUrl.setValue(url);
+    this.sendUrl.markAsTouched();
   }
 
   resetForm() {
@@ -124,7 +132,7 @@ export class SendComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.send(this.sendForm.value.sendUrl, true);
+    this.send(this.sendForm.value.sendUrl, this.settings.appSettings.sendResetFormAfterSend);
   }
 
   saucenaoLookup() {

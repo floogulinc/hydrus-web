@@ -66,7 +66,7 @@
       </button>
     </mat-list-item>
   </mat-list>
-  <mat-expansion-panel *ngIf="file.known_urls?.length > 0">
+  <mat-expansion-panel>
     <mat-expansion-panel-header>
       Known URLs ({{file.known_urls.length}})
     </mat-expansion-panel-header>
@@ -77,8 +77,14 @@
         <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url.normalised_url)">
           <mat-icon>share</mat-icon>
         </button>
+        <button mat-icon-button [matMenuTriggerFor]="urlMenu" [matMenuTriggerData]="{url}" aria-label="More options">
+          <mat-icon>more_vert</mat-icon>
+        </button>
       </mat-list-item>
     </mat-nav-list>
+    <mat-action-row>
+      <button mat-button (click)="addUrlDialog()">Add URL</button>
+    </mat-action-row>
   </mat-expansion-panel>
 
 
@@ -108,10 +114,10 @@
   <div *ngIf="file.displayTags" class="tags-section">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
       <h3 class="mat-subheading-2">Tags</h3>
-      <mat-slide-toggle labelPosition="before" [(ngModel)]="showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
+      <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
     </div>
     <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let service of (showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; trackBy: trackByTagService" >
+    <mat-expansion-panel *ngFor="let service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; trackBy: trackByTagService" >
       <mat-expansion-panel-header>
         {{service.serviceName}} ({{service.tags.length}})
       </mat-expansion-panel-header>
@@ -129,13 +135,13 @@
           </mat-chip>
         </mat-chip-list>
 
-        <mat-action-row *ngIf="showStorageTags && service.serviceType && service.serviceType === LocalTagService">
+        <mat-action-row *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
           <button mat-button (click)="addTagsDialog(service.serviceKey, service.serviceName)">Add Tags</button>
         </mat-action-row>
       </ng-template>
     </mat-expansion-panel>
     </mat-accordion>
-    <mat-card *ngIf="!showStorageTags && file.displayTags.length < 1">
+    <mat-card *ngIf="!fileInfoSheetService.showStorageTags && file.displayTags.length < 1">
       <mat-card-content>No Tags</mat-card-content>
     </mat-card>
   </div>
@@ -155,9 +161,26 @@
       <mat-icon>search</mat-icon>
       <span>Add tag to search</span>
     </button>
-    <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="showStorageTags && service.serviceType && service.serviceType === LocalTagService">
+    <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
       <mat-icon>delete</mat-icon>
       <span>Delete Tag</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #urlMenu="matMenu">
+  <ng-template matMenuContent let-url="url">
+    <button mat-menu-item [cdkCopyToClipboard]="url.normalised_url">
+      <mat-icon>content_copy</mat-icon>
+      <span>Copy URL</span>
+    </button>
+    <button mat-menu-item (click)="editUrlDialog(url.normalised_url)">
+      <mat-icon>edit</mat-icon>
+      <span>Edit URL</span>
+    </button>
+    <button mat-menu-item (click)="deleteUrl(url.normalised_url)">
+      <mat-icon>delete</mat-icon>
+      <span>Delete URL</span>
     </button>
   </ng-template>
 </mat-menu>

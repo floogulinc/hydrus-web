@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ngxLocalStorage } from 'ngx-localstorage';
-import { BehaviorSubject, catchError, map, NEVER, of, retry, shareReplay, switchMap } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { BehaviorSubject, catchError, of, retry, shareReplay, switchMap } from 'rxjs';
+import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 import { HydrusApiService } from './hydrus-api.service';
 import { requiredVersion } from './hydrus-version';
 import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-version-dialog.component';
@@ -12,13 +11,7 @@ import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-ver
 })
 export class HydrusVersionService {
 
-  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
-  hydrusApiUrl: string;
-
-  @ngxLocalStorage({ prefix: environment.localStoragePrefix })
-  hydrusApiKey: string;
-
-  constructor(private api: HydrusApiService, private dialog: MatDialog) {
+  constructor(private api: HydrusApiService, private dialog: MatDialog, private apiSettings: HydrusApiSettingsService) {
     this.hydrusVersion$.subscribe(v => {
       console.log(v);
       if(v && ((v.hydrus_version && v.hydrus_version < requiredVersion) || (!v.hydrus_version && v.version))) {
@@ -37,7 +30,7 @@ export class HydrusVersionService {
 
   public hydrusVersion$ = this.refreshVersion$.pipe(
     switchMap(() => {
-      if(this.hydrusApiUrl && this.hydrusApiKey) {
+      if(this.apiSettings.apiSet) {
         return this.api.getApiVersion().pipe(
           retry(1),
           catchError((err) => of(null))
