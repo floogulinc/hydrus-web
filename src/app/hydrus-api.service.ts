@@ -419,7 +419,10 @@ export class HydrusApiService {
       this.getAPIUrl() + 'add_files/add_file',
       file,
       {
-        headers: this.getHeaders(),
+        headers: {
+          ...this.getHeaders(),
+          'Content-Type': 'application/octet-stream'
+        },
         reportProgress: true,
         observe: 'events'
       }

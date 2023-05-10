@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HydrusApiService } from './hydrus-api.service';
 
 export enum HydrusAddFileStatus {
   STATUS_SUCCESSFUL_AND_NEW = 1,
@@ -19,5 +20,11 @@ export interface HydrusAddFileResponse {
 })
 export class HydrusUploadService {
 
-  constructor() { }
+  constructor(
+    private hydrusApiService: HydrusApiService
+  ) { }
+
+  public addFile(file: Blob) {
+    return this.hydrusApiService.addFile(file);
+  }
 }
