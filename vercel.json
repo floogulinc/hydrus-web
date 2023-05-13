@@ -7,6 +7,10 @@
     {
       "source": "/__saucenao-search",
       "destination": "https://saucenao.com/search.php"
+    },
+    {
+      "source": "/__deepl-api-free/:path*",
+      "destination": "hhttps://api-free.deepl.com/:path*"
     }
   ]
 }
