@@ -10,7 +10,7 @@
     },
     {
       "source": "/__deepl-api-free/:path*",
-      "destination": "hhttps://api-free.deepl.com/:path*"
+      "destination": "https://api-free.deepl.com/:path*"
     }
   ]
 }
