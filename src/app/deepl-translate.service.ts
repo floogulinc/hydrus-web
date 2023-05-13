@@ -14,6 +14,9 @@ export class DeeplTranslateService {
     private settings: SettingsService
   ) { }
 
+  public get canTranslate(): boolean {
+    return !!this.settings.appSettings.deeplApiKey && !!this.settings.appSettings.deeplApiProxy;
+  }
 
   translateText<T extends string | string[]>(
     texts: T,
