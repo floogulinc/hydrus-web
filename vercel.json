@@ -11,6 +11,10 @@
     {
       "source": "/__deepl-api-free/:path*",
       "destination": "https://api-free.deepl.com/:path*"
+    },
+    {
+      "source": "/__deepl-api/:path*",
+      "destination": "https://api.deepl.com/:path*"
     }
   ]
 }

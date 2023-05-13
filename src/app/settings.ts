@@ -15,6 +15,8 @@ export interface AppSettingsV1 {
   sendDefaultPage: string;
   sendResetFormAfterSend: boolean;
   sendFixDiscordUrls: boolean;
+  deeplApiKey: string;
+  deeplApiProxy: string;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -33,4 +35,6 @@ export const defaultAppSettings: AppSettings = {
   sendDefaultPage: '',
   sendResetFormAfterSend: true,
   sendFixDiscordUrls: false,
+  deeplApiKey: '',
+  deeplApiProxy: '/__deepl-api-free/'
 }
