@@ -163,7 +163,7 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.HAS_NOTES]: { name: 'has notes', operator: null, value: null, units: null },
   [SystemPredicate.NO_NOTES]: { name: 'no notes', operator: null, value: null, units: null },
   [SystemPredicate.NUM_NOTES]: { name: 'number of notes', operator: Operators.RELATIONAL_EXACT, value: Value.NATURAL, units: null },
-  [SystemPredicate.HAS_NOTE_NAME]: { name: 'has note with name', operator: null, value: Value.ANY_STRING, units: null },
+  [SystemPredicate.HAS_NOTE_NAME]: { name: 'note with name', operator: null, value: Value.ANY_STRING, units: null },
   [SystemPredicate.NO_NOTE_NAME]: { name: 'does not have note with name', operator: null, value: Value.ANY_STRING, units: null },
 }
 
