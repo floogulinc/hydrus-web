@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FileInput } from 'ngx-material-file-input';
-import { HydrusUploadService } from '../hydrus-upload.service';
+import { HydrusAddFileStatus, HydrusUploadService } from '../hydrus-upload.service';
 import { last, tap, lastValueFrom } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpEventType } from '@angular/common/http';
@@ -47,7 +47,8 @@ export class UploadFileComponent implements OnInit {
           // })
         ));
         if(response.type === HttpEventType.Response) {
-          this.snackbar.open(response.body.note, undefined, {
+          const message = response.body.status === HydrusAddFileStatus.STATUS_SUCCESSFUL_AND_NEW ? 'File Uploaded' : response.body.note;
+          this.snackbar.open(message, undefined, {
             duration: 5000
           });
         }
