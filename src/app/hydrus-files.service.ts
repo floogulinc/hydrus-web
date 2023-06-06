@@ -174,21 +174,12 @@ export class HydrusFilesService {
 
   public getFileAsFile(file: HydrusBasicFileFromAPI): Observable<File> {
     return this.api.getFileAsBlob(file.hash).pipe(
-      map(b => new File([b], file.hash + file.ext, {type: this.fixFileType(b.type)}))
+      map(b => new File([b], file.hash + file.ext, {type: b.type}))
     );
   }
 
   public getThumbAsBlob(file: HydrusBasicFileFromAPI): Observable<Blob> {
     return this.api.getThumbAsBlob(file.hash)
-  }
-
-  // Needed until https://github.com/hydrusnetwork/hydrus/issues/646 is merged
-  private fixFileType(type: string) {
-    if (type === 'image/jpg') {
-      return 'image/jpeg';
-    } else {
-      return type;
-    }
   }
 
   public deleteFile(hash: string, reason: string = 'Hydrus Web'){
