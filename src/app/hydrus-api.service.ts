@@ -5,7 +5,7 @@ import { HydrusSortType } from './hydrus-sort';
 import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
 import { HydrusSearchTags, ServiceNamesOrKeysToActionsToTags, ServiceNamesOrKeysToTags, TagDisplayType } from './hydrus-tags';
 import { HydrusBonedStats } from './hydrus-mr-bones';
-import { HydrusServiceInfo } from './hydrus-services';
+import { HydrusServiceInfo, HydrusServices } from './hydrus-services';
 import { HydrusAddURLResponse, HydrusURLFiles, HydrusURLInfo, HydrusURLServiceNamesToTags } from './hydrus-url';
 import { HydrusVersionResponse } from './hydrus-version';
 import { HydrusNoteImportConflicts } from './hydrus-notes';
@@ -146,9 +146,10 @@ export class HydrusApiService {
    * @param params.file_ids (a list of numerical file ids)
    * @param params.hashes (a list of hexadecimal SHA256 hashes)
    * @param params.only_return_identifiers true or false (optional, defaulting to false)
+   * @param params.only_return_basic_information true or false (optional, defaulting to false)
    * @param params.detailed_url_information true or false (optional, defaulting to false)
-   * @param params.hide_service_names_tags true or false (optional, defaulting to false)
    * @param params.include_notes true or false (optional, defaulting to false)
+   * @param params.include_services_object true or false (optional, defaulting to true)
    * @returns  A list of JSON Objects that store a variety of file metadata.
    */
    public getFileMetadata<Identifiers extends boolean, Basic extends boolean>(
@@ -156,11 +157,11 @@ export class HydrusApiService {
       only_return_identifiers?: Identifiers;
       only_return_basic_information?: Basic;
       detailed_url_information?: boolean;
-      hide_service_names_tags?: boolean;
       include_notes?: boolean;
+      include_services_object?: boolean;
     },
     noCache = false
-  ): Observable<{ metadata: Identifiers extends true ? {file_id: number, hash: string }[] : Basic extends true ? HydrusBasicFileFromAPI[] : HydrusFileFromAPI[] }> {
+  ): Observable<{ services?: HydrusServices, metadata: Identifiers extends true ? {file_id: number, hash: string }[] : Basic extends true ? HydrusBasicFileFromAPI[] : HydrusFileFromAPI[] }> {
     let newParams: AngularHttpParams;
     if ('hashes' in params) {
       //this.logger.debug(`getFileMetadata ${params.hashes}`);

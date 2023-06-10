@@ -50,22 +50,30 @@ export const service_string_lookup: Record<HydrusServiceType, string> = {
   [HydrusServiceType.NULL_SERVICE]: 'null service'
 }
 
-export interface HydrusService {
+export interface HydrusServiceSimple {
   name: string,
-  service_key: string,
   type: HydrusServiceType,
   type_pretty: string
 }
 
+export interface HydrusService extends HydrusServiceSimple {
+  service_key: string,
+}
+
 export interface HydrusServiceInfo {
-  local_tags: HydrusService[];
-  tag_repositories: HydrusService[];
-  file_repositories: HydrusService[];
-  local_files: HydrusService[];
-  all_local_media: HydrusService[];
-  trash: HydrusService[];
-  local_updates: HydrusService[];
-  all_local_files: HydrusService[];
-  all_known_files: HydrusService[];
-  all_known_tags: HydrusService[];
+  local_tags: HydrusService[]; // deprecated in v531
+  tag_repositories: HydrusService[]; // deprecated in v531
+  file_repositories: HydrusService[]; // deprecated in v531
+  local_files: HydrusService[]; // deprecated in v531
+  all_local_media: HydrusService[]; // deprecated in v531
+  trash: HydrusService[]; // deprecated in v531
+  local_updates: HydrusService[]; // deprecated in v531
+  all_local_files: HydrusService[]; // deprecated in v531
+  all_known_files: HydrusService[]; // deprecated in v531
+  all_known_tags: HydrusService[]; // deprecated in v531
+  services: HydrusServices; // added in v531
+}
+
+export interface HydrusServices {
+  [service_key: string]: HydrusServiceSimple
 }
