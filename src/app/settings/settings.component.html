@@ -50,6 +50,16 @@
         </mat-form-field>
         <mat-slide-toggle formControlName="sendResetFormAfterSend" class="margin-bottom-16">Reset form after sending URL to Hydrus</mat-slide-toggle>
         <mat-slide-toggle formControlName="sendFixDiscordUrls" class="margin-bottom-16" matTooltip="media.discordapp.net to cdn.discordapp.com">Fix shared Discord URLs</mat-slide-toggle>
+        <h2>Upload</h2>
+        <mat-form-field appearance="outline">
+          <mat-label>Filename Tag Service</mat-label>
+          <mat-select formControlName="uploadFilenameTagService">
+            <mat-option>None (disabled)</mat-option>
+            <mat-option *ngFor="let service of tagServices$ | async" [value]="service.service_key">
+              {{service.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
         <h2>External Services</h2>
         <mat-form-field appearance="outline">
           <mat-label>hyshare base URL</mat-label>

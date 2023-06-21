@@ -5,6 +5,9 @@ import { HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.servi
 import { HydrusVersionService } from '../hydrus-version.service';
 import { defaultAppSettings, AppSettings } from '../settings';
 import { SettingsService } from '../settings.service';
+import { HydrusServicesService } from '../hydrus-services.service';
+import { getLocalTagServices } from '../hydrus-services';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
@@ -18,9 +21,14 @@ export class SettingsComponent implements OnInit {
     private snackbar: MatSnackBar,
     private api: HydrusApiService,
     private hydrusVersionService: HydrusVersionService,
+    private hydrusServices: HydrusServicesService,
   ) { }
 
   testData: HydrusKeyVerificationData;
+
+  tagServices$ = this.hydrusServices.hydrusServicesArray$.pipe(
+    map(s => getLocalTagServices(s))
+  )
 
   ngOnInit() {
   }

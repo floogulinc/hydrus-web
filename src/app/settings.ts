@@ -15,6 +15,7 @@ export interface AppSettingsV1 {
   sendDefaultPage: string;
   sendResetFormAfterSend: boolean;
   sendFixDiscordUrls: boolean;
+  uploadFilenameTagService: string;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -33,4 +34,5 @@ export const defaultAppSettings: AppSettings = {
   sendDefaultPage: '',
   sendResetFormAfterSend: true,
   sendFixDiscordUrls: false,
+  uploadFilenameTagService: '',
 }
