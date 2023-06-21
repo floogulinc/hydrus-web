@@ -77,3 +77,38 @@ export interface HydrusServiceInfo {
 export interface HydrusServices {
   [service_key: string]: HydrusServiceSimple
 }
+
+export function servicesArrayFromObject(services: HydrusServices): HydrusService[] {
+  return Object.entries(services).map(([service_key, service]) => ({service_key, ...service}));
+}
+
+export function getServiceArrayUniversal(serviceInfo: HydrusServiceInfo) {
+  if(serviceInfo.services) {
+    return servicesArrayFromObject(serviceInfo.services);
+  } else {
+    return [
+      ...serviceInfo.local_tags,
+      ...serviceInfo.tag_repositories ,
+      ...serviceInfo.file_repositories,
+      ...serviceInfo.local_files,
+      ...serviceInfo.all_local_media,
+      ...serviceInfo.trash,
+      ...serviceInfo.local_updates,
+      ...serviceInfo.all_local_files,
+      ...serviceInfo.all_known_files,
+      ...serviceInfo.all_known_tags,
+    ]
+  }
+}
+
+export function getTagServices(serviceArray: HydrusService[]) {
+  return serviceArray.filter(s => s.type === HydrusServiceType.LOCAL_TAG || s.type === HydrusServiceType.TAG_REPOSITORY || s.type === HydrusServiceType.COMBINED_TAG)
+}
+
+export function getLocalTagServices(serviceArray: HydrusService[]) {
+  return serviceArray.filter(s => s.type === HydrusServiceType.LOCAL_TAG)
+}
+
+export function getAllKnownTagsService(services: HydrusServices) {
+  return services['616c6c206b6e6f776e2074616773'];
+}
