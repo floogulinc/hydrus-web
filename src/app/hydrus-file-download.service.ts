@@ -34,7 +34,7 @@ export class HydrusFileDownloadService {
       });
     } else {
       const url = `${hfile.file_url}&download=true`;
-      window.open(url, '_blank');
+      window.open(url, '_self');
     }
   }
 
