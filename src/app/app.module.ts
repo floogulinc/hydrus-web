@@ -83,6 +83,7 @@ import { NoteEditDialogComponent } from './note-edit-dialog/note-edit-dialog.com
 import { WelcomeComponent } from './welcome/welcome.component';
 import { UrlEditDialogComponent } from './url-edit-dialog/url-edit-dialog.component';
 import { UploadFileComponent } from './upload-file/upload-file.component';
+import { ServicesInfoDialogComponent } from './services-info-dialog/services-info-dialog.component';
 
 
 const MAT_MODULES = [
@@ -143,7 +144,8 @@ const MAT_MODULES = [
         NoteEditDialogComponent,
         WelcomeComponent,
         UrlEditDialogComponent,
-        UploadFileComponent
+        UploadFileComponent,
+        ServicesInfoDialogComponent
     ],
     imports: [
         BrowserModule,

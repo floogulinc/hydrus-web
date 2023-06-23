@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Hydrus Services</h1>
+<div mat-dialog-content>
+  <div *ngIf="services.hydrusServicesArray$ | async as services; else loading">
+    <mat-list>
+      <mat-list-item *ngFor="let service of services">
+        <h2 matLine>{{service.name}}</h2>
+        <p matLine>{{service.type_pretty}}</p>
+        <pre matLine>{{service.service_key}}</pre>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <ng-template #loading>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+</div>

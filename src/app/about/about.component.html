@@ -30,6 +30,9 @@
     <a mat-list-item role="listitem" (click)="boned()">
       <div mat-line>How boned am I?</div>
     </a>
+    <a mat-list-item role="listitem" (click)="services()">
+      <div mat-line>Hydrus Services</div>
+    </a>
     <mat-divider></mat-divider>
     <div mat-subheader>Debug</div>
     <a mat-list-item role="listitem" [href]="repoURL + '/commit/' + env.versionInfo.hash">

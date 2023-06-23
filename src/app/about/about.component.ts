@@ -6,6 +6,7 @@ import { Platform } from '@angular/cdk/platform';
 import { MatDialog } from '@angular/material/dialog';
 import { MrBonesDialogComponent } from '../mr-bones-dialog/mr-bones-dialog.component';
 import { HydrusVersionService } from '../hydrus-version.service';
+import { ServicesInfoDialogComponent } from '../services-info-dialog/services-info-dialog.component';
 
 @Component({
   selector: 'app-about',
@@ -43,6 +44,12 @@ export class AboutComponent implements OnInit {
   boned() {
     this.dialog.open(MrBonesDialogComponent, {
       maxWidth: '95vw'
+    });
+  }
+
+  services() {
+    this.dialog.open(ServicesInfoDialogComponent, {
+      maxWidth: '95w'
     });
   }
 

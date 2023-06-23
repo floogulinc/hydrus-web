@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, retry, shareReplay } from 'rxjs';
-import { getServiceArrayUniversal, servicesArrayFromObject } from './hydrus-services';
+import { getServiceArrayUniversal } from './hydrus-services';
 
 @Injectable({
   providedIn: 'root'
