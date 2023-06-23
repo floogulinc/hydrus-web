@@ -49,7 +49,7 @@ export class AboutComponent implements OnInit {
 
   services() {
     this.dialog.open(ServicesInfoDialogComponent, {
-      maxWidth: '95w'
+      maxWidth: '95vw'
     });
   }
 
