@@ -211,7 +211,7 @@ export const unitDefaults: Record<Units, string> = {
   [Units.PIXELS]: 'megapixels',
 }
 
-export const hashAlgorithms = ['sha256', 'md5', 'sha1', 'sha512'];
+export const hashAlgorithms = ['sha256', 'md5', 'sha1', 'sha512']; // DevSkim: ignore DS126858
 
 export const valueLabels: Partial<Record<SystemPredicate, string>> = {
   [SystemPredicate.FILE_SERVICE]: 'File service',

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, HydrusFileType, type } from './hydrus-file';
+import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, HydrusFileType, generateRatingsArray, type } from './hydrus-file';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, tap } from 'rxjs/operators';
+import { HydrusServices } from './hydrus-services';
 
 function chunk<T>(array: T[], size: number): T[][] {
   const chunked = [];
@@ -32,7 +33,7 @@ export class HydrusFilesService {
     return this.allFiles.size;
   }
 
-  private getFileMetadataAPI(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
+  private getFileMetadataAPI(fileIds: number[]) {
     return this.api.getFileMetadata(
       {
         file_ids: fileIds,
@@ -41,10 +42,10 @@ export class HydrusFilesService {
         detailed_url_information: true,
         include_notes: true,
       }
-    ).pipe(map(val => val.metadata));
+    );
   }
 
-  private getFileMetadataHashAPI(fileHashes: string[]): Observable<HydrusFileFromAPI[]> {
+  private getFileMetadataHashAPI(fileHashes: string[]) {
     return this.api.getFileMetadata(
       {
         hashes: fileHashes,
@@ -54,7 +55,7 @@ export class HydrusFilesService {
         include_notes: true,
       },
       true
-    ).pipe(map(val => val.metadata));
+    );
   }
 
   private getBasicFileMetadataAPI(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
@@ -104,7 +105,7 @@ export class HydrusFilesService {
     );
   }
 
-  private processFileFromAPI(file: HydrusFileFromAPI): HydrusFile {
+  private processFileFromAPI(file: HydrusFileFromAPI, services?: HydrusServices): HydrusFile {
     const importTimes = file.file_services.current
               ? Object.values(file.file_services.current)
                   .filter((x) => !!x.time_imported)
@@ -119,7 +120,8 @@ export class HydrusFilesService {
       file_url: this.api.getFileURLFromHash(file.hash),
       thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
       file_type: type(file.mime),
-      time_imported: firstImportTime
+      time_imported: firstImportTime,
+      ratings_array: file.ratings ? generateRatingsArray(file.ratings, services) : undefined
     }
   }
 
@@ -135,7 +137,7 @@ export class HydrusFilesService {
   public getFilesById(fileIds: number[]): Observable<HydrusFile[]> {
     if (fileIds.length === 0) { return of([]); }
     return this.getFileMetadataAPI(fileIds).pipe(
-      map(v => v.map(i => this.processFileFromAPI(i))));
+      map(v => v.metadata.map(i => this.processFileFromAPI(i, v.services))));
   }
 
   public getBasicFilesById(fileIds: number[]): Observable<HydrusBasicFile[]> {
@@ -153,7 +155,7 @@ export class HydrusFilesService {
   public getFilesByHash(fileHashes: string[]) {
     if (fileHashes.length === 0) { return of([]); }
     return this.getFileMetadataHashAPI(fileHashes).pipe(
-      map(v => v.map(i => this.processFileFromAPI(i))));
+      map(v => v.metadata.map(i => this.processFileFromAPI(i, v.services))));
   }
 
   public getFileById(fileId: number): Observable<HydrusFile> {

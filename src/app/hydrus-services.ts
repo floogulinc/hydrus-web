@@ -20,6 +20,7 @@ export enum HydrusServiceType {
   COMBINED_DELETED_FILE = 19,
   LOCAL_FILE_UPDATE_DOMAIN = 20,
   COMBINED_LOCAL_MEDIA = 21,
+  LOCAL_RATING_INCDEC = 22,
   SERVER_ADMIN = 99,
   NULL_SERVICE = 100,
 }
@@ -36,6 +37,7 @@ export const service_string_lookup: Record<HydrusServiceType, string> = {
   [HydrusServiceType.LOCAL_TAG]: 'local tag service',
   [HydrusServiceType.LOCAL_RATING_NUMERICAL]: 'local numerical rating service',
   [HydrusServiceType.LOCAL_RATING_LIKE]: 'local like/dislike rating service',
+  [HydrusServiceType.LOCAL_RATING_INCDEC]: 'local inc/dec rating service',
   [HydrusServiceType.RATING_NUMERICAL_REPOSITORY]: 'hydrus numerical rating repository',
   [HydrusServiceType.RATING_LIKE_REPOSITORY]: 'hydrus like/dislike rating repository',
   [HydrusServiceType.COMBINED_TAG]: 'virtual combined tag service',
@@ -51,14 +53,45 @@ export const service_string_lookup: Record<HydrusServiceType, string> = {
 }
 
 export interface HydrusServiceSimple {
-  name: string,
-  type: HydrusServiceType,
-  type_pretty: string
+  name: string;
+  type: HydrusServiceType;
+  type_pretty: string;
 }
 
 export interface HydrusService extends HydrusServiceSimple {
   service_key: string,
 }
+
+type HydrusRatingStarType = 'circle' | 'square' | 'fat star' | 'pentagram star';
+
+export interface HydrusNumericalRatingService extends HydrusServiceSimple {
+  min: number;
+  max: number;
+  star_shape: HydrusRatingStarType;
+  type: HydrusServiceType.LOCAL_RATING_NUMERICAL | HydrusServiceType.RATING_NUMERICAL_REPOSITORY;
+}
+
+export interface HydrusIncDecRatingService extends HydrusServiceSimple {
+  type: HydrusServiceType.LOCAL_RATING_INCDEC
+}
+
+export function isNumericalRatingService(service: HydrusServiceSimple | HydrusNumericalRatingService): service is HydrusNumericalRatingService {
+  return service.type === HydrusServiceType.LOCAL_RATING_NUMERICAL || service.type === HydrusServiceType.RATING_NUMERICAL_REPOSITORY;
+}
+
+export interface HydrusLikeRatingService extends HydrusServiceSimple {
+  star_shape: HydrusRatingStarType;
+  type: HydrusServiceType.LOCAL_RATING_LIKE | HydrusServiceType.RATING_LIKE_REPOSITORY;
+}
+
+export function isLikeRatingService(service: HydrusServiceSimple | HydrusLikeRatingService): service is HydrusLikeRatingService {
+  return service.type === HydrusServiceType.LOCAL_RATING_LIKE || service.type === HydrusServiceType.RATING_LIKE_REPOSITORY;
+}
+
+export function isIncDecRatingService(service: HydrusServiceSimple): service is HydrusIncDecRatingService {
+  return service.type === HydrusServiceType.LOCAL_RATING_INCDEC
+}
+
 
 export interface HydrusServiceInfo {
   local_tags: HydrusService[]; // deprecated in v531
@@ -74,11 +107,13 @@ export interface HydrusServiceInfo {
   services: HydrusServices; // added in v531
 }
 
+//export type HydrusService = GenericHydrusService & (HydrusNumericalRatingService | HydrusLikeRatingService | {})
+
 export interface HydrusServices {
   [service_key: string]: HydrusServiceSimple
 }
 
-export function servicesArrayFromObject(services: HydrusServices): HydrusService[] {
+export function servicesArrayFromObject(services: HydrusServices) {
   return Object.entries(services).map(([service_key, service]) => ({service_key, ...service}));
 }
 

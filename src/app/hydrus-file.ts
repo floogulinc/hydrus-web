@@ -1,5 +1,5 @@
 import { HydrusNotes } from "./hydrus-notes";
-import { HydrusServiceType, service_string_lookup } from "./hydrus-services";
+import { HydrusIncDecRatingService, HydrusLikeRatingService, HydrusNumericalRatingService, HydrusServiceSimple, HydrusServiceType, HydrusServices, isIncDecRatingService, isLikeRatingService, isNumericalRatingService, service_string_lookup } from "./hydrus-services";
 import { HydrusURLInfo } from "./hydrus-url";
 
 export interface ServiceNamesToStatusesToTags {
@@ -49,6 +49,10 @@ export interface HydrusBasicFileFromAPI {
   num_words?: number;
 }
 
+interface RatingsFromAPI {
+  [service_key: string]: boolean | number | null;
+}
+
 export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   known_urls: string[];
   file_services: {
@@ -73,10 +77,46 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   detailed_known_urls?: HydrusURLInfo[];
 
   ipfs_multihashes?: Record<string, string>;
+
+  ratings?: RatingsFromAPI;
 }
+
+type Rating =
+  {service_key: string} &
+  ((HydrusNumericalRatingService & {value: number | null}) |
+  (HydrusLikeRatingService & {value: boolean | null}) |
+  (HydrusIncDecRatingService & {value: number}))
 
 export interface HydrusFile extends HydrusFileFromAPI, HydrusBasicFile {
   time_imported?: Date;
+  ratings_array?: Rating[]
+}
+
+export function generateRatingsArray(ratings: RatingsFromAPI, services: HydrusServices) {
+  return Object.entries(ratings).map(([service_key, value]) => {
+    const service = services[service_key];
+    if (isNumericalRatingService(service)) {
+      return {
+        service_key,
+        ...service,
+        value: value as number | null
+      }
+    } else if (isLikeRatingService(service)) {
+      return {
+        service_key,
+        ...service,
+        value: value as boolean | null
+      }
+    } else if (isIncDecRatingService(service)) {
+      return {
+        service_key,
+        ...service,
+        value: value as number
+      }
+    } else {
+      return null;
+    }
+  })
 }
 
 export interface HydrusBasicFile extends HydrusBasicFileFromAPI {
