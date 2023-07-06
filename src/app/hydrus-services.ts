@@ -62,11 +62,11 @@ export interface HydrusService extends HydrusServiceSimple {
   service_key: string,
 }
 
-type HydrusRatingStarType = 'circle' | 'square' | 'fat star' | 'pentagram star';
+export type HydrusRatingStarType = 'circle' | 'square' | 'fat star' | 'pentagram star';
 
 export interface HydrusNumericalRatingService extends HydrusServiceSimple {
-  min: number;
-  max: number;
+  min_stars: number;
+  max_stars: number;
   star_shape: HydrusRatingStarType;
   type: HydrusServiceType.LOCAL_RATING_NUMERICAL | HydrusServiceType.RATING_NUMERICAL_REPOSITORY;
 }

@@ -1,5 +1,5 @@
 import { Component, Inject, ChangeDetectionStrategy, Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagService, HydrusTagServiceType } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagService, HydrusTagServiceType, Rating } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
@@ -15,13 +15,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HydrusSearchTags } from '../hydrus-tags';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
-import { HydrusServiceType } from '../hydrus-services';
+import { HydrusRatingStarType, HydrusServiceType, isIncDecRatingService, isLikeRatingService, isNumericalRatingService } from '../hydrus-services';
 import { NoteEditDialogComponent } from '../note-edit-dialog/note-edit-dialog.component';
 import { HydrusNotesService } from '../hydrus-notes.service';
 import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
-import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component';
-
-
+import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component'
+import { HydrusRatingsService } from '../hydrus-ratings.service';
 
 function getFileIcon(fileType: HydrusFileType) {
   switch (fileType) {
@@ -79,7 +78,8 @@ export class FileInfoSheetComponent {
     private router: Router,
     private notesService: HydrusNotesService,
     public fileInfoSheetService: FileInfoSheetService,
-    private urlService: HydrusUrlService
+    private urlService: HydrusUrlService,
+    private ratingsService: HydrusRatingsService
   ) {
    }
 
@@ -88,6 +88,15 @@ export class FileInfoSheetComponent {
   isBrowse = this.router.isActive('/', {paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'})
 
   reload$ = new BehaviorSubject(null);
+
+  isNumericalRatingService = isNumericalRatingService;
+  isLikeRatingService = isLikeRatingService;
+  isIncDecRatingService = isIncDecRatingService;
+
+  hasServiceKey(obj: any): obj is {service_key: string} {
+    return !!obj.service_key
+  }
+
 
   processTags(file: HydrusFile): {
     displayTags: TagServiceItem[],
@@ -130,6 +139,20 @@ export class FileInfoSheetComponent {
     shareReplay(1),
   )
 
+  ratingIcons: Record<HydrusRatingStarType, string> = {
+    'fat star': 'rating:star',
+    'pentagram star': 'rating:star',
+    'circle': 'rating:circle',
+    'square': 'rating:square'
+  }
+
+  ratingIconsOutline: Record<HydrusRatingStarType, string> = {
+    'fat star': 'rating:star_outline',
+    'pentagram star': 'rating:star_outline',
+    'circle': 'rating:circle_outline',
+    'square': 'rating:square_outline'
+  }
+
   ipfsUrl$ = this.file$.pipe(
     filter(file => file.ipfs_multihashes && Object.values(file.ipfs_multihashes).length > 0),
     map(file => `${this.settings.appSettings.ipfsMultihashUrlPrefix}${Object.values(file.ipfs_multihashes)[0]}`)
@@ -146,6 +169,10 @@ export class FileInfoSheetComponent {
 
   trackByNote(index: number, item: { name: string, value: string }) {
     return item.name;
+  }
+
+  trackByRating(index: number, rating: Rating) {
+    return rating.service_key;
   }
 
 
@@ -442,6 +469,27 @@ export class FileInfoSheetComponent {
     if(dialogResult) {
       return this.editUrl(url, dialogResult.url);
     }
+  }
+
+  async setRating(rating: {service_key: string}, value: number | boolean | null) {
+    try {
+      await firstValueFrom(this.ratingsService.setRating(this.data.file.hash, rating.service_key, value))
+      this.reload();
+      this.snackbar.open(`Rating changed`, undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.reload();
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+    }
+  }
+
+  testRating(rating: Rating, value: any) {
+    console.log(rating);
+    console.log(value);
+    rating.value = value;
   }
 
 }

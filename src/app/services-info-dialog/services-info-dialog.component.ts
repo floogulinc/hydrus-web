@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HydrusServicesService } from '../hydrus-services.service';
+import { isNumericalRatingService, isLikeRatingService, isIncDecRatingService } from '../hydrus-services';
 
 @Component({
   selector: 'app-services-info-dialog',
@@ -7,6 +8,10 @@ import { HydrusServicesService } from '../hydrus-services.service';
   styleUrls: ['./services-info-dialog.component.scss']
 })
 export class ServicesInfoDialogComponent implements OnInit {
+
+  isNumericalRatingService = isNumericalRatingService;
+  isLikeRatingService = isLikeRatingService;
+  isIncDecRatingService = isIncDecRatingService;
 
   constructor(
     public services: HydrusServicesService

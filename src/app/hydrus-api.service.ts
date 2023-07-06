@@ -430,5 +430,13 @@ export class HydrusApiService {
     );
   }
 
+  public setRating(data: {
+    hash: string,
+    rating_service_key: string,
+    rating: number | boolean | null
+  }) {
+    return this.apiPost('edit_ratings/set_rating', data);
+  }
+
 
 }

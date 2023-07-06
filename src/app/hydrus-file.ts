@@ -81,7 +81,7 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   ratings?: RatingsFromAPI;
 }
 
-type Rating =
+export type Rating =
   {service_key: string} &
   ((HydrusNumericalRatingService & {value: number | null}) |
   (HydrusLikeRatingService & {value: boolean | null}) |
@@ -94,22 +94,19 @@ export interface HydrusFile extends HydrusFileFromAPI, HydrusBasicFile {
 
 export function generateRatingsArray(ratings: RatingsFromAPI, services: HydrusServices) {
   return Object.entries(ratings).map(([service_key, value]) => {
-    const service = services[service_key];
+    const service = {service_key, ...services[service_key]}
     if (isNumericalRatingService(service)) {
       return {
-        service_key,
         ...service,
         value: value as number | null
       }
     } else if (isLikeRatingService(service)) {
       return {
-        service_key,
         ...service,
         value: value as boolean | null
       }
     } else if (isIncDecRatingService(service)) {
       return {
-        service_key,
         ...service,
         value: value as number
       }

@@ -10,7 +10,7 @@ import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 import { MigrationService } from './migration.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CUBE } from './svg-icons';
+import { CUBE, ratingsIcons } from './svg-icons';
 import { HydrusVersionService } from './hydrus-version.service';
 
 @Component({
@@ -35,11 +35,12 @@ export class AppComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private updates: SwUpdate,
     private snackBar: MatSnackBar,
-    private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer,
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer,
     private hydrusVersionService: HydrusVersionService
   ) {
     iconRegistry.addSvgIconLiteral('cube', sanitizer.bypassSecurityTrustHtml(CUBE));
+    Object.entries(ratingsIcons).forEach(([name, literal]) => iconRegistry.addSvgIconLiteralInNamespace('rating', name, sanitizer.bypassSecurityTrustHtml(literal)))
   }
 
   @ViewChild(MatSidenavContent, {static: true})

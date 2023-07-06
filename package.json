@@ -41,6 +41,7 @@
     "byte-size": "^8.1.0",
     "file-saver": "^2.0.5",
     "material-icons": "^1.12.0",
+    "ngx-bar-rating": "^4.0.1",
     "ngx-localstorage": "^3.5.0",
     "ngx-material-file-input": "^4.0.1",
     "ngx-pipes": "^3.1.0",

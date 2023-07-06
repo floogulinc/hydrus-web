@@ -43,11 +43,16 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TextFieldModule} from '@angular/cdk/text-field';
+import { MatNativeDateModule } from '@angular/material/core';
+
 
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -57,23 +62,23 @@ import { PushModule } from '@rx-angular/template/push';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
+
+import { NgPipesModule } from 'ngx-pipes';
+
+import { BarRatingModule } from 'ngx-bar-rating';
+
 import { AboutComponent } from './about/about.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
 import { FilesPageComponent } from './files-page/files-page.component';
 import { SendComponent } from './send/send.component';
 import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatExpansionModule} from '@angular/material/expansion';
-import { NgPipesModule } from 'ngx-pipes';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
 import { TagInputDialogComponent } from './tag-input-dialog/tag-input-dialog.component';
 import { TagNamespaceClassPipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
-import { MatNativeDateModule } from '@angular/material/core';
 import { SortInputComponent } from './sort-input/sort-input.component';
 import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.component';
 import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
@@ -167,7 +172,8 @@ const MAT_MODULES = [
         ClipboardModule,
         LetModule,
         PushModule,
-        MaterialFileInputModule
+        MaterialFileInputModule,
+        BarRatingModule
     ],
     providers: [],
     bootstrap: [AppComponent]
