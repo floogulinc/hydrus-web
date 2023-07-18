@@ -39,7 +39,7 @@ export class HydrusApiService {
   }
 
   public getAPIUrl(): string {
-    return this.hydrusApiUrl + (this.hydrusApiUrl.endsWith('/') ? '' : '/');
+    return this.hydrusApiUrl + (this.hydrusApiUrl?.endsWith('/') ? '' : '/');
   }
 
   private getHeaders() {

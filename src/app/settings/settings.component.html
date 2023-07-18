@@ -55,7 +55,7 @@
           <mat-label>Filename Tag Service</mat-label>
           <mat-select formControlName="uploadFilenameTagService">
             <mat-option>None (disabled)</mat-option>
-            <mat-option *ngFor="let service of tagServices$ | async" [value]="service.service_key">
+            <mat-option *ngFor="let service of (apiSettings.apiSet ? (tagServices$ | async) : [])" [value]="service.service_key">
               {{service.name}}
             </mat-option>
           </mat-select>

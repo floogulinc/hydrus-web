@@ -8,6 +8,7 @@ import { SettingsService } from '../settings.service';
 import { HydrusServicesService } from '../hydrus-services.service';
 import { getLocalTagServices } from '../hydrus-services';
 import { map } from 'rxjs';
+import { HydrusApiSettingsService } from '../hydrus-api-settings.service';
 
 @Component({
   selector: 'app-settings',
@@ -22,6 +23,7 @@ export class SettingsComponent implements OnInit {
     private api: HydrusApiService,
     private hydrusVersionService: HydrusVersionService,
     private hydrusServices: HydrusServicesService,
+    public apiSettings: HydrusApiSettingsService
   ) { }
 
   testData: HydrusKeyVerificationData;
