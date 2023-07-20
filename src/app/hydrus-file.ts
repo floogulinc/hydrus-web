@@ -164,7 +164,8 @@ export function getFileCategory(type: HydrusFiletype): FileCategory {
     HydrusFiletype.IMAGE_APNG,
     HydrusFiletype.IMAGE_GIF,
     HydrusFiletype.IMAGE_BMP,
-    HydrusFiletype.IMAGE_WEBP
+    HydrusFiletype.IMAGE_WEBP,
+    HydrusFiletype.IMAGE_SVG
   ].includes(type)) {
     return FileCategory.Image;
   }
