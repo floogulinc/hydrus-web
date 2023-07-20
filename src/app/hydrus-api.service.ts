@@ -42,7 +42,7 @@ export class HydrusApiService {
     return this.hydrusApiUrl + (this.hydrusApiUrl?.endsWith('/') ? '' : '/');
   }
 
-  private getHeaders() {
+  private get headers() {
     return {
       'Hydrus-Client-API-Access-Key': this.hydrusApiKey
     };
@@ -54,19 +54,19 @@ export class HydrusApiService {
     } : {};
     return this.http.get<T>(this.getAPIUrl() + path, {
       params,
-      headers: {...this.getHeaders(), ...cacheHeaders}
+      headers: {...this.headers, ...cacheHeaders}
     });
   }
 
   private apiPost<T>(path: string, data: any) {
     return this.http.post<T>(this.getAPIUrl() + path,
                           data,
-                          {headers: this.getHeaders()});
+                          {headers: this.headers});
   }
 
   public testApi(): Observable<HydrusKeyVerificationData> {
     return this.http.get<HydrusKeyVerificationData>(this.getAPIUrl() + 'verify_access_key', {
-      headers: this.getHeaders()
+      headers: this.headers
     });
   }
 
@@ -220,7 +220,7 @@ export class HydrusApiService {
     return this.http.get(
       this.getAPIUrl() + 'get_files/file?hash=' + file_hash,
       {
-        headers: this.getHeaders(),
+        headers: this.headers,
         responseType: 'blob'
       },
     );
@@ -230,7 +230,7 @@ export class HydrusApiService {
     return this.http.get(
       this.getAPIUrl() + 'get_files/thumbnail?hash=' + file_hash,
       {
-        headers: this.getHeaders(),
+        headers: this.headers,
         responseType: 'blob'
       },
     );
@@ -421,7 +421,7 @@ export class HydrusApiService {
       file,
       {
         headers: {
-          ...this.getHeaders(),
+          ...this.headers,
           'Content-Type': 'application/octet-stream'
         },
         reportProgress: true,
