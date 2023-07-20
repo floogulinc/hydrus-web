@@ -89,6 +89,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { UrlEditDialogComponent } from './url-edit-dialog/url-edit-dialog.component';
 import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ServicesInfoDialogComponent } from './services-info-dialog/services-info-dialog.component';
+import { ApiSettingsComponent } from './api-settings/api-settings.component';
+import { AppSettingsComponent } from './app-settings/app-settings.component';
 
 
 const MAT_MODULES = [
@@ -150,7 +152,9 @@ const MAT_MODULES = [
         WelcomeComponent,
         UrlEditDialogComponent,
         UploadFileComponent,
-        ServicesInfoDialogComponent
+        ServicesInfoDialogComponent,
+        ApiSettingsComponent,
+        AppSettingsComponent
     ],
     imports: [
         BrowserModule,

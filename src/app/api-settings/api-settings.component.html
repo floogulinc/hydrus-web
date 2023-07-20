@@ -1,0 +1,34 @@
+<div fxLayout="column" class="settings-column">
+  <mat-form-field appearance="outline">
+    <mat-label>Hydrus API URL</mat-label>
+    <input
+      matInput
+      name="hydrusApiUrl"
+      type="url"
+      autocomplete="off"
+      ngxLocalStorage="hydrusApiUrl"
+      lsEvent="input"
+      [lsDebounce]="1000"
+      [lsInitFromStorage]="true"
+      (lsStoredValue)="this.apiUrlStored()"
+      placeholder="https://my.hydrus.api/"
+    >
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+      <mat-label>Hydrus API Key</mat-label>
+    <input
+      matInput
+      name="hydrusApiKey"
+      type="password"
+      autocomplete="off"
+      ngxLocalStorage="hydrusApiKey"
+      lsEvent="input"
+      [lsDebounce]="1000"
+      [lsInitFromStorage]="true"
+      (lsStoredValue)="this.apiKeyStored()"
+    >
+  </mat-form-field>
+  <div fxLayout="row" class="test-button-container">
+    <button mat-raised-button color="primary" (click)="this.testApi()">Test API</button>
+  </div>
+</div>

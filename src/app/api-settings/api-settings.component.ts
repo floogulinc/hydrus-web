@@ -1,0 +1,52 @@
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.service';
+import { SettingsService } from '../settings.service';
+import { HydrusVersionService } from '../hydrus-version.service';
+
+@Component({
+  selector: 'app-api-settings',
+  templateUrl: './api-settings.component.html',
+  styleUrls: ['./api-settings.component.scss']
+})
+export class ApiSettingsComponent implements OnInit {
+
+  constructor(
+    private api: HydrusApiService,
+    private snackbar: MatSnackBar,
+    private hydrusVersionService: HydrusVersionService,
+  ) { }
+
+  testData: HydrusKeyVerificationData;
+
+  ngOnInit(): void {
+  }
+
+  apiUrlStored() {
+    this.snackbar.open('API URL saved', undefined, {
+      duration: 2000
+    });
+  }
+
+  apiKeyStored() {
+    this.snackbar.open('API key saved', undefined, {
+      duration: 2000
+    });
+  }
+
+  testApi() {
+    this.api.testApi().subscribe((data) => {
+      console.log(data);
+      this.hydrusVersionService.checkHydrusVersion();
+      this.snackbar.open(data.human_description, undefined, {
+        duration: 5000
+      });
+    }, (error) => {
+      console.log(error);
+      this.snackbar.open(`Error: ${error.message}`, undefined, {
+        duration: 5000
+      });
+    });
+  }
+
+}
