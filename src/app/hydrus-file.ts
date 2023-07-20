@@ -1,6 +1,7 @@
-import { HydrusNotes } from "./hydrus-notes";
-import { HydrusIncDecRatingService, HydrusLikeRatingService, HydrusNumericalRatingService, HydrusServiceSimple, HydrusServiceType, HydrusServices, isIncDecRatingService, isLikeRatingService, isNumericalRatingService, service_string_lookup } from "./hydrus-services";
-import { HydrusURLInfo } from "./hydrus-url";
+import { HydrusNotes } from './hydrus-notes';
+import { HydrusIncDecRatingService, HydrusLikeRatingService, HydrusNumericalRatingService, HydrusServiceSimple, HydrusServiceType, HydrusServices, isIncDecRatingService, isLikeRatingService, isNumericalRatingService, service_string_lookup } from './hydrus-services';
+import { HydrusURLInfo } from './hydrus-url';
+import { HydrusFiletype } from './hydrus-file-mimes'
 
 export interface ServiceNamesToStatusesToTags {
   [service: string]: StatusesToTags;
@@ -60,8 +61,8 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
     deleted?: FileFileServices;
   };
   time_modified: number;
-  service_names_to_statuses_to_tags?: ServiceNamesToStatusesToTags;
-  service_names_to_statuses_to_display_tags?: ServiceNamesToStatusesToTags;
+  service_names_to_statuses_to_tags?: ServiceNamesToStatusesToTags; // removed in v514
+  service_names_to_statuses_to_display_tags?: ServiceNamesToStatusesToTags; // removed in v514
   service_keys_to_statuses_to_tags?: ServiceNamesToStatusesToTags;
   service_keys_to_statuses_to_display_tags?: ServiceNamesToStatusesToTags;
   is_inbox: boolean;
@@ -70,6 +71,8 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
 
   notes?: HydrusNotes;
 
+  // added in v506
+  // all known tags added in v507
   tags: {
     [serviceKey: string]: HydrusTagService
   }
@@ -79,6 +82,17 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   ipfs_multihashes?: Record<string, string>;
 
   ratings?: RatingsFromAPI;
+
+  has_exif?: boolean; // added in v506
+  has_human_readable_embedded_metadata?: boolean; // added in v506
+  has_icc_profile?: boolean; // added in v506
+
+  thumbnail_width?: number; // added in v506
+  thumbnail_height?: number; // added in v506
+
+  time_modified_details?: Record<string, number>; // added in v506
+
+  is_deleted?: boolean; // added in v506
 }
 
 export type Rating =
@@ -119,14 +133,16 @@ export function generateRatingsArray(ratings: RatingsFromAPI, services: HydrusSe
 export interface HydrusBasicFile extends HydrusBasicFileFromAPI {
   file_url: string;
   thumbnail_url: string;
-  file_type: HydrusFileType;
+  file_category: FileCategory;
+  file_type: HydrusFiletype;
+  file_type_string: string;
 }
 
 export interface HydrusFileList {
     [fileId: number]: HydrusFile;
 }
 
-export enum HydrusFileType {
+export enum FileCategory {
   Image,
   Video,
   Audio,
@@ -141,39 +157,38 @@ export enum TagStatus {
   Petitioned = 3,
 }
 
-export function type(mime: string): HydrusFileType {
+export function getFileCategory(type: HydrusFiletype): FileCategory {
   if ([
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/apng',
-    'image/gif',
-    'image/bmp',
-    'image/webp'
-  ].includes(mime)) {
-    return HydrusFileType.Image;
+    HydrusFiletype.IMAGE_JPEG,
+    HydrusFiletype.IMAGE_PNG,
+    HydrusFiletype.IMAGE_APNG,
+    HydrusFiletype.IMAGE_GIF,
+    HydrusFiletype.IMAGE_BMP,
+    HydrusFiletype.IMAGE_WEBP
+  ].includes(type)) {
+    return FileCategory.Image;
   }
   if ([
-    'video/mp4',
-    'video/webm',
-    'video/x-matroska',
-    'video/quicktime',
-  ].includes(mime)) {
-    return HydrusFileType.Video;
+    HydrusFiletype.VIDEO_MP4,
+    HydrusFiletype.VIDEO_WEBM,
+    HydrusFiletype.VIDEO_MKV,
+    HydrusFiletype.VIDEO_MOV,
+  ].includes(type)) {
+    return FileCategory.Video;
   }
   if ([
-    'audio/mp3',
-    'audio/ogg',
-    'audio/flac',
-    'audio/x-wav',
-  ].includes(mime)) {
-    return HydrusFileType.Audio;
+    HydrusFiletype.AUDIO_MP3,
+    HydrusFiletype.AUDIO_OGG,
+    HydrusFiletype.AUDIO_FLAC,
+    HydrusFiletype.AUDIO_WAVE,
+  ].includes(type)) {
+    return FileCategory.Audio;
   }
   if ([
-    'video/x-flv',
-    'application/x-shockwave-flash'
-  ].includes(mime)) {
-    return HydrusFileType.Flash;
+    HydrusFiletype.APPLICATION_FLASH,
+    HydrusFiletype.VIDEO_FLV
+  ].includes(type)) {
+    return FileCategory.Flash;
   }
-  return HydrusFileType.Unsupported;
+  return FileCategory.Unsupported;
 }

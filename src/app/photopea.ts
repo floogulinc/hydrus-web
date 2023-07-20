@@ -1,4 +1,5 @@
 import { HydrusBasicFile } from "./hydrus-file";
+import { HydrusFiletype } from "./hydrus-file-mimes";
 import { RecursiveArray } from "./utils/array-utils";
 
 const photopeaBaseUrl = 'https://www.photopea.com/'
@@ -42,18 +43,19 @@ function generatePhotopeaUrl(data: PhotopeaUrlData) {
 
 export function canOpenInPhotopea(file: HydrusBasicFile) {
   return [
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/apng',
-    'image/gif',
-    'image/bmp',
-    'image/webp',
-    'application/x-photoshop',
-    'application/clip',
-    'image/tiff',
-    'image/x-icon'
-  ].includes(file.mime)
+    HydrusFiletype.IMAGE_JPEG,
+    HydrusFiletype.IMAGE_PNG,
+    HydrusFiletype.IMAGE_APNG,
+    HydrusFiletype.IMAGE_GIF,
+    HydrusFiletype.IMAGE_BMP,
+    HydrusFiletype.IMAGE_WEBP,
+    HydrusFiletype.APPLICATION_PSD,
+    HydrusFiletype.APPLICATION_CLIP,
+    HydrusFiletype.IMAGE_TIFF,
+    HydrusFiletype.IMAGE_ICON,
+    HydrusFiletype.APPLICATION_KRITA,
+    HydrusFiletype.IMAGE_SVG,
+  ].includes(file.file_type)
 }
 
 export function getPhotopeaUrlForFile(file: HydrusBasicFile) {

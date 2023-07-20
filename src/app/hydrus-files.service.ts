@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, HydrusFileType, generateRatingsArray, type } from './hydrus-file';
+import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, FileCategory, generateRatingsArray, getFileCategory } from './hydrus-file';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, tap } from 'rxjs/operators';
 import { HydrusServices } from './hydrus-services';
+import { HydrusFiletype, filetypeFromMime, mime_string_lookup } from './hydrus-file-mimes';
 
 function chunk<T>(array: T[], size: number): T[][] {
   const chunked = [];
@@ -105,6 +106,18 @@ export class HydrusFilesService {
     );
   }
 
+  private basicFileExtraInfo(file: HydrusBasicFileFromAPI) {
+    const filetype = filetypeFromMime(file.mime);
+
+    return {
+      file_url: this.api.getFileURLFromHash(file.hash),
+      thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
+      file_type: filetype,
+      file_category: getFileCategory(filetype),
+      file_type_string: filetype === HydrusFiletype.APPLICATION_UNKNOWN ? file.mime : mime_string_lookup[filetype]
+    }
+  }
+
   private processFileFromAPI(file: HydrusFileFromAPI, services?: HydrusServices): HydrusFile {
     const importTimes = file.file_services.current
               ? Object.values(file.file_services.current)
@@ -117,9 +130,7 @@ export class HydrusFilesService {
 
     return {
       ...file,
-      file_url: this.api.getFileURLFromHash(file.hash),
-      thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
-      file_type: type(file.mime),
+      ...this.basicFileExtraInfo(file),
       time_imported: firstImportTime,
       ratings_array: file.ratings ? generateRatingsArray(file.ratings, services) : undefined
     }
@@ -128,9 +139,7 @@ export class HydrusFilesService {
   private processBasicFileFromAPI(file: HydrusBasicFileFromAPI): HydrusBasicFile {
     return {
       ...file,
-      file_url: this.api.getFileURLFromHash(file.hash),
-      thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
-      file_type: type(file.mime),
+      ...this.basicFileExtraInfo(file)
     }
   }
 

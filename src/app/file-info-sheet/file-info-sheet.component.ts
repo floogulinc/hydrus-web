@@ -1,5 +1,5 @@
 import { Component, Inject, ChangeDetectionStrategy, Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagService, HydrusTagServiceType, Rating } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile, FileCategory, HydrusTagService, HydrusTagServiceType, Rating } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { saveAs } from 'file-saver';
@@ -22,15 +22,15 @@ import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
 import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component'
 import { HydrusRatingsService } from '../hydrus-ratings.service';
 
-function getFileIcon(fileType: HydrusFileType) {
+function getFileIcon(fileType: FileCategory) {
   switch (fileType) {
-    case HydrusFileType.Image: {
+    case FileCategory.Image: {
       return 'image';
     }
-    case HydrusFileType.Video: {
+    case FileCategory.Video: {
       return 'movie';
     }
-    case HydrusFileType.Audio: {
+    case FileCategory.Audio: {
       return 'music_note';
     }
     default: {
@@ -124,7 +124,7 @@ export class FileInfoSheetComponent {
     map(file => {
       const tags = this.processTags(file);
 
-      const fileIcon = getFileIcon(file.file_type);
+      const fileIcon = getFileIcon(file.file_category);
 
       const notesMapArray = file.notes ? Object.entries(file.notes).map(([name, value]) => ({ name, value })) : [];
 

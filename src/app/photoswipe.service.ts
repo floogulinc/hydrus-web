@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusFileType } from './hydrus-file';
+import { HydrusBasicFile, FileCategory } from './hydrus-file';
 import PhotoSwipe, { PhotoSwipeOptions, SlideData } from 'photoswipe';
 import { Platform } from '@angular/cdk/platform';
 import Content from 'photoswipe/dist/types/slide/content';
@@ -243,7 +243,7 @@ export class PhotoswipeService {
         errorMsgEl.appendChild(img);
 
         const errorMsgText = document.createElement('div');
-        errorMsgText.innerText = `Unsupported Filetype (${file.mime})`;
+        errorMsgText.innerText = `Unsupported Filetype (${file.file_type_string})`;
         errorMsgText.className = 'pswp-error-text';
         errorMsgEl.appendChild(errorMsgText);
 
@@ -312,7 +312,7 @@ export class PhotoswipeService {
       errorMsgEl.appendChild(img);
 
       const errorMsgText = document.createElement('div');
-      errorMsgText.innerText = `The file cannot be loaded (${file.mime})`;
+      errorMsgText.innerText = `The file cannot be loaded (${file.file_type_string})`;
       errorMsgText.className = 'pswp-error-text';
       errorMsgEl.appendChild(errorMsgText);
 
@@ -375,8 +375,8 @@ export class PhotoswipeService {
 
   getPhotoSwipeItem(file: HydrusBasicFile): SlideData {
 
-    switch(file.file_type) {
-      case HydrusFileType.Image: {
+    switch(file.file_category) {
+      case FileCategory.Image: {
         return {
           src: file.file_url,
           msrc: file.thumbnail_url,
@@ -385,13 +385,13 @@ export class PhotoswipeService {
           file
         };
       }
-      case HydrusFileType.Video: {
+      case FileCategory.Video: {
         return {
           file,
           type: 'video',
         };
       }
-      case HydrusFileType.Audio: {
+      case FileCategory.Audio: {
         return {
           file,
           type: 'audio'
