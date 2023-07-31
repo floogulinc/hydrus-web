@@ -21,6 +21,8 @@ import { HydrusNotesService } from '../hydrus-notes.service';
 import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
 import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component'
 import { HydrusRatingsService } from '../hydrus-ratings.service';
+import { JsonViewDialogComponent } from '../json-view-dialog/json-view-dialog.component';
+import { ExifReaderService } from '../exif-reader.service';
 
 function getFileIcon(fileType: FileCategory) {
   switch (fileType) {
@@ -79,7 +81,8 @@ export class FileInfoSheetComponent {
     private notesService: HydrusNotesService,
     public fileInfoSheetService: FileInfoSheetService,
     private urlService: HydrusUrlService,
-    private ratingsService: HydrusRatingsService
+    private ratingsService: HydrusRatingsService,
+    private exifReader: ExifReaderService
   ) {
    }
 
@@ -486,10 +489,26 @@ export class FileInfoSheetComponent {
     }
   }
 
-  testRating(rating: Rating, value: any) {
-    console.log(rating);
-    console.log(value);
-    rating.value = value;
+  async rawInfo() {
+    const snackBarRef = this.snackbar.open('Getting file info...');
+    const json = await firstValueFrom(this.filesService.getRawFileMetadata(this.data.file.hash));
+    snackBarRef.dismiss();
+    JsonViewDialogComponent.open(this.dialog, {json, title: "Raw file data"});
+  }
+
+  canGetMetadata = this.exifReader.canReadExif(this.data.file);
+
+  async fileMetadata() {
+    const snackBarRef = this.snackbar.open('Getting file metadata...');
+    try {
+      const exif = await this.exifReader.getExifTagsForFile(this.data.file);
+      snackBarRef.dismiss();
+      JsonViewDialogComponent.open(this.dialog, {json: exif, title: "File metadata"});
+    } catch (error) {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+    }
   }
 
 }

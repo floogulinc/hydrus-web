@@ -59,6 +59,12 @@ export class HydrusFilesService {
     );
   }
 
+  public getRawFileMetadata(hash: string) {
+    return this.getFileMetadataHashAPI([hash]).pipe(
+      map((value) => value.metadata?.[0])
+    )
+  }
+
   private getBasicFileMetadataAPI(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
     return this.api.getFileMetadata({ file_ids: fileIds, only_return_identifiers: false, only_return_basic_information: true }).pipe(map(val => val.metadata));
   }
@@ -206,5 +212,6 @@ export class HydrusFilesService {
   public unarchiveFile(hash: string){
     return this.api.unarchiveFiles({hash});
   }
+
 
 }

@@ -34,6 +34,14 @@
         <mat-icon>search</mat-icon>
         <span>SauceNAO lookup</span>
       </button>
+      <button mat-menu-item *ngIf="canGetMetadata" (click)="fileMetadata()">
+        <mat-icon>list</mat-icon>
+        <span>View file metadata</span>
+      </button>
+      <button mat-menu-item (click)="rawInfo()">
+        <mat-icon>data_object</mat-icon>
+        <span>View raw file info</span>
+      </button>
       <button mat-menu-item (click)="reload()">
         <mat-icon>refresh</mat-icon>
         <span>Refresh</span>

@@ -52,20 +52,15 @@ import {ScrollingModule} from '@angular/cdk/scrolling';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import { MatNativeDateModule } from '@angular/material/core';
-
-
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { LetModule } from '@rx-angular/template/let';
 import { PushModule } from '@rx-angular/template/push';
-
 import { MaterialFileInputModule } from 'ngx-material-file-input';
-
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
-
 import { NgPipesModule } from 'ngx-pipes';
-
 import { BarRatingModule } from 'ngx-bar-rating';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+
 
 import { AboutComponent } from './about/about.component';
 import { ImageListComponent } from './image-list/image-list.component';
@@ -91,6 +86,7 @@ import { UploadFileComponent } from './upload-file/upload-file.component';
 import { ServicesInfoDialogComponent } from './services-info-dialog/services-info-dialog.component';
 import { ApiSettingsComponent } from './api-settings/api-settings.component';
 import { AppSettingsComponent } from './app-settings/app-settings.component';
+import { JsonViewDialogComponent } from './json-view-dialog/json-view-dialog.component';
 
 
 const MAT_MODULES = [
@@ -154,7 +150,8 @@ const MAT_MODULES = [
         UploadFileComponent,
         ServicesInfoDialogComponent,
         ApiSettingsComponent,
-        AppSettingsComponent
+        AppSettingsComponent,
+        JsonViewDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -177,7 +174,8 @@ const MAT_MODULES = [
         LetModule,
         PushModule,
         MaterialFileInputModule,
-        BarRatingModule
+        BarRatingModule,
+        NgxJsonViewerModule
     ],
     providers: [],
     bootstrap: [AppComponent]
