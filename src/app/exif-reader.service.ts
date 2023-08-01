@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import * as ExifReader from 'exifreader';
 import { HydrusBasicFile } from './hydrus-file';
 import { HydrusFiletype } from './hydrus-file-mimes';
+import { firstValueFrom } from 'rxjs';
+import { HydrusFilesService } from './hydrus-files.service';
 
 
 @Injectable({
@@ -10,10 +12,11 @@ import { HydrusFiletype } from './hydrus-file-mimes';
 })
 export class ExifReaderService {
 
-  constructor() { }
+  constructor(private hydrusFilesService: HydrusFilesService) { }
 
   async getExifTagsForFile(file: HydrusBasicFile) {
-    return ExifReader.load(file.file_url, {includeUnknown: true});
+    const fileData = await firstValueFrom(this.hydrusFilesService.getFileAsFile(file));
+    return ExifReader.load(fileData, {includeUnknown: true});
   }
 
   canReadExif(file: HydrusBasicFile) {
