@@ -5,6 +5,10 @@
     <mat-slide-toggle formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
     <app-tag-input formControlName="browseDefaultSearchTags" placeholder="Browse page default search" class=""></app-tag-input>
     <app-tag-input formControlName="favoriteTags" [enableFavorites]="false" [enableOrSearch]="false" placeholder="Favorite tags" class=""></app-tag-input>
+    <h2>File Viewing</h2>
+    <mat-slide-toggle formControlName="mediaAutoplay" class="margin-bottom-16">Autoplay video and audio files</mat-slide-toggle>
+    <mat-slide-toggle formControlName="mediaLoop" class="margin-bottom-16">Loop video and audio files</mat-slide-toggle>
+    <mat-slide-toggle formControlName="mediaDefaultMuted" class="margin-bottom-16">Video and audio files start muted</mat-slide-toggle>
     <h2>Send</h2>
     <mat-form-field appearance="outline">
       <mat-label>Default page name for sending URLs</mat-label>

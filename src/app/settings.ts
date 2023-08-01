@@ -16,6 +16,9 @@ export interface AppSettingsV1 {
   sendResetFormAfterSend: boolean;
   sendFixDiscordUrls: boolean;
   uploadFilenameTagService: string;
+  mediaAutoplay: boolean;
+  mediaLoop: boolean;
+  mediaDefaultMuted: boolean;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -35,4 +38,7 @@ export const defaultAppSettings: AppSettings = {
   sendResetFormAfterSend: true,
   sendFixDiscordUrls: false,
   uploadFilenameTagService: '',
+  mediaAutoplay: true,
+  mediaLoop: true,
+  mediaDefaultMuted: false,
 }

@@ -268,10 +268,11 @@ export class PhotoswipeService {
         const file = content.data.file as HydrusBasicFile;
         const vid = document.createElement('video');
         vid.src = file.file_url;
-        vid.autoplay = true;
+        vid.autoplay = this.settingsService.appSettings.mediaAutoplay;
         vid.controls = !this.platform.FIREFOX;
         vid.poster = file.thumbnail_url;
-        vid.loop = true;
+        vid.loop = this.settingsService.appSettings.mediaLoop;
+        vid.muted = this.settingsService.appSettings.mediaDefaultMuted;
         vid.className = 'pswp-video pswp-media';
         vid.onloadeddata = (e) => {
           content.onLoaded();
@@ -284,8 +285,9 @@ export class PhotoswipeService {
         const file = content.data.file as HydrusBasicFile;
         const audio = document.createElement('audio');
         audio.src = file.file_url;
-        audio.autoplay = true;
-        audio.loop = true;
+        audio.autoplay = this.settingsService.appSettings.mediaAutoplay;
+        audio.loop = this.settingsService.appSettings.mediaLoop;
+        audio.muted = this.settingsService.appSettings.mediaDefaultMuted;
         audio.controls = true;
         audio.className = 'pswp-audio pswp-media';
         audio.onloadeddata = (e) => {
