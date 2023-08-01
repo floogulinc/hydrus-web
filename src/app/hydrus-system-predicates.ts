@@ -10,6 +10,10 @@ export enum SystemPredicate {
   NOT_BEST_QUALITY_OF_GROUP,
   HAS_AUDIO,
   NO_AUDIO,
+  HAS_EXIF,
+  NO_EXIF,
+  HAS_HUMAN_READABLE_EMBEDDED_METADATA,
+  NO_HUMAN_READABLE_EMBEDDED_METADATA,
   HAS_ICC_PROFILE,
   NO_ICC_PROFILE,
   HAS_TAGS,
@@ -123,6 +127,10 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.NOT_BEST_QUALITY_OF_GROUP]: { name: 'is not the best quality file of its duplicate group', operator: null, value: null, units: null },
   [SystemPredicate.HAS_AUDIO]: { name: 'has audio', operator: null, value: null, units: null },
   [SystemPredicate.NO_AUDIO]: { name: 'no audio', operator: null, value: null, units: null },
+  [SystemPredicate.HAS_EXIF]: { name: 'has exif', operator: null, value: null, units: null },
+  [SystemPredicate.NO_EXIF]: { name: 'no exif', operator: null, value: null, units: null },
+  [SystemPredicate.HAS_HUMAN_READABLE_EMBEDDED_METADATA]: { name: 'has embedded metadata', operator: null, value: null, units: null },
+  [SystemPredicate.NO_HUMAN_READABLE_EMBEDDED_METADATA]: { name: 'no embedded metadata', operator: null, value: null, units: null },
   [SystemPredicate.HAS_ICC_PROFILE]: { name: 'has icc profile', operator: null, value: null, units: null },
   [SystemPredicate.NO_ICC_PROFILE]: { name: 'no icc profile', operator: null, value: null, units: null },
   [SystemPredicate.HAS_TAGS]: { name: 'has tags', operator: null, value: null, units: null },
@@ -249,6 +257,17 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
     ]
   },
   {
+    name: 'embedded metadata',
+    predicates: [
+      SystemPredicate.HAS_EXIF,
+      SystemPredicate.NO_EXIF,
+      SystemPredicate.HAS_HUMAN_READABLE_EMBEDDED_METADATA,
+      SystemPredicate.NO_HUMAN_READABLE_EMBEDDED_METADATA,
+      SystemPredicate.HAS_ICC_PROFILE,
+      SystemPredicate.NO_ICC_PROFILE
+    ]
+  },
+  {
     name: 'file relationships',
     predicates: [
       SystemPredicate.NOT_BEST_QUALITY_OF_GROUP,
@@ -275,13 +294,6 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
     predicates: [
       SystemPredicate.HAS_AUDIO,
       SystemPredicate.NO_AUDIO
-    ]
-  },
-  {
-    name: 'has icc profile',
-    predicates: [
-      SystemPredicate.HAS_ICC_PROFILE,
-      SystemPredicate.NO_ICC_PROFILE
     ]
   },
   { predicate: SystemPredicate.HASH },
