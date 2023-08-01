@@ -87,6 +87,7 @@ import { ServicesInfoDialogComponent } from './services-info-dialog/services-inf
 import { ApiSettingsComponent } from './api-settings/api-settings.component';
 import { AppSettingsComponent } from './app-settings/app-settings.component';
 import { JsonViewDialogComponent } from './json-view-dialog/json-view-dialog.component';
+import { FileMetadataDialogComponent } from './file-metadata-dialog/file-metadata-dialog.component';
 
 
 const MAT_MODULES = [
@@ -151,7 +152,8 @@ const MAT_MODULES = [
         ServicesInfoDialogComponent,
         ApiSettingsComponent,
         AppSettingsComponent,
-        JsonViewDialogComponent
+        JsonViewDialogComponent,
+        FileMetadataDialogComponent
     ],
     imports: [
         BrowserModule,

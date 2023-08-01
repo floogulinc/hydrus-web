@@ -23,6 +23,7 @@ import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.compo
 import { HydrusRatingsService } from '../hydrus-ratings.service';
 import { JsonViewDialogComponent } from '../json-view-dialog/json-view-dialog.component';
 import { ExifReaderService } from '../exif-reader.service';
+import { FileMetadataDialogComponent } from '../file-metadata-dialog/file-metadata-dialog.component';
 
 function getFileIcon(fileType: FileCategory) {
   switch (fileType) {
@@ -499,16 +500,7 @@ export class FileInfoSheetComponent {
   canGetMetadata = this.exifReader.canReadExif(this.data.file);
 
   async fileMetadata() {
-    const snackBarRef = this.snackbar.open('Getting file metadata...');
-    try {
-      const exif = await this.exifReader.getExifTagsForFile(this.data.file);
-      snackBarRef.dismiss();
-      JsonViewDialogComponent.open(this.dialog, {json: exif, title: "File metadata"});
-    } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
-    }
+    FileMetadataDialogComponent.open(this.dialog, {file: this.data.file});
   }
 
 }
