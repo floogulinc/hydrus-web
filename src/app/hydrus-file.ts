@@ -136,6 +136,7 @@ export interface HydrusBasicFile extends HydrusBasicFileFromAPI {
   file_category: FileCategory;
   file_type: HydrusFiletype;
   file_type_string: string;
+  has_thumbnail: boolean;
 }
 
 export interface HydrusFileList {
@@ -165,7 +166,13 @@ export function getFileCategory(type: HydrusFiletype): FileCategory {
     HydrusFiletype.IMAGE_GIF,
     HydrusFiletype.IMAGE_BMP,
     HydrusFiletype.IMAGE_WEBP,
-    HydrusFiletype.IMAGE_SVG
+    HydrusFiletype.IMAGE_SVG,
+    HydrusFiletype.IMAGE_HEIF,
+    HydrusFiletype.IMAGE_HEIF_SEQUENCE,
+    HydrusFiletype.IMAGE_HEIC,
+    HydrusFiletype.IMAGE_HEIC_SEQUENCE,
+    HydrusFiletype.IMAGE_AVIF,
+    HydrusFiletype.IMAGE_AVIF_SEQUENCE,
   ].includes(type)) {
     return FileCategory.Image;
   }

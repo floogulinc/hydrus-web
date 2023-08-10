@@ -203,7 +203,7 @@ export class FileInfoSheetComponent {
     this.downloadService.shareFile(this.data.file);
   }
 
-  canSaucenao = this.saucenaoService.canSaucenao && this.saucenaoService.validSaucenaoMime(this.data.file.mime);
+  canSaucenao = this.saucenaoService.canSaucenao && this.saucenaoService.validSaucenaoFile(this.data.file);
 
   saucenaoLookup() {
     const addUrlOptions: AddUrlOptions = {};

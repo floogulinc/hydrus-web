@@ -8,6 +8,7 @@ import { SagiriClientError, SagiriServerError } from 'sagiri/dist/errors';
 import { map, catchError } from 'rxjs/operators';
 import { SagiriResult } from 'sagiri';
 import { SettingsService } from './settings.service';
+import { HydrusBasicFile } from './hydrus-file';
 
 // from https://github.com/ClarityCafe/Sagiri/blob/master/lib/index.ts#L147-L156
 /* interface SagiriResult {
@@ -64,15 +65,8 @@ export class SaucenaoService {
     return !!this.settings.appSettings.saucenaoApiKey && !!this.settings.appSettings.saucenaoSearchProxy;
   }
 
-  public validSaucenaoMime(mime: string) {
-    return ([
-      'image/jpeg',
-      'image/jpg',
-      'image/png',
-      'image/gif',
-      'image/bmp',
-      'image/webp'
-    ].includes(mime));
+  public validSaucenaoFile(file: HydrusBasicFile) {
+    return file.has_thumbnail;
   }
 
   public searchResponse(urlOrFile: SaucenaoUrlorFile, queryOptions?: SaucenaoQuery): Observable<Response> {

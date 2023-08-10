@@ -60,6 +60,14 @@ export enum HydrusFiletype {
   IMAGE_SVG = 56,
   APPLICATION_XCF = 57,
   APPLICATION_GZIP = 58,
+  GENERAL_APPLICATION_ARCHIVE = 59,
+  GENERAL_IMAGE_PROJECT = 60,
+  IMAGE_HEIF = 61,
+  IMAGE_HEIF_SEQUENCE = 62,
+  IMAGE_HEIC = 63,
+  IMAGE_HEIC_SEQUENCE = 64,
+  IMAGE_AVIF = 65,
+  IMAGE_AVIF_SEQUENCE = 66,
   APPLICATION_OCTET_STREAM = 100,
   APPLICATION_UNKNOWN = 101
 }
@@ -73,6 +81,12 @@ const searchableFileTypes = [
   HydrusFiletype.IMAGE_TIFF,
   HydrusFiletype.IMAGE_ICON,
   HydrusFiletype.IMAGE_SVG,
+  HydrusFiletype.IMAGE_HEIF,
+  HydrusFiletype.IMAGE_HEIF_SEQUENCE,
+  HydrusFiletype.IMAGE_HEIC,
+  HydrusFiletype.IMAGE_HEIC_SEQUENCE,
+  HydrusFiletype.IMAGE_AVIF,
+  HydrusFiletype.IMAGE_AVIF_SEQUENCE,
   HydrusFiletype.APPLICATION_FLASH,
   HydrusFiletype.VIDEO_AVI,
   HydrusFiletype.VIDEO_FLV,
@@ -107,6 +121,96 @@ const searchableFileTypes = [
   HydrusFiletype.AUDIO_WAVPACK
 ]
 
+const IMAGES = [
+  HydrusFiletype.IMAGE_JPEG,
+  HydrusFiletype.IMAGE_PNG,
+  HydrusFiletype.IMAGE_BMP,
+  HydrusFiletype.IMAGE_WEBP,
+  HydrusFiletype.IMAGE_TIFF,
+  HydrusFiletype.IMAGE_ICON,
+  HydrusFiletype.IMAGE_HEIF,
+  HydrusFiletype.IMAGE_HEIC,
+  HydrusFiletype.IMAGE_AVIF,
+]
+
+const ANIMATIONS = [
+  HydrusFiletype.IMAGE_GIF,
+  HydrusFiletype.IMAGE_APNG,
+  HydrusFiletype.IMAGE_HEIF_SEQUENCE,
+  HydrusFiletype.IMAGE_HEIC_SEQUENCE,
+  HydrusFiletype.IMAGE_AVIF_SEQUENCE,
+]
+
+const HEIF_TYPE_SEQUENCES = [
+  HydrusFiletype.IMAGE_HEIF_SEQUENCE,
+  HydrusFiletype.IMAGE_HEIC_SEQUENCE,
+  HydrusFiletype.IMAGE_AVIF_SEQUENCE
+]
+
+const AUDIO = [
+  HydrusFiletype.AUDIO_MP3,
+  HydrusFiletype.AUDIO_OGG,
+  HydrusFiletype.AUDIO_FLAC,
+  HydrusFiletype.AUDIO_M4A,
+  HydrusFiletype.AUDIO_MKV,
+  HydrusFiletype.AUDIO_MP4,
+  HydrusFiletype.AUDIO_REALMEDIA,
+  HydrusFiletype.AUDIO_TRUEAUDIO,
+  HydrusFiletype.AUDIO_WAVE,
+  HydrusFiletype.AUDIO_WAVPACK,
+  HydrusFiletype.AUDIO_WMA
+]
+
+const VIDEO = [
+  HydrusFiletype.VIDEO_MP4,
+  HydrusFiletype.VIDEO_WEBM,
+  HydrusFiletype.VIDEO_MKV,
+  HydrusFiletype.VIDEO_AVI,
+  HydrusFiletype.VIDEO_FLV,
+  HydrusFiletype.VIDEO_MOV,
+  HydrusFiletype.VIDEO_MPEG,
+  HydrusFiletype.VIDEO_OGV,
+  HydrusFiletype.VIDEO_REALMEDIA,
+  HydrusFiletype.VIDEO_WMV
+]
+
+const APPLICATIONS = [
+  HydrusFiletype.APPLICATION_FLASH,
+  HydrusFiletype.APPLICATION_PDF
+]
+
+const IMAGE_PROJECT_FILES = [
+  HydrusFiletype.APPLICATION_PSD,
+  HydrusFiletype.APPLICATION_CLIP,
+  HydrusFiletype.APPLICATION_SAI2,
+  HydrusFiletype.APPLICATION_KRITA,
+  HydrusFiletype.IMAGE_SVG,
+  HydrusFiletype.APPLICATION_XCF
+]
+
+const ARCHIVES = [
+  HydrusFiletype.APPLICATION_7Z,
+  HydrusFiletype.APPLICATION_GZIP,
+  HydrusFiletype.APPLICATION_RAR,
+  HydrusFiletype.APPLICATION_ZIP
+]
+
+const MIMES_WITH_THUMBNAILS = [
+  ...IMAGES,
+  ...ANIMATIONS,
+  ...VIDEO,
+  HydrusFiletype.IMAGE_SVG,
+  HydrusFiletype.APPLICATION_PDF,
+  HydrusFiletype.APPLICATION_FLASH,
+  HydrusFiletype.APPLICATION_CLIP,
+  HydrusFiletype.APPLICATION_PSD,
+  HydrusFiletype.APPLICATION_KRITA
+]
+
+export function hasThumbnail(mime: HydrusFiletype) {
+  return MIMES_WITH_THUMBNAILS.includes(mime);
+}
+
 export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_HYDRUS_CLIENT_COLLECTION] : 'collection',
   [HydrusFiletype.IMAGE_JPEG] : 'jpeg',
@@ -118,6 +222,12 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.IMAGE_TIFF] : 'tiff',
   [HydrusFiletype.IMAGE_ICON] : 'icon',
   [HydrusFiletype.IMAGE_SVG] : 'svg',
+  [HydrusFiletype.IMAGE_HEIF]: 'heif',
+  [HydrusFiletype.IMAGE_HEIF_SEQUENCE]: 'heif sequence',
+  [HydrusFiletype.IMAGE_HEIC]: 'heic',
+  [HydrusFiletype.IMAGE_HEIC_SEQUENCE]: 'heic sequence',
+  [HydrusFiletype.IMAGE_AVIF]: 'avif',
+  [HydrusFiletype.IMAGE_AVIF_SEQUENCE]: 'avif sequence',
   [HydrusFiletype.APPLICATION_FLASH] : 'flash',
   [HydrusFiletype.APPLICATION_OCTET_STREAM] : 'application/octet-stream',
   [HydrusFiletype.APPLICATION_YAML] : 'yaml',
@@ -165,6 +275,8 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.UNDETERMINED_PNG] : 'png or apng',
   [HydrusFiletype.APPLICATION_UNKNOWN] : 'unknown filetype',
   [HydrusFiletype.GENERAL_APPLICATION] : 'application',
+  [HydrusFiletype.GENERAL_APPLICATION_ARCHIVE] : 'archive',
+  [HydrusFiletype.GENERAL_IMAGE_PROJECT] : 'image project file',
   [HydrusFiletype.GENERAL_AUDIO] : 'audio',
   [HydrusFiletype.GENERAL_IMAGE] : 'image',
   [HydrusFiletype.GENERAL_VIDEO] : 'video',
@@ -182,6 +294,12 @@ const mime_mimetype_string_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.IMAGE_TIFF] : 'image/tiff',
   [HydrusFiletype.IMAGE_ICON] : 'image/x-icon',
   [HydrusFiletype.IMAGE_SVG] : 'image/svg+xml',
+  [HydrusFiletype.IMAGE_HEIF]: 'image/heif',
+  [HydrusFiletype.IMAGE_HEIF_SEQUENCE]: 'image/heif-sequence',
+  [HydrusFiletype.IMAGE_HEIC]: 'image/heic',
+  [HydrusFiletype.IMAGE_HEIC_SEQUENCE]: 'image/heic-sequence',
+  [HydrusFiletype.IMAGE_AVIF]: 'image/avif',
+  [HydrusFiletype.IMAGE_AVIF_SEQUENCE]: 'image/avif-sequence',
   [HydrusFiletype.APPLICATION_FLASH] : 'application/x-shockwave-flash',
   [HydrusFiletype.APPLICATION_OCTET_STREAM] : 'application/octet-stream',
   [HydrusFiletype.APPLICATION_YAML] : 'application/x-yaml',
@@ -226,6 +344,8 @@ const mime_mimetype_string_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.VIDEO_WEBM] : 'video/webm',
   [HydrusFiletype.APPLICATION_UNKNOWN] : 'unknown filetype',
   [HydrusFiletype.GENERAL_APPLICATION] : 'application',
+  [HydrusFiletype.GENERAL_APPLICATION_ARCHIVE] : 'archive',
+  [HydrusFiletype.GENERAL_IMAGE_PROJECT] : 'image project file',
   [HydrusFiletype.GENERAL_AUDIO] : 'audio',
   [HydrusFiletype.GENERAL_IMAGE] : 'image',
   [HydrusFiletype.GENERAL_VIDEO] : 'video',
@@ -243,6 +363,12 @@ const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.IMAGE_TIFF] : '.tiff',
   [HydrusFiletype.IMAGE_ICON] : '.ico',
   [HydrusFiletype.IMAGE_SVG] : '.svg',
+  [HydrusFiletype.IMAGE_HEIF]: '.heif',
+  [HydrusFiletype.IMAGE_HEIF_SEQUENCE]: '.heifs',
+  [HydrusFiletype.IMAGE_HEIC]: '.heic',
+  [HydrusFiletype.IMAGE_HEIC_SEQUENCE]: '.heics',
+  [HydrusFiletype.IMAGE_AVIF]: '.avif',
+  [HydrusFiletype.IMAGE_AVIF_SEQUENCE]: '.avifs',
   [HydrusFiletype.APPLICATION_FLASH] : '.swf',
   [HydrusFiletype.APPLICATION_OCTET_STREAM] : '.bin',
   [HydrusFiletype.APPLICATION_YAML] : '.yaml',
@@ -301,6 +427,12 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'image/tiff' : HydrusFiletype.IMAGE_TIFF,
   'image/x-icon' : HydrusFiletype.IMAGE_ICON,
   'image/svg+xml': HydrusFiletype.IMAGE_SVG,
+  'image/heif' : HydrusFiletype.IMAGE_HEIF,
+  'image/heif-sequence' : HydrusFiletype.IMAGE_HEIF_SEQUENCE,
+  'image/heic' : HydrusFiletype.IMAGE_HEIC,
+  'image/heic-sequence' : HydrusFiletype.IMAGE_HEIC_SEQUENCE,
+  'image/avif' : HydrusFiletype.IMAGE_AVIF,
+  'image/avif-sequence' : HydrusFiletype.IMAGE_AVIF_SEQUENCE,
   'image/vnd.microsoft.icon' : HydrusFiletype.IMAGE_ICON,
   'image' : HydrusFiletype.GENERAL_IMAGE,
   'application/x-shockwave-flash' : HydrusFiletype.APPLICATION_FLASH,

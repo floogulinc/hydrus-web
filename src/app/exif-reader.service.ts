@@ -24,8 +24,10 @@ export class ExifReaderService {
       HydrusFiletype.IMAGE_JPEG,
       HydrusFiletype.IMAGE_PNG,
       HydrusFiletype.IMAGE_TIFF,
-      HydrusFiletype.IMAGE_WEBP
-      //HEIC/HEIF when added to hydrus
+      HydrusFiletype.IMAGE_WEBP,
+      HydrusFiletype.IMAGE_HEIF,
+      HydrusFiletype.IMAGE_HEIC,
+      HydrusFiletype.IMAGE_HEIC_SEQUENCE,
     ].includes(file.file_type)
   }
 
