@@ -45,8 +45,9 @@ export function canOpenInPhotopea(file: HydrusBasicFile) {
   return [
     HydrusFiletype.IMAGE_JPEG,
     HydrusFiletype.IMAGE_PNG,
-    HydrusFiletype.IMAGE_APNG,
+    HydrusFiletype.ANIMATION_APNG,
     HydrusFiletype.IMAGE_GIF,
+    HydrusFiletype.ANIMATION_GIF,
     HydrusFiletype.IMAGE_BMP,
     HydrusFiletype.IMAGE_WEBP,
     HydrusFiletype.APPLICATION_PSD,

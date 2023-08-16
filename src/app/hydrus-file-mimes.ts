@@ -4,7 +4,7 @@ export enum HydrusFiletype {
   APPLICATION_HYDRUS_CLIENT_COLLECTION = 0,
   IMAGE_JPEG = 1,
   IMAGE_PNG = 2,
-  IMAGE_GIF = 3,
+  ANIMATION_GIF = 3,
   IMAGE_BMP = 4,
   APPLICATION_FLASH = 5,
   APPLICATION_YAML = 6,
@@ -24,7 +24,7 @@ export enum HydrusFiletype {
   VIDEO_MKV = 20,
   VIDEO_WEBM = 21,
   APPLICATION_JSON = 22,
-  IMAGE_APNG = 23,
+  ANIMATION_APNG = 23,
   UNDETERMINED_PNG = 24,
   VIDEO_MPEG = 25,
   VIDEO_MOV = 26,
@@ -68,6 +68,8 @@ export enum HydrusFiletype {
   IMAGE_HEIC_SEQUENCE = 64,
   IMAGE_AVIF = 65,
   IMAGE_AVIF_SEQUENCE = 66,
+  UNDETERMINED_GIF = 67,
+  IMAGE_GIF = 68,
   APPLICATION_OCTET_STREAM = 100,
   APPLICATION_UNKNOWN = 101
 }
@@ -75,8 +77,9 @@ export enum HydrusFiletype {
 const searchableFileTypes = [
   HydrusFiletype.IMAGE_JPEG,
   HydrusFiletype.IMAGE_PNG,
-  HydrusFiletype.IMAGE_APNG,
+  HydrusFiletype.ANIMATION_APNG,
   HydrusFiletype.IMAGE_GIF,
+  HydrusFiletype.ANIMATION_GIF,
   HydrusFiletype.IMAGE_WEBP,
   HydrusFiletype.IMAGE_TIFF,
   HydrusFiletype.IMAGE_ICON,
@@ -124,6 +127,7 @@ const searchableFileTypes = [
 const IMAGES = [
   HydrusFiletype.IMAGE_JPEG,
   HydrusFiletype.IMAGE_PNG,
+  HydrusFiletype.IMAGE_GIF,
   HydrusFiletype.IMAGE_BMP,
   HydrusFiletype.IMAGE_WEBP,
   HydrusFiletype.IMAGE_TIFF,
@@ -134,8 +138,8 @@ const IMAGES = [
 ]
 
 const ANIMATIONS = [
-  HydrusFiletype.IMAGE_GIF,
-  HydrusFiletype.IMAGE_APNG,
+  HydrusFiletype.ANIMATION_GIF,
+  HydrusFiletype.ANIMATION_APNG,
   HydrusFiletype.IMAGE_HEIF_SEQUENCE,
   HydrusFiletype.IMAGE_HEIC_SEQUENCE,
   HydrusFiletype.IMAGE_AVIF_SEQUENCE,
@@ -215,8 +219,9 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_HYDRUS_CLIENT_COLLECTION] : 'collection',
   [HydrusFiletype.IMAGE_JPEG] : 'jpeg',
   [HydrusFiletype.IMAGE_PNG] : 'png',
-  [HydrusFiletype.IMAGE_APNG] : 'apng',
-  [HydrusFiletype.IMAGE_GIF] : 'gif',
+  [HydrusFiletype.ANIMATION_APNG] : 'apng',
+  [HydrusFiletype.IMAGE_GIF] : 'static gif',
+  [HydrusFiletype.ANIMATION_GIF] : 'animated gif',
   [HydrusFiletype.IMAGE_BMP] : 'bmp',
   [HydrusFiletype.IMAGE_WEBP] : 'webp',
   [HydrusFiletype.IMAGE_TIFF] : 'tiff',
@@ -273,6 +278,7 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.UNDETERMINED_WM] : 'wma or wmv',
   [HydrusFiletype.UNDETERMINED_MP4] : 'mp4 with or without audio',
   [HydrusFiletype.UNDETERMINED_PNG] : 'png or apng',
+  [HydrusFiletype.UNDETERMINED_GIF] : 'animated or static gif',
   [HydrusFiletype.APPLICATION_UNKNOWN] : 'unknown filetype',
   [HydrusFiletype.GENERAL_APPLICATION] : 'application',
   [HydrusFiletype.GENERAL_APPLICATION_ARCHIVE] : 'archive',
@@ -283,12 +289,13 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.GENERAL_ANIMATION] : 'animation'
 }
 
-const mime_mimetype_string_lookup: Partial<Record<HydrusFiletype, string>> = {
+const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_HYDRUS_CLIENT_COLLECTION] : 'collection',
   [HydrusFiletype.IMAGE_JPEG] : 'image/jpeg',
   [HydrusFiletype.IMAGE_PNG] : 'image/png',
-  [HydrusFiletype.IMAGE_APNG] : 'image/apng',
+  [HydrusFiletype.ANIMATION_APNG] : 'image/apng',
   [HydrusFiletype.IMAGE_GIF] : 'image/gif',
+  [HydrusFiletype.ANIMATION_GIF] : 'image/gif',
   [HydrusFiletype.IMAGE_BMP] : 'image/bmp',
   [HydrusFiletype.IMAGE_WEBP] : 'image/webp',
   [HydrusFiletype.IMAGE_TIFF] : 'image/tiff',
@@ -349,15 +356,20 @@ const mime_mimetype_string_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.GENERAL_AUDIO] : 'audio',
   [HydrusFiletype.GENERAL_IMAGE] : 'image',
   [HydrusFiletype.GENERAL_VIDEO] : 'video',
-  [HydrusFiletype.GENERAL_ANIMATION] : 'animation'
+  [HydrusFiletype.GENERAL_ANIMATION] : 'animation',
+  [HydrusFiletype.UNDETERMINED_WM] : 'audio/x-ms-wma or video/x-ms-wmv',
+  [HydrusFiletype.UNDETERMINED_MP4] : 'audio/mp4 or video/mp4',
+  [HydrusFiletype.UNDETERMINED_PNG] : 'image/png or image/apng',
+  [HydrusFiletype.UNDETERMINED_GIF] : 'aimage/gif',
 }
 
 const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.APPLICATION_HYDRUS_CLIENT_COLLECTION] : '.collection',
   [HydrusFiletype.IMAGE_JPEG] : '.jpg',
   [HydrusFiletype.IMAGE_PNG] : '.png',
-  [HydrusFiletype.IMAGE_APNG] : '.png',
+  [HydrusFiletype.ANIMATION_APNG] : '.png',
   [HydrusFiletype.IMAGE_GIF] : '.gif',
+  [HydrusFiletype.ANIMATION_GIF] : '.gif',
   [HydrusFiletype.IMAGE_BMP] : '.bmp',
   [HydrusFiletype.IMAGE_WEBP] : '.webp',
   [HydrusFiletype.IMAGE_TIFF] : '.tiff',
@@ -420,8 +432,8 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'image/jpg' : HydrusFiletype.IMAGE_JPEG,
   'image/x-png' : HydrusFiletype.IMAGE_PNG,
   'image/png' : HydrusFiletype.IMAGE_PNG,
-  'image/apng' : HydrusFiletype.IMAGE_APNG,
-  'image/gif' : HydrusFiletype.IMAGE_GIF,
+  'image/apng' : HydrusFiletype.ANIMATION_APNG,
+  'image/gif' : HydrusFiletype.ANIMATION_GIF,
   'image/bmp' : HydrusFiletype.IMAGE_BMP,
   'image/webp' : HydrusFiletype.IMAGE_WEBP,
   'image/tiff' : HydrusFiletype.IMAGE_TIFF,

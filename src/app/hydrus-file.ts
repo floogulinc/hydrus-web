@@ -162,8 +162,9 @@ export function getFileCategory(type: HydrusFiletype): FileCategory {
   if ([
     HydrusFiletype.IMAGE_JPEG,
     HydrusFiletype.IMAGE_PNG,
-    HydrusFiletype.IMAGE_APNG,
+    HydrusFiletype.ANIMATION_APNG,
     HydrusFiletype.IMAGE_GIF,
+    HydrusFiletype.ANIMATION_GIF,
     HydrusFiletype.IMAGE_BMP,
     HydrusFiletype.IMAGE_WEBP,
     HydrusFiletype.IMAGE_SVG,
