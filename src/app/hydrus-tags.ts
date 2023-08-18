@@ -5,7 +5,9 @@ export interface HydrusTagSearchTag {
   count: number
 }
 
-export type HydrusSearchTags = RecursiveArray<string>;
+export type HydrusSearchTag = string | HydrusSearchTags
+export type HydrusSearchTags = HydrusSearchTag[];
+
 
 export type TagDisplayType = 'storage' | 'display';
 

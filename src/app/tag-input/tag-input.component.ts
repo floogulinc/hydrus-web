@@ -109,7 +109,9 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     if(this.defaultTags) {
       this.searchTags = [...this.defaultTags];
     }
-
+    if(!this.enableSystemPredicates && this.enableFavorites) {
+      this.favoriteTags =  this.settingsService.appSettings.favoriteTags.filter(tags => !searchTagsContainsSystemPredicate(tags));
+    }
   }
 
   chipInputEvent(event: MatChipInputEvent): void {

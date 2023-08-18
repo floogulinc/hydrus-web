@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { HydrusFile, ServiceNamesToStatusesToTags } from '../hydrus-file';
+import { HydrusSearchTag, HydrusSearchTags } from '../hydrus-tags';
 
 
 export function getNamespace(tag: string): string {
@@ -74,4 +75,17 @@ export function serviceNamesToCurrentTags(
       value[0],
     ]),
   );
+}
+
+export function isSystemPredicate(tag: string) {
+  return getNamespace(tag) === 'system';
+}
+
+export function searchTagsContainsSystemPredicate(searchTags: HydrusSearchTag) {
+  console.log(searchTags);
+  if (typeof searchTags === 'string') {
+    return isSystemPredicate(searchTags);
+  } else {
+    return searchTags.find(searchTagsContainsSystemPredicate);
+  }
 }
