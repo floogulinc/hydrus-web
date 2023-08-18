@@ -82,7 +82,6 @@ export function isSystemPredicate(tag: string) {
 }
 
 export function searchTagsContainsSystemPredicate(searchTags: HydrusSearchTag) {
-  console.log(searchTags);
   if (typeof searchTags === 'string') {
     return isSystemPredicate(searchTags);
   } else {
