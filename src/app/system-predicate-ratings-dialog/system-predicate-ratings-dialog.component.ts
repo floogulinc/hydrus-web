@@ -11,7 +11,7 @@ function generateRating(service: HydrusService) {
   if (isNumericalRatingService(service)) {
     return {
       ...service,
-      value: null as HydrusNumericalRatingValue
+      value: 0 as HydrusNumericalRatingValue
     }
   } else if (isLikeRatingService(service)) {
     return {
