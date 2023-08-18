@@ -253,6 +253,9 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
       serviceFilter: services => services.filter(isRatingService),
     })
     const service = await firstValueFrom(serviceDialog.afterClosed());
+    if(!service) {
+      return null;
+    }
     const dialogRef = this.dialog.open<SystemPredicateRatingsDialogComponent, {service: HydrusService}, string>(
       SystemPredicateRatingsDialogComponent,
       {
