@@ -1,0 +1,3 @@
+<button mat-icon-button (click)="setRating(rating.value - 1)" [disabled]="rating.value === 0"><mat-icon>remove</mat-icon></button>
+<span>{{rating.value}}</span>
+<button mat-icon-button (click)="setRating(rating.value + 1)"><mat-icon>add</mat-icon></button>

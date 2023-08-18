@@ -1,0 +1,37 @@
+<h1 mat-dialog-title>system:rating for {{data.service.name}}</h1>
+<div mat-dialog-content>
+<div class="form-section outer-form-section">
+  <!-- <mat-form-field appearance="outline">
+    <mat-label>Service</mat-label>
+    <mat-select [formControl]="serviceInput">
+      <mat-option *ngFor="let service of ratingsServices$ | async" [value]="service">
+        {{service.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+  <mat-form-field appearance="outline" hideRequiredMarker>
+    <mat-label>Status</mat-label>
+    <mat-select [formControl]="operatorForm">
+      <mat-option *ngFor="let op of operators" [value]="op">
+        {{op}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <ng-template [ngIf]="isNumericalRatingService(rating)">
+    <app-rating-numerical [rating]="rating" (ratingSet)="setRating($event)"></app-rating-numerical>
+  </ng-template>
+  <ng-template [ngIf]="isLikeRatingService(rating)">
+    <app-rating-like [rating]="rating" (ratingSet)="setRating($event)"></app-rating-like>
+  </ng-template>
+  <ng-template [ngIf]="isIncDecRatingService(rating)">
+    <mat-form-field appearance="outline" hideRequiredMarker>
+      <mat-label>Rating</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="rating.value">
+    </mat-form-field>
+  </ng-template>
+</div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="addButton()">Add</button>
+</div>

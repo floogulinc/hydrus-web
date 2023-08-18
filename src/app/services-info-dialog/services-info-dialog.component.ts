@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HydrusServicesService } from '../hydrus-services.service';
-import { isNumericalRatingService, isLikeRatingService, isIncDecRatingService } from '../hydrus-services';
+import { isNumericalRatingService, isLikeRatingService, isIncDecRatingService } from '../hydrus-rating';
 
 @Component({
   selector: 'app-services-info-dialog',

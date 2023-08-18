@@ -62,37 +62,6 @@ export interface HydrusService extends HydrusServiceSimple {
   service_key: string,
 }
 
-export type HydrusRatingStarType = 'circle' | 'square' | 'fat star' | 'pentagram star';
-
-export interface HydrusNumericalRatingService extends HydrusServiceSimple {
-  min_stars: number;
-  max_stars: number;
-  star_shape: HydrusRatingStarType;
-  type: HydrusServiceType.LOCAL_RATING_NUMERICAL | HydrusServiceType.RATING_NUMERICAL_REPOSITORY;
-}
-
-export interface HydrusIncDecRatingService extends HydrusServiceSimple {
-  type: HydrusServiceType.LOCAL_RATING_INCDEC
-}
-
-export function isNumericalRatingService(service: HydrusServiceSimple | HydrusNumericalRatingService): service is HydrusNumericalRatingService {
-  return service.type === HydrusServiceType.LOCAL_RATING_NUMERICAL || service.type === HydrusServiceType.RATING_NUMERICAL_REPOSITORY;
-}
-
-export interface HydrusLikeRatingService extends HydrusServiceSimple {
-  star_shape: HydrusRatingStarType;
-  type: HydrusServiceType.LOCAL_RATING_LIKE | HydrusServiceType.RATING_LIKE_REPOSITORY;
-}
-
-export function isLikeRatingService(service: HydrusServiceSimple | HydrusLikeRatingService): service is HydrusLikeRatingService {
-  return service.type === HydrusServiceType.LOCAL_RATING_LIKE || service.type === HydrusServiceType.RATING_LIKE_REPOSITORY;
-}
-
-export function isIncDecRatingService(service: HydrusServiceSimple): service is HydrusIncDecRatingService {
-  return service.type === HydrusServiceType.LOCAL_RATING_INCDEC
-}
-
-
 export interface HydrusServiceInfo {
   local_tags: HydrusService[]; // deprecated in v531
   tag_repositories: HydrusService[]; // deprecated in v531
@@ -146,4 +115,18 @@ export function getLocalTagServices(serviceArray: HydrusService[]) {
 
 export function getAllKnownTagsService(services: HydrusServices) {
   return services['616c6c206b6e6f776e2074616773'];
+}
+
+export function isFileService(service: HydrusServiceSimple) {
+  return [
+    HydrusServiceType.FILE_REPOSITORY,
+    HydrusServiceType.LOCAL_FILE_DOMAIN,
+    HydrusServiceType.LOCAL_FILE_TRASH_DOMAIN,
+    HydrusServiceType.LOCAL_FILE_UPDATE_DOMAIN,
+    HydrusServiceType.COMBINED_LOCAL_FILE,
+    HydrusServiceType.COMBINED_LOCAL_MEDIA,
+    HydrusServiceType.COMBINED_FILE,
+    HydrusServiceType.IPFS,
+    HydrusServiceType.COMBINED_DELETED_FILE
+  ].includes(service.type);
 }

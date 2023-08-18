@@ -4,6 +4,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { searchFiletypes } from '../hydrus-file-mimes';
 import { allSystemPredicates, hashAlgorithms, operatorDefaults, operatorOptions, Operators, Predicate, SystemPredicate, unitDefaults, Units, unitsOptions, Value, valueLabels } from '../hydrus-system-predicates';
+import { HydrusServicesService } from '../hydrus-services.service';
+import { map, of, switchMap } from 'rxjs';
+import { isFileService } from '../hydrus-services';
+import { isRatingService } from '../hydrus-rating';
 
 
 @Component({
@@ -16,7 +20,8 @@ export class SystemPredicateDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<SystemPredicateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: {predicate: SystemPredicate},
-    @Inject(LOCALE_ID) private locale
+    @Inject(LOCALE_ID) private locale,
+    private services: HydrusServicesService
   ) {
 
   }
@@ -34,6 +39,23 @@ export class SystemPredicateDialogComponent implements OnInit {
 
   public predicateEnum = this.data.predicate;
   public predicate: Predicate = allSystemPredicates[this.data.predicate];
+
+  services$ = of(this.data.predicate).pipe(
+    switchMap(predicate => {
+      if(predicate === SystemPredicate.FILE_SERVICE) {
+        return this.services.hydrusServicesArray$.pipe(
+          map(services => services.filter(isFileService))
+        )
+      } else if (predicate === SystemPredicate.HAS_RATING || predicate === SystemPredicate.NO_RATING) {
+        return this.services.hydrusServicesArray$.pipe(
+          map(services => services.filter(isRatingService))
+        )
+      } else {
+        return of([])
+      }
+    })
+  )
+
 
   predicateForm = new FormGroup({
     value: new FormGroup({
@@ -104,6 +126,9 @@ export class SystemPredicateDialogComponent implements OnInit {
           left: new FormControl(1, Validators.required),
           right: new FormControl(1, Validators.required)
         })
+      }
+      case Value.SERVICE_NAME: {
+        return new FormControl<string>(null, Validators.required)
       }
       default: {
         return null
@@ -176,6 +201,9 @@ export class SystemPredicateDialogComponent implements OnInit {
       }
       case Value.RATIO: {
         return `${v.left}:${v.right}`
+      }
+      case Value.SERVICE_NAME: {
+        return `${v}`
       }
       default: {
         return null

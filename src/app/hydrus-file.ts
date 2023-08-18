@@ -1,7 +1,8 @@
 import { HydrusNotes } from './hydrus-notes';
-import { HydrusIncDecRatingService, HydrusLikeRatingService, HydrusNumericalRatingService, HydrusServiceSimple, HydrusServiceType, HydrusServices, isIncDecRatingService, isLikeRatingService, isNumericalRatingService, service_string_lookup } from './hydrus-services';
 import { HydrusURLInfo } from './hydrus-url';
 import { HydrusFiletype } from './hydrus-file-mimes'
+import { HydrusIncDecRatingValue, HydrusLikeRatingValue, HydrusNumericalRatingValue, HydrusRating, isIncDecRatingService, isLikeRatingService, isNumericalRatingService } from './hydrus-rating';
+import { HydrusServiceType, HydrusServices } from './hydrus-services';
 
 export interface ServiceNamesToStatusesToTags {
   [service: string]: StatusesToTags;
@@ -50,10 +51,6 @@ export interface HydrusBasicFileFromAPI {
   num_words?: number;
 }
 
-interface RatingsFromAPI {
-  [service_key: string]: boolean | number | null;
-}
-
 export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   known_urls: string[];
   file_services: {
@@ -95,15 +92,9 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   is_deleted?: boolean; // added in v506
 }
 
-export type Rating =
-  {service_key: string} &
-  ((HydrusNumericalRatingService & {value: number | null}) |
-  (HydrusLikeRatingService & {value: boolean | null}) |
-  (HydrusIncDecRatingService & {value: number}))
 
-export interface HydrusFile extends HydrusFileFromAPI, HydrusBasicFile {
-  time_imported?: Date;
-  ratings_array?: Rating[]
+interface RatingsFromAPI {
+  [service_key: string]: boolean | number | null;
 }
 
 export function generateRatingsArray(ratings: RatingsFromAPI, services: HydrusServices) {
@@ -112,23 +103,30 @@ export function generateRatingsArray(ratings: RatingsFromAPI, services: HydrusSe
     if (isNumericalRatingService(service)) {
       return {
         ...service,
-        value: value as number | null
+        value: value as HydrusNumericalRatingValue
       }
     } else if (isLikeRatingService(service)) {
       return {
         ...service,
-        value: value as boolean | null
+        value: value as HydrusLikeRatingValue
       }
     } else if (isIncDecRatingService(service)) {
       return {
         ...service,
-        value: value as number
+        value: value as HydrusIncDecRatingValue
       }
     } else {
       return null;
     }
   })
 }
+
+
+export interface HydrusFile extends HydrusFileFromAPI, HydrusBasicFile {
+  time_imported?: Date;
+  ratings_array?: HydrusRating[]
+}
+
 
 export interface HydrusBasicFile extends HydrusBasicFileFromAPI {
   file_url: string;

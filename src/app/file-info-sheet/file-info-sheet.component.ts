@@ -1,21 +1,19 @@
 import { Component, Inject, ChangeDetectionStrategy, Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusFile, FileCategory, HydrusTagService, HydrusTagServiceType, Rating } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile, FileCategory, HydrusTagServiceType } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
-import { BehaviorSubject, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BehaviorSubject, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
 import { HydrusFileDownloadService } from '../hydrus-file-download.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HydrusSearchTags } from '../hydrus-tags';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
-import { HydrusRatingStarType, HydrusServiceType, isIncDecRatingService, isLikeRatingService, isNumericalRatingService } from '../hydrus-services';
 import { NoteEditDialogComponent } from '../note-edit-dialog/note-edit-dialog.component';
 import { HydrusNotesService } from '../hydrus-notes.service';
 import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
@@ -24,6 +22,8 @@ import { HydrusRatingsService } from '../hydrus-ratings.service';
 import { JsonViewDialogComponent } from '../json-view-dialog/json-view-dialog.component';
 import { ExifReaderService } from '../exif-reader.service';
 import { FileMetadataDialogComponent } from '../file-metadata-dialog/file-metadata-dialog.component';
+import { isNumericalRatingService, isLikeRatingService, isIncDecRatingService, HydrusRating } from '../hydrus-rating';
+import { HydrusServiceType } from '../hydrus-services';
 
 function getFileIcon(fileType: FileCategory) {
   switch (fileType) {
@@ -143,20 +143,6 @@ export class FileInfoSheetComponent {
     shareReplay(1),
   )
 
-  ratingIcons: Record<HydrusRatingStarType, string> = {
-    'fat star': 'rating:star',
-    'pentagram star': 'rating:star',
-    'circle': 'rating:circle',
-    'square': 'rating:square'
-  }
-
-  ratingIconsOutline: Record<HydrusRatingStarType, string> = {
-    'fat star': 'rating:star_outline',
-    'pentagram star': 'rating:star_outline',
-    'circle': 'rating:circle_outline',
-    'square': 'rating:square_outline'
-  }
-
   ipfsUrl$ = this.file$.pipe(
     filter(file => file.ipfs_multihashes && Object.values(file.ipfs_multihashes).length > 0),
     map(file => `${this.settings.appSettings.ipfsMultihashUrlPrefix}${Object.values(file.ipfs_multihashes)[0]}`)
@@ -175,7 +161,7 @@ export class FileInfoSheetComponent {
     return item.name;
   }
 
-  trackByRating(index: number, rating: Rating) {
+  trackByRating(index: number, rating: HydrusRating) {
     return rating.service_key;
   }
 

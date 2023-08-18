@@ -49,7 +49,6 @@ export class NoteEditDialogComponent implements OnInit {
   });
 
   submitNote() {
-    console.log('submit called');
     this.dialogRef.close(this.noteForm.value);
   }
 

@@ -1,5 +1,6 @@
 // Some things from https://github.com/hydrusnetwork/hydrus/blob/master/hydrus/external/SystemPredicateParser.py
 
+
 export enum SystemPredicate {
   EVERYTHING = 1,
   INBOX,
@@ -56,6 +57,12 @@ export enum SystemPredicate {
   NUM_NOTES,
   HAS_NOTE_NAME,
   NO_NOTE_NAME,
+  RATING_SPECIFIC_NUMERICAL,
+  RATING_SPECIFIC_LIKE_DISLIKE,
+  RATING_SPECIFIC_INCDEC,
+  HAS_RATING,
+  NO_RATING,
+  RATING_GENERAL
 }
 
 
@@ -64,6 +71,10 @@ export enum Operators {
   RELATIONAL = 1,
   /** Like RELATIONAL but without the approximately equal operator */
   RELATIONAL_EXACT,
+  /** One of '=', '<', '>', '\u2248' ('≈') (takes '~=' too), and the various 'since', 'before', 'the day of', 'the month of' time-based analogues */
+  RELATIONAL_TIME,
+  /** RELATIONAL, but in the middle of a 'service_name = 4/5' kind of thing */
+  RELATIONAL_FOR_RATING_SERVICE,
   /** One of '=' or '!=' */
   EQUAL,
   /** One of 'is not currently in', 'is currently in', 'is not pending to', 'is pending to' */
@@ -99,7 +110,17 @@ export enum Value {
   /** An integer */
   INTEGER,
   /** A tuple of 2 ints, both non-negative */
-  RATIO
+  RATIO,
+  /** 1:1 */
+  RATIO_SPECIAL,
+  /** my favourites 3/5 */
+  RATING_SERVICE_NAME_AND_NUMERICAL_VALUE,
+  /** my favourites like */
+  RATING_SERVICE_NAME_AND_LIKE_DISLIKE,
+  /** my favourites 3/5 */
+  RATING_SERVICE_NAME_AND_INCDEC,
+  RATING_SERVICE_GENERIC,
+  SERVICE_NAME,
 }
 
 export enum Units {
@@ -144,12 +165,12 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.LIMIT]: { name: 'limit', operator: Operators.ONLY_EQUAL, value: Value.NATURAL, units: null },
   [SystemPredicate.FILETYPE]: { name: 'filetype', operator: Operators.ONLY_EQUAL, value: Value.FILETYPE_LIST, units: null },
   [SystemPredicate.HASH]: { name: 'hash', operator: Operators.EQUAL, value: Value.HASHLIST_WITH_ALGORITHM, units: null },
-  [SystemPredicate.ARCHIVED_DATE]: { name: 'archived time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
-  [SystemPredicate.MOD_DATE]: { name: 'modified date', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },  // TODO: change to `modified time` when required hydrus version >= 525
-  [SystemPredicate.LAST_VIEWED_TIME]: { name: 'last viewed time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
-  [SystemPredicate.TIME_IMPORTED]: { name: 'import time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
+  [SystemPredicate.ARCHIVED_DATE]: { name: 'archived time', operator: Operators.RELATIONAL_TIME, value: Value.DATE_OR_TIME_INTERVAL, units: null },
+  [SystemPredicate.MOD_DATE]: { name: 'modified date', operator: Operators.RELATIONAL_TIME, value: Value.DATE_OR_TIME_INTERVAL, units: null },  // TODO: change to `modified time` when required hydrus version >= 525
+  [SystemPredicate.LAST_VIEWED_TIME]: { name: 'last viewed time', operator: Operators.RELATIONAL_TIME, value: Value.DATE_OR_TIME_INTERVAL, units: null },
+  [SystemPredicate.TIME_IMPORTED]: { name: 'import time', operator: Operators.RELATIONAL_TIME, value: Value.DATE_OR_TIME_INTERVAL, units: null },
   [SystemPredicate.DURATION]: { name: 'duration', operator: Operators.RELATIONAL, value: Value.TIME_SEC_MSEC, units: null },
-  [SystemPredicate.FILE_SERVICE]: { name: 'file service', operator: Operators.FILESERVICE_STATUS, value: Value.ANY_STRING, units: null },
+  [SystemPredicate.FILE_SERVICE]: { name: 'file service', operator: Operators.FILESERVICE_STATUS, value: Value.SERVICE_NAME, units: null },
   [SystemPredicate.NUM_FILE_RELS]: { name: 'number of file relationships', operator: Operators.RELATIONAL, value: Value.NATURAL, units: Units.FILE_RELATIONSHIP_TYPE },
   [SystemPredicate.RATIO]: { name: 'ratio', operator: Operators.RATIO_OPERATORS, value: Value.RATIO, units: null },
   [SystemPredicate.NUM_PIXELS]: { name: 'num pixels', operator: Operators.RELATIONAL, value: Value.NATURAL, units: Units.PIXELS },
@@ -173,11 +194,19 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.NUM_NOTES]: { name: 'number of notes', operator: Operators.RELATIONAL_EXACT, value: Value.NATURAL, units: null },
   [SystemPredicate.HAS_NOTE_NAME]: { name: 'note with name', operator: null, value: Value.ANY_STRING, units: null },
   [SystemPredicate.NO_NOTE_NAME]: { name: 'does not have note with name', operator: null, value: Value.ANY_STRING, units: null },
+  [SystemPredicate.HAS_RATING]: { name: 'has rating for', operator: null, value: Value.SERVICE_NAME, units: null },
+  [SystemPredicate.NO_RATING]: { name: 'no rating for', operator: null, value: Value.SERVICE_NAME, units: null },
+  [SystemPredicate.RATING_SPECIFIC_NUMERICAL]: { name: 'rating for', operator: Operators.RELATIONAL_FOR_RATING_SERVICE, value: Value.RATING_SERVICE_NAME_AND_NUMERICAL_VALUE, units: null },
+  [SystemPredicate.RATING_SPECIFIC_LIKE_DISLIKE]: { name: 'rating for', operator: Operators.RELATIONAL_FOR_RATING_SERVICE, value: Value.RATING_SERVICE_NAME_AND_LIKE_DISLIKE, units: null },
+  [SystemPredicate.RATING_SPECIFIC_INCDEC]: { name: 'rating for', operator: Operators.RELATIONAL_FOR_RATING_SERVICE, value: Value.RATING_SERVICE_NAME_AND_INCDEC, units: null },
+  [SystemPredicate.RATING_GENERAL]: { name: 'rating', operator: Operators.RELATIONAL_FOR_RATING_SERVICE, value: Value.RATING_SERVICE_GENERIC, units: null },
 }
 
 export const operatorOptions: Record<Operators, string[]> = {
   [Operators.RELATIONAL]: ['<', '≈', '=', '≠', '>'],
   [Operators.RELATIONAL_EXACT]: ['<', '=', '>'],
+  [Operators.RELATIONAL_TIME]: ['before', '≈', '=', '≠', 'since'],
+  [Operators.RELATIONAL_FOR_RATING_SERVICE]: ['<', '≈', '=', '>'],
   [Operators.EQUAL]: ['is', 'is not'],
   [Operators.FILESERVICE_STATUS]: [
     'is currently in',
@@ -193,11 +222,13 @@ export const operatorOptions: Record<Operators, string[]> = {
 export const operatorDefaults: Record<Operators, string> = {
   [Operators.RELATIONAL]: '=',
   [Operators.RELATIONAL_EXACT]: '=',
+  [Operators.RELATIONAL_TIME]: '=',
+  [Operators.RELATIONAL_FOR_RATING_SERVICE]: '',
   [Operators.EQUAL]: 'is',
   [Operators.FILESERVICE_STATUS]: 'is currently in',
   [Operators.TAG_RELATIONAL]: '=',
   [Operators.ONLY_EQUAL]: 'is',
-  [Operators.RATIO_OPERATORS]: '='
+  [Operators.RATIO_OPERATORS]: '=',
 }
 
 export const unitsOptions: Record<Units, string[]> = {
@@ -340,5 +371,31 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
       SystemPredicate.LAST_VIEWED_TIME,
       SystemPredicate.ARCHIVED_DATE
     ]
+  },
+  {
+    name: 'rating',
+    predicates: [
+      SystemPredicate.HAS_RATING,
+      SystemPredicate.NO_RATING,
+      SystemPredicate.RATING_GENERAL
+    ]
   }
 ];
+
+export const ratingOperators: Partial<Record<SystemPredicate, string[]>> = {
+  [SystemPredicate.RATING_SPECIFIC_NUMERICAL]: [
+    'more than',
+    'less than',
+    'is',
+    'is about'
+  ],
+  [SystemPredicate.RATING_SPECIFIC_LIKE_DISLIKE]: [
+    'is'
+  ],
+  [SystemPredicate.RATING_SPECIFIC_INCDEC]: [
+    'more than',
+    'less than',
+    'is',
+    'is about'
+  ]
+}

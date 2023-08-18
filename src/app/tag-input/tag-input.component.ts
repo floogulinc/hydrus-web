@@ -5,7 +5,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
-import { Observable, of } from 'rxjs';
+import { Observable, firstValueFrom, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType } from '../hydrus-tags';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,11 @@ import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
 import { SettingsService } from '../settings.service';
+import { ServiceSelectDialogComponent } from '../service-select-dialog/service-select-dialog.component';
+import { SystemPredicateRatingsDialogComponent } from '../system-predicate-ratings-dialog/system-predicate-ratings-dialog.component';
+import { isRatingService } from '../hydrus-rating';
+import { HydrusService } from '../hydrus-services';
+import { searchTagsContainsSystemPredicate } from '../utils/tag-utils';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {
   const pred = allSystemPredicates[p];
@@ -212,24 +217,53 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     return 'predicate' in p;
   }
 
-  systemPredicateButton(pred: SystemPredicate) {
+  async systemPredicateButton(pred: SystemPredicate) {
+    if(pred === SystemPredicate.RATING_GENERAL) {
+      const result = await this.ratingPredicateDialog();
+      if(result) {
+        this.addSearchTag(result);
+      }
+      return;
+    }
     const predicate = allSystemPredicates[pred];
     if(!predicate.operator && !predicate.units && !predicate.value) {
       this.addSearchTag(`system:${predicate.name}`);
     } else {
-      const dialogRef = this.dialog.open<SystemPredicateDialogComponent, {predicate: SystemPredicate}, string>(
-        SystemPredicateDialogComponent,
-        {
-          //width: '80vw',
-          data: {predicate: pred},
-        }
-      );
-      dialogRef.afterClosed().subscribe(result => {
-        if(result) {
-          this.addSearchTag(result);
-        }
-      });
+      const result = await this.predicateDialog(pred);
+      if(result) {
+        this.addSearchTag(result);
+      }
     }
+  }
+
+  async predicateDialog(pred: SystemPredicate) {
+    const dialogRef = this.dialog.open<SystemPredicateDialogComponent, {predicate: SystemPredicate}, string>(
+      SystemPredicateDialogComponent,
+      {
+        //width: '80vw',
+        data: {predicate: pred},
+      }
+    )
+    return firstValueFrom(dialogRef.afterClosed());
+  }
+
+  async ratingPredicateDialog() {
+    const serviceDialog = ServiceSelectDialogComponent.open(this.dialog, {
+      title: 'Select rating service',
+      serviceFilter: services => services.filter(isRatingService),
+    })
+    const service = await firstValueFrom(serviceDialog.afterClosed());
+    const dialogRef = this.dialog.open<SystemPredicateRatingsDialogComponent, {service: HydrusService}, string>(
+      SystemPredicateRatingsDialogComponent,
+      {
+        data: {
+          service
+        },
+        // maxWidth: '648px',
+        // width: '90vw',
+      }
+    );
+    return firstValueFrom(dialogRef.afterClosed());
   }
 
 

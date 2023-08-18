@@ -107,14 +107,7 @@
         <mat-list-item *ngIf="isNumericalRatingService(rating)">
           <p matLine>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
           <p matLine class="numerical-rating-line">
-            <bar-rating [rate]="rating.value" [max]="rating.max_stars" (rateChange)="setRating(rating, $event)">
-              <ng-template ratingActive>
-                <mat-icon [svgIcon]="ratingIcons[rating.star_shape]"></mat-icon>
-              </ng-template>
-              <ng-template ratingInactive>
-                <mat-icon [svgIcon]="ratingIconsOutline[rating.star_shape]"></mat-icon>
-              </ng-template>
-            </bar-rating>
+            <app-rating-numerical [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-numerical>
           </p>
           <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
             <mat-icon>more_vert</mat-icon>
@@ -123,11 +116,7 @@
         <mat-list-item *ngIf="isLikeRatingService(rating)">
           <p matLine>{{rating.name}} ({{rating.value === null ? 'not set' : rating.value ? 'liked' : 'dislike'}})</p>
           <p matLine>
-            <button mat-icon-button [color]="rating.value === false ? 'warn' : ''" (click)="this.setRating(rating, !rating.value)">
-              <mat-icon *ngIf="rating.value === null" [svgIcon]="ratingIconsOutline[rating.star_shape]"></mat-icon>
-              <mat-icon *ngIf="rating.value === true" [svgIcon]="ratingIcons[rating.star_shape]"></mat-icon>
-              <mat-icon *ngIf="rating.value === false" [svgIcon]="ratingIcons[rating.star_shape]"></mat-icon>
-            </button>
+            <app-rating-like [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-like>
           </p>
           <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
             <mat-icon>more_vert</mat-icon>
@@ -136,9 +125,7 @@
         <mat-list-item *ngIf="isIncDecRatingService(rating)">
           <p matLine>{{rating.name}}</p>
           <p matLine class="inc-rating-line">
-            <button mat-icon-button (click)="setRating(rating, rating.value - 1)" [disabled]="rating.value === 0"><mat-icon>remove</mat-icon></button>
-            <span>{{rating.value}}</span>
-            <button mat-icon-button (click)="setRating(rating, rating.value + 1)"><mat-icon>add</mat-icon></button>
+            <app-rating-inc-dec [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-inc-dec>
           </p>
           <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
             <mat-icon>more_vert</mat-icon>
@@ -146,11 +133,6 @@
         </mat-list-item>
       </ng-template>
     </mat-list>
-      <!-- <div *ngFor="let rating of file.ratings_array">
-        <ng-template [ngIf]="isNumericalRatingService(rating)">
-          <div>{{rating.name}}<bar-rating [(rate)]="rating.value" [max]="rating.max_stars" [theme]="'stars'"></bar-rating></div>
-        </ng-template>
-      </div> -->
   </mat-expansion-panel>
   </mat-accordion>
 

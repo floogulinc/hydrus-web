@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>{{this.data.title}}</h1>
+<div mat-dialog-content>
+  <div fxLayout="column">
+    <mat-form-field appearance="outline">
+      <mat-label>Service</mat-label>
+      <mat-select [(ngModel)]="currentService">
+        <mat-option *ngFor="let service of services$ | async" [value]="service">
+          {{service.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="currentService" [disabled]="!currentService">Select</button>
+</div>

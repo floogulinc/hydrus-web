@@ -88,6 +88,11 @@ import { ApiSettingsComponent } from './api-settings/api-settings.component';
 import { AppSettingsComponent } from './app-settings/app-settings.component';
 import { JsonViewDialogComponent } from './json-view-dialog/json-view-dialog.component';
 import { FileMetadataDialogComponent } from './file-metadata-dialog/file-metadata-dialog.component';
+import { SystemPredicateRatingsDialogComponent } from './system-predicate-ratings-dialog/system-predicate-ratings-dialog.component';
+import { ServiceSelectDialogComponent } from './service-select-dialog/service-select-dialog.component';
+import { RatingNumericalComponent } from './rating-numerical/rating-numerical.component';
+import { RatingLikeComponent } from './rating-like/rating-like.component';
+import { RatingIncDecComponent } from './rating-inc-dec/rating-inc-dec.component';
 
 
 const MAT_MODULES = [
@@ -153,7 +158,12 @@ const MAT_MODULES = [
         ApiSettingsComponent,
         AppSettingsComponent,
         JsonViewDialogComponent,
-        FileMetadataDialogComponent
+        FileMetadataDialogComponent,
+        SystemPredicateRatingsDialogComponent,
+        ServiceSelectDialogComponent,
+        RatingNumericalComponent,
+        RatingLikeComponent,
+        RatingIncDecComponent
     ],
     imports: [
         BrowserModule,
