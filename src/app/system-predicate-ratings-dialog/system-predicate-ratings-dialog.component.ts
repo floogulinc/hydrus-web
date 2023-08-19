@@ -60,7 +60,7 @@ export class SystemPredicateRatingsDialogComponent implements OnInit {
     if(isNumericalRatingService(this.rating)) {
       return `${this.rating.value}/${this.rating.max_stars}`
     } else if(isLikeRatingService(this.rating)) {
-      return this.rating.value ? 'liked' : 'disliked'
+      return this.rating.value ? 'like' : 'dislike'
     } else if(isIncDecRatingService(this.rating)) {
       return `${this.rating.value}`
     } else {
