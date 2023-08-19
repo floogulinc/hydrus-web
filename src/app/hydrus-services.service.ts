@@ -18,7 +18,7 @@ export class HydrusServicesService {
   );
 
   public hydrusServicesArray$ = this.hydrusServices$.pipe(
-    map(s => getServiceArrayUniversal(s))
+    map(s => getServiceArrayUniversal(s)),
   )
 
 }

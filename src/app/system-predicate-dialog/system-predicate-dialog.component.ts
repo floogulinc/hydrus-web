@@ -5,11 +5,12 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { searchFiletypes } from '../hydrus-file-mimes';
 import { allSystemPredicates, hashAlgorithms, operatorDefaults, operatorOptions, Operators, Predicate, SystemPredicate, unitDefaults, Units, unitsOptions, Value, valueLabels } from '../hydrus-system-predicates';
 import { HydrusServicesService } from '../hydrus-services.service';
-import { map, of, switchMap } from 'rxjs';
-import { isFileService } from '../hydrus-services';
+import { filter, map, of, shareReplay, switchMap, take } from 'rxjs';
+import { HydrusService, isFileService } from '../hydrus-services';
 import { isRatingService } from '../hydrus-rating';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-
+@UntilDestroy()
 @Component({
   selector: 'app-system-predicate-dialog',
   templateUrl: './system-predicate-dialog.component.html',
@@ -23,7 +24,13 @@ export class SystemPredicateDialogComponent implements OnInit {
     @Inject(LOCALE_ID) private locale,
     private services: HydrusServicesService
   ) {
-
+    if(this.predicate.value === Value.SERVICE_NAME) {
+      this.services$.pipe(
+        untilDestroyed(this),
+        filter(services => services && services.length > 0),
+        take(1),
+      ).subscribe(services => this.predicateForm.get(['value', Value.SERVICE_NAME]).setValue(services[0].name))
+    }
   }
 
   readonly SystemPredicate = SystemPredicate;
@@ -53,7 +60,8 @@ export class SystemPredicateDialogComponent implements OnInit {
       } else {
         return of([])
       }
-    })
+    }),
+    shareReplay(1)
   )
 
 
