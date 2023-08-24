@@ -49,6 +49,10 @@ export interface HydrusBasicFileFromAPI {
   has_audio: boolean;
   num_frames?: number;
   num_words?: number;
+
+  // TODO: make non-optional when v540 is minimum
+  filetype_human?: string; // added in v540
+  filetype_enum?: HydrusFiletype; //added in v540
 }
 
 export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {

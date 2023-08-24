@@ -360,7 +360,7 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.UNDETERMINED_WM] : 'audio/x-ms-wma or video/x-ms-wmv',
   [HydrusFiletype.UNDETERMINED_MP4] : 'audio/mp4 or video/mp4',
   [HydrusFiletype.UNDETERMINED_PNG] : 'image/png or image/apng',
-  [HydrusFiletype.UNDETERMINED_GIF] : 'aimage/gif',
+  [HydrusFiletype.UNDETERMINED_GIF] : 'image/gif',
 }
 
 const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {

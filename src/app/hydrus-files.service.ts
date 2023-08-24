@@ -113,15 +113,16 @@ export class HydrusFilesService {
   }
 
   private basicFileExtraInfo(file: HydrusBasicFileFromAPI) {
-    const filetype = filetypeFromMime(file.mime);
+    const file_type = file.filetype_enum ?? filetypeFromMime(file.mime);
+    const file_type_string = file.filetype_human ?? (file_type === HydrusFiletype.APPLICATION_UNKNOWN ? file.mime : mime_string_lookup[file_type]);
 
     return {
       file_url: this.api.getFileURLFromHash(file.hash),
       thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
-      file_type: filetype,
-      file_category: getFileCategory(filetype),
-      file_type_string: filetype === HydrusFiletype.APPLICATION_UNKNOWN ? file.mime : mime_string_lookup[filetype],
-      has_thumbnail: hasThumbnail(filetype)
+      file_type,
+      file_category: getFileCategory(file_type),
+      file_type_string,
+      has_thumbnail: hasThumbnail(file_type)
     }
   }
 

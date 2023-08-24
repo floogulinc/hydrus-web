@@ -9,6 +9,7 @@ import { filter, map, of, shareReplay, switchMap, take } from 'rxjs';
 import { HydrusService, isFileService } from '../hydrus-services';
 import { isRatingService } from '../hydrus-rating';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { HydrusVersionService } from '../hydrus-version.service';
 
 @UntilDestroy()
 @Component({
@@ -22,7 +23,8 @@ export class SystemPredicateDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<SystemPredicateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: {predicate: SystemPredicate},
     @Inject(LOCALE_ID) private locale,
-    private services: HydrusServicesService
+    private services: HydrusServicesService,
+    private versionService: HydrusVersionService
   ) {
     if(this.predicate.value === Value.SERVICE_NAME) {
       this.services$.pipe(
@@ -73,6 +75,10 @@ export class SystemPredicateDialogComponent implements OnInit {
     ...(this.predicate.operator === Operators.TAG_RELATIONAL ? {tagRelationalOperator: new FormControl('', Validators.required)} : {}),
     ...(this.predicate.units ? {units: new FormControl(unitDefaults[this.predicate.units])} : {})
   });
+
+  canUseFiletypeName$ = this.versionService.hydrusVersion$.pipe(
+    map(v => v && v.hydrus_version >= 540),
+  )
 
   ngOnInit(): void {
 
