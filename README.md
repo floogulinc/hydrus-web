@@ -36,12 +36,16 @@ There are some guides on doing this on the [wiki](https://github.com/floogulinc/
 
 ## Hydrus Version Support
 
-The minimum versions of the Hydrus client for Hydrus Web are:
+The minimum required versions of the Hydrus client for Hydrus Web are:
 
-- Stable branch ([hydrus.app](https://hydrus.app/)): v500
-- Dev branch ([dev.hydrus.app](https://dev.hydrus.app/)): v500
-- 1.0.0+: v500
-- [0.3.2](https://github.com/floogulinc/hydrus-web/releases/tag/v0.3.2): v357 (fewer features will work with older versions)
+| Hydrus Web | Hydrus Client Version |
+|--|--|
+| Stable branch ([hydrus.app](https://hydrus.app/)) | v500 |
+| Dev branch ([dev.hydrus.app](https://dev.hydrus.app/)) | v500 |
+| 1.0.0+ | v500 |
+| [0.3.2](https://github.com/floogulinc/hydrus-web/releases/tag/v0.3.2) | v357 probably |
+
+Some features may require a newer Hydrus version than the minimum.
 
 ## Development
 
