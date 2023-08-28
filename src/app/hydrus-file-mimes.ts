@@ -70,6 +70,8 @@ export enum HydrusFiletype {
   IMAGE_AVIF_SEQUENCE = 66,
   UNDETERMINED_GIF = 67,
   IMAGE_GIF = 68,
+  APPLICATION_PROCREATE = 69,
+  IMAGE_QOI = 70,
   APPLICATION_OCTET_STREAM = 100,
   APPLICATION_UNKNOWN = 101
 }
@@ -82,6 +84,7 @@ const searchableFileTypes = [
   HydrusFiletype.ANIMATION_GIF,
   HydrusFiletype.IMAGE_WEBP,
   HydrusFiletype.IMAGE_TIFF,
+  HydrusFiletype.IMAGE_QOI,
   HydrusFiletype.IMAGE_ICON,
   HydrusFiletype.IMAGE_SVG,
   HydrusFiletype.IMAGE_HEIF,
@@ -105,6 +108,7 @@ const searchableFileTypes = [
   HydrusFiletype.APPLICATION_SAI2,
   HydrusFiletype.APPLICATION_KRITA,
   HydrusFiletype.APPLICATION_XCF,
+  HydrusFiletype.APPLICATION_PROCREATE,
   HydrusFiletype.APPLICATION_PDF,
   HydrusFiletype.APPLICATION_ZIP,
   HydrusFiletype.APPLICATION_RAR,
@@ -131,6 +135,7 @@ const IMAGES = [
   HydrusFiletype.IMAGE_BMP,
   HydrusFiletype.IMAGE_WEBP,
   HydrusFiletype.IMAGE_TIFF,
+  HydrusFiletype.IMAGE_QOI,
   HydrusFiletype.IMAGE_ICON,
   HydrusFiletype.IMAGE_HEIF,
   HydrusFiletype.IMAGE_HEIC,
@@ -189,7 +194,8 @@ const IMAGE_PROJECT_FILES = [
   HydrusFiletype.APPLICATION_SAI2,
   HydrusFiletype.APPLICATION_KRITA,
   HydrusFiletype.IMAGE_SVG,
-  HydrusFiletype.APPLICATION_XCF
+  HydrusFiletype.APPLICATION_XCF,
+  HydrusFiletype.APPLICATION_PROCREATE,
 ]
 
 const ARCHIVES = [
@@ -208,7 +214,8 @@ const MIMES_WITH_THUMBNAILS = [
   HydrusFiletype.APPLICATION_FLASH,
   HydrusFiletype.APPLICATION_CLIP,
   HydrusFiletype.APPLICATION_PSD,
-  HydrusFiletype.APPLICATION_KRITA
+  HydrusFiletype.APPLICATION_KRITA,
+  HydrusFiletype.APPLICATION_PROCREATE
 ]
 
 export function hasThumbnail(mime: HydrusFiletype) {
@@ -225,6 +232,7 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.IMAGE_BMP] : 'bmp',
   [HydrusFiletype.IMAGE_WEBP] : 'webp',
   [HydrusFiletype.IMAGE_TIFF] : 'tiff',
+  [HydrusFiletype.IMAGE_QOI] : 'qoi',
   [HydrusFiletype.IMAGE_ICON] : 'icon',
   [HydrusFiletype.IMAGE_SVG] : 'svg',
   [HydrusFiletype.IMAGE_HEIF]: 'heif',
@@ -244,6 +252,7 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_SAI2] : 'sai2',
   [HydrusFiletype.APPLICATION_KRITA] : 'krita',
   [HydrusFiletype.APPLICATION_XCF] : 'xcf',
+  [HydrusFiletype.APPLICATION_PROCREATE] : 'procreate',
   [HydrusFiletype.APPLICATION_ZIP] : 'zip',
   [HydrusFiletype.APPLICATION_RAR] : 'rar',
   [HydrusFiletype.APPLICATION_7Z] : '7z',
@@ -299,6 +308,7 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.IMAGE_BMP] : 'image/bmp',
   [HydrusFiletype.IMAGE_WEBP] : 'image/webp',
   [HydrusFiletype.IMAGE_TIFF] : 'image/tiff',
+  [HydrusFiletype.IMAGE_QOI] : 'image/qoi',
   [HydrusFiletype.IMAGE_ICON] : 'image/x-icon',
   [HydrusFiletype.IMAGE_SVG] : 'image/svg+xml',
   [HydrusFiletype.IMAGE_HEIF]: 'image/heif',
@@ -318,6 +328,7 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_SAI2] : 'application/sai2',
   [HydrusFiletype.APPLICATION_KRITA]: 'application/x-krita',
   [HydrusFiletype.APPLICATION_XCF] : 'image/x-xcf',
+  [HydrusFiletype.APPLICATION_PROCREATE] : 'application/x-procreate',
   [HydrusFiletype.APPLICATION_ZIP] : 'application/zip',
   [HydrusFiletype.APPLICATION_RAR] : 'application/vnd.rar',
   [HydrusFiletype.APPLICATION_7Z] : 'application/x-7z-compressed',
@@ -373,6 +384,7 @@ const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.IMAGE_BMP] : '.bmp',
   [HydrusFiletype.IMAGE_WEBP] : '.webp',
   [HydrusFiletype.IMAGE_TIFF] : '.tiff',
+  [HydrusFiletype.IMAGE_QOI] : '.qoi',
   [HydrusFiletype.IMAGE_ICON] : '.ico',
   [HydrusFiletype.IMAGE_SVG] : '.svg',
   [HydrusFiletype.IMAGE_HEIF]: '.heif',
@@ -391,6 +403,7 @@ const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.APPLICATION_SAI2] : '.sai2',
   [HydrusFiletype.APPLICATION_KRITA]: '.kra',
   [HydrusFiletype.APPLICATION_XCF] : '.xcf',
+  [HydrusFiletype.APPLICATION_PROCREATE] : '.procreate',
   [HydrusFiletype.APPLICATION_ZIP] : '.zip',
   [HydrusFiletype.APPLICATION_RAR] : '.rar',
   [HydrusFiletype.APPLICATION_7Z] : '.7z',
@@ -437,6 +450,7 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'image/bmp' : HydrusFiletype.IMAGE_BMP,
   'image/webp' : HydrusFiletype.IMAGE_WEBP,
   'image/tiff' : HydrusFiletype.IMAGE_TIFF,
+  'image/qoi' : HydrusFiletype.IMAGE_QOI,
   'image/x-icon' : HydrusFiletype.IMAGE_ICON,
   'image/svg+xml': HydrusFiletype.IMAGE_SVG,
   'image/heif' : HydrusFiletype.IMAGE_HEIF,
@@ -454,6 +468,7 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'application/clip' : HydrusFiletype.APPLICATION_CLIP,
   'application/sai2': HydrusFiletype.APPLICATION_SAI2,
   'application/x-krita': HydrusFiletype.APPLICATION_KRITA,
+  'application/x-procreate': HydrusFiletype.APPLICATION_PROCREATE,
   'image/x-xcf' : HydrusFiletype.APPLICATION_XCF,
   'application/octet-stream' : HydrusFiletype.APPLICATION_OCTET_STREAM,
   'application/x-yaml' : HydrusFiletype.APPLICATION_YAML,
