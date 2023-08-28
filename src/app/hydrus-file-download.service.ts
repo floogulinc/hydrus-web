@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver-es';
 import { HydrusBasicFile } from './hydrus-file';
 import { HydrusFilesService } from './hydrus-files.service';
 import { HydrusVersionService } from './hydrus-version.service';
