@@ -12,7 +12,7 @@
         <div *ngIf="page.pages && page.pages.length > 0">
           <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: page.pages }"></ng-container>
         </div>
-        <div *ngIf="page.page_type === 6 || page.page_type === 7 || page.page_type === 3 || page.page_type === 1 || page.page_type === 2">
+        <div *ngIf="page.page_type === HydrusPageType.FileSearch || page.page_type === HydrusPageType.ImportURLs || page.page_type === HydrusPageType.ImportHDD || page.page_type === HydrusPageType.ImportGallery || page.page_type === HydrusPageType.ImportSimpleDownloader">
           <app-files-page [pageListItem]="page"></app-files-page>
         </div>
       </ng-template>
