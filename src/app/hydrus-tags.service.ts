@@ -10,7 +10,7 @@ export class HydrusTagsService {
 
   constructor(private api: HydrusApiService) { }
 
-  searchTags(search: string, tag_display_type: TagDisplayType = 'storage'): Observable<HydrusTagSearchTag[]> {
+  searchTags(search: string, tag_display_type: TagDisplayType = 'storage') {
     return this.api.searchTags({search, tag_display_type}).pipe(map(r => r['tags']));
   }
 
@@ -36,6 +36,20 @@ export class HydrusTagsService {
         }
       }
     )
+  }
+
+  getTagSiblingsAndParentsArray(tag: string, noCache = false) {
+    return this.api.getSiblingsAndParents([tag], noCache).pipe(
+      map(({ services, tags }) => Object.entries(tags[tag]).map(([serviceKey, data]) => {
+        const service = services[serviceKey];
+        return {
+          serviceKey,
+          serviceName: service.name,
+          serviceType: service.type,
+          ...data
+        }
+      }))
+    );
   }
 
 

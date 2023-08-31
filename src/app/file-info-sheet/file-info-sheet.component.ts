@@ -24,6 +24,8 @@ import { ExifReaderService } from '../exif-reader.service';
 import { FileMetadataDialogComponent } from '../file-metadata-dialog/file-metadata-dialog.component';
 import { isNumericalRatingService, isLikeRatingService, isIncDecRatingService, HydrusRating } from '../hydrus-rating';
 import { HydrusServiceType } from '../hydrus-services';
+import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
+import { HydrusVersionService } from '../hydrus-version.service';
 
 function getFileIcon(fileType: FileCategory) {
   switch (fileType) {
@@ -83,7 +85,8 @@ export class FileInfoSheetComponent {
     public fileInfoSheetService: FileInfoSheetService,
     private urlService: HydrusUrlService,
     private ratingsService: HydrusRatingsService,
-    private exifReader: ExifReaderService
+    private exifReader: ExifReaderService,
+    private versionService: HydrusVersionService
   ) {
    }
 
@@ -101,6 +104,9 @@ export class FileInfoSheetComponent {
     return !!obj.service_key
   }
 
+  canGetSiblingsParents$ = this.versionService.hydrusVersion$.pipe(
+    map(v => v && v.hydrus_version >= 541),
+  )
 
   processTags(file: HydrusFile): {
     displayTags: TagServiceItem[],
@@ -329,6 +335,26 @@ export class FileInfoSheetComponent {
       this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
         duration: 2000
       });
+    }
+  }
+
+  async tagSiblingsParentsDialog(tag: string) {
+    const dialog = TagSiblingsParentsDialogComponent.open(this.dialog, {
+      tag,
+      allowSearchTag: true,
+      allowAddTagToSearch: true,
+      allowNewSiblingParentDialog: true
+    });
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if (dialogResult) {
+      switch (dialogResult.action) {
+        case 'searchTag':
+          return this.searchTags([dialogResult.tag])
+        case 'addSearchTag':
+          return this.addSearchTags([dialogResult.tag]);
+        case 'newSiblingParentDialog':
+          return this.tagSiblingsParentsDialog(dialogResult.tag)
+      }
     }
   }
 

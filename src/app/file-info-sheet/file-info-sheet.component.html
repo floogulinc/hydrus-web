@@ -209,6 +209,10 @@
       <mat-icon>search</mat-icon>
       <span>Add tag to search</span>
     </button>
+    <button mat-menu-item (click)="tagSiblingsParentsDialog(tag)" *ngIf="canGetSiblingsParents$ | async">
+      <mat-icon svgIcon="graph"></mat-icon>
+      <span>View Siblings and Parents</span>
+    </button>
     <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
       <mat-icon>delete</mat-icon>
       <span>Delete Tag</span>

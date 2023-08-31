@@ -93,6 +93,7 @@ import { ServiceSelectDialogComponent } from './service-select-dialog/service-se
 import { RatingNumericalComponent } from './rating-numerical/rating-numerical.component';
 import { RatingLikeComponent } from './rating-like/rating-like.component';
 import { RatingIncDecComponent } from './rating-inc-dec/rating-inc-dec.component';
+import { TagSiblingsParentsDialogComponent } from './tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
 
 
 const MAT_MODULES = [
@@ -163,7 +164,8 @@ const MAT_MODULES = [
         ServiceSelectDialogComponent,
         RatingNumericalComponent,
         RatingLikeComponent,
-        RatingIncDecComponent
+        RatingIncDecComponent,
+        TagSiblingsParentsDialogComponent
     ],
     imports: [
         BrowserModule,

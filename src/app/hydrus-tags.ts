@@ -1,5 +1,3 @@
-import { RecursiveArray } from "./utils/array-utils";
-
 export interface HydrusTagSearchTag {
   value: string,
   count: number
@@ -27,5 +25,16 @@ export interface ServiceNamesOrKeysToTags {
 export interface ServiceNamesOrKeysToActionsToTags {
   [serviceNameOrKey: string] : {
     [action: string]: string[]
+  }
+}
+
+export interface TagsToServiceKeysToSiblingsAndParents {
+  [tag: string]: {
+    [service_key: string]: {
+      siblings: string[];
+      ideal_tag: string;
+      descendants: string[];
+      ancestors: string[];
+    }
   }
 }

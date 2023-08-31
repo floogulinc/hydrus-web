@@ -3,7 +3,7 @@ import { map, Observable } from 'rxjs';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HydrusSortType } from './hydrus-sort';
 import { HydrusBasicFileFromAPI, HydrusFileFromAPI } from './hydrus-file';
-import { HydrusSearchTags, ServiceNamesOrKeysToActionsToTags, ServiceNamesOrKeysToTags, TagDisplayType } from './hydrus-tags';
+import { HydrusSearchTags, HydrusTagSearchTag, ServiceNamesOrKeysToActionsToTags, ServiceNamesOrKeysToTags, TagDisplayType, TagsToServiceKeysToSiblingsAndParents } from './hydrus-tags';
 import { HydrusBonedStats } from './hydrus-mr-bones';
 import { HydrusServiceInfo, HydrusServices } from './hydrus-services';
 import { HydrusAddURLResponse, HydrusURLFiles, HydrusURLInfo, HydrusURLServiceNamesToTags } from './hydrus-url';
@@ -322,7 +322,7 @@ export class HydrusApiService {
     tag_service_name?: string,
     tag_display_type?: TagDisplayType
   }) {
-    return this.apiGet('add_tags/search_tags', new HttpParams({fromObject: params}));
+    return this.apiGet<{tags: HydrusTagSearchTag[]}>('add_tags/search_tags', new HttpParams({fromObject: params}));
   }
 
 
@@ -436,6 +436,10 @@ export class HydrusApiService {
     rating: number | boolean | null
   }) {
     return this.apiPost('edit_ratings/set_rating', data);
+  }
+
+  public getSiblingsAndParents(tags: string[], noCache = false) {
+    return this.apiGet<{ services: HydrusServices, tags: TagsToServiceKeysToSiblingsAndParents}>('add_tags/get_siblings_and_parents', {tags: JSON.stringify(tags)}, noCache);
   }
 
 

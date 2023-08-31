@@ -10,7 +10,7 @@ import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
 import { MigrationService } from './migration.service';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CUBE, ratingsIcons } from './svg-icons';
+import { CUBE, GRAPH, ratingsIcons } from './svg-icons';
 import { HydrusVersionService } from './hydrus-version.service';
 
 @Component({
@@ -40,6 +40,7 @@ export class AppComponent implements OnInit {
     private hydrusVersionService: HydrusVersionService
   ) {
     iconRegistry.addSvgIconLiteral('cube', sanitizer.bypassSecurityTrustHtml(CUBE));
+    iconRegistry.addSvgIconLiteral('graph', sanitizer.bypassSecurityTrustHtml(GRAPH));
     Object.entries(ratingsIcons).forEach(([name, literal]) => iconRegistry.addSvgIconLiteralInNamespace('rating', name, sanitizer.bypassSecurityTrustHtml(literal)))
   }
 
