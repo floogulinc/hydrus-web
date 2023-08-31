@@ -77,6 +77,15 @@ export function serviceNamesToCurrentTags(
   );
 }
 
+@Pipe({
+  name: 'isSystemPredicate'
+})
+export class IsSystemPredicatePipe implements PipeTransform {
+  transform(tag: string): boolean {
+    return isSystemPredicate(tag);
+  }
+}
+
 export function isSystemPredicate(tag: string) {
   return getNamespace(tag) === 'system';
 }

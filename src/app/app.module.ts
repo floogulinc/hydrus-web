@@ -72,7 +72,7 @@ import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
 import { TagInputDialogComponent } from './tag-input-dialog/tag-input-dialog.component';
-import { TagNamespaceClassPipe } from './utils/tag-utils';
+import { IsSystemPredicatePipe, TagNamespaceClassPipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
 import { SortInputComponent } from './sort-input/sort-input.component';
 import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.component';
@@ -165,7 +165,8 @@ const MAT_MODULES = [
         RatingNumericalComponent,
         RatingLikeComponent,
         RatingIncDecComponent,
-        TagSiblingsParentsDialogComponent
+        TagSiblingsParentsDialogComponent,
+        IsSystemPredicatePipe
     ],
     imports: [
         BrowserModule,

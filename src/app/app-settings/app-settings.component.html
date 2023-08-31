@@ -3,8 +3,8 @@
     <h2>Browse</h2>
     <mat-slide-toggle formControlName="browseSearchOnLoad" class="margin-bottom-16">Search immediately on the browse page</mat-slide-toggle>
     <mat-slide-toggle formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
-    <app-tag-input formControlName="browseDefaultSearchTags" placeholder="Browse page default search" class=""></app-tag-input>
-    <app-tag-input formControlName="favoriteTags" [enableFavorites]="false" [enableOrSearch]="false" placeholder="Favorite tags" class=""></app-tag-input>
+    <app-tag-input formControlName="browseDefaultSearchTags" placeholder="Browse page default search" [enableSiblingParentsDialog]="false" class=""></app-tag-input>
+    <app-tag-input formControlName="favoriteTags" [enableFavorites]="false" [enableOrSearch]="false" [enableSiblingParentsDialog]="false" placeholder="Favorite tags" class=""></app-tag-input>
     <h2>File Viewing</h2>
     <mat-slide-toggle formControlName="mediaAutoplay" class="margin-bottom-16">Autoplay video and audio files</mat-slide-toggle>
     <mat-slide-toggle formControlName="mediaLoop" class="margin-bottom-16">Loop video and audio files</mat-slide-toggle>

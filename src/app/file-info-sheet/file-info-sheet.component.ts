@@ -86,7 +86,6 @@ export class FileInfoSheetComponent {
     private urlService: HydrusUrlService,
     private ratingsService: HydrusRatingsService,
     private exifReader: ExifReaderService,
-    private versionService: HydrusVersionService
   ) {
    }
 
@@ -104,9 +103,7 @@ export class FileInfoSheetComponent {
     return !!obj.service_key
   }
 
-  canGetSiblingsParents$ = this.versionService.hydrusVersion$.pipe(
-    map(v => v && v.hydrus_version >= 541),
-  )
+  canGetSiblingsParents$ = this.tagsService.canGetSiblingsParents$;
 
   processTags(file: HydrusFile): {
     displayTags: TagServiceItem[],

@@ -3,7 +3,7 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, 
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
@@ -21,6 +21,8 @@ import { searchTagsContainsSystemPredicate } from '../utils/tag-utils';
 import { HydrusServicesService } from '../hydrus-services.service';
 import { HydrusRatingsService } from '../hydrus-ratings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
+import { HydrusVersionService } from '../hydrus-version.service';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {
   const pred = allSystemPredicates[p];
@@ -67,6 +69,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   @Input() displayType: TagDisplayType = 'display';
 
+  @Input() enableSiblingParentsDialog = true;
+
   @Output()
   tags = new EventEmitter<HydrusSearchTags>();
 
@@ -92,6 +96,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
    }
 
   favoriteTags = this.settingsService.appSettings.favoriteTags;
+
+  canGetSiblingsParents$ = this.tagsService.canGetSiblingsParents$;
 
 
   writeValue(obj: string[]): void {
@@ -300,6 +306,26 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
       }
     }
   })
+
+  async tagSiblingsParentsDialog(tag: string) {
+    const dialog = TagSiblingsParentsDialogComponent.open(this.dialog, {
+      tag,
+      allowSearchTag: true,
+      allowAddTagToSearch: true,
+      allowNewSiblingParentDialog: true
+    });
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if (dialogResult) {
+      switch (dialogResult.action) {
+        case 'searchTag':
+          return this.setSearchTags([dialogResult.tag])
+        case 'addSearchTag':
+          return this.addSearchTags([dialogResult.tag]);
+        case 'newSiblingParentDialog':
+          return this.tagSiblingsParentsDialog(dialogResult.tag)
+      }
+    }
+  }
 
 
 }
