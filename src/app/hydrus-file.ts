@@ -150,6 +150,7 @@ export enum FileCategory {
   Video,
   Audio,
   Flash,
+  PSD,
   Unsupported
 }
 
@@ -200,6 +201,9 @@ export function getFileCategory(type: HydrusFiletype): FileCategory {
     HydrusFiletype.VIDEO_FLV
   ].includes(type)) {
     return FileCategory.Flash;
+  }
+  if(type === HydrusFiletype.APPLICATION_PSD) {
+    return FileCategory.PSD;
   }
   return FileCategory.Unsupported;
 }

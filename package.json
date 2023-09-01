@@ -37,6 +37,7 @@
     "@rx-angular/template": "^14.0.0",
     "@s-libs/ng-core": "^14.1.0",
     "@types/byte-size": "^8.1.0",
+    "@webtoon/psd": "^0.4.0",
     "array-flat-polyfill": "^1.0.1",
     "byte-size": "^8.1.0",
     "exifreader": "^4.13.0",

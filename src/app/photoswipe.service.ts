@@ -8,9 +8,12 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
 import { Location } from '@angular/common';
 import { HydrusFileDownloadService } from './hydrus-file-download.service';
-import { take } from 'rxjs';
+import { firstValueFrom, take } from 'rxjs';
 import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
 import { SettingsService } from './settings.service';
+import { HydrusFilesService } from './hydrus-files.service';
+import Psd from "@webtoon/psd";
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -26,11 +29,15 @@ export class PhotoswipeService {
     private bottomSheet: MatBottomSheet,
     private location: Location,
     private downloadService: HydrusFileDownloadService,
-    private settingsService: SettingsService
+    private filesService: HydrusFilesService,
+    private settingsService: SettingsService,
+    private snackbar: MatSnackBar,
   ) { }
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
     const imgindex = items.findIndex(e => e.file_id === id);
+
+    const processedFiles = new Map<string, SlideData>();
 
     const options: PhotoSwipeOptions = {
       index: imgindex,
@@ -54,6 +61,10 @@ export class PhotoswipeService {
     })
 
     pswp.addFilter('itemData', (itemData, index) => {
+      const file = items[index];
+      if(processedFiles.has(file.hash)) {
+        return processedFiles.get(file.hash);
+      }
       return this.getPhotoSwipeItem(items[index]);
     });
 
@@ -228,6 +239,69 @@ export class PhotoswipeService {
 
         content.element = document.createElement('div');
         content.element.className = 'pswp-audio-container';
+      } else if (isContentType(content, 'psd')) {
+        e.preventDefault();
+        content.element = document.createElement('div');
+        content.element.className = 'pswp__content pswp__error-msg-container';
+
+        const errorMsgEl = document.createElement('div');
+        errorMsgEl.className = 'pswp__error-msg';
+        content.element.appendChild(errorMsgEl);
+
+        const img = document.createElement('img');
+        img.src = file.thumbnail_url;
+        img.className = 'pswp-error-thumb';
+        errorMsgEl.appendChild(img);
+
+        const errorMsgText = document.createElement('div');
+        errorMsgText.innerText = `Unsupported Filetype (${file.file_type_string})`;
+        errorMsgText.className = 'pswp-error-text';
+        errorMsgEl.appendChild(errorMsgText);
+
+        const psdButton = document.createElement('button');
+        psdButton.innerText = 'Load PSD';
+        psdButton.className = 'mat-raised-button mat-button-base';
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'pswp-error-text';
+        errorMsgEl.appendChild(buttonContainer);
+        buttonContainer.appendChild(psdButton);
+        psdButton.addEventListener('click', async (ev) => {
+          try {
+            errorMsgText.innerText = `Downloading PSD...`;
+            const downloadFile = await firstValueFrom(this.filesService.getFileAsFile(file));
+            errorMsgText.innerText = `Rendering PSD...`;
+            const imgUrl = await this.getPSDFileAsDataURL(downloadFile);
+            const data = {
+              type: 'image',
+              src: imgUrl,
+              msrc: file.thumbnail_url,
+              width: file.width,
+              height: file.height,
+              file
+            }
+            processedFiles.set(file.hash, data);
+            pswp.refreshSlideContent(content.index);
+          } catch (error) {
+            errorMsgText.innerText = `Unsupported Filetype (${file.file_type_string})`;
+            this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+              duration: 2000
+            });
+          }
+        })
+
+        if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
+          const photopeaButton = document.createElement('a');
+          photopeaButton.innerText = 'Open file in Photopea';
+          photopeaButton.href = getPhotopeaUrlForFile(file);
+          photopeaButton.target = '_blank';
+          photopeaButton.className = 'mat-raised-button mat-button-base';
+          const buttonContainer = document.createElement('div');
+          buttonContainer.className = 'pswp-error-text';
+          errorMsgEl.appendChild(buttonContainer);
+          buttonContainer.appendChild(photopeaButton);
+        }
+
+
       } else if (isContentType(content, 'unsupported')) {
         e.preventDefault();
         content.element = document.createElement('div');
@@ -399,6 +473,14 @@ export class PhotoswipeService {
           type: 'audio'
         };
       }
+      case FileCategory.PSD: {
+        return {
+          file,
+          type: 'psd',
+          width: file.width,
+          height: file.height
+        };
+      }
       default: {
         return {
           type: 'unsupported',
@@ -406,6 +488,28 @@ export class PhotoswipeService {
         };
       }
     }
+  }
+
+  async getPSDFileAsDataURL(file: Blob) {
+    const result = await file.arrayBuffer();
+    const psdFile = Psd.parse(result);
+
+    console.log(psdFile)
+
+    const canvasElement = document.createElement("canvas");
+    canvasElement.width = psdFile.width;
+    canvasElement.height = psdFile.height;
+    const context = canvasElement.getContext("2d");
+    const compositeBuffer = await psdFile.composite();
+    const imageData = new ImageData(
+      compositeBuffer,
+      psdFile.width,
+      psdFile.height
+    );
+
+    context.putImageData(imageData, 0, 0);
+
+    return canvasElement.toDataURL();
   }
 
 }
