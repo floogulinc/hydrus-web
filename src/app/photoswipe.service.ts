@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ApplicationRef, EnvironmentInjector, Injectable, createComponent } from '@angular/core';
 import { HydrusBasicFile, FileCategory } from './hydrus-file';
 import PhotoSwipe, { PhotoSwipeOptions, SlideData } from 'photoswipe';
 import { Platform } from '@angular/cdk/platform';
@@ -14,6 +14,7 @@ import { SettingsService } from './settings.service';
 import { HydrusFilesService } from './hydrus-files.service';
 import Psd from "@webtoon/psd";
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButton } from '@angular/material/button';
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -32,6 +33,8 @@ export class PhotoswipeService {
     private filesService: HydrusFilesService,
     private settingsService: SettingsService,
     private snackbar: MatSnackBar,
+    private appRef: ApplicationRef,
+    private injector: EnvironmentInjector
   ) { }
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
@@ -254,18 +257,28 @@ export class PhotoswipeService {
         errorMsgEl.appendChild(img);
 
         const errorMsgText = document.createElement('div');
-        errorMsgText.innerText = `Unsupported Filetype (${file.file_type_string})`;
+        errorMsgText.innerText = `PSD File`;
         errorMsgText.className = 'pswp-error-text';
         errorMsgEl.appendChild(errorMsgText);
 
         const psdButton = document.createElement('button');
-        psdButton.innerText = 'Load PSD';
-        psdButton.className = 'mat-raised-button mat-button-base';
+        psdButton.setAttribute('mat-raised-button', '');
+        const psdButtonComponent = createComponent(MatButton, {
+          environmentInjector: this.injector,
+          hostElement: psdButton,
+          projectableNodes: [
+            [document.createTextNode('Load PSD')]
+          ]
+        })
+
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'pswp-error-text';
         errorMsgEl.appendChild(buttonContainer);
         buttonContainer.appendChild(psdButton);
+        this.appRef.attachView(psdButtonComponent.hostView);
+
         psdButton.addEventListener('click', async (ev) => {
+          psdButtonComponent.setInput('disabled', true);
           try {
             errorMsgText.innerText = `Downloading PSD...`;
             const downloadFile = await firstValueFrom(this.filesService.getFileAsFile(file));
@@ -282,24 +295,16 @@ export class PhotoswipeService {
             processedFiles.set(file.hash, data);
             pswp.refreshSlideContent(content.index);
           } catch (error) {
-            errorMsgText.innerText = `Unsupported Filetype (${file.file_type_string})`;
+            errorMsgText.innerText = `PSD File`;
             this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
               duration: 2000
             });
+            console.error(error);
           }
+          psdButtonComponent.setInput('disabled', false);
         })
 
-        if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
-          const photopeaButton = document.createElement('a');
-          photopeaButton.innerText = 'Open file in Photopea';
-          photopeaButton.href = getPhotopeaUrlForFile(file);
-          photopeaButton.target = '_blank';
-          photopeaButton.className = 'mat-raised-button mat-button-base';
-          const buttonContainer = document.createElement('div');
-          buttonContainer.className = 'pswp-error-text';
-          errorMsgEl.appendChild(buttonContainer);
-          buttonContainer.appendChild(photopeaButton);
-        }
+        this.addPhotopeaButton(file, errorMsgEl);
 
 
       } else if (isContentType(content, 'unsupported')) {
@@ -321,17 +326,7 @@ export class PhotoswipeService {
         errorMsgText.className = 'pswp-error-text';
         errorMsgEl.appendChild(errorMsgText);
 
-        if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
-          const photopeaButton = document.createElement('a');
-          photopeaButton.innerText = 'Open file in Photopea';
-          photopeaButton.href = getPhotopeaUrlForFile(file);
-          photopeaButton.target = '_blank';
-          photopeaButton.className = 'mat-raised-button mat-button-base';
-          const buttonContainer = document.createElement('div');
-          buttonContainer.className = 'pswp-error-text';
-          errorMsgEl.appendChild(buttonContainer);
-          buttonContainer.appendChild(photopeaButton);
-        }
+        this.addPhotopeaButton(file, errorMsgEl);
 
       }
 
@@ -510,6 +505,30 @@ export class PhotoswipeService {
     context.putImageData(imageData, 0, 0);
 
     return canvasElement.toDataURL();
+  }
+
+  addPhotopeaButton(file: HydrusBasicFile, element: HTMLElement) {
+    if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
+      const photopeaButton = document.createElement('a');
+      photopeaButton.setAttribute('mat-raised-button', '');
+      photopeaButton.target = '_blank';
+      photopeaButton.href = getPhotopeaUrlForFile(file);
+
+      const photopeaButtonComponent = createComponent(MatButton, {
+        environmentInjector: this.injector,
+        hostElement: photopeaButton,
+        projectableNodes: [
+          [document.createTextNode('Open file in Photopea')]
+        ]
+      })
+
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'pswp-error-text';
+      element.appendChild(buttonContainer);
+      buttonContainer.appendChild(photopeaButton);
+
+      this.appRef.attachView(photopeaButtonComponent.hostView);
+    }
   }
 
 }
