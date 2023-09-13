@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { map, tap } from 'rxjs';
+import { catchError, map, tap, throwError } from 'rxjs';
 import { HydrusApiService } from '../hydrus-api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
 
 interface BonesTableElement {
   label: string,
@@ -19,7 +21,11 @@ interface BonesTableElement {
 })
 export class MrBonesDialogComponent implements OnInit {
 
-  constructor(private apiService: HydrusApiService) { }
+  constructor(
+    public dialogRef: MatDialogRef<MrBonesDialogComponent>,
+    private apiService: HydrusApiService,
+    private snackbar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
   }
@@ -27,6 +33,13 @@ export class MrBonesDialogComponent implements OnInit {
   displayedColumns: (keyof BonesTableElement)[] = ['label', 'num', 'numPercent', 'size', 'sizePercent', 'averageFilesize']
 
   bones$ = this.apiService.mrBones().pipe(
+    catchError((error, caught) => {
+      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
+        duration: 2000
+      });
+      this.dialogRef.close();
+      return throwError(() => error);
+    }),
     map(bones => bones.boned_stats),
     map(stats => {
       const {num_inbox, num_archive, num_deleted, size_inbox, size_archive, size_deleted} = stats;
