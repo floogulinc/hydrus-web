@@ -16,5 +16,7 @@ export class SettingsComponent implements OnInit {
   ngOnInit() {
   }
 
+  initialSelect = this.apiSettings.apiSet ? 1 : 0;
+
 
 }
