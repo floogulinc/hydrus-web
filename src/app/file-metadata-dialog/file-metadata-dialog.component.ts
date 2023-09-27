@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExifReaderService } from '../exif-reader.service';
 import { catchError, from, map, of, shareReplay } from 'rxjs';
 import { Tags } from 'exifreader';
+import { ErrorService } from '../error.service';
 
 interface FileMetadataDialogData {
   file: HydrusBasicFile
@@ -20,7 +21,7 @@ export class FileMetadataDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<FileMetadataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: FileMetadataDialogData,
-    private snackbar: MatSnackBar,
+    private errorService: ErrorService,
     private exifReader: ExifReaderService
   ) { }
 
@@ -31,9 +32,7 @@ export class FileMetadataDialogComponent implements OnInit {
 
   fileMetadata$ = from(this.exifReader.getExifTagsForFile(this.data.file)).pipe(
     catchError((error) => {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
       this.dialogRef.close();
       throw error;
     }),

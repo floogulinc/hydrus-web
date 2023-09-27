@@ -7,6 +7,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { PagesComponent } from '../pages/pages.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HydrusVersionService } from '../hydrus-version.service';
+import { ErrorService } from '../error.service';
 
 @UntilDestroy()
 @Component({
@@ -23,7 +24,8 @@ export class FilesPageComponent implements OnInit {
   constructor(
     public pagesService: HydrusPagesService,
     private snackbar: MatSnackBar,
-    private versionService: HydrusVersionService
+    private versionService: HydrusVersionService,
+    private errorService: ErrorService
   ) { }
 
   loadSub: Subscription;
@@ -57,10 +59,8 @@ export class FilesPageComponent implements OnInit {
       snackbarRef.onAction().subscribe(() => {
         this.load();
       })
-    }, (err) => {
-      this.snackbar.open(`Error refreshing page: ${err}`, null, {
-        duration: 2000
-      });
+    }, (error) => {
+      this.errorService.handleHydrusError(error, 'Error refreshing page');
     })
 
   }

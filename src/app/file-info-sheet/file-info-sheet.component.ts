@@ -26,6 +26,7 @@ import { isNumericalRatingService, isLikeRatingService, isIncDecRatingService, H
 import { HydrusServiceType } from '../hydrus-services';
 import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
 import { HydrusVersionService } from '../hydrus-version.service';
+import { ErrorService } from '../error.service';
 
 function getFileIcon(fileType: FileCategory) {
   switch (fileType) {
@@ -86,6 +87,7 @@ export class FileInfoSheetComponent {
     private urlService: HydrusUrlService,
     private ratingsService: HydrusRatingsService,
     private exifReader: ExifReaderService,
+    private errorService: ErrorService
   ) {
    }
 
@@ -210,9 +212,7 @@ export class FileInfoSheetComponent {
       snackBarRef.dismiss();
     }, error => {
       snackBarRef.dismiss();
-      this.snackbar.open(`Error downloading file: ${error.message}`, undefined, {
-        duration: 10000
-      });
+      this.errorService.handleHydrusError(error, 'Error downloading file')
     });
   }
 
@@ -225,9 +225,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -239,9 +237,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -253,9 +249,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -267,9 +261,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -300,9 +292,7 @@ export class FileInfoSheetComponent {
         this.addTags([tag], serviceKey);
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -329,9 +319,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -366,9 +354,7 @@ export class FileInfoSheetComponent {
           duration: 2000
         });
       } catch (error) {
-        this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-          duration: 2000
-        });
+        this.errorService.handleHydrusError(error);
       }
     }
   }
@@ -399,9 +385,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch(error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -416,9 +400,7 @@ export class FileInfoSheetComponent {
         this.setNote(noteName, noteContent, 'Note Restored')
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -431,9 +413,7 @@ export class FileInfoSheetComponent {
       });
     } catch (error) {
       console.log(error);
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -456,9 +436,7 @@ export class FileInfoSheetComponent {
         this.addUrl(url);
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -470,9 +448,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -493,9 +469,7 @@ export class FileInfoSheetComponent {
       });
     } catch (error) {
       this.reload();
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 

@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.service';
 import { SettingsService } from '../settings.service';
 import { HydrusVersionService } from '../hydrus-version.service';
+import { ErrorService } from '../error.service';
 
 @Component({
   selector: 'app-api-settings',
@@ -15,6 +16,7 @@ export class ApiSettingsComponent implements OnInit {
     private api: HydrusApiService,
     private snackbar: MatSnackBar,
     private hydrusVersionService: HydrusVersionService,
+    private errorService: ErrorService
   ) { }
 
   testData: HydrusKeyVerificationData;
@@ -42,10 +44,7 @@ export class ApiSettingsComponent implements OnInit {
         duration: 5000
       });
     }, (error) => {
-      console.log(error);
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
-        duration: 5000
-      });
+      this.errorService.handleHydrusError(error)
     });
   }
 

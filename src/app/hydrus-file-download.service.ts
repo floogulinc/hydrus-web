@@ -5,6 +5,7 @@ import { HydrusBasicFile } from './hydrus-file';
 import { HydrusFilesService } from './hydrus-files.service';
 import { HydrusVersionService } from './hydrus-version.service';
 import { firstValueFrom } from 'rxjs';
+import { ErrorService } from './error.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class HydrusFileDownloadService {
   constructor(
     private filesService: HydrusFilesService,
     private snackbar: MatSnackBar,
-    private hydrusVersionService: HydrusVersionService
+    private hydrusVersionService: HydrusVersionService,
+    private errorService: ErrorService
   ) { }
 
   public canShare = navigator.share && navigator.canShare;
@@ -28,9 +30,7 @@ export class HydrusFileDownloadService {
         snackBarRef.dismiss();
       }, error => {
         snackBarRef.dismiss();
-        this.snackbar.open(`Error downloading file: ${error.message}`, undefined, {
-          duration: 10000
-        });
+        this.errorService.handleHydrusError(error, 'Error downloading file')
       });
     } else {
       const url = `${hfile.file_url}&download=true`;
@@ -54,9 +54,7 @@ export class HydrusFileDownloadService {
     }, error => {
       snackBarRef.dismiss();
       if (error.message !== 'Share canceled') {
-        this.snackbar.open(`Error sharing file: ${error.message}`, undefined, {
-          duration: 10000
-        });
+        this.errorService.handleHydrusError(error, 'Error sharing file');
       }
     });
   }

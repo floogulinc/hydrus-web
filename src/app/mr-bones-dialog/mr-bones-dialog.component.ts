@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { HydrusApiService } from '../hydrus-api.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ErrorService } from '../error.service';
 
 interface BonesTableElement {
   label: string,
@@ -24,7 +24,7 @@ export class MrBonesDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<MrBonesDialogComponent>,
     private apiService: HydrusApiService,
-    private snackbar: MatSnackBar
+    private errorService: ErrorService
   ) { }
 
   ngOnInit(): void {
@@ -34,9 +34,7 @@ export class MrBonesDialogComponent implements OnInit {
 
   bones$ = this.apiService.mrBones().pipe(
     catchError((error, caught) => {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
       this.dialogRef.close();
       return throwError(() => error);
     }),

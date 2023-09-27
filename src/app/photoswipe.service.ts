@@ -13,8 +13,8 @@ import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
 import { SettingsService } from './settings.service';
 import { HydrusFilesService } from './hydrus-files.service';
 import Psd from "@webtoon/psd";
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatButton } from '@angular/material/button';
+import { ErrorService } from './error.service';
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -32,9 +32,9 @@ export class PhotoswipeService {
     private downloadService: HydrusFileDownloadService,
     private filesService: HydrusFilesService,
     private settingsService: SettingsService,
-    private snackbar: MatSnackBar,
     private appRef: ApplicationRef,
-    private injector: EnvironmentInjector
+    private injector: EnvironmentInjector,
+    private errorService: ErrorService
   ) { }
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
@@ -296,9 +296,7 @@ export class PhotoswipeService {
             pswp.refreshSlideContent(content.index);
           } catch (error) {
             errorMsgText.innerText = `PSD File`;
-            this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-              duration: 2000
-            });
+            this.errorService.handleHydrusError(error)
             console.error(error);
           }
           psdButtonComponent.setInput('disabled', false);

@@ -6,9 +6,9 @@ import { UntilDestroy } from '@ngneat/until-destroy';
 import { SettingsService } from '../settings.service';
 import { HydrusSearchTags } from '../hydrus-tags';
 import { defaultSort, displaySortGroups, HydrusSortType, isDisplaySortMetaTypeGroup, isDisplaySortType, SortInfo, sortToString } from '../hydrus-sort';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ErrorService } from '../error.service';
 
 @UntilDestroy()
 @Component({
@@ -23,9 +23,9 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
     private searchService: SearchService,
     public filesService: HydrusFilesService,
     public settingsService: SettingsService,
-    private snackbar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router,
+    private errorService: ErrorService,
     ) {
   }
 
@@ -59,9 +59,7 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     ).pipe(
       catchError(error => {
-        this.snackbar.open(`Error searching: ${error.message}`, undefined, {
-          duration: 5000
-        })
+        this.errorService.handleHydrusError(error, 'Error searching');
         return of([]);
       }),
     )),

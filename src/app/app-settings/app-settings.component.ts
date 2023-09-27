@@ -7,6 +7,7 @@ import { getLocalTagServices } from '../hydrus-services';
 import { HydrusServicesService } from '../hydrus-services.service';
 import { defaultAppSettings } from '../settings';
 import { SettingsService } from '../settings.service';
+import { ErrorService } from '../error.service';
 
 @Component({
   selector: 'app-app-settings',
@@ -19,7 +20,8 @@ export class AppSettingsComponent implements OnInit {
     private settings: SettingsService,
     private snackbar: MatSnackBar,
     private hydrusServices: HydrusServicesService,
-    public apiSettings: HydrusApiSettingsService
+    public apiSettings: HydrusApiSettingsService,
+    private errorService: ErrorService,
   ) { }
 
   ngOnInit(): void {
@@ -43,9 +45,7 @@ export class AppSettingsComponent implements OnInit {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error saving settings: ${{error}}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleError(error, 'Error saving settings');
     }
   }
 

@@ -8,6 +8,7 @@ import { HttpEventType } from '@angular/common/http';
 import { SettingsService } from '../settings.service';
 import { HydrusTagService } from '../hydrus-file';
 import { HydrusTagsService } from '../hydrus-tags.service';
+import { ErrorService } from '../error.service';
 
 @Component({
   selector: 'app-upload-file',
@@ -21,6 +22,7 @@ export class UploadFileComponent implements OnInit {
     private snackbar: MatSnackBar,
     private settings: SettingsService,
     private tagsService: HydrusTagsService,
+    private errorService: ErrorService
   ) { }
 
   ngOnInit(): void {
@@ -66,9 +68,7 @@ export class UploadFileComponent implements OnInit {
             });
           }
         } catch (error) {
-          this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-            duration: 2000
-          });
+          this.errorService.handleHydrusError(error);
         }
       }
       this.uploadForm.reset();
