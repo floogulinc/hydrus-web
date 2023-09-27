@@ -22,7 +22,7 @@ export class ErrorService {
 
   displayError(error: Error, message = 'Error', customText?: string) {
     console.error(error);
-    const snackbarRef = this.snackbar.open(customText ?? `${message}: ${error.message ?? error}`, 'Details', {
+    const snackbarRef = this.snackbar.open(`${message}: ${customText ?? error.message ?? error}`, 'Details', {
       duration: 5000
     });
     snackbarRef.onAction().subscribe(() => {
