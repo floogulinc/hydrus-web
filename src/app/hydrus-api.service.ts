@@ -216,6 +216,15 @@ export class HydrusApiService {
     return this.getAPIUrl() + 'get_files/thumbnail?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
   }
 
+  /**
+   * Generates a file's render URL from its Hash
+   * @param file_hash the hash of the file to get a render of
+   * @return the URL of the rendered file referenced by the hash
+   */
+  public getRenderedURLFromHash(file_hash: string): string {
+    return this.getAPIUrl() + 'get_files/render?hash=' + file_hash + '&Hydrus-Client-API-Access-Key=' + this.hydrusApiKey;
+  }
+
 
   public getFileAsBlob(file_hash: string): Observable<Blob> {
     return this.http.get(

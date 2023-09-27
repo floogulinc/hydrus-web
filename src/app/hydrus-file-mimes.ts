@@ -522,3 +522,13 @@ export const searchFiletypes = searchableFileTypes.map(ft => ({
 export function filetypeFromMime(mime: string) {
   return mime_enum_lookup[mime] ?? HydrusFiletype.APPLICATION_UNKNOWN;
 }
+
+
+const renderableFiletypes = [
+  ...IMAGES,
+  HydrusFiletype.APPLICATION_PSD
+]
+
+export function isFileHydrusRenderable(mime: HydrusFiletype) {
+  return renderableFiletypes.includes(mime);
+}

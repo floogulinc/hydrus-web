@@ -4,7 +4,7 @@ import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { map, tap } from 'rxjs/operators';
 import { HydrusServices } from './hydrus-services';
-import { HydrusFiletype, filetypeFromMime, hasThumbnail, mime_string_lookup } from './hydrus-file-mimes';
+import { HydrusFiletype, filetypeFromMime, hasThumbnail, isFileHydrusRenderable, mime_string_lookup } from './hydrus-file-mimes';
 
 function chunk<T>(array: T[], size: number): T[][] {
   const chunked = [];
@@ -115,6 +115,7 @@ export class HydrusFilesService {
   private basicFileExtraInfo(file: HydrusBasicFileFromAPI) {
     const file_type = file.filetype_enum ?? filetypeFromMime(file.mime);
     const file_type_string = file.filetype_human ?? (file_type === HydrusFiletype.APPLICATION_UNKNOWN ? file.mime : mime_string_lookup[file_type]);
+    const renderable = isFileHydrusRenderable(file_type);
 
     return {
       file_url: this.api.getFileURLFromHash(file.hash),
@@ -122,7 +123,8 @@ export class HydrusFilesService {
       file_type,
       file_category: getFileCategory(file_type),
       file_type_string,
-      has_thumbnail: hasThumbnail(file_type)
+      has_thumbnail: hasThumbnail(file_type),
+      ...(renderable ? {render_url: this.api.getRenderedURLFromHash(file.hash)} : {})
     }
   }
 

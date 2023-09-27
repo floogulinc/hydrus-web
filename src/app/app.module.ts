@@ -94,6 +94,7 @@ import { RatingNumericalComponent } from './rating-numerical/rating-numerical.co
 import { RatingLikeComponent } from './rating-like/rating-like.component';
 import { RatingIncDecComponent } from './rating-inc-dec/rating-inc-dec.component';
 import { TagSiblingsParentsDialogComponent } from './tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
+import { BlurHashColorPipe } from './blurhash';
 
 
 const MAT_MODULES = [

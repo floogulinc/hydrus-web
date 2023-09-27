@@ -140,6 +140,7 @@ export interface HydrusBasicFile extends HydrusBasicFileFromAPI {
   file_type: HydrusFiletype;
   file_type_string: string;
   has_thumbnail: boolean;
+  render_url?: string;
 }
 
 export interface HydrusFileList {
