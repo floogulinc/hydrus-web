@@ -159,6 +159,7 @@ export class HydrusApiService {
       detailed_url_information?: boolean;
       include_notes?: boolean;
       include_services_object?: boolean;
+      include_blurhash?: boolean;
     },
     noCache = false
   ): Observable<{ services?: HydrusServices, metadata: Identifiers extends true ? {file_id: number, hash: string }[] : Basic extends true ? HydrusBasicFileFromAPI[] : HydrusFileFromAPI[] }> {

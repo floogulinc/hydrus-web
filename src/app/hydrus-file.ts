@@ -53,6 +53,7 @@ export interface HydrusBasicFileFromAPI {
   // TODO: make non-optional when v540 is minimum
   filetype_human?: string; // added in v540
   filetype_enum?: HydrusFiletype; //added in v540
+  blurhash?: string; // added in v545
 }
 
 export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {

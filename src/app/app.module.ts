@@ -166,7 +166,8 @@ const MAT_MODULES = [
         RatingLikeComponent,
         RatingIncDecComponent,
         TagSiblingsParentsDialogComponent,
-        IsSystemPredicatePipe
+        IsSystemPredicatePipe,
+        BlurHashColorPipe,
     ],
     imports: [
         BrowserModule,

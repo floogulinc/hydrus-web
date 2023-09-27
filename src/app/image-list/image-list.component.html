@@ -7,7 +7,7 @@
         (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.files, file.file_id);">
         <div class="mdc-image-list__image-aspect-container">
           <div class="mdc-image-list__image image-list-image"
-            [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')'}"
+            [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')', 'background-color' : file.blurhash ? (file.blurhash | blurhashcolor) : '#c7c5cb'}"
             [ngClass]="'file-id-' + file.file_id"></div>
         </div>
       </a>
