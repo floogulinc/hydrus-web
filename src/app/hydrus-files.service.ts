@@ -66,11 +66,11 @@ export class HydrusFilesService {
   }
 
   private getBasicFileMetadataAPI(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
-    return this.api.getFileMetadata({ file_ids: fileIds, only_return_identifiers: false, only_return_basic_information: true }).pipe(map(val => val.metadata));
+    return this.api.getFileMetadata({ file_ids: fileIds, only_return_identifiers: false, only_return_basic_information: true, include_blurhash: true }).pipe(map(val => val.metadata));
   }
 
   private getBasicFileMetadataHashAPI(fileHashes: string[]): Observable<HydrusBasicFileFromAPI[]> {
-    return this.api.getFileMetadata({ hashes: fileHashes, only_return_identifiers: false, only_return_basic_information: true }).pipe(map(val => val.metadata));
+    return this.api.getFileMetadata({ hashes: fileHashes, only_return_identifiers: false, only_return_basic_information: true, include_blurhash: true }).pipe(map(val => val.metadata));
   }
 
   private getFileMetadataAPIChunked(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
