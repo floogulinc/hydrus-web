@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogConfig } from '@angu
 interface JsonViewDialogData {
   json: any;
   title: string;
+  copyButton?: boolean;
 }
 
 @Component({
@@ -19,6 +20,10 @@ export class JsonViewDialogComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  }
+
+  getJSON(): string {
+    return JSON.stringify(this.data.json, null, 2)
   }
 
 

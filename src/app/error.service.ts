@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { JsonViewDialogComponent } from './json-view-dialog/json-view-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import {serializeError} from 'serialize-error';
 
 interface HydrusError {
   error: string;
@@ -26,7 +27,11 @@ export class ErrorService {
       duration: 5000
     });
     snackbarRef.onAction().subscribe(() => {
-      JsonViewDialogComponent.open(this.dialog, {title: message, json: error})
+      JsonViewDialogComponent.open(this.dialog, {
+        title: message,
+        json: serializeError(error),
+        copyButton: true
+      })
     });
   }
 
