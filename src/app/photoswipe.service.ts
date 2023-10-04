@@ -8,13 +8,11 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
 import { Location } from '@angular/common';
 import { HydrusFileDownloadService } from './hydrus-file-download.service';
-import { firstValueFrom, take } from 'rxjs';
+import { take } from 'rxjs';
 import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
 import { SettingsService } from './settings.service';
-import { HydrusFilesService } from './hydrus-files.service';
-import Psd from "@webtoon/psd";
 import { MatButton } from '@angular/material/button';
-import { ErrorService } from './error.service';
+
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -30,17 +28,16 @@ export class PhotoswipeService {
     private bottomSheet: MatBottomSheet,
     private location: Location,
     private downloadService: HydrusFileDownloadService,
-    private filesService: HydrusFilesService,
     private settingsService: SettingsService,
     private appRef: ApplicationRef,
     private injector: EnvironmentInjector,
-    private errorService: ErrorService
+
   ) { }
+
+  private processedFiles = new Map<string, SlideData>();
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
     const imgindex = items.findIndex(e => e.file_id === id);
-
-    const processedFiles = new Map<string, SlideData>();
 
     const options: PhotoSwipeOptions = {
       index: imgindex,
@@ -65,8 +62,8 @@ export class PhotoswipeService {
 
     pswp.addFilter('itemData', (itemData, index) => {
       const file = items[index];
-      if(processedFiles.has(file.hash)) {
-        return processedFiles.get(file.hash);
+      if(this.processedFiles.has(file.hash)) {
+        return this.processedFiles.get(file.hash);
       }
       return this.getPhotoSwipeItem(items[index]);
     });
@@ -242,7 +239,7 @@ export class PhotoswipeService {
 
         content.element = document.createElement('div');
         content.element.className = 'pswp-audio-container';
-      } else if (isContentType(content, 'psd')) {
+      } else if (isContentType(content, 'renderable')) {
         e.preventDefault();
         content.element = document.createElement('div');
         content.element.className = 'pswp__content pswp__error-msg-container';
@@ -257,49 +254,38 @@ export class PhotoswipeService {
         errorMsgEl.appendChild(img);
 
         const errorMsgText = document.createElement('div');
-        errorMsgText.innerText = `PSD File`;
+        errorMsgText.innerText = `Unsupported Filetype (${file.file_type_string})`;
         errorMsgText.className = 'pswp-error-text';
         errorMsgEl.appendChild(errorMsgText);
 
-        const psdButton = document.createElement('button');
-        psdButton.setAttribute('mat-raised-button', '');
+        const renderButton = document.createElement('button');
+        renderButton.setAttribute('mat-raised-button', '');
         const psdButtonComponent = createComponent(MatButton, {
           environmentInjector: this.injector,
-          hostElement: psdButton,
+          hostElement: renderButton,
           projectableNodes: [
-            [document.createTextNode('Load PSD')]
+            [document.createTextNode('Load render from Hydrus')]
           ]
         })
 
         const buttonContainer = document.createElement('div');
         buttonContainer.className = 'pswp-error-text';
         errorMsgEl.appendChild(buttonContainer);
-        buttonContainer.appendChild(psdButton);
+        buttonContainer.appendChild(renderButton);
         this.appRef.attachView(psdButtonComponent.hostView);
 
-        psdButton.addEventListener('click', async (ev) => {
+        renderButton.addEventListener('click', async (ev) => {
           psdButtonComponent.setInput('disabled', true);
-          try {
-            errorMsgText.innerText = `Downloading PSD...`;
-            const downloadFile = await firstValueFrom(this.filesService.getFileAsFile(file));
-            errorMsgText.innerText = `Rendering PSD...`;
-            const imgUrl = await this.getPSDFileAsDataURL(downloadFile);
-            const data = {
-              type: 'image',
-              src: imgUrl,
-              msrc: file.thumbnail_url,
-              width: file.width,
-              height: file.height,
-              file
-            }
-            processedFiles.set(file.hash, data);
-            pswp.refreshSlideContent(content.index);
-          } catch (error) {
-            errorMsgText.innerText = `PSD File`;
-            this.errorService.handleHydrusError(error)
-            console.error(error);
+          const data = {
+            type: 'image',
+            src: file.render_url,
+            msrc: file.thumbnail_url,
+            width: file.width,
+            height: file.height,
+            file
           }
-          psdButtonComponent.setInput('disabled', false);
+          this.processedFiles.set(file.hash, data);
+          pswp.refreshSlideContent(content.index);
         })
 
         this.addPhotopeaButton(file, errorMsgEl);
@@ -466,10 +452,10 @@ export class PhotoswipeService {
           type: 'audio'
         };
       }
-      case FileCategory.PSD: {
+      case FileCategory.Renderable: {
         return {
           file,
-          type: 'psd',
+          type: 'renderable',
           width: file.width,
           height: file.height
         };
@@ -481,28 +467,6 @@ export class PhotoswipeService {
         };
       }
     }
-  }
-
-  async getPSDFileAsDataURL(file: Blob) {
-    const result = await file.arrayBuffer();
-    const psdFile = Psd.parse(result);
-
-    console.log(psdFile)
-
-    const canvasElement = document.createElement("canvas");
-    canvasElement.width = psdFile.width;
-    canvasElement.height = psdFile.height;
-    const context = canvasElement.getContext("2d");
-    const compositeBuffer = await psdFile.composite();
-    const imageData = new ImageData(
-      compositeBuffer,
-      psdFile.width,
-      psdFile.height
-    );
-
-    context.putImageData(imageData, 0, 0);
-
-    return canvasElement.toDataURL();
   }
 
   addPhotopeaButton(file: HydrusBasicFile, element: HTMLElement) {

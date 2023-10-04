@@ -1,6 +1,6 @@
 import { HydrusNotes } from './hydrus-notes';
 import { HydrusURLInfo } from './hydrus-url';
-import { HydrusFiletype } from './hydrus-file-mimes'
+import { HydrusFiletype, isFileHydrusRenderable } from './hydrus-file-mimes'
 import { HydrusIncDecRatingValue, HydrusLikeRatingValue, HydrusNumericalRatingValue, HydrusRating, isIncDecRatingService, isLikeRatingService, isNumericalRatingService } from './hydrus-rating';
 import { HydrusServiceType, HydrusServices } from './hydrus-services';
 
@@ -152,7 +152,7 @@ export enum FileCategory {
   Video,
   Audio,
   Flash,
-  PSD,
+  Renderable,
   Unsupported
 }
 
@@ -204,8 +204,8 @@ export function getFileCategory(type: HydrusFiletype): FileCategory {
   ].includes(type)) {
     return FileCategory.Flash;
   }
-  if(type === HydrusFiletype.APPLICATION_PSD) {
-    return FileCategory.PSD;
+  if(isFileHydrusRenderable(type)) {
+    return FileCategory.Renderable;
   }
   return FileCategory.Unsupported;
 }
