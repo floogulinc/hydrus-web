@@ -72,6 +72,8 @@ export enum HydrusFiletype {
   IMAGE_GIF = 68,
   APPLICATION_PROCREATE = 69,
   IMAGE_QOI = 70,
+  APPLICATION_EPUB = 71,
+  APPLICATION_DJVU = 72,
   APPLICATION_OCTET_STREAM = 100,
   APPLICATION_UNKNOWN = 101
 }
@@ -111,6 +113,8 @@ const searchableFileTypes = [
   HydrusFiletype.APPLICATION_XCF,
   HydrusFiletype.APPLICATION_PROCREATE,
   HydrusFiletype.APPLICATION_PDF,
+  HydrusFiletype.APPLICATION_EPUB,
+  HydrusFiletype.APPLICATION_DJVU,
   HydrusFiletype.APPLICATION_ZIP,
   HydrusFiletype.APPLICATION_RAR,
   HydrusFiletype.APPLICATION_7Z,
@@ -186,7 +190,9 @@ const VIDEO = [
 
 const APPLICATIONS = [
   HydrusFiletype.APPLICATION_FLASH,
-  HydrusFiletype.APPLICATION_PDF
+  HydrusFiletype.APPLICATION_PDF,
+  HydrusFiletype.APPLICATION_EPUB,
+  HydrusFiletype.APPLICATION_DJVU,
 ]
 
 const IMAGE_PROJECT_FILES = [
@@ -248,6 +254,8 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_JSON] : 'json',
   [HydrusFiletype.APPLICATION_CBOR] : 'cbor',
   [HydrusFiletype.APPLICATION_PDF] : 'pdf',
+  [HydrusFiletype.APPLICATION_EPUB] : 'epub',
+  [HydrusFiletype.APPLICATION_DJVU] : 'djvu',
   [HydrusFiletype.APPLICATION_PSD] : 'psd',
   [HydrusFiletype.APPLICATION_CLIP] : 'clip',
   [HydrusFiletype.APPLICATION_SAI2] : 'sai2',
@@ -324,6 +332,8 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_JSON] : 'application/json',
   [HydrusFiletype.APPLICATION_CBOR] : 'application/cbor',
   [HydrusFiletype.APPLICATION_PDF] : 'application/pdf',
+  [HydrusFiletype.APPLICATION_EPUB] : 'application/epub+zip',
+  [HydrusFiletype.APPLICATION_DJVU] : 'image/vnd.djvu',
   [HydrusFiletype.APPLICATION_PSD] : 'image/vnd.adobe.photoshop',
   [HydrusFiletype.APPLICATION_CLIP] : 'application/clip',
   [HydrusFiletype.APPLICATION_SAI2] : 'application/sai2',
@@ -399,6 +409,8 @@ const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.APPLICATION_YAML] : '.yaml',
   [HydrusFiletype.APPLICATION_JSON] : '.json',
   [HydrusFiletype.APPLICATION_PDF] : '.pdf',
+  [HydrusFiletype.APPLICATION_EPUB] : 'epub',
+  [HydrusFiletype.APPLICATION_DJVU] : 'djvu',
   [HydrusFiletype.APPLICATION_PSD] : '.psd',
   [HydrusFiletype.APPLICATION_CLIP] : '.clip',
   [HydrusFiletype.APPLICATION_SAI2] : '.sai2',
@@ -475,6 +487,10 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'application/x-yaml' : HydrusFiletype.APPLICATION_YAML,
   'PDF document' : HydrusFiletype.APPLICATION_PDF,
   'application/pdf' : HydrusFiletype.APPLICATION_PDF,
+  'application/epub+zip' : HydrusFiletype.APPLICATION_EPUB,
+  'image/vnd.djvu' : HydrusFiletype.APPLICATION_DJVU,
+  'image/vnd.djvu+multipage' : HydrusFiletype.APPLICATION_DJVU,
+  'image/x-djvu' : HydrusFiletype.APPLICATION_DJVU,
   'application/zip' : HydrusFiletype.APPLICATION_ZIP,
   'application/vnd.rar' : HydrusFiletype.APPLICATION_RAR,
   'application/x-7z-compressed' : HydrusFiletype.APPLICATION_7Z,
