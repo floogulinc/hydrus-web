@@ -163,7 +163,7 @@ export enum TagStatus {
   Petitioned = 3,
 }
 
-export function getFileCategory(type: HydrusFiletype): FileCategory {
+export function getFileCategory(type: HydrusFiletype, hydrusVersion?: number): FileCategory {
   if ([
     HydrusFiletype.IMAGE_JPEG,
     HydrusFiletype.IMAGE_PNG,
@@ -204,7 +204,7 @@ export function getFileCategory(type: HydrusFiletype): FileCategory {
   ].includes(type)) {
     return FileCategory.Flash;
   }
-  if(isFileHydrusRenderable(type)) {
+  if(isFileHydrusRenderable(type, hydrusVersion)) {
     return FileCategory.Renderable;
   }
   return FileCategory.Unsupported;

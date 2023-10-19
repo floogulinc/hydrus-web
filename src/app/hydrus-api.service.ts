@@ -52,7 +52,7 @@ export class HydrusApiService {
     const cacheHeaders = noCache ? {
       'Cache-Control': 'no-cache'
     } : {};
-    return this.http.get<T>(this.getAPIUrl() + path, {
+    return this.http.get<T & Partial<HydrusVersionResponse>>(this.getAPIUrl() + path, {
       params,
       headers: {...this.headers, ...cacheHeaders}
     });
@@ -162,7 +162,7 @@ export class HydrusApiService {
       include_blurhash?: boolean;
     },
     noCache = false
-  ): Observable<{ services?: HydrusServices, metadata: Identifiers extends true ? {file_id: number, hash: string }[] : Basic extends true ? HydrusBasicFileFromAPI[] : HydrusFileFromAPI[] }> {
+  ) {
     let newParams: AngularHttpParams;
     if ('hashes' in params) {
       //this.logger.debug(`getFileMetadata ${params.hashes}`);
@@ -177,7 +177,7 @@ export class HydrusApiService {
         file_ids: JSON.stringify(params.file_ids),
       };
     }
-    return this.apiGet('get_files/file_metadata', newParams, noCache);
+    return this.apiGet<{ services?: HydrusServices, metadata: Identifiers extends true ? {file_id: number, hash: string }[] : Basic extends true ? HydrusBasicFileFromAPI[] : HydrusFileFromAPI[] }>('get_files/file_metadata', newParams, noCache);
   }
 
   /**

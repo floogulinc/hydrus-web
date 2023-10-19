@@ -545,6 +545,16 @@ const renderableFiletypes = [
   HydrusFiletype.APPLICATION_PSD
 ]
 
-export function isFileHydrusRenderable(mime: HydrusFiletype) {
+const renderableFiletypes548 = [
+  ...IMAGES,
+  HydrusFiletype.APPLICATION_PSD,
+  HydrusFiletype.APPLICATION_KRITA
+]
+
+export function isFileHydrusRenderable(mime: HydrusFiletype, hydrusVersion?: number) {
+  if(hydrusVersion && hydrusVersion >= 548) {
+    return renderableFiletypes548.includes(mime);
+  }
   return renderableFiletypes.includes(mime);
 }
+

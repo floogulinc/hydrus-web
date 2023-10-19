@@ -65,25 +65,45 @@ export class HydrusFilesService {
     )
   }
 
-  private getBasicFileMetadataAPI(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
-    return this.api.getFileMetadata({ file_ids: fileIds, only_return_identifiers: false, only_return_basic_information: true, include_blurhash: true }).pipe(map(val => val.metadata));
+  private getBasicFileMetadataAPI(fileIds: number[]) {
+    return this.api.getFileMetadata(
+      {
+        file_ids: fileIds,
+        only_return_identifiers: false,
+        only_return_basic_information: true,
+        include_blurhash: true
+      });
   }
 
-  private getBasicFileMetadataHashAPI(fileHashes: string[]): Observable<HydrusBasicFileFromAPI[]> {
-    return this.api.getFileMetadata({ hashes: fileHashes, only_return_identifiers: false, only_return_basic_information: true, include_blurhash: true }).pipe(map(val => val.metadata));
+
+  private getBasicFileMetadataHashAPI(fileHashes: string[]) {
+    return this.api.getFileMetadata(
+      {
+        hashes: fileHashes,
+        only_return_identifiers: false,
+        only_return_basic_information: true,
+        include_blurhash: true
+      });
   }
 
-  private getFileMetadataAPIChunked(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
-    return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getBasicFileMetadataAPI(ids))).pipe(
+  private getFileMetadataChunked(fileIds: number[]) {
+    return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getAndProcessFileMetadataChunk(ids))).pipe(
       map(files => files.flat())
     );
   }
 
+  private getAndProcessFileMetadataChunk(fileIds: number[]) {
+    return this.getBasicFileMetadataAPI(fileIds).pipe(
+      map(v => v.metadata.map(i => this.processBasicFileFromAPI(i, v.hydrus_version))),
+      tap(v => this.addFilesAndTags(v))
+    )
+  }
+
   private getAndAddMetadata(fileIds: number[]): Observable<HydrusBasicFile[]> {
-    if (fileIds.length === 0) { return of([]); }
-    return this.getFileMetadataAPIChunked(fileIds).pipe(
-      map(v => v.map(i => this.processBasicFileFromAPI(i))),
-      tap(v => this.addFilesAndTags(v)));
+    if (fileIds.length === 0) {
+      return of([]);
+    }
+    return this.getFileMetadataChunked(fileIds);
   }
 
   private addFilesAndTags(files: HydrusBasicFile[]) {
@@ -112,23 +132,23 @@ export class HydrusFilesService {
     );
   }
 
-  private basicFileExtraInfo(file: HydrusBasicFileFromAPI) {
+  private basicFileExtraInfo(file: HydrusBasicFileFromAPI, hydrusVersion: number) {
     const file_type = file.filetype_enum ?? filetypeFromMime(file.mime);
     const file_type_string = file.filetype_human ?? (file_type === HydrusFiletype.APPLICATION_UNKNOWN ? file.mime : mime_string_lookup[file_type]);
-    const renderable = isFileHydrusRenderable(file_type);
+    const renderable = isFileHydrusRenderable(file_type, hydrusVersion);
 
     return {
       file_url: this.api.getFileURLFromHash(file.hash),
       thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
       file_type,
-      file_category: getFileCategory(file_type),
+      file_category: getFileCategory(file_type, hydrusVersion),
       file_type_string,
       has_thumbnail: hasThumbnail(file_type),
       ...(renderable ? {render_url: this.api.getRenderedURLFromHash(file.hash)} : {})
     }
   }
 
-  private processFileFromAPI(file: HydrusFileFromAPI, services?: HydrusServices): HydrusFile {
+  private processFileFromAPI(file: HydrusFileFromAPI, hydrusVersion?: number, services?: HydrusServices): HydrusFile {
     const importTimes = file.file_services.current
               ? Object.values(file.file_services.current)
                   .filter((x) => !!x.time_imported)
@@ -140,41 +160,53 @@ export class HydrusFilesService {
 
     return {
       ...file,
-      ...this.basicFileExtraInfo(file),
+      ...this.basicFileExtraInfo(file, hydrusVersion),
       time_imported: firstImportTime,
       ratings_array: file.ratings ? generateRatingsArray(file.ratings, services) : undefined
     }
   }
 
-  private processBasicFileFromAPI(file: HydrusBasicFileFromAPI): HydrusBasicFile {
+  private processBasicFileFromAPI(file: HydrusBasicFileFromAPI, hydrusVersion: number): HydrusBasicFile {
     return {
       ...file,
-      ...this.basicFileExtraInfo(file)
+      ...this.basicFileExtraInfo(file, hydrusVersion)
     }
   }
 
   public getFilesById(fileIds: number[]): Observable<HydrusFile[]> {
-    if (fileIds.length === 0) { return of([]); }
+    if (fileIds.length === 0) {
+      return of([]);
+    }
     return this.getFileMetadataAPI(fileIds).pipe(
-      map(v => v.metadata.map(i => this.processFileFromAPI(i, v.services))));
+      map(v => v.metadata.map(i => this.processFileFromAPI(i, v.hydrus_version, v.services)))
+    );
   }
 
   public getBasicFilesById(fileIds: number[]): Observable<HydrusBasicFile[]> {
-    if (fileIds.length === 0) { return of([]); }
+    if (fileIds.length === 0) {
+      return of([]);
+    }
     return this.getBasicFileMetadataAPI(fileIds).pipe(
-      map(v => v.map(i => this.processBasicFileFromAPI(i))));
+      map(v => v.metadata.map(i => this.processBasicFileFromAPI(i, v.hydrus_version)))
+    );
   }
 
   public getBasicFilesByHash(fileHashes: string[]): Observable<HydrusBasicFile[]> {
-    if (fileHashes.length === 0) { return of([]); }
+    if (fileHashes.length === 0) {
+      return of([]);
+    }
     return this.getBasicFileMetadataHashAPI(fileHashes).pipe(
-      map(v => v.map(i => this.processBasicFileFromAPI(i))));
+      map(v => v.metadata.map(i => this.processBasicFileFromAPI(i, v.hydrus_version)))
+    );
   }
 
-  public getFilesByHash(fileHashes: string[]) {
-    if (fileHashes.length === 0) { return of([]); }
+  public getFilesByHash(fileHashes: string[]): Observable<HydrusFile[]> {
+    if (fileHashes.length === 0) {
+      return of([]);
+    }
     return this.getFileMetadataHashAPI(fileHashes).pipe(
-      map(v => v.metadata.map(i => this.processFileFromAPI(i, v.services))));
+      map(v => v.metadata.map(i => this.processFileFromAPI(i, v.hydrus_version, v.services))),
+    );
   }
 
   public getFileById(fileId: number): Observable<HydrusFile> {
