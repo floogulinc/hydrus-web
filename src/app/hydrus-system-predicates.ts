@@ -11,6 +11,8 @@ export enum SystemPredicate {
   NOT_BEST_QUALITY_OF_GROUP,
   HAS_AUDIO,
   NO_AUDIO,
+  HAS_TRANSPARENCY,
+  NO_TRANSPARENCY,
   HAS_EXIF,
   NO_EXIF,
   HAS_HUMAN_READABLE_EMBEDDED_METADATA,
@@ -20,6 +22,7 @@ export enum SystemPredicate {
   HAS_TAGS,
   UNTAGGED,
   NUM_OF_TAGS,
+  NUM_OF_TAGS_WITH_NAMESPACE,
   NUM_OF_WORDS,
   HEIGHT,
   WIDTH,
@@ -121,6 +124,7 @@ export enum Value {
   RATING_SERVICE_NAME_AND_INCDEC,
   RATING_SERVICE_GENERIC,
   SERVICE_NAME,
+  NAMESPACE_AND_NUM_TAGS,
 }
 
 export enum Units {
@@ -148,6 +152,8 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.NOT_BEST_QUALITY_OF_GROUP]: { name: 'is not the best quality file of its duplicate group', operator: null, value: null, units: null },
   [SystemPredicate.HAS_AUDIO]: { name: 'has audio', operator: null, value: null, units: null },
   [SystemPredicate.NO_AUDIO]: { name: 'no audio', operator: null, value: null, units: null },
+  [SystemPredicate.HAS_TRANSPARENCY]: { name: 'has transparency', operator: null, value: null, units: null },
+  [SystemPredicate.NO_TRANSPARENCY]: { name: 'no transparency', operator: null, value: null, units: null },
   [SystemPredicate.HAS_EXIF]: { name: 'has exif', operator: null, value: null, units: null },
   [SystemPredicate.NO_EXIF]: { name: 'no exif', operator: null, value: null, units: null },
   [SystemPredicate.HAS_HUMAN_READABLE_EMBEDDED_METADATA]: { name: 'has embedded metadata', operator: null, value: null, units: null },
@@ -157,6 +163,7 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.HAS_TAGS]: { name: 'has tags', operator: null, value: null, units: null },
   [SystemPredicate.UNTAGGED]: { name: 'untagged', operator: null, value: null, units: null },
   [SystemPredicate.NUM_OF_TAGS]: { name: 'number of tags', operator: Operators.RELATIONAL, value: Value.NATURAL, units: null },
+  [SystemPredicate.NUM_OF_TAGS_WITH_NAMESPACE]: { name: 'number of tags with namespace', operator: null, value: Value.NAMESPACE_AND_NUM_TAGS, units: null },
   [SystemPredicate.NUM_OF_WORDS]: { name: 'number of words', operator: Operators.RELATIONAL, value: Value.NATURAL, units: null },
   [SystemPredicate.HEIGHT]: { name: 'height', operator: Operators.RELATIONAL, value: Value.NATURAL, units: Units.PIXELS_OR_NONE },
   [SystemPredicate.WIDTH]: { name: 'width', operator: Operators.RELATIONAL, value: Value.NATURAL, units: Units.PIXELS_OR_NONE },
@@ -288,8 +295,12 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
     ]
   },
   {
-    name: 'embedded metadata',
+    name: 'file properties',
     predicates: [
+      SystemPredicate.HAS_AUDIO,
+      SystemPredicate.NO_AUDIO,
+      SystemPredicate.HAS_TRANSPARENCY,
+      SystemPredicate.NO_TRANSPARENCY,
       SystemPredicate.HAS_EXIF,
       SystemPredicate.NO_EXIF,
       SystemPredicate.HAS_HUMAN_READABLE_EMBEDDED_METADATA,
@@ -320,13 +331,6 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
   },
   { predicate: SystemPredicate.FILESIZE },
   { predicate: SystemPredicate.FILETYPE },
-  {
-    name: 'has audio',
-    predicates: [
-      SystemPredicate.HAS_AUDIO,
-      SystemPredicate.NO_AUDIO
-    ]
-  },
   { predicate: SystemPredicate.HASH },
   {
     name: 'known url',
@@ -357,7 +361,8 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
     predicates: [
       SystemPredicate.HAS_TAGS,
       SystemPredicate.UNTAGGED,
-      SystemPredicate.NUM_OF_TAGS
+      SystemPredicate.NUM_OF_TAGS,
+//      SystemPredicate.NUM_OF_TAGS_WITH_NAMESPACE
     ]
   },
   { predicate: SystemPredicate.NUM_OF_WORDS },
