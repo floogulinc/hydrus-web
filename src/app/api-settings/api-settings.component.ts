@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HydrusApiService, HydrusKeyVerificationData } from '../hydrus-api.service';
+import { HydrusApiService } from '../hydrus-api.service';
+import { HydrusKeyVerificationData } from '../hydrus-api';
 import { SettingsService } from '../settings.service';
 import { HydrusVersionService } from '../hydrus-version.service';
 import { ErrorService } from '../error.service';

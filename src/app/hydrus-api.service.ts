@@ -11,11 +11,8 @@ import { HydrusVersionResponse } from './hydrus-version';
 import { HydrusNoteImportConflicts } from './hydrus-notes';
 import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 import { HydrusAddFileResponse } from './hydrus-upload.service';
-
-export interface HydrusKeyVerificationData {
-  basic_permissions: number[];
-  human_description: string;
-}
+import { HydrusKeyVerificationData, HydrusRequestFileDomain, HydrusRequestFiles, HydrusRequestSingleFile } from './hydrus-api';
+import { HydrusJobStatus, HydrusJobStatusAddRequest, HydrusJobStatusUpdateRequest } from './hydrus-job-status';
 
 type AngularHttpParams = HttpParams | {
   [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
@@ -318,11 +315,8 @@ export class HydrusApiService {
     urls_to_add?: string[],
     url_to_delete?: string,
     urls_to_delete?: string[],
-    hash?: string,
-    hashes?: string[],
-    file_id?: number,
-    file_ids?: number[]
-  }) {
+
+  } & HydrusRequestFiles) {
     return this.apiPost<void>('add_urls/associate_url', data);
   }
 
@@ -337,47 +331,20 @@ export class HydrusApiService {
 
 
   public deleteFiles(data: {
-    hash?: string,
-    hashes?: string[],
-    file_id?: number,
-    file_ids?: number[],
-    file_service_name?: string,
-    file_service_key?: string,
     reason?: string
-  }) {
+  } & HydrusRequestFiles & Pick<HydrusRequestFileDomain, 'file_service_key' | 'file_service_keys'>) {
     return this.apiPost<void>('add_files/delete_files', data);
   }
 
-  public undeleteFiles(data: {
-    hash?: string,
-    hashes?: string[],
-    file_id?: number,
-    file_ids?: number[],
-    file_service_name?: string,
-    file_service_key?: string
-  }) {
+  public undeleteFiles(data: HydrusRequestFiles & HydrusRequestFileDomain) {
     return this.apiPost<void>('add_files/undelete_files', data);
   }
 
-  public archiveFiles(data: {
-    hash?: string,
-    hashes?: string[],
-    file_id?: number,
-    file_ids?: number[],
-    file_service_name?: string,
-    file_service_key?: string
-  }) {
+  public archiveFiles(data: HydrusRequestFiles & HydrusRequestFileDomain) {
     return this.apiPost<void>('add_files/archive_files', data);
   }
 
-  public unarchiveFiles(data: {
-    hash?: string,
-    hashes?: string[],
-    file_id?: number,
-    file_ids?: number[],
-    file_service_name?: string,
-    file_service_key?: string
-  }) {
+  public unarchiveFiles(data: HydrusRequestFiles & HydrusRequestFileDomain) {
     return this.apiPost<void>('add_files/unarchive_files', data);
   }
 
@@ -390,34 +357,26 @@ export class HydrusApiService {
   }
 
   public addTags(data: {
-    hash?: string,
-    hashes?: string[],
-    file_id?: number,
-    file_ids?: number[],
     service_names_to_tags?: ServiceNamesOrKeysToTags,
     service_keys_to_tags?: ServiceNamesOrKeysToTags,
     service_names_to_actions_to_tags?: ServiceNamesOrKeysToActionsToTags,
     service_keys_to_actions_to_tags?: ServiceNamesOrKeysToActionsToTags
-  }) {
+  } & HydrusRequestFiles) {
     return this.apiPost<void>('add_tags/add_tags', data);
   }
 
   public setNotes(data: {
     notes: Record<string, string>,
-    hash?: string,
-    file_id?: number,
     merge_cleverly?: boolean,
     extend_existing_note_if_possible?: boolean
     conflict_resolution?: HydrusNoteImportConflicts
-  }) {
+  } & HydrusRequestSingleFile) {
     return this.apiPost<void>('add_notes/set_notes', data);
   }
 
   public deleteNotes(data: {
-    note_names: string[],
-    hash?: string,
-    file_id?: number
-  }) {
+    note_names: string[]
+  } & HydrusRequestSingleFile) {
     return this.apiPost<void>('add_notes/delete_notes', data);
   }
 
