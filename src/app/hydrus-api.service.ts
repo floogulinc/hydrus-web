@@ -411,5 +411,34 @@ export class HydrusApiService {
     return this.apiGet<{ services: HydrusServices, tags: TagsToServiceKeysToSiblingsAndParents}>('add_tags/get_siblings_and_parents', {tags: JSON.stringify(tags)}, noCache);
   }
 
+  public getPopups(only_in_view?: boolean, noCache = false) {
+    return this.apiGet<{ job_statuses: HydrusJobStatus[]}>('manage_popups/get_popups', {only_in_view}, noCache);
+  }
+
+  public addPopup(data: HydrusJobStatusAddRequest) {
+    return this.apiPost<{ job_status: HydrusJobStatus } & HydrusVersionResponse>('manage_popups/add_popup', data);
+  }
+
+  public updatePopup(data: HydrusJobStatusUpdateRequest) {
+    return this.apiPost<{ job_status: HydrusJobStatus } & HydrusVersionResponse>('manage_popups/update_popup', data);
+  }
+
+  public dismissPopup(data: {job_status_key: string, seconds?: number}) {
+    return this.apiPost<void>('manage_popups/dismiss_popup', data);
+  }
+
+  public finishPopup(data: {job_status_key: string, seconds?: number}) {
+    return this.apiPost<void>('manage_popups/finish_popup', data);
+  }
+
+  public cancelPopup(data: {job_status_key: string, seconds?: number}) {
+    return this.apiPost<void>('manage_popups/cancel_popup', data);
+  }
+
+  public callUserCallablePopup(data: {job_status_key: string}) {
+    return this.apiPost<void>('manage_popups/call_user_callable', data);
+  }
+
+
 
 }

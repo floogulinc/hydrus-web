@@ -1,0 +1,40 @@
+import { Injectable } from '@angular/core';
+import { HydrusApiService } from './hydrus-api.service';
+import { HydrusJobStatusAddRequest, HydrusJobStatusUpdateRequest } from './hydrus-job-status';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class HydrusPopupsService {
+
+  constructor(private api: HydrusApiService) { }
+
+  getPopups(only_in_view?: boolean) {
+    return this.api.getPopups(only_in_view, true);
+  }
+
+  addPopup(data: HydrusJobStatusAddRequest) {
+    return this.api.addPopup(data);
+  }
+
+  updatePopup(data: HydrusJobStatusUpdateRequest) {
+    return this.api.updatePopup(data)
+  }
+
+  dismissPopup(key: string) {
+    return this.api.dismissPopup({job_status_key: key});
+  }
+
+  finishPopup(key: string) {
+    return this.api.finishPopup({job_status_key: key});
+  }
+
+  cancelPopup(key: string) {
+    return this.api.cancelPopup({job_status_key: key});
+  }
+
+  callUserCallable(key: string) {
+    return this.api.callUserCallablePopup({job_status_key: key});
+  }
+
+}
