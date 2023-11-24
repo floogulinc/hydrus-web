@@ -1,13 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HydrusApiService } from './hydrus-api.service';
 import { HydrusJobStatusAddRequest, HydrusJobStatusUpdateRequest } from './hydrus-job-status';
+import { switchMap } from 'rxjs';
+import { HydrusVersionService } from './hydrus-version.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HydrusPopupsService {
 
-  constructor(private api: HydrusApiService) { }
+  constructor(
+    private api: HydrusApiService,
+    private hydrusVersion: HydrusVersionService
+  ) { }
+
+
+
+  //popups$ =
+
+  canGetPopups$ = this.hydrusVersion.isAtLeastVersion(553); //TODO: set to 554
 
   getPopups(only_in_view?: boolean) {
     return this.api.getPopups(only_in_view, true);

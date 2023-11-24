@@ -76,9 +76,7 @@ export class SystemPredicateDialogComponent implements OnInit {
     ...(this.predicate.units ? {units: new FormControl(unitDefaults[this.predicate.units])} : {})
   });
 
-  canUseFiletypeName$ = this.versionService.hydrusVersion$.pipe(
-    map(v => v && v.hydrus_version >= 540),
-  )
+  canUseFiletypeName$ = this.versionService.isAtLeastVersion(540);
 
   ngOnInit(): void {
 
