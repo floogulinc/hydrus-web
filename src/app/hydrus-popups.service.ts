@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HydrusApiService } from './hydrus-api.service';
 import { HydrusJobStatusAddRequest, HydrusJobStatusUpdateRequest } from './hydrus-job-status';
-import { switchMap } from 'rxjs';
+import { BehaviorSubject, EMPTY, interval, map, merge, of, switchMap } from 'rxjs';
 import { HydrusVersionService } from './hydrus-version.service';
 
 @Injectable({
@@ -15,10 +15,27 @@ export class HydrusPopupsService {
   ) { }
 
 
-
-  //popups$ =
+  private refreshPopups$ = new BehaviorSubject<void>(undefined);
 
   canGetPopups$ = this.hydrusVersion.isAtLeastVersion(553); //TODO: set to 554
+
+  popups$ = this.canGetPopups$.pipe(
+    switchMap(canGetPopups => {
+      if(canGetPopups) {
+        return merge(this.refreshPopups$, interval(1 * 60 * 1000)).pipe(
+          switchMap(() => this.getPopups().pipe(
+            map(({job_statuses}) => job_statuses)
+          ))
+        )
+      } else {
+        return EMPTY
+      }
+    })
+  )
+
+  public refreshPopups() {
+    this.refreshPopups$.next();
+  }
 
   getPopups(only_in_view?: boolean) {
     return this.api.getPopups(only_in_view, true);
