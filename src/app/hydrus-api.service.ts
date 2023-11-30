@@ -431,6 +431,10 @@ export class HydrusApiService {
     return this.apiPost<void>('manage_popups/finish_popup', data);
   }
 
+  public finishAndDismissPopup(data: {job_status_key: string, seconds?: number}) {
+    return this.apiPost<void>('manage_popups/finish_and_dismiss_popup', data);
+  }
+
   public cancelPopup(data: {job_status_key: string, seconds?: number}) {
     return this.apiPost<void>('manage_popups/cancel_popup', data);
   }

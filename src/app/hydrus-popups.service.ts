@@ -17,7 +17,7 @@ export class HydrusPopupsService {
 
   private refreshPopups$ = new BehaviorSubject<void>(undefined);
 
-  canGetPopups$ = this.hydrusVersion.isAtLeastVersion(553); //TODO: set to 554
+  canGetPopups$ = this.hydrusVersion.isAtLeastVersion(554);
 
   popups$ = this.canGetPopups$.pipe(
     switchMap(canGetPopups => {
@@ -55,6 +55,10 @@ export class HydrusPopupsService {
 
   finishPopup(key: string) {
     return this.api.finishPopup({job_status_key: key});
+  }
+
+  finishAndDismissPopup(key: string) {
+    return this.api.finishAndDismissPopup({job_status_key: key})
   }
 
   cancelPopup(key: string) {

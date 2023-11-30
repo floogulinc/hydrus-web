@@ -39,7 +39,7 @@ export interface HydrusJobStatus {
   is_cancelled: boolean;
   is_deleted: boolean;
   is_done: boolean;
-  is_pauseable: boolean;
+  is_pausable: boolean;
   is_paused: boolean;
   is_working: boolean;
   nice_string?: string;
