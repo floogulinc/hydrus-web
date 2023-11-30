@@ -74,6 +74,8 @@ export enum HydrusFiletype {
   IMAGE_QOI = 70,
   APPLICATION_EPUB = 71,
   APPLICATION_DJVU = 72,
+  APPLICATION_CBZ = 73,
+  ANIMATION_UGOIRA = 74,
   APPLICATION_OCTET_STREAM = 100,
   APPLICATION_UNKNOWN = 101
 }
@@ -96,6 +98,7 @@ const searchableFileTypes = [
   HydrusFiletype.IMAGE_AVIF,
   HydrusFiletype.IMAGE_AVIF_SEQUENCE,
   HydrusFiletype.IMAGE_BMP,
+  HydrusFiletype.ANIMATION_UGOIRA,
   HydrusFiletype.APPLICATION_FLASH,
   HydrusFiletype.VIDEO_AVI,
   HydrusFiletype.VIDEO_FLV,
@@ -106,6 +109,7 @@ const searchableFileTypes = [
   HydrusFiletype.VIDEO_WEBM,
   HydrusFiletype.VIDEO_OGV,
   HydrusFiletype.VIDEO_MPEG,
+  HydrusFiletype.APPLICATION_CBZ,
   HydrusFiletype.APPLICATION_CLIP,
   HydrusFiletype.APPLICATION_PSD,
   HydrusFiletype.APPLICATION_SAI2,
@@ -153,6 +157,16 @@ const ANIMATIONS = [
   HydrusFiletype.IMAGE_HEIF_SEQUENCE,
   HydrusFiletype.IMAGE_HEIC_SEQUENCE,
   HydrusFiletype.IMAGE_AVIF_SEQUENCE,
+  HydrusFiletype.ANIMATION_UGOIRA
+]
+
+const VIEWABLE_ANIMATIONS = [
+  HydrusFiletype.ANIMATION_GIF,
+  HydrusFiletype.ANIMATION_APNG,
+  HydrusFiletype.IMAGE_HEIF_SEQUENCE,
+  HydrusFiletype.IMAGE_HEIC_SEQUENCE,
+  HydrusFiletype.IMAGE_AVIF_SEQUENCE,
+  HydrusFiletype.ANIMATION_UGOIRA
 ]
 
 const HEIF_TYPE_SEQUENCES = [
@@ -206,6 +220,7 @@ const IMAGE_PROJECT_FILES = [
 ]
 
 const ARCHIVES = [
+  HydrusFiletype.APPLICATION_CBZ,
   HydrusFiletype.APPLICATION_7Z,
   HydrusFiletype.APPLICATION_GZIP,
   HydrusFiletype.APPLICATION_RAR,
@@ -222,7 +237,8 @@ const MIMES_WITH_THUMBNAILS = [
   HydrusFiletype.APPLICATION_CLIP,
   HydrusFiletype.APPLICATION_PSD,
   HydrusFiletype.APPLICATION_KRITA,
-  HydrusFiletype.APPLICATION_PROCREATE
+  HydrusFiletype.APPLICATION_PROCREATE,
+  HydrusFiletype.APPLICATION_CBZ
 ]
 
 export function hasThumbnail(mime: HydrusFiletype) {
@@ -248,6 +264,8 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.IMAGE_HEIC_SEQUENCE]: 'heic sequence',
   [HydrusFiletype.IMAGE_AVIF]: 'avif',
   [HydrusFiletype.IMAGE_AVIF_SEQUENCE]: 'avif sequence',
+  [HydrusFiletype.ANIMATION_UGOIRA] : 'ugoira',
+  [HydrusFiletype.APPLICATION_CBZ] : 'cbz',
   [HydrusFiletype.APPLICATION_FLASH] : 'flash',
   [HydrusFiletype.APPLICATION_OCTET_STREAM] : 'application/octet-stream',
   [HydrusFiletype.APPLICATION_YAML] : 'yaml',
@@ -326,8 +344,10 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.IMAGE_HEIC_SEQUENCE]: 'image/heic-sequence',
   [HydrusFiletype.IMAGE_AVIF]: 'image/avif',
   [HydrusFiletype.IMAGE_AVIF_SEQUENCE]: 'image/avif-sequence',
+  [HydrusFiletype.ANIMATION_UGOIRA] : 'application/zip',
   [HydrusFiletype.APPLICATION_FLASH] : 'application/x-shockwave-flash',
   [HydrusFiletype.APPLICATION_OCTET_STREAM] : 'application/octet-stream',
+  [HydrusFiletype.APPLICATION_CBZ] : 'application/vnd.comicbook+zip',
   [HydrusFiletype.APPLICATION_YAML] : 'application/x-yaml',
   [HydrusFiletype.APPLICATION_JSON] : 'application/json',
   [HydrusFiletype.APPLICATION_CBOR] : 'application/cbor',
@@ -404,6 +424,8 @@ const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.IMAGE_HEIC_SEQUENCE]: '.heics',
   [HydrusFiletype.IMAGE_AVIF]: '.avif',
   [HydrusFiletype.IMAGE_AVIF_SEQUENCE]: '.avifs',
+  [HydrusFiletype.ANIMATION_UGOIRA] : '.zip',
+  [HydrusFiletype.APPLICATION_CBZ] : '.cbz',
   [HydrusFiletype.APPLICATION_FLASH] : '.swf',
   [HydrusFiletype.APPLICATION_OCTET_STREAM] : '.bin',
   [HydrusFiletype.APPLICATION_YAML] : '.yaml',
@@ -491,6 +513,7 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'image/vnd.djvu' : HydrusFiletype.APPLICATION_DJVU,
   'image/vnd.djvu+multipage' : HydrusFiletype.APPLICATION_DJVU,
   'image/x-djvu' : HydrusFiletype.APPLICATION_DJVU,
+  'application/vnd.comicbook+zip': HydrusFiletype.APPLICATION_CBZ,
   'application/zip' : HydrusFiletype.APPLICATION_ZIP,
   'application/vnd.rar' : HydrusFiletype.APPLICATION_RAR,
   'application/x-7z-compressed' : HydrusFiletype.APPLICATION_7Z,

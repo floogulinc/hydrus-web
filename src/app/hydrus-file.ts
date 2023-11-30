@@ -88,6 +88,7 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   has_exif?: boolean; // added in v506
   has_human_readable_embedded_metadata?: boolean; // added in v506
   has_icc_profile?: boolean; // added in v506
+  has_transparency?: boolean; // added in v552
 
   thumbnail_width?: number; // added in v506
   thumbnail_height?: number; // added in v506
