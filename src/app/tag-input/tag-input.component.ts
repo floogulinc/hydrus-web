@@ -3,26 +3,22 @@ import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, 
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
-import { map, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType } from '../hydrus-tags';
 import { MatDialog } from '@angular/material/dialog';
-import { allSystemPredicates, predicateGroups, SystemPredicate, Value } from '../hydrus-system-predicates';
+import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
 import { SettingsService } from '../settings.service';
-import { ServiceSelectDialogComponent } from '../service-select-dialog/service-select-dialog.component';
 import { SystemPredicateRatingsDialogComponent } from '../system-predicate-ratings-dialog/system-predicate-ratings-dialog.component';
-import { isRatingService } from '../hydrus-rating';
 import { HydrusService } from '../hydrus-services';
 import { searchTagsContainsSystemPredicate } from '../utils/tag-utils';
-import { HydrusServicesService } from '../hydrus-services.service';
 import { HydrusRatingsService } from '../hydrus-ratings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
-import { HydrusVersionService } from '../hydrus-version.service';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {
   const pred = allSystemPredicates[p];

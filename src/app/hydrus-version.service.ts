@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, catchError, of, retry, shareReplay, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, map, of, retry, shareReplay, switchMap } from 'rxjs';
 import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 import { HydrusApiService } from './hydrus-api.service';
 import { requiredVersion } from './hydrus-version';
@@ -41,4 +41,10 @@ export class HydrusVersionService {
     }),
     shareReplay(1),
   );
+
+  public isAtLeastVersion(version: number) {
+    return this.hydrusVersion$.pipe(
+      map(v => v && v.hydrus_version >= version),
+    )
+  }
 }
