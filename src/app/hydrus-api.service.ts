@@ -12,6 +12,7 @@ import { HydrusNoteImportConflicts } from './hydrus-notes';
 import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 import { HydrusAddFileResponse } from './hydrus-upload.service';
 import { HydrusKeyVerificationData, HydrusRequestFileDomain, HydrusRequestFiles, HydrusRequestSingleFile } from './hydrus-api';
+import { HydrusJobStatus, HydrusJobStatusAddRequest, HydrusJobStatusUpdateRequest } from './hydrus-job-status';
 
 type AngularHttpParams = HttpParams | {
   [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
