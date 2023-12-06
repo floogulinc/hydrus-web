@@ -3,20 +3,27 @@
   <h2 class="mat-display-1">Upload to Hydrus</h2>
   <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" fxLayout="column">
 
-    <mat-form-field appearance="outline">
-      <mat-label>Select files</mat-label>
-      <ngx-mat-file-input #fileInput formControlName="fileInput" [multiple]="true"></ngx-mat-file-input>
-      <mat-icon matSuffix *ngIf="fileInput.empty">folder</mat-icon>
+
+      <ngx-file-drag-drop class="file-drag-drop" #fileInput formControlName="fileInput" [multiple]="true"></ngx-file-drag-drop>
+      <!-- <mat-icon matSuffix *ngIf="fileInput.empty">folder</mat-icon>
       <button mat-icon-button matSuffix *ngIf="!fileInput.empty" (click)="fileInput.clear($event)">
         <mat-icon>clear</mat-icon>
-      </button>
-    </mat-form-field>
+      </button> -->
+
     <mat-checkbox formControlName="addFilenameTag">Add filename tag (new files only)</mat-checkbox>
 
     <div fxLayout="row" fxLayoutAlign="end">
-      <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="uploadForm.invalid">Upload to Hydrus</button>
+      <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="uploadForm.invalid || uploading$ | push">Upload to Hydrus</button>
     </div>
   </form>
+
+  <div *rxIf="uploading$" class="upload-status">
+    <div fxLayout='row' fxLayoutAlign="space-between none">
+      <span>Uploading {{uploadFilename$ | push}}</span>
+      <span>{{percentUploaded$ | push | round}}%</span>
+    </div>
+    <mat-progress-bar mode="determinate" [value]="percentUploaded$ | push"></mat-progress-bar>
+  </div>
 
 
 </div>

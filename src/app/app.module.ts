@@ -55,12 +55,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LetModule } from '@rx-angular/template/let';
 import { PushModule } from '@rx-angular/template/push';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { IfModule } from '@rx-angular/template/if'
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
 import { NgPipesModule } from 'ngx-pipes';
 import { BarRatingModule } from 'ngx-bar-rating';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-
+import { NgxFileDragDropModule } from 'ngx-file-drag-drop';
 
 import { AboutComponent } from './about/about.component';
 import { ImageListComponent } from './image-list/image-list.component';
@@ -190,9 +190,10 @@ const MAT_MODULES = [
         ClipboardModule,
         LetModule,
         PushModule,
-        MaterialFileInputModule,
+        IfModule,
         BarRatingModule,
-        NgxJsonViewerModule
+        NgxJsonViewerModule,
+        NgxFileDragDropModule
     ],
     providers: [],
     bootstrap: [AppComponent]
