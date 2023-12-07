@@ -391,7 +391,8 @@ export class HydrusApiService {
       {
         headers: {
           ...this.headers,
-          'Content-Type': 'application/octet-stream'
+          'Content-Type': 'application/octet-stream',
+          'ngsw-bypass': ''
         },
         reportProgress: true,
         observe: 'events'
