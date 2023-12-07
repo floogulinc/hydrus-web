@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { HydrusAddFileStatus, HydrusUploadService } from '../hydrus-upload.service';
 import { tap, lastValueFrom } from 'rxjs';
@@ -7,7 +7,7 @@ import { HttpEventType } from '@angular/common/http';
 import { SettingsService } from '../settings.service';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { ErrorService } from '../error.service';
-import { FileValidators, NgxFileDragDropComponent } from 'ngx-file-drag-drop';
+import { FileValidators } from 'ngx-file-drag-drop';
 import { RxState } from '@rx-angular/state';
 
 interface UploadStatus {
@@ -38,13 +38,6 @@ export class UploadFileComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  @ViewChild('fileInput') fileInput: NgxFileDragDropComponent;
-
-  // uploadStatus = new BehaviorSubject<UploadStatus>({
-  //   uploading: false
-  // })
-
-
   uploadForm = new FormGroup({
     fileInput: new FormControl<File[]>([], [
       FileValidators.required,
@@ -64,14 +57,15 @@ export class UploadFileComponent implements OnInit {
   async handleUpload() {
     if (this.uploadForm.value.fileInput) {
       this.state.set({uploading: true})
-      for (let file of this.uploadForm.value.fileInput) {
+      while (this.uploadForm.value.fileInput.length > 0) {
+        const file = this.uploadForm.value.fileInput.shift();
         try {
-          //this.snackbar.open(`Uploading ${file.name}`);
           this.state.set({filename: file.name})
           const response = await lastValueFrom(this.uploadService.addFile(file).pipe(
             tap(x => console.log(x)),
             tap(event => {
               if (event.type === HttpEventType.UploadProgress) {
+
                 const percent = event.total ? 100 * event.loaded / event.total : 0;
                 this.state.set({percent})
               }
@@ -93,12 +87,10 @@ export class UploadFileComponent implements OnInit {
         } catch (error) {
           this.errorService.handleHydrusError(error);
         } finally {
-          this.fileInput.removeFile(file);
           this.state.set({filename: null, percent: 0})
         }
       }
       this.state.set({uploading: false})
-      //this.uploadForm.reset();
     }
   }
 
