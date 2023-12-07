@@ -18,9 +18,9 @@
   </form>
 
   <div *rxIf="uploading$" class="upload-status">
-    <div fxLayout='row' fxLayoutAlign="space-between none">
-      <span>Uploading {{uploadFilename$ | push}}</span>
-      <span>{{percentUploaded$ | push | round}}%</span>
+    <div fxLayout='row wrap' fxLayoutAlign="space-between none">
+      <div class="filename-text"><span>Uploading {{uploadFilename$ | push}}</span></div>
+      <div><span>{{percentUploaded$ | push | round}}%</span><span *rxIf="totalBytes$"> ({{upBytes$ | push | byteSize}}/{{totalBytes$ | push | byteSize}})</span></div>
     </div>
     <mat-progress-bar mode="determinate" [value]="percentUploaded$ | push"></mat-progress-bar>
   </div>

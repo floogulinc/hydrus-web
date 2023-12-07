@@ -14,3 +14,9 @@
 .upload-status {
   margin-top: 16px;
 }
+
+.filename-text {
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  overflow: hidden;
+}
