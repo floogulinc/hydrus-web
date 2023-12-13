@@ -93,7 +93,7 @@ export class HydrusFilesService {
   }
 
   private getAndProcessFileMetadataChunk(fileIds: number[]) {
-    return this.getBasicFileMetadataAPI(fileIds).pipe(
+    return this.getFileMetadataAPI(fileIds).pipe(
       map(v => v.metadata.map(i => this.processBasicFileFromAPI(i, v.hydrus_version))),
       tap(v => this.addFilesAndTags(v))
     )
