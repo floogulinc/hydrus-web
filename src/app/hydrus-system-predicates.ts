@@ -19,6 +19,8 @@ export enum SystemPredicate {
   NO_HUMAN_READABLE_EMBEDDED_METADATA,
   HAS_ICC_PROFILE,
   NO_ICC_PROFILE,
+  HAS_FORCED_FILETYPE,
+  NO_FORCED_FILETYPE,
   HAS_TAGS,
   UNTAGGED,
   NUM_OF_TAGS,
@@ -160,6 +162,8 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.NO_HUMAN_READABLE_EMBEDDED_METADATA]: { name: 'no embedded metadata', operator: null, value: null, units: null },
   [SystemPredicate.HAS_ICC_PROFILE]: { name: 'has icc profile', operator: null, value: null, units: null },
   [SystemPredicate.NO_ICC_PROFILE]: { name: 'no icc profile', operator: null, value: null, units: null },
+  [SystemPredicate.HAS_FORCED_FILETYPE]: { name: 'has forced filetype', operator: null, value: null, units: null },
+  [SystemPredicate.NO_FORCED_FILETYPE]: { name: 'no forced filetype', operator: null, value: null, units: null },
   [SystemPredicate.HAS_TAGS]: { name: 'has tags', operator: null, value: null, units: null },
   [SystemPredicate.UNTAGGED]: { name: 'untagged', operator: null, value: null, units: null },
   [SystemPredicate.NUM_OF_TAGS]: { name: 'number of tags', operator: Operators.RELATIONAL, value: Value.NATURAL, units: null },
@@ -306,7 +310,9 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
       SystemPredicate.HAS_HUMAN_READABLE_EMBEDDED_METADATA,
       SystemPredicate.NO_HUMAN_READABLE_EMBEDDED_METADATA,
       SystemPredicate.HAS_ICC_PROFILE,
-      SystemPredicate.NO_ICC_PROFILE
+      SystemPredicate.NO_ICC_PROFILE,
+      SystemPredicate.HAS_FORCED_FILETYPE,
+      SystemPredicate.NO_FORCED_FILETYPE
     ]
   },
   {
