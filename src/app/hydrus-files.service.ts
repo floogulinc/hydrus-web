@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, FileCategory, generateRatingsArray, getFileCategory } from './hydrus-file';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
-import { map, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { HydrusServices } from './hydrus-services';
 import { HydrusFiletype, filetypeFromMime, hasThumbnail, isFileHydrusRenderable, mime_string_lookup } from './hydrus-file-mimes';
 
@@ -42,6 +42,19 @@ export class HydrusFilesService {
         only_return_basic_information: false,
         detailed_url_information: true,
         include_notes: true,
+      }
+    );
+  }
+
+  // temp for v556 fix
+  private getSemiBasicFileMetadataAPI(fileIds: number[]) {
+    return this.api.getFileMetadata(
+      {
+        file_ids: fileIds,
+        only_return_identifiers: false,
+        only_return_basic_information: false,
+        detailed_url_information: false,
+        include_notes: false,
       }
     );
   }
@@ -94,6 +107,21 @@ export class HydrusFilesService {
 
   private getAndProcessFileMetadataChunk(fileIds: number[]) {
     return this.getBasicFileMetadataAPI(fileIds).pipe(
+      // fix for bug in hydrus v556
+      switchMap(v => {
+        if (v.hydrus_version === 556) {
+          const badFiles = v.metadata.filter(m => m.filetype_enum === HydrusFiletype.APPLICATION_UNKNOWN)
+          if (badFiles.length > 0) {
+            return this.getSemiBasicFileMetadataAPI(badFiles.map(f => f.file_id)).pipe(
+              map(({metadata, hydrus_version}) => ({
+                metadata: v.metadata.map(f1 => metadata.find(f2 => f2.file_id === f1.file_id) || f1),
+                hydrus_version
+              }))
+            )
+          }
+        }
+        return of(v)
+      }),
       map(v => v.metadata.map(i => this.processBasicFileFromAPI(i, v.hydrus_version))),
       tap(v => this.addFilesAndTags(v))
     )
