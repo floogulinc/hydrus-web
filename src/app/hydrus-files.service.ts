@@ -110,9 +110,9 @@ export class HydrusFilesService {
       // fix for bug in hydrus v556
       switchMap(v => {
         if (v.hydrus_version === 556) {
-          const badFiles = v.metadata.filter(m => m.filetype_enum === HydrusFiletype.APPLICATION_UNKNOWN)
-          if (badFiles.length > 0) {
-            return this.getSemiBasicFileMetadataAPI(badFiles.map(f => f.file_id)).pipe(
+          const badFileIDs = v.metadata.filter(f => f.filetype_enum === HydrusFiletype.APPLICATION_UNKNOWN).map(f => f.file_id)
+          if (badFileIDs.length > 0) {
+            return this.getSemiBasicFileMetadataAPI(badFileIDs).pipe(
               map(({metadata, hydrus_version}) => ({
                 metadata: v.metadata.map(f1 => metadata.find(f2 => f2.file_id === f1.file_id) || f1),
                 hydrus_version
