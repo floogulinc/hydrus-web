@@ -293,6 +293,12 @@ body {
   }
 }
 
+mat-icon.mat-card-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
 :root {
   --devtools-color-text-primary: rgb(32 33 36);
   --devtools-color-text-secondary: rgb(95 99 104);
