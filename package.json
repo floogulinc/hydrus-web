@@ -55,7 +55,7 @@
     "tslib": "^2.0.0",
     "type-fest": "^4.8.2",
     "typescript-migration": "^1.1.1",
-    "zone.js": "~0.11.4"
+    "zone.js": "~0.14.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.13",
