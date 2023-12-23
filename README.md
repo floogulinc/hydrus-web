@@ -32,7 +32,20 @@ You may also want to run [Hydrus on Docker](https://hydrusnetwork.github.io/hydr
 
 Unless you are opening Hydrus Web on the same device the Hydrus client is running on, you will need to make its API available with valid HTTPS. This will likely mean running some form of reverse proxy.
 
-There is now a guide on [doing this with Caddy, Duck DNS, and Tailscale](https://github.com/floogulinc/hydrus-web/wiki/Accessing-the-Hydrus-API-with-Caddy,-Duck-DNS,-and-Tailscale). There are other methods like using a self-signed CA as well.
+There are some guides on doing this on the [wiki](https://github.com/floogulinc/hydrus-web/wiki).
+
+## Hydrus Version Support
+
+The minimum required versions of the Hydrus client for Hydrus Web are:
+
+| Hydrus Web | Hydrus Client Version |
+|--|--|
+| Stable branch ([hydrus.app](https://hydrus.app/)) | v500 |
+| Dev branch ([dev.hydrus.app](https://dev.hydrus.app/)) | v500 |
+| 1.0.0+ | v500 |
+| [0.3.2](https://github.com/floogulinc/hydrus-web/releases/tag/v0.3.2) | v357 probably |
+
+Some features may require a newer Hydrus version than the minimum.
 
 ## Development
 

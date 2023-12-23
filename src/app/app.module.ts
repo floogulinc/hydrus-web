@@ -42,35 +42,38 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTableModule} from '@angular/material/table';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 import {PortalModule} from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TextFieldModule} from '@angular/cdk/text-field';
-
+import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
-
 import { LetModule } from '@rx-angular/template/let';
 import { PushModule } from '@rx-angular/template/push';
-
+import { IfModule } from '@rx-angular/template/if'
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
+import { NgPipesModule } from 'ngx-pipes';
+import { BarRatingModule } from 'ngx-bar-rating';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { NgxFileDragDropModule } from 'ngx-file-drag-drop';
+
 import { AboutComponent } from './about/about.component';
 import { ImageListComponent } from './image-list/image-list.component';
 import { PagesComponent } from './pages/pages.component';
 import { FilesPageComponent } from './files-page/files-page.component';
 import { SendComponent } from './send/send.component';
 import { FileInfoSheetComponent } from './file-info-sheet/file-info-sheet.component';
-import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatExpansionModule} from '@angular/material/expansion';
-import { NgPipesModule } from 'ngx-pipes';
 import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.component';
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
 import { TagInputDialogComponent } from './tag-input-dialog/tag-input-dialog.component';
-import { TagNamespaceClassPipe } from './utils/tag-utils';
+import { IsSystemPredicatePipe, TagNamespaceClassPipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
-import { MatNativeDateModule } from '@angular/material/core';
 import { SortInputComponent } from './sort-input/sort-input.component';
 import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.component';
 import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
@@ -79,6 +82,19 @@ import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-ver
 import { NoteEditDialogComponent } from './note-edit-dialog/note-edit-dialog.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { UrlEditDialogComponent } from './url-edit-dialog/url-edit-dialog.component';
+import { UploadFileComponent } from './upload-file/upload-file.component';
+import { ServicesInfoDialogComponent } from './services-info-dialog/services-info-dialog.component';
+import { ApiSettingsComponent } from './api-settings/api-settings.component';
+import { AppSettingsComponent } from './app-settings/app-settings.component';
+import { JsonViewDialogComponent } from './json-view-dialog/json-view-dialog.component';
+import { FileMetadataDialogComponent } from './file-metadata-dialog/file-metadata-dialog.component';
+import { SystemPredicateRatingsDialogComponent } from './system-predicate-ratings-dialog/system-predicate-ratings-dialog.component';
+import { ServiceSelectDialogComponent } from './service-select-dialog/service-select-dialog.component';
+import { RatingNumericalComponent } from './rating-numerical/rating-numerical.component';
+import { RatingLikeComponent } from './rating-like/rating-like.component';
+import { RatingIncDecComponent } from './rating-inc-dec/rating-inc-dec.component';
+import { TagSiblingsParentsDialogComponent } from './tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
+import { BlurHashColorPipe } from './blurhash';
 
 
 const MAT_MODULES = [
@@ -108,7 +124,8 @@ const MAT_MODULES = [
     MatButtonToggleModule,
     MatSelectModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    MatCheckboxModule
 ];
 
 
@@ -137,7 +154,21 @@ const MAT_MODULES = [
         HydrusVersionDialogComponent,
         NoteEditDialogComponent,
         WelcomeComponent,
-        UrlEditDialogComponent
+        UrlEditDialogComponent,
+        UploadFileComponent,
+        ServicesInfoDialogComponent,
+        ApiSettingsComponent,
+        AppSettingsComponent,
+        JsonViewDialogComponent,
+        FileMetadataDialogComponent,
+        SystemPredicateRatingsDialogComponent,
+        ServiceSelectDialogComponent,
+        RatingNumericalComponent,
+        RatingLikeComponent,
+        RatingIncDecComponent,
+        TagSiblingsParentsDialogComponent,
+        IsSystemPredicatePipe,
+        BlurHashColorPipe,
     ],
     imports: [
         BrowserModule,
@@ -158,7 +189,11 @@ const MAT_MODULES = [
         NgPipesModule,
         ClipboardModule,
         LetModule,
-        PushModule
+        PushModule,
+        IfModule,
+        BarRatingModule,
+        NgxJsonViewerModule,
+        NgxFileDragDropModule
     ],
     providers: [],
     bootstrap: [AppComponent]

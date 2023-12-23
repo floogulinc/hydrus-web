@@ -1,0 +1,68 @@
+<form [formGroup]="appSettingsForm" (ngSubmit)="submitAppSettings()" autocomplete="off">
+  <div fxLayout="column" class="settings-column">
+    <h2>Browse</h2>
+    <mat-slide-toggle formControlName="browseSearchOnLoad" class="margin-bottom-16">Search immediately on the browse page</mat-slide-toggle>
+    <mat-slide-toggle formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
+    <app-tag-input formControlName="browseDefaultSearchTags" placeholder="Browse page default search" [enableSiblingParentsDialog]="false" class=""></app-tag-input>
+    <app-tag-input formControlName="favoriteTags" [enableFavorites]="false" [enableOrSearch]="false" [enableSiblingParentsDialog]="false" placeholder="Favorite tags" class=""></app-tag-input>
+    <h2>File Viewing</h2>
+    <mat-slide-toggle formControlName="mediaAutoplay" class="margin-bottom-16">Autoplay video and audio files</mat-slide-toggle>
+    <mat-slide-toggle formControlName="mediaLoop" class="margin-bottom-16">Loop video and audio files</mat-slide-toggle>
+    <mat-slide-toggle formControlName="mediaDefaultMuted" class="margin-bottom-16">Video and audio files start muted</mat-slide-toggle>
+    <h2>Send</h2>
+    <mat-form-field appearance="outline">
+      <mat-label>Default page name for sending URLs</mat-label>
+      <input matInput type="text" autocomplete="off" formControlName="sendDefaultPage" placeholder="">
+    </mat-form-field>
+    <mat-slide-toggle formControlName="sendResetFormAfterSend" class="margin-bottom-16">Reset form after sending URL to Hydrus</mat-slide-toggle>
+    <mat-slide-toggle formControlName="sendFixDiscordUrls" class="margin-bottom-16" matTooltip="media.discordapp.net to cdn.discordapp.com">Fix shared Discord URLs</mat-slide-toggle>
+    <h2>Upload</h2>
+    <mat-form-field appearance="outline">
+      <mat-label>Filename Tag Service</mat-label>
+      <mat-select formControlName="uploadFilenameTagService">
+        <mat-option>None (disabled)</mat-option>
+        <mat-option *ngFor="let service of (apiSettings.apiSet ? (tagServices$ | async) : [])" [value]="service.service_key">
+          {{service.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <h2>External Services</h2>
+    <mat-form-field appearance="outline">
+      <mat-label>hyshare base URL</mat-label>
+      <input matInput type="url" autocomplete="off" formControlName="hyshareUrl" placeholder="https://my.hyshare.url/">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>IPFS multihash URL prefix</mat-label>
+      <input matInput type="url" autocomplete="off" formControlName="ipfsMultihashUrlPrefix">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>SauceNAO API key</mat-label>
+      <input matInput type="password" autocomplete="off" formControlName="saucenaoApiKey">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>SauceNAO search proxy URL</mat-label>
+      <input matInput type="text" autocomplete="off" formControlName="saucenaoSearchProxy">
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="photopeaIntegration" class="margin-bottom-16">Enable "open in Photopea" button</mat-slide-toggle>
+
+    <div fxLayout="row wrap" fxLayoutAlign="end" class="">
+
+      <button type="button" mat-icon-button [matMenuTriggerFor]="appSettingsSaveMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #appSettingsSaveMenu="matMenu">
+        <button type="button" mat-menu-item (click)="this.resetAppSettings()">
+          <span>Discard Changes</span>
+        </button>
+        <button type="button" mat-menu-item (click)="this.resetAppSettingsDefault()">
+          <span>Reset to Defaults</span>
+        </button>
+      </mat-menu>
+      <button mat-raised-button color="primary" type="submit" [disabled]="appSettingsForm.invalid || appSettingsForm.pristine">Save</button>
+    </div>
+  </div>
+</form>

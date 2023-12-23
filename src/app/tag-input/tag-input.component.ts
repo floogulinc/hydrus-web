@@ -5,7 +5,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
-import { Observable, of } from 'rxjs';
+import { Observable, firstValueFrom, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType } from '../hydrus-tags';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,12 @@ import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
 import { SettingsService } from '../settings.service';
+import { SystemPredicateRatingsDialogComponent } from '../system-predicate-ratings-dialog/system-predicate-ratings-dialog.component';
+import { HydrusService } from '../hydrus-services';
+import { searchTagsContainsSystemPredicate } from '../utils/tag-utils';
+import { HydrusRatingsService } from '../hydrus-ratings.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {
   const pred = allSystemPredicates[p];
@@ -59,6 +65,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
 
   @Input() displayType: TagDisplayType = 'display';
 
+  @Input() enableSiblingParentsDialog = true;
+
   @Output()
   tags = new EventEmitter<HydrusSearchTags>();
 
@@ -70,7 +78,9 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     public filesService: HydrusFilesService,
     public tagsService: HydrusTagsService,
     public dialog: MatDialog,
-    public settingsService: SettingsService
+    public settingsService: SettingsService,
+    private ratingsService: HydrusRatingsService,
+    private snackbar: MatSnackBar,
   ) {
     if (this.controlDir) {
       this.controlDir.valueAccessor = this
@@ -82,6 +92,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
    }
 
   favoriteTags = this.settingsService.appSettings.favoriteTags;
+
+  canGetSiblingsParents$ = this.tagsService.canGetSiblingsParents$;
 
 
   writeValue(obj: string[]): void {
@@ -109,7 +121,9 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     if(this.defaultTags) {
       this.searchTags = [...this.defaultTags];
     }
-
+    if(!this.enableSystemPredicates && this.enableFavorites) {
+      this.favoriteTags =  this.settingsService.appSettings.favoriteTags.filter(tags => !searchTagsContainsSystemPredicate(tags));
+    }
   }
 
   chipInputEvent(event: MatChipInputEvent): void {
@@ -210,24 +224,70 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     return 'predicate' in p;
   }
 
-  systemPredicateButton(pred: SystemPredicate) {
+  async systemPredicateButton(pred: SystemPredicate) {
+    if(pred === SystemPredicate.RATING_GENERAL) {
+      const result = await this.ratingPredicateDialog();
+      if(result) {
+        this.addSearchTag(result);
+      }
+      return;
+    }
     const predicate = allSystemPredicates[pred];
+    if(pred === SystemPredicate.HAS_RATING || pred === SystemPredicate.NO_RATING) {
+      const ratingServices = await firstValueFrom(this.ratingsService.ratingServices$);
+      if(ratingServices.length === 0) {
+        this.noRatingServiceSnackbar();
+        return;
+      } else if(ratingServices.length === 1) {
+        this.addSearchTag(`system:${predicate.name} ${ratingServices[0].name}`);
+        return;
+      }
+    }
     if(!predicate.operator && !predicate.units && !predicate.value) {
       this.addSearchTag(`system:${predicate.name}`);
     } else {
-      const dialogRef = this.dialog.open<SystemPredicateDialogComponent, {predicate: SystemPredicate}, string>(
-        SystemPredicateDialogComponent,
-        {
-          //width: '80vw',
-          data: {predicate: pred},
-        }
-      );
-      dialogRef.afterClosed().subscribe(result => {
-        if(result) {
-          this.addSearchTag(result);
-        }
-      });
+      const result = await this.predicateDialog(pred);
+      if(result) {
+        this.addSearchTag(result);
+      }
     }
+  }
+
+  async predicateDialog(pred: SystemPredicate) {
+    const dialogRef = this.dialog.open<SystemPredicateDialogComponent, {predicate: SystemPredicate}, string>(
+      SystemPredicateDialogComponent,
+      {
+        //width: '80vw',
+        data: {predicate: pred},
+      }
+    )
+    return firstValueFrom(dialogRef.afterClosed());
+  }
+
+
+  async ratingPredicateDialog() {
+    const service = await this.ratingsService.getRatingServiceDialog();
+    if(!service) {
+      this.noRatingServiceSnackbar();
+      return;
+    }
+    const dialogRef = this.dialog.open<SystemPredicateRatingsDialogComponent, {service: HydrusService}, string>(
+      SystemPredicateRatingsDialogComponent,
+      {
+        data: {
+          service
+        },
+        // maxWidth: '648px',
+        // width: '90vw',
+      }
+    );
+    return firstValueFrom(dialogRef.afterClosed());
+  }
+
+  noRatingServiceSnackbar() {
+    this.snackbar.open('There are no rating services', undefined, {
+      duration: 2000
+    });
   }
 
 
@@ -242,6 +302,26 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
       }
     }
   })
+
+  async tagSiblingsParentsDialog(tag: string) {
+    const dialog = TagSiblingsParentsDialogComponent.open(this.dialog, {
+      tag,
+      allowSearchTag: true,
+      allowAddTagToSearch: true,
+      allowNewSiblingParentDialog: true
+    });
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if (dialogResult) {
+      switch (dialogResult.action) {
+        case 'searchTag':
+          return this.setSearchTags([dialogResult.tag])
+        case 'addSearchTag':
+          return this.addSearchTags([dialogResult.tag]);
+        case 'newSiblingParentDialog':
+          return this.tagSiblingsParentsDialog(dialogResult.tag)
+      }
+    }
+  }
 
 
 }

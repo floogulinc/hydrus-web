@@ -34,6 +34,14 @@
         <mat-icon>search</mat-icon>
         <span>SauceNAO lookup</span>
       </button>
+      <button mat-menu-item *ngIf="canGetMetadata" (click)="fileMetadata()">
+        <mat-icon>list</mat-icon>
+        <span>View file metadata</span>
+      </button>
+      <button mat-menu-item (click)="rawInfo()">
+        <mat-icon>data_object</mat-icon>
+        <span>View raw file info</span>
+      </button>
       <button mat-menu-item (click)="reload()">
         <mat-icon>refresh</mat-icon>
         <span>Refresh</span>
@@ -46,7 +54,7 @@
     <mat-list-item role="listitem">
       <mat-icon mat-list-icon>{{file.fileIcon}}</mat-icon>
       <div mat-line>{{file.file_id}}</div>
-      <div mat-line class="metadata-line"><span>{{file.mime}}</span> <span *ngIf="file.width && file.height">{{file.width}}x{{file.height}}</span> <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span></div>
+      <div mat-line class="metadata-line"><span>{{file.file_type_string}}</span> <span *ngIf="file.width && file.height">{{file.width}}x{{file.height}}</span> <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span></div>
     </mat-list-item>
     <mat-list-item role="listitem">
       <mat-icon mat-list-icon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
@@ -66,6 +74,8 @@
       </button>
     </mat-list-item>
   </mat-list>
+
+  <mat-accordion multi>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
       Known URLs ({{file.known_urls.length}})
@@ -87,6 +97,44 @@
     </mat-action-row>
   </mat-expansion-panel>
 
+  <mat-expansion-panel *ngIf="file.ratings_array && file.ratings_array.length > 0">
+    <mat-expansion-panel-header>
+      Ratings
+    </mat-expansion-panel-header>
+
+    <mat-list>
+      <ng-template ngFor let-rating [ngForOf]="file.ratings_array" [ngForTrackBy]="trackByRating">
+        <mat-list-item *ngIf="isNumericalRatingService(rating)">
+          <p matLine>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
+          <p matLine class="numerical-rating-line">
+            <app-rating-numerical [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-numerical>
+          </p>
+          <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </mat-list-item>
+        <mat-list-item *ngIf="isLikeRatingService(rating)">
+          <p matLine>{{rating.name}} ({{rating.value === null ? 'not set' : rating.value ? 'liked' : 'dislike'}})</p>
+          <p matLine>
+            <app-rating-like [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-like>
+          </p>
+          <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </mat-list-item>
+        <mat-list-item *ngIf="isIncDecRatingService(rating)">
+          <p matLine>{{rating.name}}</p>
+          <p matLine class="inc-rating-line">
+            <app-rating-inc-dec [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-inc-dec>
+          </p>
+          <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+        </mat-list-item>
+      </ng-template>
+    </mat-list>
+  </mat-expansion-panel>
+  </mat-accordion>
 
   <div class="notes-section" *ngIf="file.notesMapArray">
     <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
@@ -161,6 +209,10 @@
       <mat-icon>search</mat-icon>
       <span>Add tag to search</span>
     </button>
+    <button mat-menu-item (click)="tagSiblingsParentsDialog(tag)" *ngIf="canGetSiblingsParents$ | async">
+      <mat-icon svgIcon="graph"></mat-icon>
+      <span>View Siblings and Parents</span>
+    </button>
     <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
       <mat-icon>delete</mat-icon>
       <span>Delete Tag</span>
@@ -181,6 +233,17 @@
     <button mat-menu-item (click)="deleteUrl(url.normalised_url)">
       <mat-icon>delete</mat-icon>
       <span>Delete URL</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+<mat-menu #ratingMenu="matMenu">
+  <ng-template matMenuContent let-rating="rating">
+    <button mat-menu-item *ngIf="(isNumericalRatingService(rating) || isLikeRatingService(rating)) && hasServiceKey(rating)" (click)="this.setRating(rating, null)">
+      <span>Reset rating</span>
+    </button>
+    <button mat-menu-item *ngIf="(isIncDecRatingService(rating) || (isNumericalRatingService(rating) && rating.min_stars === 0)) && hasServiceKey(rating)" (click)="this.setRating(rating, 0)">
+      <span>Set rating to 0</span>
     </button>
   </ng-template>
 </mat-menu>

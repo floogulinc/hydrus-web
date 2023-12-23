@@ -4,8 +4,14 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { searchFiletypes } from '../hydrus-file-mimes';
 import { allSystemPredicates, hashAlgorithms, operatorDefaults, operatorOptions, Operators, Predicate, SystemPredicate, unitDefaults, Units, unitsOptions, Value, valueLabels } from '../hydrus-system-predicates';
+import { HydrusServicesService } from '../hydrus-services.service';
+import { filter, map, of, shareReplay, switchMap, take } from 'rxjs';
+import { HydrusService, isFileService } from '../hydrus-services';
+import { isRatingService } from '../hydrus-rating';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { HydrusVersionService } from '../hydrus-version.service';
 
-
+@UntilDestroy()
 @Component({
   selector: 'app-system-predicate-dialog',
   templateUrl: './system-predicate-dialog.component.html',
@@ -16,9 +22,17 @@ export class SystemPredicateDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<SystemPredicateDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: {predicate: SystemPredicate},
-    @Inject(LOCALE_ID) private locale
+    @Inject(LOCALE_ID) private locale,
+    private services: HydrusServicesService,
+    private versionService: HydrusVersionService
   ) {
-
+    if(this.predicate.value === Value.SERVICE_NAME) {
+      this.services$.pipe(
+        untilDestroyed(this),
+        filter(services => services && services.length > 0),
+        take(1),
+      ).subscribe(services => this.predicateForm.get(['value', Value.SERVICE_NAME]).setValue(services[0].name))
+    }
   }
 
   readonly SystemPredicate = SystemPredicate;
@@ -35,6 +49,24 @@ export class SystemPredicateDialogComponent implements OnInit {
   public predicateEnum = this.data.predicate;
   public predicate: Predicate = allSystemPredicates[this.data.predicate];
 
+  services$ = of(this.data.predicate).pipe(
+    switchMap(predicate => {
+      if(predicate === SystemPredicate.FILE_SERVICE) {
+        return this.services.hydrusServicesArray$.pipe(
+          map(services => services.filter(isFileService))
+        )
+      } else if (predicate === SystemPredicate.HAS_RATING || predicate === SystemPredicate.NO_RATING) {
+        return this.services.hydrusServicesArray$.pipe(
+          map(services => services.filter(isRatingService))
+        )
+      } else {
+        return of([])
+      }
+    }),
+    shareReplay(1)
+  )
+
+
   predicateForm = new FormGroup({
     value: new FormGroup({
       [this.predicate.value]: this.valueForm()
@@ -43,6 +75,8 @@ export class SystemPredicateDialogComponent implements OnInit {
     ...(this.predicate.operator === Operators.TAG_RELATIONAL ? {tagRelationalOperator: new FormControl('', Validators.required)} : {}),
     ...(this.predicate.units ? {units: new FormControl(unitDefaults[this.predicate.units])} : {})
   });
+
+  canUseFiletypeName$ = this.versionService.isAtLeastVersion(540);
 
   ngOnInit(): void {
 
@@ -104,6 +138,9 @@ export class SystemPredicateDialogComponent implements OnInit {
           left: new FormControl(1, Validators.required),
           right: new FormControl(1, Validators.required)
         })
+      }
+      case Value.SERVICE_NAME: {
+        return new FormControl<string>(null, Validators.required)
       }
       default: {
         return null
@@ -176,6 +213,9 @@ export class SystemPredicateDialogComponent implements OnInit {
       }
       case Value.RATIO: {
         return `${v.left}:${v.right}`
+      }
+      case Value.SERVICE_NAME: {
+        return `${v}`
       }
       default: {
         return null

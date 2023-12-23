@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HydrusPagesService } from '../hydrus-pages.service';
-import { HydrusPageListItem } from '../hydrus-page';
+import { HydrusPageListItem, HydrusPageType } from '../hydrus-page';
 
 @Component({
   selector: 'app-pages',
@@ -10,6 +10,8 @@ import { HydrusPageListItem } from '../hydrus-page';
 export class PagesComponent implements OnInit {
 
   constructor(public pagesService: HydrusPagesService) { }
+
+  HydrusPageType = HydrusPageType;
 
   pages: HydrusPageListItem[] = [];
 

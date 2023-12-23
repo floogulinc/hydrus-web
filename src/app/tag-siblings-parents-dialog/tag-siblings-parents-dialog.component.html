@@ -1,0 +1,114 @@
+<h1 mat-dialog-title>Siblings and Parents for "{{data.tag}}"</h1>
+<div mat-dialog-content>
+
+  <div *ngIf="siblingsAndParents$ | async as siblingsAndParents; else loading">
+
+  <mat-tab-group animationDuration="0ms" dynamicHeight>
+    <mat-tab *ngFor="let service of siblingsAndParents | orderBy: 'serviceName' | orderBy: '-serviceType'; trackBy: trackByTagService" [label]="service.serviceName">
+      <ng-template matTabContent>
+        <p>
+          Ideal tag:
+          <mat-chip
+            [selectable]="false"
+            class="tag-chip"
+            [ngClass]="service.ideal_tag | tagClass"
+            [matMenuTriggerFor]="tagMenu"
+            [matMenuTriggerData]="{tag: service.ideal_tag}"
+          >
+          <div class="tag-chip-text">{{service.ideal_tag}}</div>
+        </mat-chip>
+        </p>
+        <mat-accordion multi>
+          <mat-expansion-panel >
+            <mat-expansion-panel-header>
+              Siblings ({{service.siblings.length}})
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+              <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+                <mat-chip
+                  *ngFor="let tag of (service.siblings | orderBy)"
+                  [selectable]="false"
+                  class="tag-chip"
+                  [ngClass]="tag | tagClass"
+                  [matMenuTriggerFor]="tagMenu"
+                  [matMenuTriggerData]="{tag}"
+                >
+                  <div class="tag-chip-text">{{tag}}</div>
+                </mat-chip>
+              </mat-chip-list>
+
+            </ng-template>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel >
+            <mat-expansion-panel-header>
+              Ancestors ({{service.ancestors.length}})
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+              <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+                <mat-chip
+                  *ngFor="let tag of (service.ancestors | orderBy)"
+                  [selectable]="false"
+                  class="tag-chip"
+                  [ngClass]="tag | tagClass"
+                  [matMenuTriggerFor]="tagMenu"
+                  [matMenuTriggerData]="{tag}"
+                >
+                  <div class="tag-chip-text">{{tag}}</div>
+                </mat-chip>
+              </mat-chip-list>
+
+            </ng-template>
+          </mat-expansion-panel>
+
+
+          <mat-expansion-panel >
+            <mat-expansion-panel-header>
+              Descendants ({{service.descendants.length}})
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+              <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+                <mat-chip
+                  *ngFor="let tag of (service.descendants | orderBy)"
+                  [selectable]="false"
+                  class="tag-chip"
+                  [ngClass]="tag | tagClass"
+                  [matMenuTriggerFor]="tagMenu"
+                  [matMenuTriggerData]="{tag}"
+                >
+                  <div class="tag-chip-text">{{tag}}</div>
+                </mat-chip>
+              </mat-chip-list>
+
+            </ng-template>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+  </div>
+  <ng-template #loading>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+</div>
+
+<mat-menu #tagMenu="matMenu">
+  <ng-template matMenuContent let-tag="tag">
+    <button mat-menu-item [cdkCopyToClipboard]="tag">
+      <mat-icon>content_copy</mat-icon>
+      <span>Copy tag</span>
+    </button>
+    <button mat-menu-item (click)="searchTag(tag)" *ngIf="data.allowSearchTag">
+      <mat-icon>search</mat-icon>
+      <span>Search tag</span>
+    </button>
+    <button mat-menu-item (click)="addSearchTag(tag)" *ngIf="data.allowAddTagToSearch">
+      <mat-icon>search</mat-icon>
+      <span>Add tag to search</span>
+    </button>
+    <button mat-menu-item (click)="tagSiblingsParentsDialog(tag)" *ngIf="data.allowNewSiblingParentDialog && (tag !== data.tag)">
+      <mat-icon svgIcon="graph"></mat-icon>
+      <span>View Siblings and Parents</span>
+    </button>
+  </ng-template>
+</mat-menu>

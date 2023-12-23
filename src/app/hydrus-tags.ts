@@ -1,11 +1,11 @@
-import { RecursiveArray } from "./utils/array-utils";
-
 export interface HydrusTagSearchTag {
   value: string,
   count: number
 }
 
-export type HydrusSearchTags = RecursiveArray<string>;
+export type HydrusSearchTag = string | HydrusSearchTags
+export type HydrusSearchTags = HydrusSearchTag[];
+
 
 export type TagDisplayType = 'storage' | 'display';
 
@@ -25,5 +25,16 @@ export interface ServiceNamesOrKeysToTags {
 export interface ServiceNamesOrKeysToActionsToTags {
   [serviceNameOrKey: string] : {
     [action: string]: string[]
+  }
+}
+
+export interface TagsToServiceKeysToSiblingsAndParents {
+  [tag: string]: {
+    [service_key: string]: {
+      siblings: string[];
+      ideal_tag: string;
+      descendants: string[];
+      ancestors: string[];
+    }
   }
 }

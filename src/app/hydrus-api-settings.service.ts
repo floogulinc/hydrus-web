@@ -8,7 +8,10 @@ import { MigrationService } from './migration.service';
 })
 export class HydrusApiSettingsService {
 
-  constructor(private migrationService: MigrationService, private ls: LocalStorageService) {
+  constructor(
+    private migrationService: MigrationService,
+    private ls: LocalStorageService
+  ) {
     this.setup();
   }
 

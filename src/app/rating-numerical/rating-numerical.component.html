@@ -1,0 +1,8 @@
+<bar-rating [rate]="rating.value" [max]="rating.max_stars" (rateChange)="setRating($event)">
+  <ng-template ratingActive>
+    <mat-icon [svgIcon]="ratingIcons[rating.star_shape]"></mat-icon>
+  </ng-template>
+  <ng-template ratingInactive>
+    <mat-icon [svgIcon]="ratingIconsOutline[rating.star_shape]"></mat-icon>
+  </ng-template>
+</bar-rating>
