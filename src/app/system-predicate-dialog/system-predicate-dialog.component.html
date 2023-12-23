@@ -62,7 +62,7 @@
         <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.FILETYPE_LIST">
           <mat-label>Filetypes</mat-label>
           <mat-select [formControlName]="Value.FILETYPE_LIST" multiple>
-            <mat-option *ngFor="let ft of searchFiletypes" [value]="ft.mime">{{ft.name}}</mat-option>
+            <mat-option *ngFor="let ft of searchFiletypes" [value]="(canUseFiletypeName$ | async) ? ft.name : ft.mime">{{ft.name}}</mat-option>
           </mat-select>
         </mat-form-field>
         <div *ngSwitchCase="Value.DATE_OR_TIME_INTERVAL" [formGroupName]="Value.DATE_OR_TIME_INTERVAL" class="date-form">
@@ -140,6 +140,12 @@
             <input matInput formControlName="right" type="number" min="1">
           </mat-form-field>
         </div>
+        <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.SERVICE_NAME">
+          <mat-label>Service</mat-label>
+          <mat-select [formControlName]="Value.SERVICE_NAME">
+            <mat-option *ngFor="let service of services$ | async" [value]="service.name">{{service.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </ng-container>
 
       <div *ngIf="this.predicate.units" class="form-section">

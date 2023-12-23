@@ -1,0 +1,5 @@
+<button mat-icon-button [color]="rating.value === false ? 'warn' : ''" (click)="this.setRating(!rating.value)">
+  <mat-icon *ngIf="rating.value === null" [svgIcon]="ratingIconsOutline[rating.star_shape]"></mat-icon>
+  <mat-icon *ngIf="rating.value === true" [svgIcon]="ratingIcons[rating.star_shape]"></mat-icon>
+  <mat-icon *ngIf="rating.value === false" [svgIcon]="ratingIcons[rating.star_shape]"></mat-icon>
+</button>

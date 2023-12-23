@@ -1,0 +1,7 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<mat-dialog-content>
+  <ngx-json-viewer [json]="data.json"></ngx-json-viewer>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="data.copyButton">
+  <button mat-button type="button" *ngIf="data.copyButton" [cdkCopyToClipboard]="getJSON()">Copy to clipboard</button>
+</mat-dialog-actions>

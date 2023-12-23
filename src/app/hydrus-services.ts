@@ -20,6 +20,7 @@ export enum HydrusServiceType {
   COMBINED_DELETED_FILE = 19,
   LOCAL_FILE_UPDATE_DOMAIN = 20,
   COMBINED_LOCAL_MEDIA = 21,
+  LOCAL_RATING_INCDEC = 22,
   SERVER_ADMIN = 99,
   NULL_SERVICE = 100,
 }
@@ -36,6 +37,7 @@ export const service_string_lookup: Record<HydrusServiceType, string> = {
   [HydrusServiceType.LOCAL_TAG]: 'local tag service',
   [HydrusServiceType.LOCAL_RATING_NUMERICAL]: 'local numerical rating service',
   [HydrusServiceType.LOCAL_RATING_LIKE]: 'local like/dislike rating service',
+  [HydrusServiceType.LOCAL_RATING_INCDEC]: 'local inc/dec rating service',
   [HydrusServiceType.RATING_NUMERICAL_REPOSITORY]: 'hydrus numerical rating repository',
   [HydrusServiceType.RATING_LIKE_REPOSITORY]: 'hydrus like/dislike rating repository',
   [HydrusServiceType.COMBINED_TAG]: 'virtual combined tag service',
@@ -50,22 +52,81 @@ export const service_string_lookup: Record<HydrusServiceType, string> = {
   [HydrusServiceType.NULL_SERVICE]: 'null service'
 }
 
-export interface HydrusService {
-  name: string,
+export interface HydrusServiceSimple {
+  name: string;
+  type: HydrusServiceType;
+  type_pretty: string;
+}
+
+export interface HydrusService extends HydrusServiceSimple {
   service_key: string,
-  type: HydrusServiceType,
-  type_pretty: string
 }
 
 export interface HydrusServiceInfo {
-  local_tags: HydrusService[];
-  tag_repositories: HydrusService[];
-  file_repositories: HydrusService[];
-  local_files: HydrusService[];
-  all_local_media: HydrusService[];
-  trash: HydrusService[];
-  local_updates: HydrusService[];
-  all_local_files: HydrusService[];
-  all_known_files: HydrusService[];
-  all_known_tags: HydrusService[];
+  local_tags: HydrusService[]; // deprecated in v531
+  tag_repositories: HydrusService[]; // deprecated in v531
+  file_repositories: HydrusService[]; // deprecated in v531
+  local_files: HydrusService[]; // deprecated in v531
+  all_local_media: HydrusService[]; // deprecated in v531
+  trash: HydrusService[]; // deprecated in v531
+  local_updates: HydrusService[]; // deprecated in v531
+  all_local_files: HydrusService[]; // deprecated in v531
+  all_known_files: HydrusService[]; // deprecated in v531
+  all_known_tags: HydrusService[]; // deprecated in v531
+  services: HydrusServices; // added in v531
+}
+
+//export type HydrusService = GenericHydrusService & (HydrusNumericalRatingService | HydrusLikeRatingService | {})
+
+export interface HydrusServices {
+  [service_key: string]: HydrusServiceSimple
+}
+
+export function servicesArrayFromObject(services: HydrusServices) {
+  return Object.entries(services).map(([service_key, service]) => ({service_key, ...service}));
+}
+
+export function getServiceArrayUniversal(serviceInfo: HydrusServiceInfo) {
+  if(serviceInfo.services) {
+    return servicesArrayFromObject(serviceInfo.services);
+  } else {
+    return [
+      ...serviceInfo.local_tags,
+      ...serviceInfo.tag_repositories ,
+      ...serviceInfo.file_repositories,
+      ...serviceInfo.local_files,
+      ...serviceInfo.all_local_media,
+      ...serviceInfo.trash,
+      ...serviceInfo.local_updates,
+      ...serviceInfo.all_local_files,
+      ...serviceInfo.all_known_files,
+      ...serviceInfo.all_known_tags,
+    ]
+  }
+}
+
+export function getTagServices(serviceArray: HydrusService[]) {
+  return serviceArray.filter(s => s.type === HydrusServiceType.LOCAL_TAG || s.type === HydrusServiceType.TAG_REPOSITORY || s.type === HydrusServiceType.COMBINED_TAG)
+}
+
+export function getLocalTagServices(serviceArray: HydrusService[]) {
+  return serviceArray.filter(s => s.type === HydrusServiceType.LOCAL_TAG)
+}
+
+export function getAllKnownTagsService(services: HydrusServices) {
+  return services['616c6c206b6e6f776e2074616773'];
+}
+
+export function isFileService(service: HydrusServiceSimple) {
+  return [
+    HydrusServiceType.FILE_REPOSITORY,
+    HydrusServiceType.LOCAL_FILE_DOMAIN,
+    HydrusServiceType.LOCAL_FILE_TRASH_DOMAIN,
+    HydrusServiceType.LOCAL_FILE_UPDATE_DOMAIN,
+    HydrusServiceType.COMBINED_LOCAL_FILE,
+    HydrusServiceType.COMBINED_LOCAL_MEDIA,
+    HydrusServiceType.COMBINED_FILE,
+    HydrusServiceType.IPFS,
+    HydrusServiceType.COMBINED_DELETED_FILE
+  ].includes(service.type);
 }

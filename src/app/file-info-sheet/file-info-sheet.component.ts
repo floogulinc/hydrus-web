@@ -1,37 +1,42 @@
 import { Component, Inject, ChangeDetectionStrategy, Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusFile, HydrusFileType, HydrusTagService, HydrusTagServiceType } from '../hydrus-file';
+import { HydrusBasicFile, HydrusFile, FileCategory, HydrusTagServiceType } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { saveAs } from 'file-saver';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
-import { BehaviorSubject, distinctUntilChanged, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { BehaviorSubject, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
 import { HydrusFileDownloadService } from '../hydrus-file-download.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HydrusSearchTags } from '../hydrus-tags';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
-import { HydrusServiceType } from '../hydrus-services';
 import { NoteEditDialogComponent } from '../note-edit-dialog/note-edit-dialog.component';
 import { HydrusNotesService } from '../hydrus-notes.service';
 import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
-import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component';
+import { UrlEditDialogComponent } from '../url-edit-dialog/url-edit-dialog.component'
+import { HydrusRatingsService } from '../hydrus-ratings.service';
+import { JsonViewDialogComponent } from '../json-view-dialog/json-view-dialog.component';
+import { ExifReaderService } from '../exif-reader.service';
+import { FileMetadataDialogComponent } from '../file-metadata-dialog/file-metadata-dialog.component';
+import { isNumericalRatingService, isLikeRatingService, isIncDecRatingService, HydrusRating } from '../hydrus-rating';
+import { HydrusServiceType } from '../hydrus-services';
+import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
+import { HydrusVersionService } from '../hydrus-version.service';
+import { ErrorService } from '../error.service';
 
-
-
-function getFileIcon(fileType: HydrusFileType) {
+function getFileIcon(fileType: FileCategory) {
   switch (fileType) {
-    case HydrusFileType.Image: {
+    case FileCategory.Image: {
       return 'image';
     }
-    case HydrusFileType.Video: {
+    case FileCategory.Video: {
       return 'movie';
     }
-    case HydrusFileType.Audio: {
+    case FileCategory.Audio: {
       return 'music_note';
     }
     default: {
@@ -79,7 +84,10 @@ export class FileInfoSheetComponent {
     private router: Router,
     private notesService: HydrusNotesService,
     public fileInfoSheetService: FileInfoSheetService,
-    private urlService: HydrusUrlService
+    private urlService: HydrusUrlService,
+    private ratingsService: HydrusRatingsService,
+    private exifReader: ExifReaderService,
+    private errorService: ErrorService
   ) {
    }
 
@@ -88,6 +96,16 @@ export class FileInfoSheetComponent {
   isBrowse = this.router.isActive('/', {paths: 'exact', queryParams: 'ignored', fragment: 'ignored', matrixParams: 'ignored'})
 
   reload$ = new BehaviorSubject(null);
+
+  isNumericalRatingService = isNumericalRatingService;
+  isLikeRatingService = isLikeRatingService;
+  isIncDecRatingService = isIncDecRatingService;
+
+  hasServiceKey(obj: any): obj is {service_key: string} {
+    return !!obj.service_key
+  }
+
+  canGetSiblingsParents$ = this.tagsService.canGetSiblingsParents$;
 
   processTags(file: HydrusFile): {
     displayTags: TagServiceItem[],
@@ -115,7 +133,7 @@ export class FileInfoSheetComponent {
     map(file => {
       const tags = this.processTags(file);
 
-      const fileIcon = getFileIcon(file.file_type);
+      const fileIcon = getFileIcon(file.file_category);
 
       const notesMapArray = file.notes ? Object.entries(file.notes).map(([name, value]) => ({ name, value })) : [];
 
@@ -148,6 +166,10 @@ export class FileInfoSheetComponent {
     return item.name;
   }
 
+  trackByRating(index: number, rating: HydrusRating) {
+    return rating.service_key;
+  }
+
 
   navigatorShare = navigator.share;
 
@@ -172,7 +194,7 @@ export class FileInfoSheetComponent {
     this.downloadService.shareFile(this.data.file);
   }
 
-  canSaucenao = this.saucenaoService.canSaucenao && this.saucenaoService.validSaucenaoMime(this.data.file.mime);
+  canSaucenao = this.saucenaoService.canSaucenao && this.saucenaoService.validSaucenaoFile(this.data.file);
 
   saucenaoLookup() {
     const addUrlOptions: AddUrlOptions = {};
@@ -190,9 +212,7 @@ export class FileInfoSheetComponent {
       snackBarRef.dismiss();
     }, error => {
       snackBarRef.dismiss();
-      this.snackbar.open(`Error downloading file: ${error.message}`, undefined, {
-        duration: 10000
-      });
+      this.errorService.handleHydrusError(error, 'Error downloading file')
     });
   }
 
@@ -205,9 +225,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -219,9 +237,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -233,9 +249,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -247,9 +261,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -280,9 +292,7 @@ export class FileInfoSheetComponent {
         this.addTags([tag], serviceKey);
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -309,9 +319,27 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
+    }
+  }
+
+  async tagSiblingsParentsDialog(tag: string) {
+    const dialog = TagSiblingsParentsDialogComponent.open(this.dialog, {
+      tag,
+      allowSearchTag: true,
+      allowAddTagToSearch: true,
+      allowNewSiblingParentDialog: true
+    });
+    const dialogResult = await firstValueFrom(dialog.afterClosed());
+    if (dialogResult) {
+      switch (dialogResult.action) {
+        case 'searchTag':
+          return this.searchTags([dialogResult.tag])
+        case 'addSearchTag':
+          return this.addSearchTags([dialogResult.tag]);
+        case 'newSiblingParentDialog':
+          return this.tagSiblingsParentsDialog(dialogResult.tag)
+      }
     }
   }
 
@@ -326,9 +354,7 @@ export class FileInfoSheetComponent {
           duration: 2000
         });
       } catch (error) {
-        this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-          duration: 2000
-        });
+        this.errorService.handleHydrusError(error);
       }
     }
   }
@@ -359,9 +385,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch(error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -376,9 +400,7 @@ export class FileInfoSheetComponent {
         this.setNote(noteName, noteContent, 'Note Restored')
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -391,9 +413,7 @@ export class FileInfoSheetComponent {
       });
     } catch (error) {
       console.log(error);
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -416,9 +436,7 @@ export class FileInfoSheetComponent {
         this.addUrl(url);
       })
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -430,9 +448,7 @@ export class FileInfoSheetComponent {
         duration: 2000
       });
     } catch (error) {
-      this.snackbar.open(`Error: ${error.error ?? error.message}`, undefined, {
-        duration: 2000
-      });
+      this.errorService.handleHydrusError(error);
     }
   }
 
@@ -442,6 +458,32 @@ export class FileInfoSheetComponent {
     if(dialogResult) {
       return this.editUrl(url, dialogResult.url);
     }
+  }
+
+  async setRating(rating: {service_key: string}, value: number | boolean | null) {
+    try {
+      await firstValueFrom(this.ratingsService.setRating(this.data.file.hash, rating.service_key, value))
+      this.reload();
+      this.snackbar.open(`Rating changed`, undefined, {
+        duration: 2000
+      });
+    } catch (error) {
+      this.reload();
+      this.errorService.handleHydrusError(error);
+    }
+  }
+
+  async rawInfo() {
+    const snackBarRef = this.snackbar.open('Getting file info...');
+    const json = await firstValueFrom(this.filesService.getRawFileMetadata(this.data.file.hash));
+    snackBarRef.dismiss();
+    JsonViewDialogComponent.open(this.dialog, {json, title: "Raw file data"});
+  }
+
+  canGetMetadata = this.exifReader.canReadExif(this.data.file);
+
+  async fileMetadata() {
+    FileMetadataDialogComponent.open(this.dialog, {file: this.data.file});
   }
 
 }

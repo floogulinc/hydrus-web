@@ -34,6 +34,19 @@ Unless you are opening Hydrus Web on the same device the Hydrus client is runnin
 
 There are some guides on doing this on the [wiki](https://github.com/floogulinc/hydrus-web/wiki).
 
+## Hydrus Version Support
+
+The minimum required versions of the Hydrus client for Hydrus Web are:
+
+| Hydrus Web | Hydrus Client Version |
+|--|--|
+| Stable branch ([hydrus.app](https://hydrus.app/)) | v500 |
+| Dev branch ([dev.hydrus.app](https://dev.hydrus.app/)) | v500 |
+| 1.0.0+ | v500 |
+| [0.3.2](https://github.com/floogulinc/hydrus-web/releases/tag/v0.3.2) | v357 probably |
+
+Some features may require a newer Hydrus version than the minimum.
+
 ## Development
 
 ### Development server

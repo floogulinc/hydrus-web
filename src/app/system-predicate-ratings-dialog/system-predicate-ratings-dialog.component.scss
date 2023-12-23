@@ -1,0 +1,23 @@
+.form-section {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.outer-form-section {
+  justify-content: center;
+  width: 100%;
+}
+
+.wide-form {
+  flex-grow: 1;
+  width: 600px;
+}
+.wide-field {
+  flex-grow: 1;
+}
+.string-field {
+  width: 300px;
+}

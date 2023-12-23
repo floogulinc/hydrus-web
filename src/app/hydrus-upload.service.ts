@@ -13,6 +13,7 @@ export interface HydrusAddFileResponse {
   status: HydrusAddFileStatus;
   hash: string;
   note: string;
+  traceback?: string;
 }
 
 @Injectable({

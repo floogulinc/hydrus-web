@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusFileType } from './hydrus-file';
+import { ApplicationRef, EnvironmentInjector, Injectable, createComponent } from '@angular/core';
+import { HydrusBasicFile, FileCategory } from './hydrus-file';
 import PhotoSwipe, { PhotoSwipeOptions, SlideData } from 'photoswipe';
 import { Platform } from '@angular/cdk/platform';
 import Content from 'photoswipe/dist/types/slide/content';
@@ -11,6 +11,8 @@ import { HydrusFileDownloadService } from './hydrus-file-download.service';
 import { take } from 'rxjs';
 import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
 import { SettingsService } from './settings.service';
+import { MatButton } from '@angular/material/button';
+
 
 function isContentType(content: Content | Slide, type: string) {
   return (content && content.data && content.data.type === type);
@@ -26,8 +28,13 @@ export class PhotoswipeService {
     private bottomSheet: MatBottomSheet,
     private location: Location,
     private downloadService: HydrusFileDownloadService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private appRef: ApplicationRef,
+    private injector: EnvironmentInjector,
+
   ) { }
+
+  private processedFiles = new Map<string, SlideData>();
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
     const imgindex = items.findIndex(e => e.file_id === id);
@@ -54,6 +61,10 @@ export class PhotoswipeService {
     })
 
     pswp.addFilter('itemData', (itemData, index) => {
+      const file = items[index];
+      if(this.processedFiles.has(file.hash)) {
+        return this.processedFiles.get(file.hash);
+      }
       return this.getPhotoSwipeItem(items[index]);
     });
 
@@ -228,6 +239,58 @@ export class PhotoswipeService {
 
         content.element = document.createElement('div');
         content.element.className = 'pswp-audio-container';
+      } else if (isContentType(content, 'renderable')) {
+        e.preventDefault();
+        content.element = document.createElement('div');
+        content.element.className = 'pswp__content pswp__error-msg-container';
+
+        const errorMsgEl = document.createElement('div');
+        errorMsgEl.className = 'pswp__error-msg';
+        content.element.appendChild(errorMsgEl);
+
+        const img = document.createElement('img');
+        img.src = file.thumbnail_url;
+        img.className = 'pswp-error-thumb';
+        errorMsgEl.appendChild(img);
+
+        const errorMsgText = document.createElement('div');
+        errorMsgText.innerText = `Unsupported Filetype (${file.file_type_string})`;
+        errorMsgText.className = 'pswp-error-text';
+        errorMsgEl.appendChild(errorMsgText);
+
+        const renderButton = document.createElement('button');
+        renderButton.setAttribute('mat-raised-button', '');
+        const psdButtonComponent = createComponent(MatButton, {
+          environmentInjector: this.injector,
+          hostElement: renderButton,
+          projectableNodes: [
+            [document.createTextNode('Load render from Hydrus')]
+          ]
+        })
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'pswp-error-text';
+        errorMsgEl.appendChild(buttonContainer);
+        buttonContainer.appendChild(renderButton);
+        this.appRef.attachView(psdButtonComponent.hostView);
+
+        renderButton.addEventListener('click', async (ev) => {
+          psdButtonComponent.setInput('disabled', true);
+          const data = {
+            type: 'image',
+            src: file.render_url,
+            msrc: file.thumbnail_url,
+            width: file.width,
+            height: file.height,
+            file
+          }
+          this.processedFiles.set(file.hash, data);
+          pswp.refreshSlideContent(content.index);
+        })
+
+        this.addPhotopeaButton(file, errorMsgEl);
+
+
       } else if (isContentType(content, 'unsupported')) {
         e.preventDefault();
         content.element = document.createElement('div');
@@ -243,21 +306,11 @@ export class PhotoswipeService {
         errorMsgEl.appendChild(img);
 
         const errorMsgText = document.createElement('div');
-        errorMsgText.innerText = `Unsupported Filetype (${file.mime})`;
+        errorMsgText.innerText = `Unsupported Filetype (${file.file_type_string})`;
         errorMsgText.className = 'pswp-error-text';
         errorMsgEl.appendChild(errorMsgText);
 
-        if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
-          const photopeaButton = document.createElement('a');
-          photopeaButton.innerText = 'Open file in Photopea';
-          photopeaButton.href = getPhotopeaUrlForFile(file);
-          photopeaButton.target = '_blank';
-          photopeaButton.className = 'mat-raised-button mat-button-base';
-          const buttonContainer = document.createElement('div');
-          buttonContainer.className = 'pswp-error-text';
-          errorMsgEl.appendChild(buttonContainer);
-          buttonContainer.appendChild(photopeaButton);
-        }
+        this.addPhotopeaButton(file, errorMsgEl);
 
       }
 
@@ -268,10 +321,11 @@ export class PhotoswipeService {
         const file = content.data.file as HydrusBasicFile;
         const vid = document.createElement('video');
         vid.src = file.file_url;
-        vid.autoplay = true;
+        vid.autoplay = this.settingsService.appSettings.mediaAutoplay;
         vid.controls = !this.platform.FIREFOX;
         vid.poster = file.thumbnail_url;
-        vid.loop = true;
+        vid.loop = this.settingsService.appSettings.mediaLoop;
+        vid.muted = this.settingsService.appSettings.mediaDefaultMuted;
         vid.className = 'pswp-video pswp-media';
         vid.onloadeddata = (e) => {
           content.onLoaded();
@@ -284,8 +338,9 @@ export class PhotoswipeService {
         const file = content.data.file as HydrusBasicFile;
         const audio = document.createElement('audio');
         audio.src = file.file_url;
-        audio.autoplay = true;
-        audio.loop = true;
+        audio.autoplay = this.settingsService.appSettings.mediaAutoplay;
+        audio.loop = this.settingsService.appSettings.mediaLoop;
+        audio.muted = this.settingsService.appSettings.mediaDefaultMuted;
         audio.controls = true;
         audio.className = 'pswp-audio pswp-media';
         audio.onloadeddata = (e) => {
@@ -312,7 +367,7 @@ export class PhotoswipeService {
       errorMsgEl.appendChild(img);
 
       const errorMsgText = document.createElement('div');
-      errorMsgText.innerText = `The file cannot be loaded (${file.mime})`;
+      errorMsgText.innerText = `The file cannot be loaded (${file.file_type_string})`;
       errorMsgText.className = 'pswp-error-text';
       errorMsgEl.appendChild(errorMsgText);
 
@@ -375,8 +430,8 @@ export class PhotoswipeService {
 
   getPhotoSwipeItem(file: HydrusBasicFile): SlideData {
 
-    switch(file.file_type) {
-      case HydrusFileType.Image: {
+    switch(file.file_category) {
+      case FileCategory.Image: {
         return {
           src: file.file_url,
           msrc: file.thumbnail_url,
@@ -385,16 +440,24 @@ export class PhotoswipeService {
           file
         };
       }
-      case HydrusFileType.Video: {
+      case FileCategory.Video: {
         return {
           file,
           type: 'video',
         };
       }
-      case HydrusFileType.Audio: {
+      case FileCategory.Audio: {
         return {
           file,
           type: 'audio'
+        };
+      }
+      case FileCategory.Renderable: {
+        return {
+          file,
+          type: 'renderable',
+          width: file.width,
+          height: file.height
         };
       }
       default: {
@@ -403,6 +466,30 @@ export class PhotoswipeService {
           file
         };
       }
+    }
+  }
+
+  addPhotopeaButton(file: HydrusBasicFile, element: HTMLElement) {
+    if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
+      const photopeaButton = document.createElement('a');
+      photopeaButton.setAttribute('mat-raised-button', '');
+      photopeaButton.target = '_blank';
+      photopeaButton.href = getPhotopeaUrlForFile(file);
+
+      const photopeaButtonComponent = createComponent(MatButton, {
+        environmentInjector: this.injector,
+        hostElement: photopeaButton,
+        projectableNodes: [
+          [document.createTextNode('Open file in Photopea')]
+        ]
+      })
+
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'pswp-error-text';
+      element.appendChild(buttonContainer);
+      buttonContainer.appendChild(photopeaButton);
+
+      this.appRef.attachView(photopeaButtonComponent.hostView);
     }
   }
 

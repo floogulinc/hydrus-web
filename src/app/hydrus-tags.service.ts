@@ -2,15 +2,20 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { HydrusTagSearchTag, TagDisplayType } from './hydrus-tags';
+import { HydrusVersionService } from './hydrus-version.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HydrusTagsService {
 
-  constructor(private api: HydrusApiService) { }
+  constructor(private api: HydrusApiService, private versionService: HydrusVersionService) { }
 
-  searchTags(search: string, tag_display_type: TagDisplayType = 'storage'): Observable<HydrusTagSearchTag[]> {
+  canGetSiblingsParents$ = this.versionService.hydrusVersion$.pipe(
+    map(v => v && v.hydrus_version >= 541),
+  )
+
+  searchTags(search: string, tag_display_type: TagDisplayType = 'storage') {
     return this.api.searchTags({search, tag_display_type}).pipe(map(r => r['tags']));
   }
 
@@ -36,6 +41,20 @@ export class HydrusTagsService {
         }
       }
     )
+  }
+
+  getTagSiblingsAndParentsArray(tag: string, noCache = false) {
+    return this.api.getSiblingsAndParents([tag], noCache).pipe(
+      map(({ services, tags }) => Object.entries(tags[tag]).map(([serviceKey, data]) => {
+        const service = services[serviceKey];
+        return {
+          serviceKey,
+          serviceName: service.name,
+          serviceType: service.type,
+          ...data
+        }
+      }))
+    );
   }
 
 

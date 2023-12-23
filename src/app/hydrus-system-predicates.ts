@@ -1,5 +1,6 @@
 // Some things from https://github.com/hydrusnetwork/hydrus/blob/master/hydrus/external/SystemPredicateParser.py
 
+
 export enum SystemPredicate {
   EVERYTHING = 1,
   INBOX,
@@ -10,11 +11,20 @@ export enum SystemPredicate {
   NOT_BEST_QUALITY_OF_GROUP,
   HAS_AUDIO,
   NO_AUDIO,
+  HAS_TRANSPARENCY,
+  NO_TRANSPARENCY,
+  HAS_EXIF,
+  NO_EXIF,
+  HAS_HUMAN_READABLE_EMBEDDED_METADATA,
+  NO_HUMAN_READABLE_EMBEDDED_METADATA,
   HAS_ICC_PROFILE,
   NO_ICC_PROFILE,
+  HAS_FORCED_FILETYPE,
+  NO_FORCED_FILETYPE,
   HAS_TAGS,
   UNTAGGED,
   NUM_OF_TAGS,
+  NUM_OF_TAGS_WITH_NAMESPACE,
   NUM_OF_WORDS,
   HEIGHT,
   WIDTH,
@@ -52,6 +62,12 @@ export enum SystemPredicate {
   NUM_NOTES,
   HAS_NOTE_NAME,
   NO_NOTE_NAME,
+  RATING_SPECIFIC_NUMERICAL,
+  RATING_SPECIFIC_LIKE_DISLIKE,
+  RATING_SPECIFIC_INCDEC,
+  HAS_RATING,
+  NO_RATING,
+  RATING_GENERAL
 }
 
 
@@ -60,6 +76,10 @@ export enum Operators {
   RELATIONAL = 1,
   /** Like RELATIONAL but without the approximately equal operator */
   RELATIONAL_EXACT,
+  /** One of '=', '<', '>', '\u2248' ('≈') (takes '~=' too), and the various 'since', 'before', 'the day of', 'the month of' time-based analogues */
+  RELATIONAL_TIME,
+  /** RELATIONAL, but in the middle of a 'service_name = 4/5' kind of thing */
+  RELATIONAL_FOR_RATING_SERVICE,
   /** One of '=' or '!=' */
   EQUAL,
   /** One of 'is not currently in', 'is currently in', 'is not pending to', 'is pending to' */
@@ -95,7 +115,18 @@ export enum Value {
   /** An integer */
   INTEGER,
   /** A tuple of 2 ints, both non-negative */
-  RATIO
+  RATIO,
+  /** 1:1 */
+  RATIO_SPECIAL,
+  /** my favourites 3/5 */
+  RATING_SERVICE_NAME_AND_NUMERICAL_VALUE,
+  /** my favourites like */
+  RATING_SERVICE_NAME_AND_LIKE_DISLIKE,
+  /** my favourites 3/5 */
+  RATING_SERVICE_NAME_AND_INCDEC,
+  RATING_SERVICE_GENERIC,
+  SERVICE_NAME,
+  NAMESPACE_AND_NUM_TAGS,
 }
 
 export enum Units {
@@ -123,11 +154,20 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.NOT_BEST_QUALITY_OF_GROUP]: { name: 'is not the best quality file of its duplicate group', operator: null, value: null, units: null },
   [SystemPredicate.HAS_AUDIO]: { name: 'has audio', operator: null, value: null, units: null },
   [SystemPredicate.NO_AUDIO]: { name: 'no audio', operator: null, value: null, units: null },
+  [SystemPredicate.HAS_TRANSPARENCY]: { name: 'has transparency', operator: null, value: null, units: null },
+  [SystemPredicate.NO_TRANSPARENCY]: { name: 'no transparency', operator: null, value: null, units: null },
+  [SystemPredicate.HAS_EXIF]: { name: 'has exif', operator: null, value: null, units: null },
+  [SystemPredicate.NO_EXIF]: { name: 'no exif', operator: null, value: null, units: null },
+  [SystemPredicate.HAS_HUMAN_READABLE_EMBEDDED_METADATA]: { name: 'has embedded metadata', operator: null, value: null, units: null },
+  [SystemPredicate.NO_HUMAN_READABLE_EMBEDDED_METADATA]: { name: 'no embedded metadata', operator: null, value: null, units: null },
   [SystemPredicate.HAS_ICC_PROFILE]: { name: 'has icc profile', operator: null, value: null, units: null },
   [SystemPredicate.NO_ICC_PROFILE]: { name: 'no icc profile', operator: null, value: null, units: null },
+  [SystemPredicate.HAS_FORCED_FILETYPE]: { name: 'has forced filetype', operator: null, value: null, units: null },
+  [SystemPredicate.NO_FORCED_FILETYPE]: { name: 'no forced filetype', operator: null, value: null, units: null },
   [SystemPredicate.HAS_TAGS]: { name: 'has tags', operator: null, value: null, units: null },
   [SystemPredicate.UNTAGGED]: { name: 'untagged', operator: null, value: null, units: null },
   [SystemPredicate.NUM_OF_TAGS]: { name: 'number of tags', operator: Operators.RELATIONAL, value: Value.NATURAL, units: null },
+  [SystemPredicate.NUM_OF_TAGS_WITH_NAMESPACE]: { name: 'number of tags with namespace', operator: null, value: Value.NAMESPACE_AND_NUM_TAGS, units: null },
   [SystemPredicate.NUM_OF_WORDS]: { name: 'number of words', operator: Operators.RELATIONAL, value: Value.NATURAL, units: null },
   [SystemPredicate.HEIGHT]: { name: 'height', operator: Operators.RELATIONAL, value: Value.NATURAL, units: Units.PIXELS_OR_NONE },
   [SystemPredicate.WIDTH]: { name: 'width', operator: Operators.RELATIONAL, value: Value.NATURAL, units: Units.PIXELS_OR_NONE },
@@ -136,12 +176,12 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.LIMIT]: { name: 'limit', operator: Operators.ONLY_EQUAL, value: Value.NATURAL, units: null },
   [SystemPredicate.FILETYPE]: { name: 'filetype', operator: Operators.ONLY_EQUAL, value: Value.FILETYPE_LIST, units: null },
   [SystemPredicate.HASH]: { name: 'hash', operator: Operators.EQUAL, value: Value.HASHLIST_WITH_ALGORITHM, units: null },
-  [SystemPredicate.ARCHIVED_DATE]: { name: 'archived time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
-  [SystemPredicate.MOD_DATE]: { name: 'modified date', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },  // TODO: change to `modified time` when required hydrus version >= 525
-  [SystemPredicate.LAST_VIEWED_TIME]: { name: 'last viewed time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
-  [SystemPredicate.TIME_IMPORTED]: { name: 'import time', operator: Operators.RELATIONAL, value: Value.DATE_OR_TIME_INTERVAL, units: null },
+  [SystemPredicate.ARCHIVED_DATE]: { name: 'archived time', operator: Operators.RELATIONAL_TIME, value: Value.DATE_OR_TIME_INTERVAL, units: null },
+  [SystemPredicate.MOD_DATE]: { name: 'modified date', operator: Operators.RELATIONAL_TIME, value: Value.DATE_OR_TIME_INTERVAL, units: null },  // TODO: change to `modified time` when required hydrus version >= 525
+  [SystemPredicate.LAST_VIEWED_TIME]: { name: 'last viewed time', operator: Operators.RELATIONAL_TIME, value: Value.DATE_OR_TIME_INTERVAL, units: null },
+  [SystemPredicate.TIME_IMPORTED]: { name: 'import time', operator: Operators.RELATIONAL_TIME, value: Value.DATE_OR_TIME_INTERVAL, units: null },
   [SystemPredicate.DURATION]: { name: 'duration', operator: Operators.RELATIONAL, value: Value.TIME_SEC_MSEC, units: null },
-  [SystemPredicate.FILE_SERVICE]: { name: 'file service', operator: Operators.FILESERVICE_STATUS, value: Value.ANY_STRING, units: null },
+  [SystemPredicate.FILE_SERVICE]: { name: 'file service', operator: Operators.FILESERVICE_STATUS, value: Value.SERVICE_NAME, units: null },
   [SystemPredicate.NUM_FILE_RELS]: { name: 'number of file relationships', operator: Operators.RELATIONAL, value: Value.NATURAL, units: Units.FILE_RELATIONSHIP_TYPE },
   [SystemPredicate.RATIO]: { name: 'ratio', operator: Operators.RATIO_OPERATORS, value: Value.RATIO, units: null },
   [SystemPredicate.NUM_PIXELS]: { name: 'num pixels', operator: Operators.RELATIONAL, value: Value.NATURAL, units: Units.PIXELS },
@@ -163,13 +203,21 @@ export const allSystemPredicates: Record<SystemPredicate, Predicate> = {
   [SystemPredicate.HAS_NOTES]: { name: 'has notes', operator: null, value: null, units: null },
   [SystemPredicate.NO_NOTES]: { name: 'no notes', operator: null, value: null, units: null },
   [SystemPredicate.NUM_NOTES]: { name: 'number of notes', operator: Operators.RELATIONAL_EXACT, value: Value.NATURAL, units: null },
-  [SystemPredicate.HAS_NOTE_NAME]: { name: 'has note with name', operator: null, value: Value.ANY_STRING, units: null },
+  [SystemPredicate.HAS_NOTE_NAME]: { name: 'note with name', operator: null, value: Value.ANY_STRING, units: null },
   [SystemPredicate.NO_NOTE_NAME]: { name: 'does not have note with name', operator: null, value: Value.ANY_STRING, units: null },
+  [SystemPredicate.HAS_RATING]: { name: 'has rating for', operator: null, value: Value.SERVICE_NAME, units: null },
+  [SystemPredicate.NO_RATING]: { name: 'no rating for', operator: null, value: Value.SERVICE_NAME, units: null },
+  [SystemPredicate.RATING_SPECIFIC_NUMERICAL]: { name: 'rating for', operator: Operators.RELATIONAL_FOR_RATING_SERVICE, value: Value.RATING_SERVICE_NAME_AND_NUMERICAL_VALUE, units: null },
+  [SystemPredicate.RATING_SPECIFIC_LIKE_DISLIKE]: { name: 'rating for', operator: Operators.RELATIONAL_FOR_RATING_SERVICE, value: Value.RATING_SERVICE_NAME_AND_LIKE_DISLIKE, units: null },
+  [SystemPredicate.RATING_SPECIFIC_INCDEC]: { name: 'rating for', operator: Operators.RELATIONAL_FOR_RATING_SERVICE, value: Value.RATING_SERVICE_NAME_AND_INCDEC, units: null },
+  [SystemPredicate.RATING_GENERAL]: { name: 'rating', operator: Operators.RELATIONAL_FOR_RATING_SERVICE, value: Value.RATING_SERVICE_GENERIC, units: null },
 }
 
 export const operatorOptions: Record<Operators, string[]> = {
   [Operators.RELATIONAL]: ['<', '≈', '=', '≠', '>'],
   [Operators.RELATIONAL_EXACT]: ['<', '=', '>'],
+  [Operators.RELATIONAL_TIME]: ['before', '≈', '=', '≠', 'since'],
+  [Operators.RELATIONAL_FOR_RATING_SERVICE]: ['<', '≈', '=', '>'],
   [Operators.EQUAL]: ['is', 'is not'],
   [Operators.FILESERVICE_STATUS]: [
     'is currently in',
@@ -185,11 +233,13 @@ export const operatorOptions: Record<Operators, string[]> = {
 export const operatorDefaults: Record<Operators, string> = {
   [Operators.RELATIONAL]: '=',
   [Operators.RELATIONAL_EXACT]: '=',
+  [Operators.RELATIONAL_TIME]: '=',
+  [Operators.RELATIONAL_FOR_RATING_SERVICE]: '',
   [Operators.EQUAL]: 'is',
   [Operators.FILESERVICE_STATUS]: 'is currently in',
   [Operators.TAG_RELATIONAL]: '=',
   [Operators.ONLY_EQUAL]: 'is',
-  [Operators.RATIO_OPERATORS]: '='
+  [Operators.RATIO_OPERATORS]: '=',
 }
 
 export const unitsOptions: Record<Units, string[]> = {
@@ -211,7 +261,7 @@ export const unitDefaults: Record<Units, string> = {
   [Units.PIXELS]: 'megapixels',
 }
 
-export const hashAlgorithms = ['sha256', 'md5', 'sha1', 'sha512'];
+export const hashAlgorithms = ['sha256', 'md5', 'sha1', 'sha512']; // DevSkim: ignore DS126858
 
 export const valueLabels: Partial<Record<SystemPredicate, string>> = {
   [SystemPredicate.FILE_SERVICE]: 'File service',
@@ -249,6 +299,23 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
     ]
   },
   {
+    name: 'file properties',
+    predicates: [
+      SystemPredicate.HAS_AUDIO,
+      SystemPredicate.NO_AUDIO,
+      SystemPredicate.HAS_TRANSPARENCY,
+      SystemPredicate.NO_TRANSPARENCY,
+      SystemPredicate.HAS_EXIF,
+      SystemPredicate.NO_EXIF,
+      SystemPredicate.HAS_HUMAN_READABLE_EMBEDDED_METADATA,
+      SystemPredicate.NO_HUMAN_READABLE_EMBEDDED_METADATA,
+      SystemPredicate.HAS_ICC_PROFILE,
+      SystemPredicate.NO_ICC_PROFILE,
+      SystemPredicate.HAS_FORCED_FILETYPE,
+      SystemPredicate.NO_FORCED_FILETYPE
+    ]
+  },
+  {
     name: 'file relationships',
     predicates: [
       SystemPredicate.NOT_BEST_QUALITY_OF_GROUP,
@@ -270,20 +337,6 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
   },
   { predicate: SystemPredicate.FILESIZE },
   { predicate: SystemPredicate.FILETYPE },
-  {
-    name: 'has audio',
-    predicates: [
-      SystemPredicate.HAS_AUDIO,
-      SystemPredicate.NO_AUDIO
-    ]
-  },
-  {
-    name: 'has icc profile',
-    predicates: [
-      SystemPredicate.HAS_ICC_PROFILE,
-      SystemPredicate.NO_ICC_PROFILE
-    ]
-  },
   { predicate: SystemPredicate.HASH },
   {
     name: 'known url',
@@ -314,7 +367,8 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
     predicates: [
       SystemPredicate.HAS_TAGS,
       SystemPredicate.UNTAGGED,
-      SystemPredicate.NUM_OF_TAGS
+      SystemPredicate.NUM_OF_TAGS,
+//      SystemPredicate.NUM_OF_TAGS_WITH_NAMESPACE
     ]
   },
   { predicate: SystemPredicate.NUM_OF_WORDS },
@@ -328,5 +382,31 @@ export const predicateGroups: ({ name: string, predicates: SystemPredicate[] } |
       SystemPredicate.LAST_VIEWED_TIME,
       SystemPredicate.ARCHIVED_DATE
     ]
+  },
+  {
+    name: 'rating',
+    predicates: [
+      SystemPredicate.HAS_RATING,
+      SystemPredicate.NO_RATING,
+      SystemPredicate.RATING_GENERAL
+    ]
   }
 ];
+
+export const ratingOperators: Partial<Record<SystemPredicate, string[]>> = {
+  [SystemPredicate.RATING_SPECIFIC_NUMERICAL]: [
+    'more than',
+    'less than',
+    'is',
+    'is about'
+  ],
+  [SystemPredicate.RATING_SPECIFIC_LIKE_DISLIKE]: [
+    'is'
+  ],
+  [SystemPredicate.RATING_SPECIFIC_INCDEC]: [
+    'more than',
+    'less than',
+    'is',
+    'is about'
+  ]
+}

@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, Observable, tap } from 'rxjs';
 import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
 import { SaucenaoService, SaucenaoResults, SaucenaoUrlorFile } from '../saucenao.service';
+import { ErrorService } from '../error.service';
 
 interface SaucenaoDialogData {
   urlOrFile: SaucenaoUrlorFile;
@@ -22,7 +23,8 @@ export class SaucenaoDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: SaucenaoDialogData,
     public saucenaoService: SaucenaoService,
     private addService: HydrusUrlService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private errorService: ErrorService
   ) { }
 
   onNoClick(): void {
@@ -34,9 +36,7 @@ export class SaucenaoDialogComponent implements OnInit {
 
   saucenaoResults$: Observable<SaucenaoResults[]> = this.saucenaoService.search(this.data.urlOrFile).pipe(
     catchError((err, caught) => {
-      this.snackbar.open('Error: ' + err.message, undefined, {
-        duration: 5000
-      });
+      this.errorService.handleHttpError(err);
       throw err;
     })
   )
@@ -48,9 +48,7 @@ export class SaucenaoDialogComponent implements OnInit {
       });
     }, error => {
       console.log(error);
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
-        duration: 10000
-      });
+      this.errorService.handleHydrusError(error);
     });
   }
 

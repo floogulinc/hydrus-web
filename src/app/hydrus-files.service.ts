@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, HydrusFileType, type } from './hydrus-file';
+import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, FileCategory, generateRatingsArray, getFileCategory } from './hydrus-file';
 import { Observable, of, forkJoin } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
-import { map, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { HydrusServices } from './hydrus-services';
+import { HydrusFiletype, filetypeFromMime, hasThumbnail, isFileHydrusRenderable, mime_string_lookup } from './hydrus-file-mimes';
 
 function chunk<T>(array: T[], size: number): T[][] {
   const chunked = [];
@@ -32,7 +34,7 @@ export class HydrusFilesService {
     return this.allFiles.size;
   }
 
-  private getFileMetadataAPI(fileIds: number[]): Observable<HydrusFileFromAPI[]> {
+  private getFileMetadataAPI(fileIds: number[]) {
     return this.api.getFileMetadata(
       {
         file_ids: fileIds,
@@ -40,12 +42,24 @@ export class HydrusFilesService {
         only_return_basic_information: false,
         detailed_url_information: true,
         include_notes: true,
-        hide_service_names_tags: false,
       }
-    ).pipe(map(val => val.metadata));
+    );
   }
 
-  private getFileMetadataHashAPI(fileHashes: string[]): Observable<HydrusFileFromAPI[]> {
+  // temp for v556 fix
+  private getSemiBasicFileMetadataAPI(fileIds: number[]) {
+    return this.api.getFileMetadata(
+      {
+        file_ids: fileIds,
+        only_return_identifiers: false,
+        only_return_basic_information: false,
+        detailed_url_information: false,
+        include_notes: false,
+      }
+    );
+  }
+
+  private getFileMetadataHashAPI(fileHashes: string[]) {
     return this.api.getFileMetadata(
       {
         hashes: fileHashes,
@@ -53,31 +67,71 @@ export class HydrusFilesService {
         only_return_basic_information: false,
         detailed_url_information: true,
         include_notes: true,
-        hide_service_names_tags: false
       },
       true
-    ).pipe(map(val => val.metadata));
+    );
   }
 
-  private getBasicFileMetadataAPI(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
-    return this.api.getFileMetadata({ file_ids: fileIds, only_return_identifiers: false, only_return_basic_information: true }).pipe(map(val => val.metadata));
+  public getRawFileMetadata(hash: string) {
+    return this.getFileMetadataHashAPI([hash]).pipe(
+      map((value) => value.metadata?.[0])
+    )
   }
 
-  private getBasicFileMetadataHashAPI(fileHashes: string[]): Observable<HydrusBasicFileFromAPI[]> {
-    return this.api.getFileMetadata({ hashes: fileHashes, only_return_identifiers: false, only_return_basic_information: true }).pipe(map(val => val.metadata));
+  private getBasicFileMetadataAPI(fileIds: number[]) {
+    return this.api.getFileMetadata(
+      {
+        file_ids: fileIds,
+        only_return_identifiers: false,
+        only_return_basic_information: true,
+        include_blurhash: true
+      });
   }
 
-  private getFileMetadataAPIChunked(fileIds: number[]): Observable<HydrusBasicFileFromAPI[]> {
-    return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getBasicFileMetadataAPI(ids))).pipe(
+
+  private getBasicFileMetadataHashAPI(fileHashes: string[]) {
+    return this.api.getFileMetadata(
+      {
+        hashes: fileHashes,
+        only_return_identifiers: false,
+        only_return_basic_information: true,
+        include_blurhash: true
+      });
+  }
+
+  private getFileMetadataChunked(fileIds: number[]) {
+    return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getAndProcessFileMetadataChunk(ids))).pipe(
       map(files => files.flat())
     );
   }
 
+  private getAndProcessFileMetadataChunk(fileIds: number[]) {
+    return this.getBasicFileMetadataAPI(fileIds).pipe(
+      // fix for bug in hydrus v556
+      switchMap(v => {
+        if (v.hydrus_version === 556) {
+          const badFileIDs = v.metadata.filter(f => f.filetype_enum === HydrusFiletype.APPLICATION_UNKNOWN).map(f => f.file_id)
+          if (badFileIDs.length > 0) {
+            return this.getSemiBasicFileMetadataAPI(badFileIDs).pipe(
+              map(({metadata, hydrus_version}) => ({
+                metadata: v.metadata.map(f1 => metadata.find(f2 => f2.file_id === f1.file_id) || f1),
+                hydrus_version
+              }))
+            )
+          }
+        }
+        return of(v)
+      }),
+      map(v => v.metadata.map(i => this.processBasicFileFromAPI(i, v.hydrus_version))),
+      tap(v => this.addFilesAndTags(v))
+    )
+  }
+
   private getAndAddMetadata(fileIds: number[]): Observable<HydrusBasicFile[]> {
-    if (fileIds.length === 0) { return of([]); }
-    return this.getFileMetadataAPIChunked(fileIds).pipe(
-      map(v => v.map(i => this.processBasicFileFromAPI(i))),
-      tap(v => this.addFilesAndTags(v)));
+    if (fileIds.length === 0) {
+      return of([]);
+    }
+    return this.getFileMetadataChunked(fileIds);
   }
 
   private addFilesAndTags(files: HydrusBasicFile[]) {
@@ -106,7 +160,23 @@ export class HydrusFilesService {
     );
   }
 
-  private processFileFromAPI(file: HydrusFileFromAPI): HydrusFile {
+  private basicFileExtraInfo(file: HydrusBasicFileFromAPI, hydrusVersion: number) {
+    const file_type = file.filetype_enum ?? filetypeFromMime(file.mime);
+    const file_type_string = file.filetype_human ?? (file_type === HydrusFiletype.APPLICATION_UNKNOWN ? file.mime : mime_string_lookup[file_type]);
+    const renderable = isFileHydrusRenderable(file_type, hydrusVersion);
+
+    return {
+      file_url: this.api.getFileURLFromHash(file.hash),
+      thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
+      file_type,
+      file_category: getFileCategory(file_type, hydrusVersion),
+      file_type_string,
+      has_thumbnail: hasThumbnail(file_type),
+      ...(renderable ? {render_url: this.api.getRenderedURLFromHash(file.hash)} : {})
+    }
+  }
+
+  private processFileFromAPI(file: HydrusFileFromAPI, hydrusVersion?: number, services?: HydrusServices): HydrusFile {
     const importTimes = file.file_services.current
               ? Object.values(file.file_services.current)
                   .filter((x) => !!x.time_imported)
@@ -118,44 +188,53 @@ export class HydrusFilesService {
 
     return {
       ...file,
-      file_url: this.api.getFileURLFromHash(file.hash),
-      thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
-      file_type: type(file.mime),
-      time_imported: firstImportTime
+      ...this.basicFileExtraInfo(file, hydrusVersion),
+      time_imported: firstImportTime,
+      ratings_array: file.ratings ? generateRatingsArray(file.ratings, services) : undefined
     }
   }
 
-  private processBasicFileFromAPI(file: HydrusBasicFileFromAPI): HydrusBasicFile {
+  private processBasicFileFromAPI(file: HydrusBasicFileFromAPI, hydrusVersion: number): HydrusBasicFile {
     return {
       ...file,
-      file_url: this.api.getFileURLFromHash(file.hash),
-      thumbnail_url: this.api.getThumbnailURLFromHash(file.hash),
-      file_type: type(file.mime),
+      ...this.basicFileExtraInfo(file, hydrusVersion)
     }
   }
 
   public getFilesById(fileIds: number[]): Observable<HydrusFile[]> {
-    if (fileIds.length === 0) { return of([]); }
+    if (fileIds.length === 0) {
+      return of([]);
+    }
     return this.getFileMetadataAPI(fileIds).pipe(
-      map(v => v.map(i => this.processFileFromAPI(i))));
+      map(v => v.metadata.map(i => this.processFileFromAPI(i, v.hydrus_version, v.services)))
+    );
   }
 
   public getBasicFilesById(fileIds: number[]): Observable<HydrusBasicFile[]> {
-    if (fileIds.length === 0) { return of([]); }
+    if (fileIds.length === 0) {
+      return of([]);
+    }
     return this.getBasicFileMetadataAPI(fileIds).pipe(
-      map(v => v.map(i => this.processBasicFileFromAPI(i))));
+      map(v => v.metadata.map(i => this.processBasicFileFromAPI(i, v.hydrus_version)))
+    );
   }
 
   public getBasicFilesByHash(fileHashes: string[]): Observable<HydrusBasicFile[]> {
-    if (fileHashes.length === 0) { return of([]); }
+    if (fileHashes.length === 0) {
+      return of([]);
+    }
     return this.getBasicFileMetadataHashAPI(fileHashes).pipe(
-      map(v => v.map(i => this.processBasicFileFromAPI(i))));
+      map(v => v.metadata.map(i => this.processBasicFileFromAPI(i, v.hydrus_version)))
+    );
   }
 
-  public getFilesByHash(fileHashes: string[]) {
-    if (fileHashes.length === 0) { return of([]); }
+  public getFilesByHash(fileHashes: string[]): Observable<HydrusFile[]> {
+    if (fileHashes.length === 0) {
+      return of([]);
+    }
     return this.getFileMetadataHashAPI(fileHashes).pipe(
-      map(v => v.map(i => this.processFileFromAPI(i))));
+      map(v => v.metadata.map(i => this.processFileFromAPI(i, v.hydrus_version, v.services))),
+    );
   }
 
   public getFileById(fileId: number): Observable<HydrusFile> {
@@ -174,21 +253,12 @@ export class HydrusFilesService {
 
   public getFileAsFile(file: HydrusBasicFileFromAPI): Observable<File> {
     return this.api.getFileAsBlob(file.hash).pipe(
-      map(b => new File([b], file.hash + file.ext, {type: this.fixFileType(b.type)}))
+      map(b => new File([b], file.hash + file.ext, {type: b.type}))
     );
   }
 
   public getThumbAsBlob(file: HydrusBasicFileFromAPI): Observable<Blob> {
     return this.api.getThumbAsBlob(file.hash)
-  }
-
-  // Needed until https://github.com/hydrusnetwork/hydrus/issues/646 is merged
-  private fixFileType(type: string) {
-    if (type === 'image/jpg') {
-      return 'image/jpeg';
-    } else {
-      return type;
-    }
   }
 
   public deleteFile(hash: string, reason: string = 'Hydrus Web'){
@@ -206,5 +276,6 @@ export class HydrusFilesService {
   public unarchiveFile(hash: string){
     return this.api.unarchiveFiles({hash});
   }
+
 
 }

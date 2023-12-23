@@ -12,6 +12,7 @@ import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.comp
 import { HydrusApiService } from '../hydrus-api.service';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { SettingsService } from '../settings.service';
+import { ErrorService } from '../error.service';
 
 // eslint-disable-next-line max-len
 const urlRegex: RegExp = /([-a-zA-Z0-9^\p{L}\p{C}\u00a1-\uffff@:%_\+.~#?&//=]{2,256}){1}(\.[a-z]{2,4}){1}(\:[0-9]*)?(\/[-a-zA-Z0-9\u00a1-\uffff\(\)@:%,_\+.~#?&//=]*)?([-a-zA-Z0-9\(\)@:%,_\+.~#?&//=]*)?/;
@@ -35,6 +36,7 @@ export class SendComponent implements OnInit, OnDestroy {
     public apiService: HydrusApiService,
     public fileService: HydrusFilesService,
     public settings: SettingsService,
+    private errorService: ErrorService
   ) { }
 
   sendForm = new FormGroup({
@@ -124,10 +126,7 @@ export class SendComponent implements OnInit, OnDestroy {
         this.resetForm();
       }
     }, error => {
-      console.log(error);
-      this.snackbar.open(`Error: ${error.message}`, undefined, {
-        duration: 10000
-      });
+      this.errorService.handleHydrusError(error);
     });
   }
 
@@ -146,10 +145,7 @@ export class SendComponent implements OnInit, OnDestroy {
       },
       err => {
         this.saucenaoLoading = false;
-        this.snackbar.open('Error: ' + err.message, undefined, {
-          duration: 5000
-        });
-        console.log(err);
+        this.errorService.handleHttpError(err);
       });
     /* const addUrlOptions: AddUrlOptions = {};
     if (this.sendForm.value.destPageName !== '') {

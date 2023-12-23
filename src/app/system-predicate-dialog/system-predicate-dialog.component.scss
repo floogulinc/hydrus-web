@@ -1,13 +1,13 @@
-@use '../../variables' as *;
+//@use '../../variables' as *;
 //@use '@angular/material/core/typography/typography-utils';
 //@use 'sass:math';
 
-.form-section + .form-section {
-  //margin-left: 8px;
-}
-.form-section > * + * {
-  //margin-left: 8px;
-}
+// .form-section + .form-section {
+//   //margin-left: 8px;
+// }
+// .form-section > * + * {
+//   //margin-left: 8px;
+// }
 
 .form-section {
   display: flex;

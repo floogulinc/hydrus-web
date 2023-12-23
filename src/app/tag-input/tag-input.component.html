@@ -2,10 +2,16 @@
   <mat-label>{{placeholder}}</mat-label>
     <mat-chip-list #chipList [attr.aria-label]="placeholder">
       <ng-template ngFor let-tag [ngForOf]="searchTags" let-i="index" >
-        <mat-chip *ngIf="tag | isString; else arrayTag" [selectable]="false" color="primary"
-                  class="tag-chip"
-                [removable]="true" (removed)="removeSearchTag(i)"
-                [ngClass]="$any(tag) | tagClass">
+        <mat-chip
+          *ngIf="tag | isString; else arrayTag"
+          [selectable]="false" color="primary"
+          class="tag-chip"
+          [removable]="true"
+          (removed)="removeSearchTag(i)"
+          [ngClass]="$any(tag) | tagClass"
+          [matMenuTriggerFor]="tagMenu"
+          [matMenuTriggerData]="{tag}"
+        >
           <div class="tag-chip-text">{{tag}}</div>
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
@@ -89,3 +95,17 @@
       </ng-template>
     </mat-menu>
 </mat-form-field>
+
+
+<mat-menu #tagMenu="matMenu">
+  <ng-template matMenuContent let-tag="tag">
+    <button mat-menu-item [cdkCopyToClipboard]="tag">
+      <mat-icon>content_copy</mat-icon>
+      <span>Copy tag</span>
+    </button>
+    <button mat-menu-item (click)="tagSiblingsParentsDialog(tag)" *ngIf="enableSiblingParentsDialog && (canGetSiblingsParents$ | async) && !(tag | isSystemPredicate)">
+      <mat-icon svgIcon="graph"></mat-icon>
+      <span>View Siblings and Parents</span>
+    </button>
+  </ng-template>
+</mat-menu>

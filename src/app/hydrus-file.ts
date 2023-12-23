@@ -1,6 +1,8 @@
-import { HydrusNotes } from "./hydrus-notes";
-import { HydrusServiceType, service_string_lookup } from "./hydrus-services";
-import { HydrusURLInfo } from "./hydrus-url";
+import { HydrusNotes } from './hydrus-notes';
+import { HydrusURLInfo } from './hydrus-url';
+import { HydrusFiletype, isFileHydrusRenderable } from './hydrus-file-mimes'
+import { HydrusIncDecRatingValue, HydrusLikeRatingValue, HydrusNumericalRatingValue, HydrusRating, isIncDecRatingService, isLikeRatingService, isNumericalRatingService } from './hydrus-rating';
+import { HydrusServiceType, HydrusServices } from './hydrus-services';
 
 export interface ServiceNamesToStatusesToTags {
   [service: string]: StatusesToTags;
@@ -47,6 +49,11 @@ export interface HydrusBasicFileFromAPI {
   has_audio: boolean;
   num_frames?: number;
   num_words?: number;
+
+  // TODO: make non-optional when v540 is minimum
+  filetype_human?: string; // added in v540
+  filetype_enum?: HydrusFiletype; //added in v540
+  blurhash?: string; // added in v545
 }
 
 export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
@@ -56,8 +63,8 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
     deleted?: FileFileServices;
   };
   time_modified: number;
-  service_names_to_statuses_to_tags?: ServiceNamesToStatusesToTags;
-  service_names_to_statuses_to_display_tags?: ServiceNamesToStatusesToTags;
+  service_names_to_statuses_to_tags?: ServiceNamesToStatusesToTags; // removed in v514
+  service_names_to_statuses_to_display_tags?: ServiceNamesToStatusesToTags; // removed in v514
   service_keys_to_statuses_to_tags?: ServiceNamesToStatusesToTags;
   service_keys_to_statuses_to_display_tags?: ServiceNamesToStatusesToTags;
   is_inbox: boolean;
@@ -66,6 +73,8 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
 
   notes?: HydrusNotes;
 
+  // added in v506
+  // all known tags added in v507
   tags: {
     [serviceKey: string]: HydrusTagService
   }
@@ -73,27 +82,78 @@ export interface HydrusFileFromAPI extends HydrusBasicFileFromAPI {
   detailed_known_urls?: HydrusURLInfo[];
 
   ipfs_multihashes?: Record<string, string>;
+
+  ratings?: RatingsFromAPI;
+
+  has_exif?: boolean; // added in v506
+  has_human_readable_embedded_metadata?: boolean; // added in v506
+  has_icc_profile?: boolean; // added in v506
+  has_transparency?: boolean; // added in v552
+
+  thumbnail_width?: number; // added in v506
+  thumbnail_height?: number; // added in v506
+
+  time_modified_details?: Record<string, number>; // added in v506
+
+  is_deleted?: boolean; // added in v506
 }
+
+
+interface RatingsFromAPI {
+  [service_key: string]: boolean | number | null;
+}
+
+export function generateRatingsArray(ratings: RatingsFromAPI, services: HydrusServices) {
+  return Object.entries(ratings).map(([service_key, value]) => {
+    const service = {service_key, ...services[service_key]}
+    if (isNumericalRatingService(service)) {
+      return {
+        ...service,
+        value: value as HydrusNumericalRatingValue
+      }
+    } else if (isLikeRatingService(service)) {
+      return {
+        ...service,
+        value: value as HydrusLikeRatingValue
+      }
+    } else if (isIncDecRatingService(service)) {
+      return {
+        ...service,
+        value: value as HydrusIncDecRatingValue
+      }
+    } else {
+      return null;
+    }
+  })
+}
+
 
 export interface HydrusFile extends HydrusFileFromAPI, HydrusBasicFile {
   time_imported?: Date;
+  ratings_array?: HydrusRating[]
 }
+
 
 export interface HydrusBasicFile extends HydrusBasicFileFromAPI {
   file_url: string;
   thumbnail_url: string;
-  file_type: HydrusFileType;
+  file_category: FileCategory;
+  file_type: HydrusFiletype;
+  file_type_string: string;
+  has_thumbnail: boolean;
+  render_url?: string;
 }
 
 export interface HydrusFileList {
     [fileId: number]: HydrusFile;
 }
 
-export enum HydrusFileType {
+export enum FileCategory {
   Image,
   Video,
   Audio,
   Flash,
+  Renderable,
   Unsupported
 }
 
@@ -104,39 +164,49 @@ export enum TagStatus {
   Petitioned = 3,
 }
 
-export function type(mime: string): HydrusFileType {
+export function getFileCategory(type: HydrusFiletype, hydrusVersion?: number): FileCategory {
   if ([
-    'image/jpeg',
-    'image/jpg',
-    'image/png',
-    'image/apng',
-    'image/gif',
-    'image/bmp',
-    'image/webp'
-  ].includes(mime)) {
-    return HydrusFileType.Image;
+    HydrusFiletype.IMAGE_JPEG,
+    HydrusFiletype.IMAGE_PNG,
+    HydrusFiletype.ANIMATION_APNG,
+    HydrusFiletype.IMAGE_GIF,
+    HydrusFiletype.ANIMATION_GIF,
+    HydrusFiletype.IMAGE_BMP,
+    HydrusFiletype.IMAGE_WEBP,
+    HydrusFiletype.IMAGE_SVG,
+    HydrusFiletype.IMAGE_HEIF,
+    HydrusFiletype.IMAGE_HEIF_SEQUENCE,
+    HydrusFiletype.IMAGE_HEIC,
+    HydrusFiletype.IMAGE_HEIC_SEQUENCE,
+    HydrusFiletype.IMAGE_AVIF,
+    HydrusFiletype.IMAGE_AVIF_SEQUENCE,
+  ].includes(type)) {
+    return FileCategory.Image;
   }
   if ([
-    'video/mp4',
-    'video/webm',
-    'video/x-matroska',
-    'video/quicktime',
-  ].includes(mime)) {
-    return HydrusFileType.Video;
+    HydrusFiletype.VIDEO_MP4,
+    HydrusFiletype.VIDEO_WEBM,
+    HydrusFiletype.VIDEO_MKV,
+    HydrusFiletype.VIDEO_MOV,
+  ].includes(type)) {
+    return FileCategory.Video;
   }
   if ([
-    'audio/mp3',
-    'audio/ogg',
-    'audio/flac',
-    'audio/x-wav',
-  ].includes(mime)) {
-    return HydrusFileType.Audio;
+    HydrusFiletype.AUDIO_MP3,
+    HydrusFiletype.AUDIO_OGG,
+    HydrusFiletype.AUDIO_FLAC,
+    HydrusFiletype.AUDIO_WAVE,
+  ].includes(type)) {
+    return FileCategory.Audio;
   }
   if ([
-    'video/x-flv',
-    'application/x-shockwave-flash'
-  ].includes(mime)) {
-    return HydrusFileType.Flash;
+    HydrusFiletype.APPLICATION_FLASH,
+    HydrusFiletype.VIDEO_FLV
+  ].includes(type)) {
+    return FileCategory.Flash;
   }
-  return HydrusFileType.Unsupported;
+  if(isFileHydrusRenderable(type, hydrusVersion)) {
+    return FileCategory.Renderable;
+  }
+  return FileCategory.Unsupported;
 }
