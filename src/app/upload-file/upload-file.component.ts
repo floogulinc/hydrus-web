@@ -56,7 +56,6 @@ export class UploadFileComponent implements OnInit {
   readonly totalBytes$ = this.state.select('totalBytes')
 
   onSubmit() {
-    console.log(this.uploadForm.value);
     this.handleUpload();
   }
 
@@ -68,7 +67,6 @@ export class UploadFileComponent implements OnInit {
         try {
           this.state.set({filename: file.name})
           const response = await lastValueFrom(this.uploadService.addFile(file).pipe(
-            tap(x => console.log(x)),
             tap(event => {
               if (event.type === HttpEventType.UploadProgress) {
 
