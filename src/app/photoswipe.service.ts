@@ -52,6 +52,7 @@ export class PhotoswipeService {
       maxZoomLevel: 2,
       //tapAction: null,
       errorMsg: 'The file cannot be loaded',
+      trapFocus: false
     }
 
     const pswp = new PhotoSwipe(options);
@@ -128,10 +129,6 @@ export class PhotoswipeService {
         e.preventDefault();
       }
     });
-
-    // disable focus trap
-    // @ts-ignore
-    pswp.keyboard._onFocusIn = (e) => {};
 
     pswp.on('uiRegister', () => {
       pswp.ui.registerElement({
