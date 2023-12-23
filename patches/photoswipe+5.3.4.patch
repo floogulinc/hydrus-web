@@ -1,5 +1,5 @@
 diff --git a/node_modules/photoswipe/dist/photoswipe.esm.js b/node_modules/photoswipe/dist/photoswipe.esm.js
-index 35d3c3f..330a4d5 100644
+index 28c6d94..309e9d8 100644
 --- a/node_modules/photoswipe/dist/photoswipe.esm.js
 +++ b/node_modules/photoswipe/dist/photoswipe.esm.js
 @@ -2057,12 +2057,14 @@ class Gestures {
