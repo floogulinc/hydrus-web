@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { searchFiletypes } from '../hydrus-file-mimes';
 import { allSystemPredicates, hashAlgorithms, operatorDefaults, operatorOptions, Operators, Predicate, SystemPredicate, unitDefaults, Units, unitsOptions, Value, valueLabels } from '../hydrus-system-predicates';
 import { HydrusServicesService } from '../hydrus-services.service';

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HydrusService } from '../hydrus-services';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
 import { HydrusServicesService } from '../hydrus-services.service';
 import { Observable, config, filter, map, of, shareReplay, take, tap } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';

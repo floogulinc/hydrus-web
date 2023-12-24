@@ -1,14 +1,14 @@
 import { HydrusFilesService } from './../hydrus-files.service';
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { MatChipInputEvent } from '@angular/material/chips';
+import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
-import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent, MatLegacyAutocomplete as MatAutocomplete } from '@angular/material/legacy-autocomplete';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType } from '../hydrus-tags';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
@@ -17,7 +17,7 @@ import { SystemPredicateRatingsDialogComponent } from '../system-predicate-ratin
 import { HydrusService } from '../hydrus-services';
 import { searchTagsContainsSystemPredicate } from '../utils/tag-utils';
 import { HydrusRatingsService } from '../hydrus-ratings.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {

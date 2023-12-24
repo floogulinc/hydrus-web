@@ -4,7 +4,7 @@ import { firstValueFrom, map } from 'rxjs';
 import { isRatingService } from './hydrus-rating';
 import { ServiceSelectDialogComponent } from './service-select-dialog/service-select-dialog.component';
 import { HydrusServicesService } from './hydrus-services.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 @Injectable({
   providedIn: 'root'

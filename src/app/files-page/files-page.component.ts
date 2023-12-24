@@ -5,7 +5,7 @@ import { Subscription, Observable, Subject, switchMap, map, tap } from 'rxjs';
 import { AppComponent } from '../app.component';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { PagesComponent } from '../pages/pages.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { HydrusVersionService } from '../hydrus-version.service';
 import { ErrorService } from '../error.service';
 

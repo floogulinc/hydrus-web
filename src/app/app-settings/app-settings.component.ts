@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { map } from 'rxjs';
 import { HydrusApiSettingsService } from '../hydrus-api-settings.service';
 import { getLocalTagServices } from '../hydrus-services';

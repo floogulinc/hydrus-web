@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { MatSidenavContent } from '@angular/material/sidenav';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';

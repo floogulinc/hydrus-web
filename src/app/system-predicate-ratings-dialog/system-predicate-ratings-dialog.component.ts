@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HydrusServicesService } from '../hydrus-services.service';
 import { map, shareReplay } from 'rxjs';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { isNumericalRatingService, isLikeRatingService, isIncDecRatingService, HydrusRatingValue, ratingsServiceToRatingPredicate, HydrusNumericalRatingValue, HydrusIncDecRatingValue, HydrusLikeRatingValue } from '../hydrus-rating';
 import { HydrusService } from '../hydrus-services';
