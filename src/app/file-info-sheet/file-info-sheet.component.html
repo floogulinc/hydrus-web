@@ -1,4 +1,4 @@
-<div fxLayout="row" fxLayoutAlign="space-between center" class="title-row">
+<div class="title-row">
   <h2 mat-dialog-title class="sheet-title">File Info</h2>
   <div *ngIf="data.file as file">
     <button mat-icon-button *ngIf="ipfsUrl$ | async as ipfsUrl" [cdkCopyToClipboard]="ipfsUrl" matTooltip="Copy IPFS URL" aria-label="Copy IPFS URL">

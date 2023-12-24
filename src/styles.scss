@@ -276,6 +276,25 @@ body {
   max-width: 100%;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.fxFlex {
+  flex: 1 1 0%;
+}
+
+.button-row {
+  flex-flow: row wrap;
+  display: flex;
+  place-content: stretch flex-end;
+  align-items: stretch;
+  gap: 8px;
+}
 
 .pages-tab-group {
   .mat-tab-label {

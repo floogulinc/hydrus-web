@@ -9,8 +9,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 import {NgxLocalStorageModule} from 'ngx-localstorage';
 
-import { FlexLayoutModule } from '@angular/flex-layout';
-
 import { FormsModule } from '@angular/forms';
 
 import { BrowseComponent } from './browse/browse.component';
@@ -175,7 +173,6 @@ const MAT_MODULES = [
         AppRoutingModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
         HttpClientModule,
-        FlexLayoutModule,
         FormsModule,
         PortalModule,
         ScrollingModule,
