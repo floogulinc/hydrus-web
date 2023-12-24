@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{this.data.title}}</h1>
 <form [formGroup]="serviceForm" (ngSubmit)="submitForm()" autocomplete="off">
 <div mat-dialog-content>
-  <div fxLayout="column">
+  <div class="flex-column">
     <mat-form-field appearance="outline" hideRequiredMarker>
       <mat-label>Service</mat-label>
       <mat-select formControlName="service" [compareWith]="serviceCompare">

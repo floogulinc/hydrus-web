@@ -40,6 +40,12 @@
   h3 {
     margin-bottom: 0;
   }
+
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  place-content: center space-between;
+  align-items: center;
 }
 .mat-action-row {
   margin-top: 8px;

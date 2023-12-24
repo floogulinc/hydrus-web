@@ -137,7 +137,7 @@
   </mat-accordion>
 
   <div class="notes-section" *ngIf="file.notesMapArray">
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
+    <div class="sec-header">
       <h3 class="mat-subheading-2">Notes</h3>
       <button mat-icon-button (click)="addNoteDialog()" matTooltip="Add note"><mat-icon>note_add</mat-icon></button>
     </div>
@@ -160,7 +160,7 @@
 
 
   <div *ngIf="file.displayTags" class="tags-section">
-    <div fxLayout="row" fxLayoutAlign="space-between center" class="sec-header">
+    <div class="sec-header">
       <h3 class="mat-subheading-2">Tags</h3>
       <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
     </div>

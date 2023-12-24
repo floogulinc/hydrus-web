@@ -1,7 +1,7 @@
 
-<div fxLayout="column">
+<div class="flex-column">
   <h2 class="mat-display-1">Upload to Hydrus</h2>
-  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" fxLayout="column">
+  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" class="flex-column">
 
 
       <ngx-file-drag-drop class="file-drag-drop" #fileInput formControlName="fileInput" [multiple]="true"></ngx-file-drag-drop>
@@ -12,13 +12,13 @@
 
     <mat-checkbox formControlName="addFilenameTag">Add filename tag (new files only)</mat-checkbox>
 
-    <div fxLayout="row" fxLayoutAlign="end">
+    <div class="button-row">
       <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="uploadForm.invalid || uploading$ | push">Upload</button>
     </div>
   </form>
 
   <div *rxIf="uploading$" class="upload-status">
-    <div fxLayout='row wrap' fxLayoutAlign="space-between none">
+    <div class="upload-progress-bar-container">
       <div class="filename-text"><span>Uploading {{uploadFilename$ | push}}</span></div>
       <div><span>{{percentUploaded$ | push | round}}%</span><span *rxIf="totalBytes$"> ({{upBytes$ | push | byteSize}}/{{totalBytes$ | push | byteSize}})</span></div>
     </div>

@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{data.url ? 'Edit' : 'Add'}} URL</h1>
 <form [formGroup]="urlForm" (ngSubmit)="submitUrl()" autocomplete="off">
   <div mat-dialog-content>
-    <div fxLayout="column">
+    <div class="flex-column">
       <mat-form-field appearance="fill">
         <mat-label>URL</mat-label>
         <input matInput formControlName="url" type="url">
