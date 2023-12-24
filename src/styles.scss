@@ -142,7 +142,7 @@
   }
 }
 
-@include mat.core-theme($light-theme);
+//@include mat.core-theme($light-theme);
 @include mat.all-legacy-component-themes($light-theme);
 
 @include app-theming($light-theme);
@@ -157,9 +157,12 @@ body {
 }
 
 @media (prefers-color-scheme: dark) {
-  @include mat.all-legacy-component-themes($dark-theme);
+  @include mat.all-legacy-component-colors($dark-theme);
   @include app-theming($dark-theme);
 }
+
+// Possibly remove later when switched from legacy
+@include mat.typography-hierarchy($typography-config);
 
 .main-content {
   margin: auto;
