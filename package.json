@@ -30,7 +30,7 @@
     "@floogulinc/ngx-virtual-scroller": "16.0.0",
     "@fontsource/roboto": "^4.5.8",
     "@material/image-list": "^15.0.0-canary.8656bf0e0.0",
-    "@ngneat/until-destroy": "^9.2.2",
+    "@ngneat/until-destroy": "^10.0.0",
     "@rx-angular/cdk": "^16.0.0",
     "@rx-angular/state": "^16.3.0",
     "@rx-angular/template": "^16.1.1",
