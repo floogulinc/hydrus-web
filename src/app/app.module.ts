@@ -1,3 +1,6 @@
+import { RxIf } from "@rx-angular/template/if";
+import { RxPush } from "@rx-angular/template/push";
+import { RxLet } from "@rx-angular/template/let";
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -51,9 +54,6 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LetModule } from '@rx-angular/template/let';
-import { PushModule } from '@rx-angular/template/push';
-import { IfModule } from '@rx-angular/template/if'
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
 import { NgPipesModule } from 'ngx-pipes';
 import { BarRatingModule } from 'ngx-bar-rating';
@@ -185,9 +185,9 @@ const MAT_MODULES = [
         VirtualScrollerModule,
         NgPipesModule,
         ClipboardModule,
-        LetModule,
-        PushModule,
-        IfModule,
+        RxLet,
+        RxPush,
+        RxIf,
         BarRatingModule,
         NgxJsonViewerModule,
         NgxFileDragDropModule
