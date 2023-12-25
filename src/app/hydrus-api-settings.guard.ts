@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class HydrusApiSettingsGuard implements CanActivate {
+export class HydrusApiSettingsGuard  {
   constructor(private apiSettings: HydrusApiSettingsService, private router: Router) {
 
   }
