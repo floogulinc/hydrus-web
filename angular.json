@@ -80,10 +80,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "hydrus-web:build:production"
+              "buildTarget": "hydrus-web:build:production"
             },
             "development": {
-              "browserTarget": "hydrus-web:build:development"
+              "buildTarget": "hydrus-web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -91,7 +91,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "hydrus-web:build"
+            "buildTarget": "hydrus-web:build"
           }
         },
         "test": {
