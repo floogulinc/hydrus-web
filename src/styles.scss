@@ -101,6 +101,8 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
+@include mat.legacy-core();
+
 //setting up for future theme options
 @mixin app-theming($theme) {
   // Extract the palettes you need from the theme definition.
@@ -142,6 +144,9 @@
   }
 }
 
+
+@include mat.all-legacy-component-typographies();
+
 //@include mat.core-theme($light-theme);
 @include mat.all-legacy-component-themes($light-theme);
 
@@ -161,8 +166,6 @@ body {
   @include app-theming($dark-theme);
 }
 
-// Possibly remove later when switched from legacy
-@include mat.typography-hierarchy($typography-config);
 
 .main-content {
   margin: auto;
