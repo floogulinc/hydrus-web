@@ -359,3 +359,11 @@ mat-icon.mat-card-avatar {
   //--ngx-json-font-family : font-family
   //--ngx-json-font-family : font-size
 }
+
+
+// Various Material Design overrides
+
+.mat-chip {
+  // restore old font size
+  font-size: 14px;
+}

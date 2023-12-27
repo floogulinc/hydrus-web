@@ -12,7 +12,7 @@ import { defaultAscending, defaultSortType, displaySortGroups, getSortOrderInfo,
   styleUrls: ['./sort-input.component.scss'],
   providers: [provideValueAccessor(SortInputComponent)],
 })
-export class SortInputComponent extends WrappedControlSuperclass<SortInfo> implements OnInit {
+export class SortInputComponent extends WrappedControlSuperclass<SortInfo, Partial<SortInfo>> implements OnInit {
 
   /* constructor() {
     super();
@@ -28,8 +28,8 @@ export class SortInputComponent extends WrappedControlSuperclass<SortInfo> imple
   isDisplaySortType = isDisplaySortType;
 
   control = new FormGroup({
-    sortType: new FormControl(defaultSortType),
-    sortAsc: new FormControl(defaultAscending),
+    sortType: new FormControl(defaultSortType, {nonNullable: true}),
+    sortAsc: new FormControl(defaultAscending, {nonNullable: true}),
   });
 
   sortOrderInfo$ = this.control.get('sortType').valueChanges.pipe(
