@@ -1,4 +1,3 @@
-import { environment } from 'src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { HydrusFilesService } from '../hydrus-files.service';
@@ -7,6 +6,7 @@ import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { MrBonesDialogComponent } from '../mr-bones-dialog/mr-bones-dialog.component';
 import { HydrusVersionService } from '../hydrus-version.service';
 import { ServicesInfoDialogComponent } from '../services-info-dialog/services-info-dialog.component';
+import { env } from '../env';
 
 @Component({
   selector: 'app-about',
@@ -24,15 +24,15 @@ export class AboutComponent implements OnInit {
 
   public doc = document;
 
-  public env = environment;
+  public env = env;
 
   public repoURL = 'https://github.com/floogulinc/hydrus-web';
 
   public navigator = navigator;
   public window = window;
 
-  public storageQuota: StorageEstimate;
-  public storagePersisted: boolean;
+  public storageQuota?: StorageEstimate;
+  public storagePersisted?: boolean;
 
   ngOnInit() {
     if (navigator.storage) {

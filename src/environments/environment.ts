@@ -6,9 +6,8 @@ export const environment = {
   production: false,
   localStoragePrefix: 'hydrus-web-1',
   versionInfo: {
-    vercel: null,
+    vercel: undefined,
     version: '0.0.0',
-    tag: 'v0.0.0',
     branch: 'dev-local',
     hash: 'devhash'
   }

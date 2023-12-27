@@ -19,28 +19,28 @@ export function getNamespaceNoSpace(tag: string): string {
   return tag.split(':')[0].replace(/\s+/g, '-').toLowerCase();
 }
 
-export function tagsObjectFromFile(file: HydrusFile): ServiceNamesToStatusesToTags {
-  return file.service_names_to_statuses_to_display_tags ?? file.service_names_to_statuses_to_tags;
+export function legacyTagsObjectFromFile(file: HydrusFile): ServiceNamesToStatusesToTags {
+  return file.service_names_to_statuses_to_display_tags ?? file.service_names_to_statuses_to_tags ?? {};
 }
 
 
-export function allTagsFromFile(file: HydrusFile): string[] {
-  return this.allKnownTags(this.tagsObjectFromFile(file));
-}
+// export function legacyAllTagsFromFile(file: HydrusFile): string[] {
+//   return legacyAllKnownTags(legacyTagsObjectFromFile(file));
+// }
 
-function allKnownTags(serviceNamesTostatusesToTags: ServiceNamesToStatusesToTags) {
-  if (serviceNamesTostatusesToTags
-    && 'all known tags' in serviceNamesTostatusesToTags
-    && '0' in serviceNamesTostatusesToTags['all known tags']) {
-    return serviceNamesTostatusesToTags['all known tags']['0'];
-  } else {
-    return [];
-  }
-}
+// function legacyAllKnownTags(serviceNamesTostatusesToTags: ServiceNamesToStatusesToTags) {
+//   if (serviceNamesTostatusesToTags
+//     && 'all known tags' in serviceNamesTostatusesToTags
+//     && '0' in serviceNamesTostatusesToTags['all known tags']) {
+//     return serviceNamesTostatusesToTags['all known tags']['0'];
+//   } else {
+//     return [];
+//   }
+// }
 
-export function namespaceTagFromFile(file: HydrusFile, namespace: string): string {
-  return allTagsFromFile(file).find(a => getNamespace(a) === namespace);
-}
+// export function legacyNamespaceTagFromFile(file: HydrusFile, namespace: string): string | undefined {
+//   return legacyAllTagsFromFile(file).find(a => getNamespace(a) === namespace);
+// }
 
 export function getTagValue(tag: string) {
   if (!tag) {
@@ -94,6 +94,6 @@ export function searchTagsContainsSystemPredicate(searchTags: HydrusSearchTag) {
   if (typeof searchTags === 'string') {
     return isSystemPredicate(searchTags);
   } else {
-    return searchTags.find(searchTagsContainsSystemPredicate);
+    return searchTags.findIndex(searchTagsContainsSystemPredicate) >= 0;
   }
 }

@@ -35,8 +35,19 @@ export class ErrorService {
     });
   }
 
-  handleError(error: Error, message?: string) {
-    return this.displayError(error, message);
+  displayUnknownError(error: unknown, message = 'Error', customText?: string) {
+    console.error(error);
+    this.snackbar.open(`${message}: ${customText ?? 'Unknown, check the console!'}`, undefined, {
+      duration: 5000
+    });
+  }
+
+  handleError(error: Error | unknown, message?: string) {
+    if(error instanceof Error) {
+      return this.displayError(error, message);
+    } else {
+      return this.displayUnknownError(error, message);
+    }
   }
 
   handleHttpError(error: HttpErrorResponse, message?: string) {
@@ -53,7 +64,7 @@ export class ErrorService {
     }
   }
 
-  handleHydrusError(error: HttpErrorResponse | Error, message = 'Error') {
+  handleHydrusError(error: HttpErrorResponse | Error | unknown, message = 'Error') {
     if(!(error instanceof HttpErrorResponse)) {
       return this.handleError(error);
     } else {

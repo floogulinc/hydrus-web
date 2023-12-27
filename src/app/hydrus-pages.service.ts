@@ -12,7 +12,7 @@ export class HydrusPagesService {
   constructor(private api: HydrusApiService) { }
 
   getAllPages(): Observable<HydrusPageListItem[]> {
-    return this.api.getPages().pipe(map(val => val['pages']['pages']));
+    return this.api.getPages().pipe(map(val => val.pages.pages ?? []));
   }
 
   getPage(pageKey: string): Observable<HydrusPage> {

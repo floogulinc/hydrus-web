@@ -138,9 +138,9 @@ export enum Units {
 
 export interface Predicate {
   name: string,
-  operator: Operators,
-  value: Value,
-  units: Units
+  operator: Operators | null,
+  value: Value | null,
+  units: Units | null
 }
 
 // All system predicates

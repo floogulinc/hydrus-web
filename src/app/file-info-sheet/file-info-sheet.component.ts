@@ -3,7 +3,7 @@ import { HydrusBasicFile, HydrusFile, FileCategory, HydrusTagServiceType } from 
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
-import { tagsObjectFromFile } from '../utils/tag-utils';
+import { legacyTagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
 import { BehaviorSubject, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
 import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
@@ -121,7 +121,7 @@ export class FileInfoSheetComponent {
       }
     } else {
       return {
-        displayTags: Object.entries(tagsObjectFromFile(file))
+        displayTags: Object.entries(legacyTagsObjectFromFile(file))
           .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
           .map(([serviceName, statuses]) => ({ serviceName, tags: statuses[0] }))
       }

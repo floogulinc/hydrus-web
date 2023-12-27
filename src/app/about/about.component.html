@@ -77,14 +77,14 @@
     <mat-list-item role="listitem" *ngIf="navigator.storage">
       <div mat-line>Storage</div>
       <div mat-line>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
-      <div mat-line *ngIf="storageQuota">{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
+      <div mat-line *ngIf="storageQuota && storageQuota.usage !== undefined && storageQuota.quota !== undefined">{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
     </mat-list-item>
     <mat-list-item role="listitem">
       <div mat-line>Viewport Info</div>
       <div mat-line>Page Size: {{window.innerWidth}}x{{window.innerHeight}}</div>
       <div mat-line>Screen Resolution: {{window.screen.width * window.devicePixelRatio}} x {{window.screen.height * window.devicePixelRatio}}</div>
       <div mat-line>Pixel Ratio: {{window.devicePixelRatio}}</div>
-      <div mat-line>Orientation: {{window.screen?.orientation?.type}}</div>
+      <div mat-line>Orientation: {{window.screen.orientation.type}}</div>
     </mat-list-item>
   </mat-nav-list>
 </div>

@@ -12,10 +12,10 @@ import { RxState } from '@rx-angular/state';
 
 interface UploadStatus {
   uploading: boolean;
-  filename: string;
+  filename: string | null;
   percent: number;
-  upBytes: number;
-  totalBytes: number;
+  upBytes: number | null;
+  totalBytes: number | null;
 }
 
 @Component({
@@ -40,7 +40,7 @@ export class UploadFileComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  @ViewChild('fileInput') fileInput: NgxFileDragDropComponent;
+  @ViewChild('fileInput') fileInput!: NgxFileDragDropComponent;
 
   uploadForm = new FormGroup({
     fileInput: new FormControl<File[]>([], [
@@ -76,6 +76,9 @@ export class UploadFileComponent implements OnInit {
             })
           ))
           if(response.type === HttpEventType.Response) {
+            if(!response.body) {
+              throw Error('There was no response body!')
+            }
             if(response.body.status === HydrusAddFileStatus.STATUS_SUCCESSFUL_AND_NEW && this.uploadForm.value.addFilenameTag) {
               await lastValueFrom(this.tagsService.addTagsToService(
                 response.body.hash,
@@ -83,7 +86,7 @@ export class UploadFileComponent implements OnInit {
                 this.settings.appSettings.uploadFilenameTagService
               ));
             }
-            const message = response.body.status === HydrusAddFileStatus.STATUS_SUCCESSFUL_AND_NEW ? 'File Uploaded' : response.body.note;
+            const message = response.body.status === HydrusAddFileStatus.STATUS_SUCCESSFUL_AND_NEW ? 'File Uploaded' : response.body?.note;
             this.snackbar.open(message, undefined, {
               duration: 5000
             });
