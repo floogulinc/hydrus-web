@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/
 import { FormGroup, FormControl } from '@angular/forms';
 import { HydrusAddFileStatus, HydrusUploadService } from '../hydrus-upload.service';
 import { tap, lastValueFrom } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { HttpEventType } from '@angular/common/http';
 import { SettingsService } from '../settings.service';
 import { HydrusTagsService } from '../hydrus-tags.service';

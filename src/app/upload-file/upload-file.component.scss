@@ -20,3 +20,11 @@
   text-wrap: nowrap;
   overflow: hidden;
 }
+
+.upload-progress-bar-container{
+  flex-flow: wrap;
+  box-sizing: border-box;
+  display: flex;
+  place-content: stretch space-between;
+  align-items: stretch;
+}

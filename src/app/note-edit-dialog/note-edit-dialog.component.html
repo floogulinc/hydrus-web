@@ -1,7 +1,7 @@
 <h1 mat-dialog-title>{{addMode ? 'Add' : 'Edit'}} Note</h1>
 <form [formGroup]="noteForm" (ngSubmit)="submitNote()" autocomplete="off">
   <div mat-dialog-content>
-    <div fxLayout="column">
+    <div class="flex-column">
       <mat-form-field appearance="fill">
         <mat-label>Name</mat-label>
         <input matInput formControlName="noteName">

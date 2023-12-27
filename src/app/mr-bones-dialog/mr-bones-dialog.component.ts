@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { catchError, map, tap, throwError } from 'rxjs';
 import { HydrusApiService } from '../hydrus-api.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { ErrorService } from '../error.service';
 
 interface BonesTableElement {

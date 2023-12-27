@@ -30,10 +30,17 @@
 
 .main-toolbar {
   z-index: 5 !important;
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
 }
 
 .sidenav-icon {
   display: block;
   width: 24px;
   padding: 4px;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
 }

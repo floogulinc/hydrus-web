@@ -1,8 +1,8 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { JsonViewDialogComponent } from './json-view-dialog/json-view-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import {serializeError} from 'serialize-error';
 
 interface HydrusError {

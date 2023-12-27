@@ -1,6 +1,6 @@
-<div fxLayout="column">
+<div>
   <h2 class="mat-display-1">Send to Hydrus</h2>
-  <form [formGroup]="sendForm" (ngSubmit)="onSubmit()" fxLayout="column">
+  <form [formGroup]="sendForm" (ngSubmit)="onSubmit()" class="flex-column">
     <mat-form-field appearance="outline">
       <mat-label>URL to send</mat-label>
       <input matInput type="url" autocomplete="off" required
@@ -20,7 +20,7 @@
       <input matInput type="text" autocomplete="off"
       formControlName="destPageName" placeholder="" >
     </mat-form-field>
-    <div fxLayout="row" fxLayoutAlign="end">
+    <div class="button-row">
       <button mat-raised-button type="button" [disabled]="sendUrl.invalid || saucenaoLoading" *ngIf="saucenaoService.canSaucenao" (click)="saucenaoLookup()">SauceNAO Lookup</button>
       <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
     </div>
