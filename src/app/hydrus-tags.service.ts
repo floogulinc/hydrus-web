@@ -11,9 +11,7 @@ export class HydrusTagsService {
 
   constructor(private api: HydrusApiService, private versionService: HydrusVersionService) { }
 
-  canGetSiblingsParents$ = this.versionService.hydrusVersion$.pipe(
-    map(v => v && v.hydrus_version >= 541),
-  )
+  canGetSiblingsParents$ = this.versionService.isAtLeastVersion(541);
 
   searchTags(search: string, tag_display_type: TagDisplayType = 'storage') {
     return this.api.searchTags({search, tag_display_type}).pipe(map(r => r['tags']));
