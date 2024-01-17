@@ -158,6 +158,7 @@ export class HydrusApiService {
       include_notes?: boolean;
       include_services_object?: boolean;
       include_blurhash?: boolean;
+      include_milliseconds?: boolean;
     },
     noCache = false
   ) {

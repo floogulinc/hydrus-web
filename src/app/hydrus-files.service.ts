@@ -42,6 +42,7 @@ export class HydrusFilesService {
         only_return_basic_information: false,
         detailed_url_information: true,
         include_notes: true,
+        include_milliseconds: true,
       }
     );
   }
@@ -67,6 +68,7 @@ export class HydrusFilesService {
         only_return_basic_information: false,
         detailed_url_information: true,
         include_notes: true,
+        include_milliseconds: true,
       },
       true
     );
