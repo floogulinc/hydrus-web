@@ -52,7 +52,7 @@
     "sagiri": "^3.2.4",
     "serialize-error": "^11.0.2",
     "tslib": "^2.0.0",
-    "type-fest": "^4.8.2",
+    "type-fest": "^4.10.3",
     "typescript-migration": "^1.1.1",
     "zone.js": "~0.14.2"
   },
