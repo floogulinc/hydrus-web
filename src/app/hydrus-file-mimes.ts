@@ -581,6 +581,41 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'unknown filetype' : HydrusFiletype.APPLICATION_UNKNOWN
 }
 
+const filetypeCategories: {generalFiletype: HydrusFiletype, filetypes: HydrusFiletype[]}[] = [
+  {
+    generalFiletype: HydrusFiletype.GENERAL_IMAGE,
+    filetypes: IMAGES
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_ANIMATION,
+    filetypes: ANIMATIONS
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_VIDEO,
+    filetypes: VIDEO
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_AUDIO,
+    filetypes: AUDIO
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_APPLICATION,
+    filetypes: APPLICATIONS
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_IMAGE_PROJECT,
+    filetypes: IMAGE_PROJECT_FILES
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_APPLICATION_ARCHIVE,
+    filetypes: ARCHIVES
+  },
+]
+
+export const searchFiletypeCategories = filetypeCategories.map(({generalFiletype, filetypes}) => ({
+  name: mime_string_lookup[generalFiletype],
+  filetypes: filetypes.map(filetype => mime_string_lookup[filetype])
+}))
 
 export const searchFiletypes = searchableFileTypes.map(ft => ({
   mime: mime_mimetype_string_lookup[ft],

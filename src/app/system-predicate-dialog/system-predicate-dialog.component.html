@@ -62,7 +62,17 @@
         <mat-form-field appearance="outline" hideRequiredMarker *ngSwitchCase="Value.FILETYPE_LIST">
           <mat-label>Filetypes</mat-label>
           <mat-select [formControlName]="Value.FILETYPE_LIST" multiple>
-            <mat-option *ngFor="let ft of searchFiletypes" [value]="(canUseFiletypeName$ | async) ? ft.name : ft.mime">{{ft.name}}</mat-option>
+            @if (canUseFiletypeName$ | async) {
+              @for (category of searchFiletypeCategories; track category.name) {
+                <mat-optgroup [label]="category.name">
+                  @for (ft of category.filetypes; track ft) {
+                    <mat-option [value]="ft">{{ft}}</mat-option>
+                  }
+                </mat-optgroup>
+              }
+            } @else {
+              <mat-option *ngFor="let ft of searchFiletypes" [value]="ft.mime">{{ft.name}}</mat-option>
+            }
           </mat-select>
         </mat-form-field>
         <div *ngSwitchCase="Value.DATE_OR_TIME_INTERVAL" [formGroupName]="Value.DATE_OR_TIME_INTERVAL" class="date-form">
