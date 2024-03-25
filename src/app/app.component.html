@@ -6,10 +6,10 @@
     </mat-toolbar>
     <mat-nav-list class="sidenav-list" role="navigation">
       <a mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
-      [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
+        [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
         <mat-icon matListIcon>photo</mat-icon>
         Browse
-    </a>
+      </a>
       <a mat-list-item routerLink="/pages" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
         <mat-icon matListIcon>photo_library</mat-icon>
         Pages
@@ -43,7 +43,9 @@
         >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span class="app-title">Hydrus Web <span class="mat-small" *ngIf="env.versionInfo?.branch !== 'master'">{{env.versionInfo?.branch}}</span></span>
+      <span class="app-title">Hydrus Web @if (env.versionInfo?.branch !== 'master') {
+        <span class="mat-small">{{env.versionInfo?.branch}}</span>
+      }</span>
       <span class="toolbar-spacer"></span>
       <ng-template cdkPortalOutlet #toolbarActionsPortal></ng-template>
     </mat-toolbar>

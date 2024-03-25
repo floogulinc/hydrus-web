@@ -1,16 +1,18 @@
 <virtual-scroller class="virtual-scroll" #scroll [items]="files" (vsEnd)="vsEnd($event)"
   [parentScroll]="scrollElement" [bufferAmount]="24">
   <ul class="mdc-image-list browse-image-list" #container>
-    <li class="mdc-image-list__item grid-item"
-      *ngFor="let file of scroll.viewPortItems; trackBy: scrollTrackByFunction">
-      <a [href]="file.file_url"
-        (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.files, file.file_id);">
-        <div class="mdc-image-list__image-aspect-container">
-          <div class="mdc-image-list__image image-list-image"
-            [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')', 'background-color' : file.blurhash ? (file.blurhash | blurhashcolor) : '#c7c5cb'}"
+    @for (file of scroll.viewPortItems; track scrollTrackByFunction($index, file)) {
+      <li class="mdc-image-list__item grid-item"
+        >
+        <a [href]="file.file_url"
+          (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.files, file.file_id);">
+          <div class="mdc-image-list__image-aspect-container">
+            <div class="mdc-image-list__image image-list-image"
+              [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')', 'background-color' : file.blurhash ? (file.blurhash | blurhashcolor) : '#c7c5cb'}"
             [ngClass]="'file-id-' + file.file_id"></div>
-        </div>
-      </a>
-    </li>
+          </div>
+        </a>
+      </li>
+    }
   </ul>
 </virtual-scroller>

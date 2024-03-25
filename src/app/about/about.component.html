@@ -14,19 +14,24 @@
       <div mat-line>GitHub Repo</div>
       <div mat-line><code>floogulinc/hydrus-web</code></div>
     </a>
-    <a mat-list-item role="listitem" (click)="updates.checkForUpdate()" *ngIf="this.updates.isEnabled">
-      <div mat-line>Check for updates</div>
-    </a>
-    <a mat-list-item role="listitem" *ngIf="hydrusVersion.hydrusVersion$ | async as v; else noHydrusVersion" (click)="hydrusVersion.checkHydrusVersion()">
-      <div mat-line>Hydrus Version</div>
-      <div mat-line *ngIf="v.hydrus_version">Hydrus Client {{v.hydrus_version}}</div>
-      <div mat-line>Client API {{v.version}}</div>
-    </a>
-    <ng-template #noHydrusVersion>
+    @if (this.updates.isEnabled) {
+      <a mat-list-item role="listitem" (click)="updates.checkForUpdate()">
+        <div mat-line>Check for updates</div>
+      </a>
+    }
+    @if (hydrusVersion.hydrusVersion$ | async; as v) {
+      <a mat-list-item role="listitem" (click)="hydrusVersion.checkHydrusVersion()">
+        <div mat-line>Hydrus Version</div>
+        @if (v.hydrus_version) {
+          <div mat-line>Hydrus Client {{v.hydrus_version}}</div>
+        }
+        <div mat-line>Client API {{v.version}}</div>
+      </a>
+    } @else {
       <a mat-list-item role="listitem" (click)="hydrusVersion.checkHydrusVersion()">
         <div mat-line>Check Hydrus Version</div>
       </a>
-    </ng-template>
+    }
     <a mat-list-item role="listitem" (click)="boned()">
       <div mat-line>How boned am I?</div>
     </a>
@@ -46,24 +51,42 @@
     <mat-list-item role="listitem">
       <div mat-line>{{env.production ? 'Production' : 'Development'}} Build</div>
     </mat-list-item>
-    <a mat-list-item role="listitem" *ngIf="env.versionInfo.vercel" [href]="'https://' + env.versionInfo.vercel.VERCEL_URL + '/_logs'">
-      <div mat-line>Deployed on Vercel</div>
-      <div mat-line><code>{{env.versionInfo.vercel.VERCEL_URL}}</code></div>
-    </a>
+    @if (env.versionInfo.vercel) {
+      <a mat-list-item role="listitem" [href]="'https://' + env.versionInfo.vercel.VERCEL_URL + '/_logs'">
+        <div mat-line>Deployed on Vercel</div>
+        <div mat-line><code>{{env.versionInfo.vercel.VERCEL_URL}}</code></div>
+      </a>
+    }
     <a mat-list-item role="listitem" (click)="filesService.clearFilesCache()">
       <div mat-line>Clear session file metadata cache</div>
       <div mat-line>{{filesService.getFilesCacheSize()}} files cached</div>
     </a>
     <mat-list-item role="listitem">
       <div mat-line>Platform</div>
-      <div mat-line *ngIf="platform.ANDROID">Android</div>
-      <div mat-line *ngIf="platform.IOS">iOS</div>
-      <div mat-line *ngIf="platform.BLINK">Blink</div>
-      <div mat-line *ngIf="platform.EDGE">Edge</div>
-      <div mat-line *ngIf="platform.FIREFOX">Firefox</div>
-      <div mat-line *ngIf="platform.TRIDENT">Trident</div>
-      <div mat-line *ngIf="platform.WEBKIT">WebKit</div>
-      <div mat-line *ngIf="platform.SAFARI">Safari</div>
+      @if (platform.ANDROID) {
+        <div mat-line>Android</div>
+      }
+      @if (platform.IOS) {
+        <div mat-line>iOS</div>
+      }
+      @if (platform.BLINK) {
+        <div mat-line>Blink</div>
+      }
+      @if (platform.EDGE) {
+        <div mat-line>Edge</div>
+      }
+      @if (platform.FIREFOX) {
+        <div mat-line>Firefox</div>
+      }
+      @if (platform.TRIDENT) {
+        <div mat-line>Trident</div>
+      }
+      @if (platform.WEBKIT) {
+        <div mat-line>WebKit</div>
+      }
+      @if (platform.SAFARI) {
+        <div mat-line>Safari</div>
+      }
     </mat-list-item>
     <a mat-list-item role="listitem" href="/ngsw/state">
       <div mat-line>Service Worker</div>
@@ -74,11 +97,15 @@
       <div mat-line>{{window.navigator.onLine ? 'Online' : 'Offline'}}</div>
       <div mat-line>{{window.isSecureContext ? 'Secure Context' : 'Non-secure Context'}}</div>
     </mat-list-item>
-    <mat-list-item role="listitem" *ngIf="navigator.storage">
-      <div mat-line>Storage</div>
-      <div mat-line>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
-      <div mat-line *ngIf="storageQuota && storageQuota.usage !== undefined && storageQuota.quota !== undefined">{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
-    </mat-list-item>
+    @if (navigator.storage) {
+      <mat-list-item role="listitem">
+        <div mat-line>Storage</div>
+        <div mat-line>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
+        @if (storageQuota && storageQuota.usage !== undefined && storageQuota.quota !== undefined) {
+          <div mat-line>{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
+        }
+      </mat-list-item>
+    }
     <mat-list-item role="listitem">
       <div mat-line>Viewport Info</div>
       <div mat-line>Page Size: {{window.innerWidth}}x{{window.innerHeight}}</div>

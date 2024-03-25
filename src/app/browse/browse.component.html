@@ -2,14 +2,20 @@
   <div class="search-bar">
     <app-tag-input [formControl]="tagsFormControl" class="tag-input" placeholder="Tag Search"></app-tag-input>
   </div>
-  <mat-progress-bar *ngIf="searching$ | push" mode="indeterminate" class="search-progress-bar"></mat-progress-bar>
+  @if (searching$ | push) {
+    <mat-progress-bar mode="indeterminate" class="search-progress-bar"></mat-progress-bar>
+  }
   <ng-container *rxLet="currentSearch$ as search">
-    <app-image-list-loader *ngIf="search.length > 0" [fileIDs]="search" class="app-image-list"></app-image-list-loader>
-    <div *ngIf="search.length === 0 && (searching$ | push) === false">
-      <mat-card>
-        <mat-card-title>No Search Results</mat-card-title>
-      </mat-card>
-    </div>
+    @if (search.length > 0) {
+      <app-image-list-loader [fileIDs]="search" class="app-image-list"></app-image-list-loader>
+    }
+    @if (search.length === 0 && (searching$ | push) === false) {
+      <div>
+        <mat-card>
+          <mat-card-title>No Search Results</mat-card-title>
+        </mat-card>
+      </div>
+    }
   </ng-container>
 </div>
 
@@ -24,24 +30,32 @@
 
   <mat-menu #sortMenu="matMenu">
     <button mat-menu-item disabled>{{sortToString(sort)}}</button>
-    <ng-template ngFor [ngForOf]="displaySortGroups" let-sortGroupOrType>
-      <button *ngIf="isDisplaySortType(sortGroupOrType) && !sortGroupOrType.sortOrder.canAsc; else subMenuButton" type="button" mat-menu-item [disabled]="sort.sortType === sortGroupOrType.sortType" (click)="setSort(sortGroupOrType.sortType, sortGroupOrType.sortOrder.defaultAsc)">{{sortGroupOrType.basicString}}</button>
-      <ng-template #subMenuButton>
-        <button *ngIf="isDisplaySortType(sortGroupOrType)" type="button" mat-menu-item [matMenuTriggerFor]="sortTypeSubMenu" [matMenuTriggerData]="{sortType: sortGroupOrType}">{{sortGroupOrType.basicString}}</button>
-        <button *ngIf="!isDisplaySortType(sortGroupOrType)" type="button" mat-menu-item [matMenuTriggerFor]="sortGroupSubMenu" [matMenuTriggerData]="{sortGroup: sortGroupOrType}">{{sortGroupOrType.metaType}}</button>
-      </ng-template>
-    </ng-template>
-    <button *ngIf="!(sort.sortType === defaultSort.sortType && sort.sortAsc === defaultSort.sortAsc)" type="button" mat-menu-item (click)="resetSort()">Reset</button>
+    @for (sortGroupOrType of displaySortGroups; track sortGroupOrType) {
+      @if (isDisplaySortType(sortGroupOrType) && !sortGroupOrType.sortOrder.canAsc) {
+        <button type="button" mat-menu-item [disabled]="sort.sortType === sortGroupOrType.sortType" (click)="setSort(sortGroupOrType.sortType, sortGroupOrType.sortOrder.defaultAsc)">{{sortGroupOrType.basicString}}</button>
+      } @else {
+        @if (isDisplaySortType(sortGroupOrType)) {
+          <button type="button" mat-menu-item [matMenuTriggerFor]="sortTypeSubMenu" [matMenuTriggerData]="{sortType: sortGroupOrType}">{{sortGroupOrType.basicString}}</button>
+        }
+        @if (!isDisplaySortType(sortGroupOrType)) {
+          <button type="button" mat-menu-item [matMenuTriggerFor]="sortGroupSubMenu" [matMenuTriggerData]="{sortGroup: sortGroupOrType}">{{sortGroupOrType.metaType}}</button>
+        }
+      }
+    }
+    @if (!(sort.sortType === defaultSort.sortType && sort.sortAsc === defaultSort.sortAsc)) {
+      <button type="button" mat-menu-item (click)="resetSort()">Reset</button>
+    }
   </mat-menu>
 
   <mat-menu #sortGroupSubMenu="matMenu">
     <ng-template matMenuContent let-sortGroup="sortGroup">
-      <ng-template ngFor [ngForOf]="sortGroup.sortTypes" let-sortType>
-        <button *ngIf="!sortType.sortOrder.canAsc; else subSubMenuButton" type="button" mat-menu-item [disabled]="sort.sortType === sortType.sortType" (click)="setSort(sortType.sortType, sortType.sortOrder.defaultAsc)">{{sortType.basicString}}</button>
-        <ng-template #subSubMenuButton>
+      @for (sortType of sortGroup.sortTypes; track sortType) {
+        @if (!sortType.sortOrder.canAsc) {
+          <button type="button" mat-menu-item [disabled]="sort.sortType === sortType.sortType" (click)="setSort(sortType.sortType, sortType.sortOrder.defaultAsc)">{{sortType.basicString}}</button>
+        } @else {
           <button type="button" mat-menu-item [matMenuTriggerFor]="sortTypeSubMenu" [matMenuTriggerData]="{sortType: sortType}">{{sortType.basicString}}</button>
-        </ng-template>
-      </ng-template>
+        }
+      }
     </ng-template>
   </mat-menu>
 

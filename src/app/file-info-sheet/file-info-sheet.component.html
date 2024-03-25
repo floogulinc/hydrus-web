@@ -1,199 +1,246 @@
 <div class="title-row">
   <h2 mat-dialog-title class="sheet-title">File Info</h2>
-  <div *ngIf="data.file as file">
-    <button mat-icon-button *ngIf="ipfsUrl$ | async as ipfsUrl" [cdkCopyToClipboard]="ipfsUrl" matTooltip="Copy IPFS URL" aria-label="Copy IPFS URL">
-      <mat-icon svgIcon="cube"></mat-icon>
-    </button>
-    <button mat-icon-button (click)="saveFile()" aria-label="Download file" matTooltip="Download file">
-      <mat-icon>get_app</mat-icon>
-    </button>
-    <button mat-icon-button *ngIf="downloadService.canShare" (click)="shareFile()" aria-label="Share file" matTooltip="Share file">
-      <mat-icon>share</mat-icon>
-    </button>
-    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <a mat-menu-item rel="noopener noreferrer" target="_blank" href="{{file.file_url}}">
-        <mat-icon>open_in_new</mat-icon>
-        <span>Open file in new tab</span>
-      </a>
-      <button mat-menu-item [cdkCopyToClipboard]="file.hash">
-        <mat-icon>content_copy</mat-icon>
-        <span>Copy SHA256 hash</span>
+  @if (data.file; as file) {
+    <div>
+      @if (ipfsUrl$ | async; as ipfsUrl) {
+        <button mat-icon-button [cdkCopyToClipboard]="ipfsUrl" matTooltip="Copy IPFS URL" aria-label="Copy IPFS URL">
+          <mat-icon svgIcon="cube"></mat-icon>
+        </button>
+      }
+      <button mat-icon-button (click)="saveFile()" aria-label="Download file" matTooltip="Download file">
+        <mat-icon>get_app</mat-icon>
       </button>
-      <button mat-menu-item *ngIf="hyshareUrl" [cdkCopyToClipboard]="hyshareUrl + 'view/' + file.hash">
-        <mat-icon>link</mat-icon>
-        <span>Copy hyshare URL</span>
-      </button>
-      <button mat-menu-item (click)="searchSimilarFiles()">
-        <mat-icon>image_search</mat-icon>
-        <span>Search for similar files</span>
-      </button>
-      <button mat-menu-item *ngIf="canSaucenao" (click)="saucenaoLookup()">
-        <mat-icon>search</mat-icon>
-        <span>SauceNAO lookup</span>
-      </button>
-      <button mat-menu-item *ngIf="canGetMetadata" (click)="fileMetadata()">
-        <mat-icon>list</mat-icon>
-        <span>View file metadata</span>
-      </button>
-      <button mat-menu-item (click)="rawInfo()">
-        <mat-icon>data_object</mat-icon>
-        <span>View raw file info</span>
-      </button>
-      <button mat-menu-item (click)="reload()">
-        <mat-icon>refresh</mat-icon>
-        <span>Refresh</span>
-      </button>
-    </mat-menu>
-  </div>
-</div>
-<div *ngIf="file$ | async as file; else noFile">
-  <mat-list role="list">
-    <mat-list-item role="listitem">
-      <mat-icon mat-list-icon>{{file.fileIcon}}</mat-icon>
-      <div mat-line>{{file.file_id}}</div>
-      <div mat-line class="metadata-line"><span>{{file.file_type_string}}</span> <span *ngIf="file.width && file.height">{{file.width}}x{{file.height}}</span> <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span></div>
-    </mat-list-item>
-    <mat-list-item role="listitem">
-      <mat-icon mat-list-icon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
-      <div mat-line>{{file.is_trashed ? "In Trash" + (file.is_inbox ? " (Inbox)" : " (Archived)") : file.is_inbox ? "In Inbox" : "Archived"}}</div>
-      <div mat-line *ngIf="file.time_imported"><span [matTooltip]="file.time_imported | date:'yyyy-MM-dd HH:mm:ss.SSS'" matTooltipPosition="above">Imported {{file.time_imported | timeAgo}}</span></div>
-      <button mat-icon-button (click)="archiveFile()" matTooltip="Archive" *ngIf="file.is_inbox">
-        <mat-icon>archive</mat-icon>
-      </button>
-      <button mat-icon-button (click)="unarchiveFile()" matTooltip="Return to inbox" *ngIf="!file.is_inbox">
-        <mat-icon>move_to_inbox</mat-icon>
-      </button>
-      <button mat-icon-button (click)="deleteFile()" matTooltip="Send to trash" *ngIf="!file.is_trashed">
-        <mat-icon>delete</mat-icon>
-      </button>
-      <button mat-icon-button (click)="undeleteFile()" matTooltip="Undelete" *ngIf="file.is_trashed">
-        <mat-icon>restore_from_trash</mat-icon>
-      </button>
-    </mat-list-item>
-  </mat-list>
-
-  <mat-accordion multi>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      Known URLs ({{file.known_urls.length}})
-    </mat-expansion-panel-header>
-
-    <mat-nav-list>
-      <mat-list-item *ngFor="let url of file.detailed_known_urls">
-        <a matLine [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
-        <button mat-icon-button *ngIf="navigatorShare" (click)="shareUrl(url.normalised_url)">
+      @if (downloadService.canShare) {
+        <button mat-icon-button (click)="shareFile()" aria-label="Share file" matTooltip="Share file">
           <mat-icon>share</mat-icon>
         </button>
-        <button mat-icon-button [matMenuTriggerFor]="urlMenu" [matMenuTriggerData]="{url}" aria-label="More options">
-          <mat-icon>more_vert</mat-icon>
+      }
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="More options">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <a mat-menu-item rel="noopener noreferrer" target="_blank" href="{{file.file_url}}">
+          <mat-icon>open_in_new</mat-icon>
+          <span>Open file in new tab</span>
+        </a>
+        <button mat-menu-item [cdkCopyToClipboard]="file.hash">
+          <mat-icon>content_copy</mat-icon>
+          <span>Copy SHA256 hash</span>
         </button>
-      </mat-list-item>
-    </mat-nav-list>
-    <mat-action-row>
-      <button mat-button (click)="addUrlDialog()">Add URL</button>
-    </mat-action-row>
-  </mat-expansion-panel>
-
-  <mat-expansion-panel *ngIf="file.ratings_array && file.ratings_array.length > 0">
-    <mat-expansion-panel-header>
-      Ratings
-    </mat-expansion-panel-header>
-
-    <mat-list>
-      <ng-template ngFor let-rating [ngForOf]="file.ratings_array" [ngForTrackBy]="trackByRating">
-        <mat-list-item *ngIf="isNumericalRatingService(rating)">
-          <p matLine>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
-          <p matLine class="numerical-rating-line">
-            <app-rating-numerical [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-numerical>
-          </p>
-          <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
-            <mat-icon>more_vert</mat-icon>
+        @if (hyshareUrl) {
+          <button mat-menu-item [cdkCopyToClipboard]="hyshareUrl + 'view/' + file.hash">
+            <mat-icon>link</mat-icon>
+            <span>Copy hyshare URL</span>
           </button>
-        </mat-list-item>
-        <mat-list-item *ngIf="isLikeRatingService(rating)">
-          <p matLine>{{rating.name}} ({{rating.value === null ? 'not set' : rating.value ? 'liked' : 'dislike'}})</p>
-          <p matLine>
-            <app-rating-like [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-like>
-          </p>
-          <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
-            <mat-icon>more_vert</mat-icon>
+        }
+        <button mat-menu-item (click)="searchSimilarFiles()">
+          <mat-icon>image_search</mat-icon>
+          <span>Search for similar files</span>
+        </button>
+        @if (canSaucenao) {
+          <button mat-menu-item (click)="saucenaoLookup()">
+            <mat-icon>search</mat-icon>
+            <span>SauceNAO lookup</span>
           </button>
-        </mat-list-item>
-        <mat-list-item *ngIf="isIncDecRatingService(rating)">
-          <p matLine>{{rating.name}}</p>
-          <p matLine class="inc-rating-line">
-            <app-rating-inc-dec [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-inc-dec>
-          </p>
-          <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
-            <mat-icon>more_vert</mat-icon>
+        }
+        @if (canGetMetadata) {
+          <button mat-menu-item (click)="fileMetadata()">
+            <mat-icon>list</mat-icon>
+            <span>View file metadata</span>
           </button>
-        </mat-list-item>
-      </ng-template>
-    </mat-list>
-  </mat-expansion-panel>
-  </mat-accordion>
-
-  <div class="notes-section" *ngIf="file.notesMapArray">
-    <div class="sec-header">
-      <h3 class="mat-subheading-2">Notes</h3>
-      <button mat-icon-button (click)="addNoteDialog()" matTooltip="Add note"><mat-icon>note_add</mat-icon></button>
+        }
+        <button mat-menu-item (click)="rawInfo()">
+          <mat-icon>data_object</mat-icon>
+          <span>View raw file info</span>
+        </button>
+        <button mat-menu-item (click)="reload()">
+          <mat-icon>refresh</mat-icon>
+          <span>Refresh</span>
+        </button>
+      </mat-menu>
     </div>
-    <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let note of file.notesMapArray; trackBy: trackByNote" >
-      <mat-expansion-panel-header>
-        {{note.name}}
-      </mat-expansion-panel-header>
-      <p class="note-content" [innerText]="note.value"></p>
-      <mat-action-row>
-        <button mat-icon-button matTooltip="Delete note" (click)="deleteNote(note.name, note.value)"><mat-icon>delete</mat-icon></button>
-        <button mat-icon-button matTooltip="Edit note" (click)="editNoteDialog(note.name, note.value)"><mat-icon>edit</mat-icon></button>
-      </mat-action-row>
-    </mat-expansion-panel>
-    </mat-accordion>
-    <mat-card *ngIf="file.notesMapArray.length < 1">
-      <mat-card-content>No Notes</mat-card-content>
-    </mat-card>
-  </div>
-
-
-  <div *ngIf="file.displayTags" class="tags-section">
-    <div class="sec-header">
-      <h3 class="mat-subheading-2">Tags</h3>
-      <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
-    </div>
-    <mat-accordion multi>
-    <mat-expansion-panel *ngFor="let service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; trackBy: trackByTagService" >
-      <mat-expansion-panel-header>
-        {{service.serviceName}} ({{service.tags.length}})
-      </mat-expansion-panel-header>
-      <ng-template matExpansionPanelContent>
-        <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
-          <mat-chip
-            *ngFor="let tag of (service.tags | orderBy)"
-            [selectable]="false"
-            class="tag-chip"
-            [ngClass]="tag | tagClass"
-            [matMenuTriggerFor]="tagMenu"
-            [matMenuTriggerData]="{tag, service: {serviceType: service.serviceType, serviceKey: service.serviceKey}}"
-          >
-            <div class="tag-chip-text">{{tag}}</div>
-          </mat-chip>
-        </mat-chip-list>
-
-        <mat-action-row *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
-          <button mat-button (click)="addTagsDialog(service.serviceKey, service.serviceName)">Add Tags</button>
-        </mat-action-row>
-      </ng-template>
-    </mat-expansion-panel>
-    </mat-accordion>
-    <mat-card *ngIf="!fileInfoSheetService.showStorageTags && file.displayTags.length < 1">
-      <mat-card-content>No Tags</mat-card-content>
-    </mat-card>
-  </div>
+  }
 </div>
+@if (file$ | async; as file) {
+  <div>
+    <mat-list role="list">
+      <mat-list-item role="listitem">
+        <mat-icon mat-list-icon>{{file.fileIcon}}</mat-icon>
+        <div mat-line>{{file.file_id}}</div>
+        <div mat-line class="metadata-line"><span>{{file.file_type_string}}</span> @if (file.width && file.height) {
+        <span>{{file.width}}x{{file.height}}</span>
+        } <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span></div>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <mat-icon mat-list-icon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
+        <div mat-line>{{file.is_trashed ? "In Trash" + (file.is_inbox ? " (Inbox)" : " (Archived)") : file.is_inbox ? "In Inbox" : "Archived"}}</div>
+        @if (file.time_imported) {
+          <div mat-line><span [matTooltip]="file.time_imported | date:'yyyy-MM-dd HH:mm:ss.SSS'" matTooltipPosition="above">Imported {{file.time_imported | timeAgo}}</span></div>
+        }
+        @if (file.is_inbox) {
+          <button mat-icon-button (click)="archiveFile()" matTooltip="Archive">
+            <mat-icon>archive</mat-icon>
+          </button>
+        }
+        @if (!file.is_inbox) {
+          <button mat-icon-button (click)="unarchiveFile()" matTooltip="Return to inbox">
+            <mat-icon>move_to_inbox</mat-icon>
+          </button>
+        }
+        @if (!file.is_trashed) {
+          <button mat-icon-button (click)="deleteFile()" matTooltip="Send to trash">
+            <mat-icon>delete</mat-icon>
+          </button>
+        }
+        @if (file.is_trashed) {
+          <button mat-icon-button (click)="undeleteFile()" matTooltip="Undelete">
+            <mat-icon>restore_from_trash</mat-icon>
+          </button>
+        }
+      </mat-list-item>
+    </mat-list>
+    <mat-accordion multi>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          Known URLs ({{file.known_urls.length}})
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          @for (url of file.detailed_known_urls; track url) {
+            <mat-list-item>
+              <a matLine [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
+              @if (navigatorShare) {
+                <button mat-icon-button (click)="shareUrl(url.normalised_url)">
+                  <mat-icon>share</mat-icon>
+                </button>
+              }
+              <button mat-icon-button [matMenuTriggerFor]="urlMenu" [matMenuTriggerData]="{url}" aria-label="More options">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </mat-list-item>
+          }
+        </mat-nav-list>
+        <mat-action-row>
+          <button mat-button (click)="addUrlDialog()">Add URL</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+      @if (file.ratings_array && file.ratings_array.length > 0) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Ratings
+          </mat-expansion-panel-header>
+          <mat-list>
+            @for (rating of file.ratings_array; track trackByRating($index, rating)) {
+              @if (isNumericalRatingService(rating)) {
+                <mat-list-item>
+                  <p matLine>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
+                  <p matLine class="numerical-rating-line">
+                    <app-rating-numerical [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-numerical>
+                  </p>
+                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </mat-list-item>
+              }
+              @if (isLikeRatingService(rating)) {
+                <mat-list-item>
+                  <p matLine>{{rating.name}} ({{rating.value === null ? 'not set' : rating.value ? 'liked' : 'dislike'}})</p>
+                  <p matLine>
+                    <app-rating-like [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-like>
+                  </p>
+                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </mat-list-item>
+              }
+              @if (isIncDecRatingService(rating)) {
+                <mat-list-item>
+                  <p matLine>{{rating.name}}</p>
+                  <p matLine class="inc-rating-line">
+                    <app-rating-inc-dec [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-inc-dec>
+                  </p>
+                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                </mat-list-item>
+              }
+            }
+          </mat-list>
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+    @if (file.notesMapArray) {
+      <div class="notes-section">
+        <div class="sec-header">
+          <h3 class="mat-subheading-2">Notes</h3>
+          <button mat-icon-button (click)="addNoteDialog()" matTooltip="Add note"><mat-icon>note_add</mat-icon></button>
+        </div>
+        <mat-accordion multi>
+          @for (note of file.notesMapArray; track trackByNote($index, note)) {
+            <mat-expansion-panel >
+              <mat-expansion-panel-header>
+                {{note.name}}
+              </mat-expansion-panel-header>
+              <p class="note-content" [innerText]="note.value"></p>
+              <mat-action-row>
+                <button mat-icon-button matTooltip="Delete note" (click)="deleteNote(note.name, note.value)"><mat-icon>delete</mat-icon></button>
+                <button mat-icon-button matTooltip="Edit note" (click)="editNoteDialog(note.name, note.value)"><mat-icon>edit</mat-icon></button>
+              </mat-action-row>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+        @if (file.notesMapArray.length < 1) {
+          <mat-card>
+            <mat-card-content>No Notes</mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+    @if (file.displayTags) {
+      <div class="tags-section">
+        <div class="sec-header">
+          <h3 class="mat-subheading-2">Tags</h3>
+          <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
+        </div>
+        <mat-accordion multi>
+          @for (service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; track trackByTagService($index, service)) {
+            <mat-expansion-panel >
+              <mat-expansion-panel-header>
+                {{service.serviceName}} ({{service.tags.length}})
+              </mat-expansion-panel-header>
+              <ng-template matExpansionPanelContent>
+                <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+                  @for (tag of (service.tags | orderBy); track tag) {
+                    <mat-chip
+                      [selectable]="false"
+                      class="tag-chip"
+                      [ngClass]="tag | tagClass"
+                      [matMenuTriggerFor]="tagMenu"
+                      [matMenuTriggerData]="{tag, service: {serviceType: service.serviceType, serviceKey: service.serviceKey}}"
+                      >
+                      <div class="tag-chip-text">{{tag}}</div>
+                    </mat-chip>
+                  }
+                </mat-chip-list>
+                @if (fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService) {
+                  <mat-action-row>
+                    <button mat-button (click)="addTagsDialog(service.serviceKey, service.serviceName)">Add Tags</button>
+                  </mat-action-row>
+                }
+              </ng-template>
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+        @if (!fileInfoSheetService.showStorageTags && file.displayTags.length < 1) {
+          <mat-card>
+            <mat-card-content>No Tags</mat-card-content>
+          </mat-card>
+        }
+      </div>
+    }
+  </div>
+} @else {
+  <mat-spinner></mat-spinner>
+}
 
 <mat-menu #tagMenu="matMenu">
   <ng-template matMenuContent let-tag="tag" let-service="service">
@@ -205,18 +252,24 @@
       <mat-icon>search</mat-icon>
       <span>Search tag</span>
     </button>
-    <button mat-menu-item (click)="addSearchTags([tag])" *ngIf="isBrowse">
-      <mat-icon>search</mat-icon>
-      <span>Add tag to search</span>
-    </button>
-    <button mat-menu-item (click)="tagSiblingsParentsDialog(tag)" *ngIf="canGetSiblingsParents$ | async">
-      <mat-icon svgIcon="graph"></mat-icon>
-      <span>View Siblings and Parents</span>
-    </button>
-    <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)" *ngIf="fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService">
-      <mat-icon>delete</mat-icon>
-      <span>Delete Tag</span>
-    </button>
+    @if (isBrowse) {
+      <button mat-menu-item (click)="addSearchTags([tag])">
+        <mat-icon>search</mat-icon>
+        <span>Add tag to search</span>
+      </button>
+    }
+    @if (canGetSiblingsParents$ | async) {
+      <button mat-menu-item (click)="tagSiblingsParentsDialog(tag)">
+        <mat-icon svgIcon="graph"></mat-icon>
+        <span>View Siblings and Parents</span>
+      </button>
+    }
+    @if (fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService) {
+      <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete Tag</span>
+      </button>
+    }
   </ng-template>
 </mat-menu>
 
@@ -239,16 +292,17 @@
 
 <mat-menu #ratingMenu="matMenu">
   <ng-template matMenuContent let-rating="rating">
-    <button mat-menu-item *ngIf="(isNumericalRatingService(rating) || isLikeRatingService(rating)) && hasServiceKey(rating)" (click)="this.setRating(rating, null)">
-      <span>Reset rating</span>
-    </button>
-    <button mat-menu-item *ngIf="(isIncDecRatingService(rating) || (isNumericalRatingService(rating) && rating.min_stars === 0)) && hasServiceKey(rating)" (click)="this.setRating(rating, 0)">
-      <span>Set rating to 0</span>
-    </button>
+    @if ((isNumericalRatingService(rating) || isLikeRatingService(rating)) && hasServiceKey(rating)) {
+      <button mat-menu-item (click)="this.setRating(rating, null)">
+        <span>Reset rating</span>
+      </button>
+    }
+    @if ((isIncDecRatingService(rating) || (isNumericalRatingService(rating) && rating.min_stars === 0)) && hasServiceKey(rating)) {
+      <button mat-menu-item (click)="this.setRating(rating, 0)">
+        <span>Set rating to 0</span>
+      </button>
+    }
   </ng-template>
 </mat-menu>
 
-<ng-template #noFile>
-  <mat-spinner></mat-spinner>
-</ng-template>
 
