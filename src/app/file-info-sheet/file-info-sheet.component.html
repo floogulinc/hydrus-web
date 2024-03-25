@@ -129,7 +129,7 @@
             Ratings
           </mat-expansion-panel-header>
           <mat-list>
-            @for (rating of file.ratings_array; track trackByRating($index, rating)) {
+            @for (rating of file.ratings_array; track rating.service_key) {
               @if (isNumericalRatingService(rating)) {
                 <mat-list-item>
                   <p matLine>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
@@ -175,7 +175,7 @@
           <button mat-icon-button (click)="addNoteDialog()" matTooltip="Add note"><mat-icon>note_add</mat-icon></button>
         </div>
         <mat-accordion multi>
-          @for (note of file.notesMapArray; track trackByNote($index, note)) {
+          @for (note of file.notesMapArray; track note.name) {
             <mat-expansion-panel >
               <mat-expansion-panel-header>
                 {{note.name}}
@@ -202,7 +202,7 @@
           <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
         </div>
         <mat-accordion multi>
-          @for (service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; track trackByTagService($index, service)) {
+          @for (service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; track service.serviceKey ?? service.serviceName) {
             <mat-expansion-panel >
               <mat-expansion-panel-header>
                 {{service.serviceName}} ({{service.tags.length}})

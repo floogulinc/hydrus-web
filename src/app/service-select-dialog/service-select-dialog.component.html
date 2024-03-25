@@ -5,7 +5,7 @@
       <mat-form-field appearance="outline" hideRequiredMarker>
         <mat-label>Service</mat-label>
         <mat-select formControlName="service" [compareWith]="serviceCompare">
-          @for (service of services$ | async; track service) {
+          @for (service of services$ | async; track service.service_key) {
             <mat-option [value]="service">
               {{service.name}}
             </mat-option>

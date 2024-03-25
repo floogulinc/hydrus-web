@@ -21,7 +21,7 @@
       <mat-label>Filename Tag Service</mat-label>
       <mat-select formControlName="uploadFilenameTagService">
         <mat-option>None (disabled)</mat-option>
-        @for (service of (apiSettings.apiSet ? (tagServices$ | async) : []); track service) {
+        @for (service of (apiSettings.apiSet ? (tagServices$ | async) : []); track service.service_key) {
           <mat-option [value]="service.service_key">
             {{service.name}}
           </mat-option>

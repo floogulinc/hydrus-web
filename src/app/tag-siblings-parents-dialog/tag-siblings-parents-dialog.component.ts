@@ -44,10 +44,6 @@ export class TagSiblingsParentsDialogComponent implements OnInit {
     );
   }
 
-  trackByTagService(index: number, item: {serviceKey: string}) {
-    return item.serviceKey;
-  }
-
   searchTag(tag: string) {
     this.dialogRef.close({action: 'searchTag', tag});
   }

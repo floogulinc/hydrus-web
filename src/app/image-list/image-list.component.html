@@ -1,7 +1,7 @@
 <virtual-scroller class="virtual-scroll" #scroll [items]="files" (vsEnd)="vsEnd($event)"
   [parentScroll]="scrollElement" [bufferAmount]="24">
   <ul class="mdc-image-list browse-image-list" #container>
-    @for (file of scroll.viewPortItems; track scrollTrackByFunction($index, file)) {
+    @for (file of scroll.viewPortItems; track file.file_id) {
       <li class="mdc-image-list__item grid-item"
         >
         <a [href]="file.file_url"

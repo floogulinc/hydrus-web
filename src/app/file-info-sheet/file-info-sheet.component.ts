@@ -158,18 +158,6 @@ export class FileInfoSheetComponent {
     this.reload$.next(null);
   }
 
-  trackByTagService(index: number, item: TagServiceItem) {
-    return item.serviceKey ?? item.serviceName;
-  }
-
-  trackByNote(index: number, item: { name: string, value: string }) {
-    return item.name;
-  }
-
-  trackByRating(index: number, rating: HydrusRating) {
-    return rating.service_key;
-  }
-
 
   navigatorShare = navigator.share;
 

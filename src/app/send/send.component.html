@@ -44,7 +44,7 @@
                   Not yet imported
                 </mat-list-item>
               }
-              @for (file of this.currentUrlFiles.url_file_statuses; track file) {
+              @for (file of this.currentUrlFiles.url_file_statuses; track file.hash) {
                 <mat-list-item class="file-list-item">
                   @if (file.status === 2) {
                     <mat-icon matListIcon>check</mat-icon>

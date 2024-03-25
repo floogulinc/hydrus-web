@@ -2,7 +2,7 @@
   <ng-template #recursiveList let-list>
 
     <mat-tab-group animationDuration="0ms" dynamicHeight class="pages-tab-group">
-      @for (page of list; track page) {
+      @for (page of list; track page.page_key) {
         <mat-tab>
           <ng-template mat-tab-label>
             <div [matTooltip]="page.name" class="mat-tab-label-content">

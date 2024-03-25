@@ -4,7 +4,7 @@
   @if (siblingsAndParents$ | async; as siblingsAndParents) {
     <div>
       <mat-tab-group animationDuration="0ms" dynamicHeight>
-        @for (service of siblingsAndParents | orderBy: 'serviceName' | orderBy: '-serviceType'; track trackByTagService($index, service)) {
+        @for (service of siblingsAndParents | orderBy: 'serviceName' | orderBy: '-serviceType'; track service.serviceKey) {
           <mat-tab [label]="service.serviceName">
             <ng-template matTabContent>
               <p>

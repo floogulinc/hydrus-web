@@ -49,7 +49,7 @@
 
   <mat-menu #sortGroupSubMenu="matMenu">
     <ng-template matMenuContent let-sortGroup="sortGroup">
-      @for (sortType of sortGroup.sortTypes; track sortType) {
+      @for (sortType of sortGroup.sortTypes; track sortType.sortType) {
         @if (!sortType.sortOrder.canAsc) {
           <button type="button" mat-menu-item [disabled]="sort.sortType === sortType.sortType" (click)="setSort(sortType.sortType, sortType.sortOrder.defaultAsc)">{{sortType.basicString}}</button>
         } @else {

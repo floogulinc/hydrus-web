@@ -3,7 +3,7 @@
   @if (services.hydrusServicesArray$ | async; as services) {
     <div>
       <mat-list>
-        @for (service of services; track service) {
+        @for (service of services; track service.service_key) {
           <mat-list-item>
             <h2 matLine>{{service.name}}</h2>
             <p matLine>{{service.type_pretty}}</p>

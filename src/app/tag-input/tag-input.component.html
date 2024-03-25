@@ -53,7 +53,7 @@
           </mat-option>
         </cdk-virtual-scroll-viewport>
       } @else {
-        @for (tag of tags; track tag) {
+        @for (tag of tags; track tag.value) {
           <mat-option [value]="tag.value" [ngClass]="tag.value | tagClass" class="tag-color">
             {{tag.value}} ({{tag.count | number}})
           </mat-option>
@@ -86,7 +86,7 @@
   </mat-menu>
 
   <mat-menu #predicatesMenu="matMenu">
-    @for (pred of predicateButtons; track pred) {
+    @for (pred of predicateButtons; track pred.name) {
       @if (isConvertedPredicateSingle(pred)) {
         <button type="button" mat-menu-item (click)="systemPredicateButton(pred.predicate)">{{pred.name}}</button>
       } @else {
@@ -99,7 +99,7 @@
 
   <mat-menu #predicateSubMenu="matMenu">
     <ng-template matMenuContent let-predicates="predicates">
-      @for (pred of predicates; track pred) {
+      @for (pred of predicates; track pred.predicate) {
         <button mat-menu-item (click)="systemPredicateButton(pred.predicate)">{{pred.name}}</button>
       }
     </ng-template>
