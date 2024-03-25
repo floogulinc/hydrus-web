@@ -152,6 +152,16 @@
 
 @include app-theming($light-theme);
 
+@include mat.chips-theme($light-theme);
+
+@media (prefers-color-scheme: dark) {
+  @include mat.all-legacy-component-colors($dark-theme);
+
+  @include app-theming($dark-theme);
+
+  @include mat.chips-color($dark-theme);
+}
+
 html,
 body {
   height: 100%;
@@ -160,12 +170,6 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-
-@media (prefers-color-scheme: dark) {
-  @include mat.all-legacy-component-colors($dark-theme);
-  @include app-theming($dark-theme);
-}
-
 
 .main-content {
   margin: auto;
