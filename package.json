@@ -28,7 +28,7 @@
     "@angular/router": "^17.3.1",
     "@angular/service-worker": "^17.3.1",
     "@floogulinc/ngx-virtual-scroller": "17.0.0",
-    "@fontsource/roboto": "^4.5.8",
+    "@fontsource/roboto": "^5.0.12",
     "@material/image-list": "^15.0.0-canary.bc9ae6c9c.0",
     "@ngneat/until-destroy": "^10.0.0",
     "@rx-angular/cdk": "^17.0.0",
