@@ -202,7 +202,7 @@
           <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
         </div>
         <mat-accordion multi>
-          @for (service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; track service.serviceKey ?? service.serviceName) {
+          @for (service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; track  trackByTagService(service)) {
             <mat-expansion-panel >
               <mat-expansion-panel-header>
                 {{service.serviceName}} ({{service.tags.length}})

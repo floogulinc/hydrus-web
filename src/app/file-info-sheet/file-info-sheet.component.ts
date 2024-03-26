@@ -158,6 +158,9 @@ export class FileInfoSheetComponent {
     this.reload$.next(null);
   }
 
+  trackByTagService(item: TagServiceItem) {
+    return item.serviceKey ?? item.serviceName;
+  }
 
   navigatorShare = navigator.share;
 
