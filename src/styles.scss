@@ -96,12 +96,10 @@
   padding-right: 16px;
 }
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
-
+/* TODO(mdc-migration): Remove legacy-core once all legacy components are migrated*/
 @include mat.legacy-core();
+
+@include mat.core();
 
 //setting up for future theme options
 @mixin app-theming($theme) {
@@ -145,21 +143,29 @@
 }
 
 
+/* TODO(mdc-migration): Remove all-legacy-component-typographies once all legacy components are migrated*/
 @include mat.all-legacy-component-typographies();
 
+
+@include mat.all-component-typographies();
+
 //@include mat.core-theme($light-theme);
+/* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated*/
 @include mat.all-legacy-component-themes($light-theme);
+@include mat.all-component-themes($light-theme);
 
 @include app-theming($light-theme);
 
-@include mat.chips-theme($light-theme);
+//@include mat.chips-theme($light-theme);
 
 @media (prefers-color-scheme: dark) {
+  /* TODO(mdc-migration): Remove all-legacy-component-colors once all legacy components are migrated*/
   @include mat.all-legacy-component-colors($dark-theme);
+  @include mat.all-component-colors($dark-theme);
 
   @include app-theming($dark-theme);
 
-  @include mat.chips-color($dark-theme);
+  //@include mat.chips-color($dark-theme);
 }
 
 html,
@@ -189,36 +195,44 @@ body {
   z-index: 10000 !important;
 }
 
-.mat-chip.tag-chip {
-  background-color: map-get(
+.mat-mdc-chip.tag-chip {
+  --mdc-chip-elevated-container-color: #{map-get(
   map-get($mat-tag-colors, "default-namespace"),
   "default"
-  );
-  color: map-get(
+  )};
+  --mdc-chip-label-text-color: #{map-get(
     map-get($mat-tag-colors, "default-namespace"),
     "default-contrast"
-  );
-  font-weight: 400;
+  )};
+  --mdc-chip-with-trailing-icon-trailing-icon-color: #{map-get(
+    map-get($mat-tag-colors, "default-namespace"),
+    "default-contrast"
+  )};
+  //font-weight: 400;
   @each $tag, $palette in $mat-tag-colors {
     &.tag-namespace-#{$tag} {
-      background-color: map-get($palette, "default");
-      color: map-get($palette, "default-contrast");
+      --mdc-chip-elevated-container-color: #{map-get($palette, "default")};
+      --mdc-chip-label-text-color: #{map-get($palette, "default-contrast")};
+      --mdc-chip-with-trailing-icon-trailing-icon-color: #{map-get($palette, "default-contrast")};
     }
   }
   &.tag-namespace- {
-    background-color: map-get(
+    --mdc-chip-elevated-container-color: #{map-get(
       map-get($mat-tag-colors, "no-namespace"),
       "default"
-    );
-    color: map-get(
+    )};
+    --mdc-chip-label-text-color: #{map-get(
       map-get($mat-tag-colors, "no-namespace"),
       "default-contrast"
-    );
+    )};
+    --mdc-chip-with-trailing-icon-trailing-icon-color: #{map-get(
+      map-get($mat-tag-colors, "no-namespace"),
+      "default-contrast"
+    )};
   }
-  .mat-chip-remove {
-    opacity: 0.6;
-  }
-  height: 100% !important;
+  /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
+  
+  //height: 100% !important;
 }
 
 .tag-color {
@@ -281,8 +295,8 @@ body {
 }
 
 .tag-chip {
-  width: fit-content;
-  max-width: 100%;
+  //width: fit-content;
+  //max-width: 100%;
 }
 
 .flex-row {
@@ -370,7 +384,7 @@ mat-icon.mat-card-avatar {
 
 // Various Material Design overrides
 
-.mat-chip {
+.mat-mdc-chip {
   // restore old font size
-  font-size: 14px;
+  //font-size: 14px;
 }

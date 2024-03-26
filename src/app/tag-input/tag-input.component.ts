@@ -1,7 +1,7 @@
 import { HydrusFilesService } from './../hydrus-files.service';
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input, Optional, Self } from '@angular/core';
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
-import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips';
+import { MatChipInputEvent } from '@angular/material/chips';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
 import { MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent, MatLegacyAutocomplete as MatAutocomplete } from '@angular/material/legacy-autocomplete';

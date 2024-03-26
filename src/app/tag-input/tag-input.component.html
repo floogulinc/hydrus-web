@@ -1,31 +1,34 @@
 <mat-form-field class="tag-form-field" appearance="outline">
   <mat-label>{{placeholder}}</mat-label>
-  <mat-chip-list #chipList [attr.aria-label]="placeholder">
+  <mat-chip-grid #chipList [attr.aria-label]="placeholder">
     @for (tag of searchTags; track tag; let i = $index) {
       @if (tag | isString) {
-        <mat-chip
-          [selectable]="false" color="primary"
+        <mat-chip-row
+          color="primary"
           class="tag-chip"
           [removable]="true"
           (removed)="removeSearchTag(i)"
           [ngClass]="$any(tag) | tagClass"
           [matMenuTriggerFor]="tagMenu"
           [matMenuTriggerData]="{tag}"
-          >
+        >
           <div class="tag-chip-text">{{tag}}</div>
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
-        </mat-chip>
+        </mat-chip-row>
       } @else {
-        <mat-chip [selectable]="false" color="primary" class="tag-chip"
-          [removable]="true" (removed)="removeSearchTag(i)"
-          >
+        <mat-chip-row
+          color="primary" 
+          class="tag-chip"
+          [removable]="true" 
+          (removed)="removeSearchTag(i)"
+        >
           <div class="tag-chip-text">{{$any(tag) | flatten | join:' OR '}}</div>
           <button matChipRemove>
             <mat-icon>cancel</mat-icon>
           </button>
-        </mat-chip>
+        </mat-chip-row>
       }
     }
     <input
@@ -40,8 +43,8 @@
       enterkeyhint="done"
       autocapitalize="none"
       autocomplete="off"
-      >
-  </mat-chip-list>
+    >
+  </mat-chip-grid>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
     @if (filteredTags | async; as tags) {
       @if (tags.length > 25) {

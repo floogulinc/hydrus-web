@@ -9,15 +9,14 @@
             <ng-template matTabContent>
               <p>
                 Ideal tag:
-                <mat-chip
-                  [selectable]="false"
+                <mat-chip-row
                   class="tag-chip"
                   [ngClass]="service.ideal_tag | tagClass"
                   [matMenuTriggerFor]="tagMenu"
                   [matMenuTriggerData]="{tag: service.ideal_tag}"
                   >
                   <div class="tag-chip-text">{{service.ideal_tag}}</div>
-                </mat-chip>
+                </mat-chip-row>
               </p>
               <mat-accordion multi>
                 <mat-expansion-panel >
@@ -25,19 +24,18 @@
                     Siblings ({{service.siblings.length}})
                   </mat-expansion-panel-header>
                   <ng-template matExpansionPanelContent>
-                    <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+                    <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
                       @for (tag of (service.siblings | orderBy); track tag) {
-                        <mat-chip
-                          [selectable]="false"
+                        <mat-chip-option
                           class="tag-chip"
                           [ngClass]="tag | tagClass"
                           [matMenuTriggerFor]="tagMenu"
                           [matMenuTriggerData]="{tag}"
                           >
                           <div class="tag-chip-text">{{tag}}</div>
-                        </mat-chip>
+                        </mat-chip-option>
                       }
-                    </mat-chip-list>
+                    </mat-chip-listbox>
                   </ng-template>
                 </mat-expansion-panel>
                 <mat-expansion-panel >
@@ -45,19 +43,18 @@
                     Ancestors ({{service.ancestors.length}})
                   </mat-expansion-panel-header>
                   <ng-template matExpansionPanelContent>
-                    <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+                    <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
                       @for (tag of (service.ancestors | orderBy); track tag) {
-                        <mat-chip
-                          [selectable]="false"
+                        <mat-chip-option
                           class="tag-chip"
                           [ngClass]="tag | tagClass"
                           [matMenuTriggerFor]="tagMenu"
                           [matMenuTriggerData]="{tag}"
                           >
                           <div class="tag-chip-text">{{tag}}</div>
-                        </mat-chip>
+                        </mat-chip-option>
                       }
-                    </mat-chip-list>
+                    </mat-chip-listbox>
                   </ng-template>
                 </mat-expansion-panel>
                 <mat-expansion-panel >
@@ -65,19 +62,18 @@
                     Descendants ({{service.descendants.length}})
                   </mat-expansion-panel-header>
                   <ng-template matExpansionPanelContent>
-                    <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+                    <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
                       @for (tag of (service.descendants | orderBy); track tag) {
-                        <mat-chip
-                          [selectable]="false"
+                        <mat-chip-option
                           class="tag-chip"
                           [ngClass]="tag | tagClass"
                           [matMenuTriggerFor]="tagMenu"
                           [matMenuTriggerData]="{tag}"
                           >
                           <div class="tag-chip-text">{{tag}}</div>
-                        </mat-chip>
+                        </mat-chip-option>
                       }
-                    </mat-chip-list>
+                    </mat-chip-listbox>
                   </ng-template>
                 </mat-expansion-panel>
               </mat-accordion>

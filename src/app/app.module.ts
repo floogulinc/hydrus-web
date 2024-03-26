@@ -27,7 +27,7 @@ import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-l
 import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
 import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
-import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
+import {MatChipsModule} from '@angular/material/chips';
 import {MatLegacyAutocompleteModule as MatAutocompleteModule} from '@angular/material/legacy-autocomplete';
 import { TagInputComponent } from './tag-input/tag-input.component';
 import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
