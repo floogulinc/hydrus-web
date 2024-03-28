@@ -1,15 +1,30 @@
 .metadata-line span:not(:last-of-type) {
   margin-right: 20px;
 }
-.mat-mdc-dialog-title {
-  margin-bottom: 0;
-}
-.mat-list {
-  padding-top: 0;
+.sheet-title {
+  //margin-bottom: 0;
+
+  display: block;
+  margin-top: 0;
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin: 0 0 1px;
+  //padding: 0 24px 9px;
+
+  color: var(--mdc-dialog-subhead-color, rgba(0, 0, 0, 0.87));
+
+  font-family: var(--mdc-dialog-subhead-font, Roboto, sans-serif);
+  line-height: var(--mdc-dialog-subhead-line-height, 1.5rem);
+  font-size: var(--mdc-dialog-subhead-size, 1rem);
+  font-weight: var(--mdc-dialog-subhead-weight, 400);
+  letter-spacing: var(--mdc-dialog-subhead-tracking, 0.03125em);
 }
 
-.sheet-title {
-  margin-top: 0;
+
+
+.mat-mdc-list {
+  padding-top: 0;
 }
 
 .title-row {
@@ -21,7 +36,7 @@
   align-items: center;
 }
 
-.mat-spinner {
+.mat-mdc-progress-spinner {
   margin-left: auto;
   margin-right: auto;
 }

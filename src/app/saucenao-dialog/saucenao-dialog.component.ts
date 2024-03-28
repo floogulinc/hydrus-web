@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, Observable, tap } from 'rxjs';
 import { AddUrlOptions, HydrusUrlService } from '../hydrus-url.service';
 import { SaucenaoService, SaucenaoResults, SaucenaoUrlorFile } from '../saucenao.service';

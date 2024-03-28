@@ -1,5 +1,5 @@
 <div>
-  <h2 class="mat-display-1">Send to Hydrus</h2>
+  <h2 class="mat-headline-4">Send to Hydrus</h2>
   <form [formGroup]="sendForm" (ngSubmit)="onSubmit()" class="flex-column">
     <mat-form-field appearance="outline">
       <mat-label>URL to send</mat-label>
@@ -47,12 +47,12 @@
               @for (file of this.currentUrlFiles.url_file_statuses; track file.hash) {
                 <mat-list-item class="file-list-item">
                   @if (file.status === 2) {
-                    <mat-icon matListIcon>check</mat-icon>
+                    <mat-icon matListItemIcon>check</mat-icon>
                   }
                   @if (file.status === 3) {
-                    <mat-icon matListIcon>delete</mat-icon>
+                    <mat-icon matListItemIcon>delete</mat-icon>
                   }
-                  <div mat-line class="file-note">{{file.note}}</div>
+                  <div matListItemTitle class="file-note">{{file.note}}</div>
                 </mat-list-item>
               }
             </mat-list>
@@ -88,12 +88,12 @@
                   <mat-list class="saucenao-url-list">
                     @for (url of result.urls; track url) {
                       <mat-list-item>
-                        <div mat-line>{{url.site}}</div>
-                        <div mat-line>{{url.url}}</div>
-                        <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
+                        <div matListItemTitle>{{url.site}}</div>
+                        <div matListItemLine>{{url.url}}</div>
+                        <a mat-icon-button matListItemMeta rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
                           <mat-icon>open_in_new</mat-icon>
                         </a>
-                        <button mat-icon-button (click)="send(url.url)" title="Send to Hydrus">
+                        <button mat-icon-button matListItemMeta (click)="send(url.url)" title="Send to Hydrus">
                           <mat-icon>send</mat-icon>
                         </button>
                       </mat-list-item>

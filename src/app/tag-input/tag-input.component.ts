@@ -17,7 +17,7 @@ import { SystemPredicateRatingsDialogComponent } from '../system-predicate-ratin
 import { HydrusService } from '../hydrus-services';
 import { searchTagsContainsSystemPredicate } from '../utils/tag-utils';
 import { HydrusRatingsService } from '../hydrus-ratings.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
 
 function convertPredicate(p: SystemPredicate): ConvertedPredicate {

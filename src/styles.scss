@@ -97,7 +97,7 @@
 }
 
 /* TODO(mdc-migration): Remove legacy-core once all legacy components are migrated*/
-@include mat.legacy-core();
+//@include mat.legacy-core();
 
 @include mat.core();
 
@@ -124,13 +124,13 @@
   .drawer-list-item-active {
     background-color: change-color(mat.get-color-from-palette($primary), $alpha: 0.15) !important;
     color: mat.get-color-from-palette($primary) !important;
-    .mat-list-icon {
+    .mat-mdc-list-item-icon {
       color: mat.get-color-from-palette($primary) !important;
     }
   }
 
   .sidenav-list {
-    .mat-list-icon {
+    .mat-mdc-list-item-icon {
       //color: rgba(0, 0, 0, 0.54);
       color: mat.get-color-from-palette($foreground, icon);
       margin-right: 16px;
@@ -144,14 +144,14 @@
 
 
 /* TODO(mdc-migration): Remove all-legacy-component-typographies once all legacy components are migrated*/
-@include mat.all-legacy-component-typographies();
+//@include mat.all-legacy-component-typographies();
 
 
 @include mat.all-component-typographies();
 
 //@include mat.core-theme($light-theme);
 /* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated*/
-@include mat.all-legacy-component-themes($light-theme);
+//@include mat.all-legacy-component-themes($light-theme);
 @include mat.all-component-themes($light-theme);
 
 @include app-theming($light-theme);
@@ -160,7 +160,7 @@
 
 @media (prefers-color-scheme: dark) {
   /* TODO(mdc-migration): Remove all-legacy-component-colors once all legacy components are migrated*/
-  @include mat.all-legacy-component-colors($dark-theme);
+  //@include mat.all-legacy-component-colors($dark-theme);
   @include mat.all-component-colors($dark-theme);
 
   @include app-theming($dark-theme);
@@ -283,7 +283,7 @@ body {
 }
 
 .form-field-spacing {
-  @extend .mat-form-field-wrapper;
+  @extend .mat-mdc-text-field-wrapper;
 }
 
 .text-ellipsis {
@@ -324,8 +324,11 @@ body {
 }
 
 .pages-tab-group {
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
   .mat-tab-label {
     max-width: 160px;
+    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
     .mat-tab-label-content {
       width: 100%;
       height: 100%;
@@ -339,7 +342,7 @@ body {
   }
 }
 
-mat-icon.mat-card-avatar {
+mat-icon.mat-mdc-card-avatar {
   width: 40px;
   height: 40px;
   font-size: 40px;

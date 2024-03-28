@@ -1,5 +1,5 @@
 <div class="title-row">
-  <h2 mat-dialog-title class="sheet-title">File Info</h2>
+  <h2 class="mat-mdc-dialog-container sheet-title">File Info</h2>
   @if (data.file; as file) {
     <div>
       @if (ipfsUrl$ | async; as ipfsUrl) {
@@ -65,35 +65,39 @@
   <div>
     <mat-list role="list">
       <mat-list-item role="listitem">
-        <mat-icon mat-list-icon>{{file.fileIcon}}</mat-icon>
-        <div mat-line>{{file.file_id}}</div>
-        <div mat-line class="metadata-line"><span>{{file.file_type_string}}</span> @if (file.width && file.height) {
-        <span>{{file.width}}x{{file.height}}</span>
-        } <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span></div>
+        <mat-icon matListItemIcon>{{file.fileIcon}}</mat-icon>
+        <div matListItemTitle>{{file.file_id}}</div>
+        <div matListItemLine class="metadata-line">
+          <span>{{file.file_type_string}}</span> 
+          @if (file.width && file.height) {
+            <span>{{file.width}}x{{file.height}}</span>
+          } 
+          <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span>
+        </div>
       </mat-list-item>
       <mat-list-item role="listitem">
-        <mat-icon mat-list-icon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
-        <div mat-line>{{file.is_trashed ? "In Trash" + (file.is_inbox ? " (Inbox)" : " (Archived)") : file.is_inbox ? "In Inbox" : "Archived"}}</div>
+        <mat-icon matListItemIcon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
+        <div matListItemTitle>{{file.is_trashed ? "In Trash" + (file.is_inbox ? " (Inbox)" : " (Archived)") : file.is_inbox ? "In Inbox" : "Archived"}}</div>
         @if (file.time_imported) {
-          <div mat-line><span [matTooltip]="file.time_imported | date:'yyyy-MM-dd HH:mm:ss.SSS'" matTooltipPosition="above">Imported {{file.time_imported | timeAgo}}</span></div>
+          <div matListItemLine><span [matTooltip]="file.time_imported | date:'yyyy-MM-dd HH:mm:ss.SSS'" matTooltipPosition="above">Imported {{file.time_imported | timeAgo}}</span></div>
         }
         @if (file.is_inbox) {
-          <button mat-icon-button (click)="archiveFile()" matTooltip="Archive">
+          <button mat-icon-button (click)="archiveFile()" matTooltip="Archive" matListItemMeta>
             <mat-icon>archive</mat-icon>
           </button>
         }
         @if (!file.is_inbox) {
-          <button mat-icon-button (click)="unarchiveFile()" matTooltip="Return to inbox">
+          <button mat-icon-button (click)="unarchiveFile()" matTooltip="Return to inbox" matListItemMeta>
             <mat-icon>move_to_inbox</mat-icon>
           </button>
         }
         @if (!file.is_trashed) {
-          <button mat-icon-button (click)="deleteFile()" matTooltip="Send to trash">
+          <button mat-icon-button (click)="deleteFile()" matTooltip="Send to trash" matListItemMeta>
             <mat-icon>delete</mat-icon>
           </button>
         }
         @if (file.is_trashed) {
-          <button mat-icon-button (click)="undeleteFile()" matTooltip="Undelete">
+          <button mat-icon-button (click)="undeleteFile()" matTooltip="Undelete" matListItemMeta>
             <mat-icon>restore_from_trash</mat-icon>
           </button>
         }

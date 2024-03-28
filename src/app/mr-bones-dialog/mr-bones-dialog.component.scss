@@ -1,4 +1,4 @@
-.mat-spinner {
+.mat-mdc-progress-spinner {
   margin-left: auto;
   margin-right: auto;
 }
@@ -7,7 +7,7 @@ table {
   width: 100%;
 }
 
-.mat-column-num.mat-cell,
+.mat-column-num.mat-mdc-cell,
 .mat-column-numPercent.mat-cell,
 .mat-column-size.mat-cell,
 .mat-column-sizePercent.mat-cell,
@@ -23,12 +23,12 @@ img {
   display: block;
 }
 
-.mat-cell, .mat-header-cell {
+.mat-mdc-cell, .mat-mdc-header-cell {
   padding-left: 8px;
   padding-right: 8px;
 }
 
-.mat-header-cell {
+.mat-mdc-header-cell {
   text-align: center;
 }
 

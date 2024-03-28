@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HydrusBasicFile } from '../hydrus-file';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ExifReaderService } from '../exif-reader.service';
 import { catchError, from, map, of, shareReplay } from 'rxjs';
 import { Tags } from 'exifreader';

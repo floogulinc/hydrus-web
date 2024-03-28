@@ -5,15 +5,16 @@
       <mat-list>
         @for (service of services; track service.service_key) {
           <mat-list-item>
-            <h2 matLine>{{service.name}}</h2>
-            <p matLine>{{service.type_pretty}}</p>
-            @if (isNumericalRatingService(service)) {
-              <p matLine>{{service.min_stars}}-{{service.max_stars}} {{service.star_shape}}s</p>
-            }
-            @if (isLikeRatingService(service)) {
-              <p matLine>{{service.star_shape}} shape</p>
-            }
-            <pre matLine>{{service.service_key}}</pre>
+            <h2 matListItemTitle>{{service.name}}</h2>
+            <div matListItemLine>{{service.type_pretty}}
+              @if (isNumericalRatingService(service)) {
+                <span> &mdash; {{service.min_stars}}-{{service.max_stars}} {{service.star_shape}}s</span>
+              }
+              @if (isLikeRatingService(service)) {
+                <span> &mdash; {{service.star_shape}} shape</span>
+              }
+            </div>
+            <pre matListItemLine>{{service.service_key}}</pre>
           </mat-list-item>
         }
       </mat-list>
