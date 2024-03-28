@@ -250,7 +250,8 @@ const MIMES_WITH_THUMBNAILS = [
   HydrusFiletype.APPLICATION_PSD,
   HydrusFiletype.APPLICATION_KRITA,
   HydrusFiletype.APPLICATION_PROCREATE,
-  HydrusFiletype.APPLICATION_CBZ
+  HydrusFiletype.APPLICATION_CBZ,
+  HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_PPTX
 ]
 
 export function hasThumbnail(mime: HydrusFiletype) {
