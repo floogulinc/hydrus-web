@@ -236,7 +236,11 @@ body {
 }
 
 .tag-color {
-  color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
+
+  // I HATE CSS
+  &.tag-color {
+    color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
+  }
   //color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
   @each $tag, $palette in $mat-tag-colors {
       &.tag-namespace-#{$tag} {
@@ -257,10 +261,10 @@ body {
   text-overflow: ellipsis;
 }
 
-.mat-button,
-.mat-raised-button,
-.mat-stroked-button,
-.mat-flat-button {
+.mat-mdc-button,
+.mat-mdc-raised-button,
+.mat-mdc-outlined-button,
+.mat-mdc-unelevated-button {
   text-transform: uppercase;
 }
 

@@ -11,7 +11,7 @@ import { HydrusFileDownloadService } from './hydrus-file-download.service';
 import { take } from 'rxjs';
 import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
 import { SettingsService } from './settings.service';
-import { MatLegacyButton as MatButton } from '@angular/material/legacy-button';
+import { MatButton } from '@angular/material/button';
 
 
 function isContentType(content: Content | Slide, type: string) {

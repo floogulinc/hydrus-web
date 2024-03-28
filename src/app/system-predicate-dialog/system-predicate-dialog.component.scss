@@ -37,13 +37,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  > .mat-form-field {
+  > .mat-mdc-form-field {
     width: 248px;
   }
 }
 
 .ratio-form {
-  .mat-form-field {
+  .mat-mdc-form-field {
     width: 60px;
   }
 }
@@ -57,7 +57,7 @@
 }
 
 .time-interval-form, .large-time-interval-form {
-  > .mat-form-field {
+  > .mat-mdc-form-field {
     width: 120px;
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { HydrusFilesService } from '../hydrus-files.service';
 import { Platform } from '@angular/cdk/platform';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { MrBonesDialogComponent } from '../mr-bones-dialog/mr-bones-dialog.component';
 import { HydrusVersionService } from '../hydrus-version.service';
 import { ServicesInfoDialogComponent } from '../services-info-dialog/services-info-dialog.component';
