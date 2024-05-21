@@ -257,7 +257,7 @@ export class PhotoswipeService {
         errorMsgEl.appendChild(errorMsgText);
 
         const renderButton = document.createElement('button');
-        renderButton.setAttribute('mat-raised-button', '');
+        renderButton.setAttribute('mat-stroked-button', '');
         const psdButtonComponent = createComponent(MatButton, {
           environmentInjector: this.injector,
           hostElement: renderButton,
@@ -470,7 +470,7 @@ export class PhotoswipeService {
   addPhotopeaButton(file: HydrusBasicFile, element: HTMLElement) {
     if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
       const photopeaButton = document.createElement('a');
-      photopeaButton.setAttribute('mat-raised-button', '');
+      photopeaButton.setAttribute('mat-stroked-button', '');
       photopeaButton.target = '_blank';
       photopeaButton.href = getPhotopeaUrlForFile(file);
 

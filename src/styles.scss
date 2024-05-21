@@ -2,6 +2,8 @@
 // Custom Theming for Angular Material
 @use '@angular/material' as mat;
 
+@use '@angular/material-experimental' as matx;
+
 @import "@fontsource/roboto/300.css";
 @import "@fontsource/roboto/400.css";
 @import "@fontsource/roboto/500.css";
@@ -96,13 +98,44 @@
   padding-right: 16px;
 }
 
+
 /* TODO(mdc-migration): Remove legacy-core once all legacy components are migrated*/
 //@include mat.legacy-core();
 
 @include mat.core();
 
-//setting up for future theme options
 @mixin app-theming($theme) {
+  @if (mat.get-theme-version($theme) == 1) {
+    // Add your new M3 styles here.
+
+    .drawer-list-item-active {
+      background-color: change-color(mat.get-theme-color($theme, primary), $alpha: 0.15) !important;
+      color: mat.get-theme-color($theme, primary) !important;
+      .mat-mdc-list-item-icon {
+        color: mat.get-theme-color($theme, primary) !important;
+      }
+    }
+  
+    .sidenav-list {
+      .mat-mdc-list-item-icon {
+        //color: rgba(0, 0, 0, 0.54);
+        //color: mat.get-theme-color($theme, primary);
+        margin-right: 16px;
+      }
+    }
+  
+    // .image-grid-supporting-text {
+    //   color: mat.get-theme-color($theme, text) !important;
+    // }
+
+
+  } @else {
+    @include app-theming-legacy($theme)
+  }
+}
+
+//setting up for future theme options
+@mixin app-theming-legacy($theme) {
   // Extract the palettes you need from the theme definition.
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
@@ -147,26 +180,94 @@
 //@include mat.all-legacy-component-typographies();
 
 
-@include mat.all-component-typographies();
+//@include mat.all-component-typographies();
 
 //@include mat.core-theme($light-theme);
 /* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated*/
 //@include mat.all-legacy-component-themes($light-theme);
-@include mat.all-component-themes($light-theme);
 
-@include app-theming($light-theme);
+@mixin setup-themes($light-theme, $dark-theme) {
+  @include mat.all-component-typographies();
+  @include mat.typography-hierarchy($light-theme, $back-compat: true);
 
-//@include mat.chips-theme($light-theme);
+  @include mat.all-component-themes($light-theme);
+  @include app-theming($light-theme);
 
-@media (prefers-color-scheme: dark) {
-  /* TODO(mdc-migration): Remove all-legacy-component-colors once all legacy components are migrated*/
-  //@include mat.all-legacy-component-colors($dark-theme);
-  @include mat.all-component-colors($dark-theme);
-
-  @include app-theming($dark-theme);
-
-  //@include mat.chips-color($dark-theme);
+  @media (prefers-color-scheme: dark) {
+    @include mat.all-component-colors($dark-theme);
+    @include app-theming($dark-theme);
+  }
 }
+
+
+
+
+@mixin legacy-theme {
+  // Define the palettes for your theme using the Material Design palettes available in palette.scss
+  // (imported above). For each palette, you can optionally specify a default, lighter, and darker
+  // hue. Available color palettes: https://material.io/design/color/
+  $light-primary: mat.define-palette(mat.$indigo-palette);
+  $dark-primary: mat.define-palette(mat.$indigo-palette, 200);
+  $light-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+  // The warn palette is optional (defaults to red).
+  $light-warn: mat.define-palette(mat.$red-palette);
+
+  $typography-config: mat.define-typography-config();
+
+  // Create the theme object (a Sass map containing all of the palettes).
+  $light-theme: mat.define-light-theme((
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+      warn: $light-warn
+    ),
+    typography: $typography-config,
+    density: 0,
+  ));
+
+  $dark-theme: mat.define-dark-theme((
+    color: (
+      primary: $dark-primary,
+      accent: $light-accent,
+      warn: $light-warn
+    ),
+  ));
+
+  @include setup-themes($light-theme, $dark-theme);
+}
+
+@mixin modern-theme($palette) {
+
+
+  $light-theme: matx.define-theme((
+    color: (
+      theme-type: light,
+      primary: $palette,
+    ),
+    density: (
+      scale: 0
+    )
+  ));
+
+  $dark-theme: matx.define-theme((
+    color: (
+      theme-type: dark,
+      primary: $palette,
+    ),
+    density: (
+      scale: 0
+    )
+  ));
+
+  @include setup-themes($light-theme, $dark-theme);
+}
+
+html {
+  @include modern-theme(matx.$m3-azure-palette);
+  //@include legacy-theme;
+}
+
 
 html,
 body {
@@ -261,12 +362,6 @@ body {
   text-overflow: ellipsis;
 }
 
-.mat-mdc-button,
-.mat-mdc-raised-button,
-.mat-mdc-outlined-button,
-.mat-mdc-unelevated-button {
-  text-transform: uppercase;
-}
 
 .file-info-panel {
   width: 720px;
@@ -283,7 +378,9 @@ body {
 }
 
 .form-field-spacing {
-  @extend .mat-mdc-text-field-wrapper;
+  // TODO: Fix this
+  //@extend .mat-mdc-text-field-wrapper;
+  padding-bottom: var(--mat-form-field-subscript-text-line-height);
 }
 
 .text-ellipsis {
@@ -394,4 +491,23 @@ mat-icon.mat-mdc-card-avatar {
 .mat-mdc-chip {
   // restore old font size
   //font-size: 14px;
+}
+
+.mdc-list-item {
+  &.mdc-list-item--with-two-lines .mdc-list-item {
+    &__start, &__end {
+      align-self: center !important;
+      margin-top: 0 !important;
+    }
+  }
+  
+  &.mdc-list-item--with-leading-icon.mdc-list-item--with-two-lines.mdc-list-item--with-trailing-meta .mdc-list-item__end::before {
+    height: 0 !important;
+    content: none !important;
+  }
+  
+  &.mdc-list-item--with-trailing-meta .mdc-list-item__end {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
 }

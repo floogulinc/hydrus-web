@@ -111,13 +111,13 @@
         <mat-nav-list>
           @for (url of file.detailed_known_urls; track url) {
             <mat-list-item>
-              <a matLine [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
-              @if (navigatorShare) {
-                <button mat-icon-button (click)="shareUrl(url.normalised_url)">
+              <a matListItemTitle class="known-url-list-item-title" [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
+              @if (true) {
+                <button mat-icon-button matListItemMeta (click)="shareUrl(url.normalised_url)">
                   <mat-icon>share</mat-icon>
                 </button>
               }
-              <button mat-icon-button [matMenuTriggerFor]="urlMenu" [matMenuTriggerData]="{url}" aria-label="More options">
+              <button mat-icon-button matListItemMeta [matMenuTriggerFor]="urlMenu" [matMenuTriggerData]="{url}" aria-label="More options">
                 <mat-icon>more_vert</mat-icon>
               </button>
             </mat-list-item>
