@@ -108,10 +108,8 @@
     }
     <mat-list-item role="listitem">
       <div matListItemTitle>Viewport Info</div>
-      <div matListItemLine>Page Size: {{window.innerWidth}}x{{window.innerHeight}}</div>
-      <div matListItemLine>Screen Resolution: {{window.screen.width * window.devicePixelRatio}} x {{window.screen.height * window.devicePixelRatio}}</div>
-      <div matListItemLine>Pixel Ratio: {{window.devicePixelRatio}}</div>
-      <div matListItemLine>Orientation: {{window.screen.orientation.type}}</div>
+      <div matListItemLine>Page Size: {{window.innerWidth}}x{{window.innerHeight}} (Pixel Ratio: {{window.devicePixelRatio}})</div>
+      <div matListItemLine>Screen Resolution: {{window.screen.width * window.devicePixelRatio}} x {{window.screen.height * window.devicePixelRatio}} (Orientation: {{window.screen.orientation.type}})</div>
     </mat-list-item>
   </mat-nav-list>
 </div>

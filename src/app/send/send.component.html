@@ -33,9 +33,11 @@
     </form>
 
     @if (currentUrlInfo$ | async; as currentUrlInfo) {
-      <mat-card class="url-info-card">
-        <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
-        <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
+      <mat-card class="url-info-card" appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
+          <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
+        </mat-card-header>
         @if (currentUrlFiles$ | async; as currentUrlFiles) {
           <mat-card-content>
             <mat-list>
@@ -63,7 +65,7 @@
 
     @if (currentUrlBasicFileInfo$ | async; as currentUrlBasicFiles) {
       <div>
-        <h2 class="mat-title">Current URL files</h2>
+        <h2 class="mat-headline-6">Current URL files</h2>
         <app-image-list [files]="currentUrlBasicFiles"></app-image-list>
       </div>
     }
@@ -71,14 +73,14 @@
 
     @if (saucenaoResults || saucenaoLoading) {
       <div class="saucenao-results">
-        <h2 class="mat-title">SauceNao Results</h2>
+        <h2 class="mat-headline-6">SauceNao Results</h2>
         @if (saucenaoLoading) {
           <mat-spinner class="saucenao-spinner"></mat-spinner>
         }
         @if (saucenaoResults) {
           <div>
             @for (result of saucenaoResults; track result) {
-              <mat-card class="saucenao-card">
+              <mat-card class="saucenao-card" appearance="outlined">
                 <mat-card-header>
                   <img mat-card-avatar class="thumbnail" [src]="result.thumbnail">
                   <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>

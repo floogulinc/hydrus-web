@@ -11,6 +11,9 @@
 @import 'material-icons/iconfont/filled.css';
 
 
+// --------------------------------------------------------------------------------
+// Photoswipe:
+
 @import 'photoswipe/dist/photoswipe.css';
 
 .pswp {
@@ -99,6 +102,9 @@
 }
 
 
+// --------------------------------------------------------------------------------
+// Material Setup:
+
 /* TODO(mdc-migration): Remove legacy-core once all legacy components are migrated*/
 //@include mat.legacy-core();
 
@@ -115,20 +121,6 @@
         color: mat.get-theme-color($theme, primary) !important;
       }
     }
-  
-    .sidenav-list {
-      .mat-mdc-list-item-icon {
-        //color: rgba(0, 0, 0, 0.54);
-        //color: mat.get-theme-color($theme, primary);
-        margin-right: 16px;
-      }
-    }
-  
-    // .image-grid-supporting-text {
-    //   color: mat.get-theme-color($theme, text) !important;
-    // }
-
-
   } @else {
     @include app-theming-legacy($theme)
   }
@@ -166,7 +158,6 @@
     .mat-mdc-list-item-icon {
       //color: rgba(0, 0, 0, 0.54);
       color: mat.get-color-from-palette($foreground, icon);
-      margin-right: 16px;
     }
   }
 
@@ -198,8 +189,6 @@
     @include app-theming($dark-theme);
   }
 }
-
-
 
 
 @mixin legacy-theme {
@@ -238,8 +227,6 @@
 }
 
 @mixin modern-theme($palette) {
-
-
   $light-theme: matx.define-theme((
     color: (
       theme-type: light,
@@ -263,20 +250,83 @@
   @include setup-themes($light-theme, $dark-theme);
 }
 
+
 html {
   @include modern-theme(matx.$m3-azure-palette);
-  //@include legacy-theme;
 }
 
 
-html,
-body {
+
+html, body {
   height: 100%;
 }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  overscroll-behavior: none;
 }
+
+// --------------------------------------------------------------------------------
+// Material Overrides:
+
+.mdc-evolution-chip-set .mat-mdc-chip {
+  .mdc-evolution-chip__cell--primary,
+  .mdc-evolution-chip__action--primary,
+  .mat-mdc-chip-action-label {
+    overflow: hidden;
+  }
+}
+
+.mdc-list-item {
+  &.mdc-list-item--with-two-lines, &.mdc-list-item--with-three-lines {
+    .mdc-list-item {
+      &__start, &__end {
+        align-self: center !important;
+        margin-top: 0 !important;
+      }
+    }
+  }
+
+  &.mdc-list-item--with-leading-icon {
+    &.mdc-list-item--with-two-lines, &.mdc-list-item--with-three-lines {
+      &.mdc-list-item--with-trailing-meta .mdc-list-item__end::before {
+        height: 0 !important;
+        content: none !important;
+      }
+    }
+  }
+
+  &.mdc-list-item--with-trailing-meta .mdc-list-item__end {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+
+// https://github.com/angular/components/issues/28618
+
+@mixin elevations() {
+  @for $elevation from 0 to 24 {
+    .mat-elevation-z#{$elevation} {
+      @include mat.elevation($elevation);
+    }
+  }
+}
+
+@include elevations();
+
+.cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
+mat-icon.mat-mdc-card-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
+
+// --------------------------------------------------------------------------------
 
 .main-content {
   margin: auto;
@@ -288,15 +338,15 @@ body {
   max-width: 1920px;
 }
 
-body {
-  overscroll-behavior: none;
-}
-
-.cdk-overlay-container {
-  z-index: 10000 !important;
+.sidenav-list {
+  .mat-mdc-list-item-icon {
+    margin-right: 16px;
+  }
 }
 
 .mat-mdc-chip.tag-chip {
+  --mdc-chip-outline-width: 0;
+
   --mdc-chip-elevated-container-color: #{map-get(
   map-get($mat-tag-colors, "default-namespace"),
   "default"
@@ -332,7 +382,7 @@ body {
     )};
   }
   /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
-  
+
   //height: 100% !important;
 }
 
@@ -363,11 +413,16 @@ body {
 }
 
 
-.file-info-panel {
-  width: 720px;
-  .mat-bottom-sheet-container {
-    min-width: min(100vw, 720px);
-  }
+// .file-info-panel .mat-bottom-sheet-container- {
+//   &medium, &large, &xlarge {
+//     width: 960px;
+//     max-width: 960px;
+//   }
+// }
+
+.file-info-panel .mat-bottom-sheet-container {
+  width: 960px;
+  max-width: 960px;
 }
 
 
@@ -390,15 +445,10 @@ body {
 }
 
 .tag-chip-text {
-  width: calc(100%); // calc is important here, do not use "100%" alone
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.tag-chip {
-  //width: fit-content;
-  //max-width: 100%;
-}
 
 .flex-row {
   display: flex;
@@ -439,11 +489,9 @@ body {
   }
 }
 
-mat-icon.mat-mdc-card-avatar {
-  width: 40px;
-  height: 40px;
-  font-size: 40px;
-}
+
+// --------------------------------------------------------------------------------
+// JSON Viewer Themes:
 
 :root {
   --devtools-color-text-primary: rgb(32 33 36);
@@ -485,29 +533,3 @@ mat-icon.mat-mdc-card-avatar {
   //--ngx-json-font-family : font-size
 }
 
-
-// Various Material Design overrides
-
-.mat-mdc-chip {
-  // restore old font size
-  //font-size: 14px;
-}
-
-.mdc-list-item {
-  &.mdc-list-item--with-two-lines .mdc-list-item {
-    &__start, &__end {
-      align-self: center !important;
-      margin-top: 0 !important;
-    }
-  }
-  
-  &.mdc-list-item--with-leading-icon.mdc-list-item--with-two-lines.mdc-list-item--with-trailing-meta .mdc-list-item__end::before {
-    height: 0 !important;
-    content: none !important;
-  }
-  
-  &.mdc-list-item--with-trailing-meta .mdc-list-item__end {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-}

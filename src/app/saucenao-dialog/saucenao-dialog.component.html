@@ -3,7 +3,7 @@
   @if (saucenaoResults$ | async; as saucenaoResults) {
     <div>
       @for (result of saucenaoResults; track result) {
-        <mat-card class="saucenao-card mat-elevation-z0">
+        <mat-card class="saucenao-card" appearance="outlined">
           <mat-card-header>
             <img mat-card-avatar class="thumbnail" [src]="result.thumbnail">
             <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>

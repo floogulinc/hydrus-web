@@ -68,10 +68,10 @@
         <mat-icon matListItemIcon>{{file.fileIcon}}</mat-icon>
         <div matListItemTitle>{{file.file_id}}</div>
         <div matListItemLine class="metadata-line">
-          <span>{{file.file_type_string}}</span> 
+          <span>{{file.file_type_string}}</span>
           @if (file.width && file.height) {
             <span>{{file.width}}x{{file.height}}</span>
-          } 
+          }
           <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span>
         </div>
       </mat-list-item>
@@ -212,7 +212,7 @@
                 {{service.serviceName}} ({{service.tags.length}})
               </mat-expansion-panel-header>
               <ng-template matExpansionPanelContent>
-                <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-orientation="vertical" aria-label="File tags">
+                <mat-chip-listbox class="mat-mdc-chip-set-stacked tag-chip-list" aria-orientation="vertical" aria-label="File tags">
                   @for (tag of (service.tags | orderBy); track tag) {
                     <mat-chip-option
                       [selectable]="false"
