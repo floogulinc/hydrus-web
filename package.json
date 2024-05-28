@@ -30,7 +30,7 @@
     "@angular/service-worker": "^17.3.1",
     "@iharbeck/ngx-virtual-scroller": "17.0.2",
     "@fontsource/roboto": "^4.5.8",
-    "@material/image-list": "^15.0.0-canary.bc9ae6c9c.0",
+    "@material/image-list": "^15.0.0-canary.7f224ddd4.0",
     "@ngneat/until-destroy": "^10.0.0",
     "@rx-angular/cdk": "^17.0.0",
     "@rx-angular/state": "^17.0.0",
