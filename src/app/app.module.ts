@@ -54,7 +54,7 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
+import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 import { NgPipesModule } from 'ngx-pipes';
 import { BarRatingModule } from 'ngx-bar-rating';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
