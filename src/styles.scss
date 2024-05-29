@@ -140,29 +140,29 @@
 
   @if $is-dark {
     .mat-toolbar.mat-primary {
-      background: mat.get-color-from-palette($background, app-bar);
-      color: mat.get-color-from-palette($foreground, text);
+      background: mat.m2-get-color-from-palette($background, app-bar);
+      color: mat.m2-get-color-from-palette($foreground, text);
     }
   }
 
   // Define any styles affected by the theme.
   .drawer-list-item-active {
-    background-color: change-color(mat.get-color-from-palette($primary), $alpha: 0.15) !important;
-    color: mat.get-color-from-palette($primary) !important;
+    background-color: change-color(mat.m2-get-color-from-palette($primary), $alpha: 0.15) !important;
+    color: mat.m2-get-color-from-palette($primary) !important;
     .mat-mdc-list-item-icon {
-      color: mat.get-color-from-palette($primary) !important;
+      color: mat.m2-get-color-from-palette($primary) !important;
     }
   }
 
   .sidenav-list {
     .mat-mdc-list-item-icon {
       //color: rgba(0, 0, 0, 0.54);
-      color: mat.get-color-from-palette($foreground, icon);
+      color: mat.m2-get-color-from-palette($foreground, icon);
     }
   }
 
   .image-grid-supporting-text {
-    color: mat.get-color-from-palette($foreground, text) !important;
+    color: mat.m2-get-color-from-palette($foreground, text) !important;
   }
 }
 
@@ -195,17 +195,17 @@
   // Define the palettes for your theme using the Material Design palettes available in palette.scss
   // (imported above). For each palette, you can optionally specify a default, lighter, and darker
   // hue. Available color palettes: https://material.io/design/color/
-  $light-primary: mat.define-palette(mat.$indigo-palette);
-  $dark-primary: mat.define-palette(mat.$indigo-palette, 200);
-  $light-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+  $light-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+  $dark-primary: mat.m2-define-palette(mat.$m2-indigo-palette, 200);
+  $light-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
 
   // The warn palette is optional (defaults to red).
-  $light-warn: mat.define-palette(mat.$red-palette);
+  $light-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-  $typography-config: mat.define-typography-config();
+  $typography-config: mat.m2-define-typography-config();
 
   // Create the theme object (a Sass map containing all of the palettes).
-  $light-theme: mat.define-light-theme((
+  $light-theme: mat.m2-define-light-theme((
     color: (
       primary: $light-primary,
       accent: $light-accent,
@@ -215,7 +215,7 @@
     density: 0,
   ));
 
-  $dark-theme: mat.define-dark-theme((
+  $dark-theme: mat.m2-define-dark-theme((
     color: (
       primary: $dark-primary,
       accent: $light-accent,
@@ -227,7 +227,7 @@
 }
 
 @mixin modern-theme($palette) {
-  $light-theme: matx.define-theme((
+  $light-theme: mat.define-theme((
     color: (
       theme-type: light,
       primary: $palette,
@@ -237,7 +237,7 @@
     )
   ));
 
-  $dark-theme: matx.define-theme((
+  $dark-theme: mat.define-theme((
     color: (
       theme-type: dark,
       primary: $palette,
@@ -252,7 +252,7 @@
 
 
 html {
-  @include modern-theme(matx.$m3-azure-palette);
+  @include modern-theme(mat.$azure-palette);
 }
 
 
