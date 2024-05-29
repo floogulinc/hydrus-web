@@ -46,7 +46,7 @@
     "ngx-json-viewer": "^3.2.1",
     "ngx-localstorage": "^3.5.0",
     "ngx-pipes": "^3.1.0",
-    "ngxtension": "^2.1.0",
+    "ngxtension": "^3.3.0",
     "photoswipe": "^5.3.4",
     "rxjs": "~7.8.1",
     "sagiri": "^3.4.0",
