@@ -7,7 +7,7 @@ import { HttpEventType } from '@angular/common/http';
 import { SettingsService } from '../settings.service';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { ErrorService } from '../error.service';
-import { FileValidators, NgxFileDragDropComponent } from 'ngx-file-drag-drop';
+import { FileValidators, NgxFileDragDropComponent } from '../../lib/ngx-file-drag-drop';
 import { RxState } from '@rx-angular/state';
 
 interface UploadStatus {

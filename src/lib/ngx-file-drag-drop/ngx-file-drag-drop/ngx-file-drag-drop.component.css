@@ -1,0 +1,64 @@
+input {
+  width: 0px;
+  height: 0px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+:host {
+  display: block;
+  border: 2px dashed;
+  border-radius: 20px;
+  min-height: 50px;
+  margin: 10px auto;
+  max-width: 500px;
+  padding: 20px;
+  cursor: pointer;
+}
+/* :host:active, */
+/* :host.drag-over {
+  border-color: purple;
+} */
+:host.disabled {
+  opacity: 0.5;
+  cursor: unset;
+}
+
+.placeholder {
+  /* opacity: 0.9; */
+  color: grey;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+mat-chip {
+  max-width: 100%;
+}
+.filename {
+  max-width: calc(100% - 1em);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+:host.empty-input {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-mdc-chip.mat-mdc-standard-chip.mat-focus-indicator {
+  /* transition: none !important; */
+  box-shadow: none;
+}
+
+.mat-mdc-chip.mat-mdc-standard-chip::after {
+  background: unset;
+}
+
+/* :host.ng-invalid.ng-touched {
+  border-color: red !important;
+} */

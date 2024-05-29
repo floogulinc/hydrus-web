@@ -58,7 +58,7 @@ import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 import { NgPipesModule } from 'ngx-pipes';
 import { BarRatingModule } from 'ngx-bar-rating';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { NgxFileDragDropModule } from 'ngx-file-drag-drop';
+import { NgxFileDragDropModule } from '../lib/ngx-file-drag-drop';
 
 import { AboutComponent } from './about/about.component';
 import { ImageListComponent } from './image-list/image-list.component';
