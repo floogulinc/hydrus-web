@@ -8,7 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 import {NgxLocalStorageModule} from 'ngx-localstorage';
 
@@ -127,8 +127,7 @@ const MAT_MODULES = [
 ];
 
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         BrowseComponent,
         SettingsComponent,
@@ -168,11 +167,9 @@ const MAT_MODULES = [
         IsSystemPredicatePipe,
         BlurHashColorPipe,
     ],
-    imports: [
-        BrowserModule,
+    bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-        HttpClientModule,
         FormsModule,
         PortalModule,
         ScrollingModule,
@@ -190,9 +187,5 @@ const MAT_MODULES = [
         RxIf,
         BarRatingModule,
         NgxJsonViewerModule,
-        NgxFileDragDropModule
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
-})
+        NgxFileDragDropModule], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }
