@@ -324,6 +324,11 @@ mat-icon.mat-mdc-card-avatar {
 }
 
 
+html {
+  // restores old behavior that was set on each dialog container element
+  --mat-dialog-container-max-width: 80vw;
+}
+
 // --------------------------------------------------------------------------------
 
 .main-content {

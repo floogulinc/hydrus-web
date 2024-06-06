@@ -69,8 +69,6 @@ export class ServiceSelectDialogComponent implements OnInit {
     return dialog.open<ServiceSelectDialogComponent, ServiceSelectDialogData, HydrusService>(
       ServiceSelectDialogComponent,
       {
-        maxWidth: '648px',
-        width: '90vw',
         data: {
           ...defaultData,
           ...data
