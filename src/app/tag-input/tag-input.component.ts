@@ -15,7 +15,7 @@ import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.co
 import { SettingsService } from '../settings.service';
 import { SystemPredicateRatingsDialogComponent } from '../system-predicate-ratings-dialog/system-predicate-ratings-dialog.component';
 import { HydrusService } from '../hydrus-services';
-import { searchTagsContainsSystemPredicate } from '../utils/tag-utils';
+import { formatTagCase, getNamespace, searchTagsContainsSystemPredicate } from '../utils/tag-utils';
 import { HydrusRatingsService } from '../hydrus-ratings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TagSiblingsParentsDialogComponent } from '../tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
@@ -132,9 +132,8 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
     }
 
     const input = event.chipInput.inputElement;
-    const value = event.value.toLowerCase(); // Hydrus tags are always lowercase
 
-    this.addSearchTag(value);
+    this.addSearchTag(event.value);
 
     // Reset the input value
     if (input) {
@@ -145,7 +144,7 @@ export class TagInputComponent implements OnInit, ControlValueAccessor {
   }
 
   addSearchTag(tag: string) {
-    const value = tag.toLowerCase();
+    const value = formatTagCase(tag);
     if ((value || '').trim()) {
       this.searchTags.push(value);
     }

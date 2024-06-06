@@ -97,3 +97,12 @@ export function searchTagsContainsSystemPredicate(searchTags: HydrusSearchTag) {
     return searchTags.findIndex(searchTagsContainsSystemPredicate) >= 0;
   }
 }
+
+
+export function formatTagCase(tag: string) {
+  if(getNamespace(tag) === 'system') {
+    return tag;
+  } else {
+    return tag.toLowerCase();
+  }
+}
