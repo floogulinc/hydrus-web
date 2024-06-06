@@ -173,6 +173,7 @@ export function getFileCategory(type: HydrusFiletype, hydrusVersion?: number): F
     HydrusFiletype.ANIMATION_GIF,
     HydrusFiletype.IMAGE_BMP,
     HydrusFiletype.IMAGE_WEBP,
+    HydrusFiletype.ANIMATION_WEBP,
     HydrusFiletype.IMAGE_SVG,
     HydrusFiletype.IMAGE_HEIF,
     HydrusFiletype.IMAGE_HEIF_SEQUENCE,
