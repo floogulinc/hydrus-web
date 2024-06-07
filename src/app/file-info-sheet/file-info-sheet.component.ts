@@ -112,7 +112,8 @@ export class FileInfoSheetComponent {
       data: {
         file
       },
-      closeOnNavigation: true
+      closeOnNavigation: true,
+      panelClass: 'file-info-panel'
     })
   }
 
