@@ -12,6 +12,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CUBE, GRAPH, ratingsIcons, HYDRUS } from './svg-icons';
 import { HydrusVersionService } from './hydrus-version.service';
+import { ThemeService } from './theme.service';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,8 @@ export class AppComponent implements OnInit {
     private snackBar: MatSnackBar,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
-    private hydrusVersionService: HydrusVersionService
+    private hydrusVersionService: HydrusVersionService,
+    private themeService: ThemeService,
   ) {
     iconRegistry.addSvgIconLiteral('cube', sanitizer.bypassSecurityTrustHtml(CUBE));
     iconRegistry.addSvgIconLiteral('graph', sanitizer.bypassSecurityTrustHtml(GRAPH));
@@ -70,5 +72,6 @@ export class AppComponent implements OnInit {
           break;
       }
     });
+    this.themeService.initTheming();
   }
 }
