@@ -109,60 +109,17 @@
 @include mat.core();
 
 @mixin app-theming($theme) {
-  @if (mat.get-theme-version($theme) == 1) {
-    // Add your new M3 styles here.
-
-    .drawer-list-item-active {
-      background-color: change-color(mat.get-theme-color($theme, primary), $alpha: 0.15) !important;
-      color: mat.get-theme-color($theme, primary) !important;
-      .mat-mdc-list-item-icon {
-        color: mat.get-theme-color($theme, primary) !important;
-      }
-    }
-  } @else {
-    @include app-theming-legacy($theme)
-  }
-}
-
-//setting up for future theme options
-@mixin app-theming-legacy($theme) {
-  // Extract the palettes you need from the theme definition.
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-
-  $foreground: map-get($theme, foreground);
-
-  $background: map-get($theme, background);
-
-  $is-dark: map-get($theme, is-dark);
-
-  @if $is-dark {
-    .mat-toolbar.mat-primary {
-      background: mat.m2-get-color-from-palette($background, app-bar);
-      color: mat.m2-get-color-from-palette($foreground, text);
-    }
-  }
-
-  // Define any styles affected by the theme.
   .drawer-list-item-active {
-    background-color: change-color(mat.m2-get-color-from-palette($primary), $alpha: 0.15) !important;
-    color: mat.m2-get-color-from-palette($primary) !important;
+    //background-color: rgba(mat.get-theme-color($theme, primary), 0.15) !important;
+    background-color: color-mix(in srgb, mat.get-theme-color($theme, primary) 15%, transparent);
+    color: mat.get-theme-color($theme, primary) !important;
     .mat-mdc-list-item-icon {
-      color: mat.m2-get-color-from-palette($primary) !important;
+      color: mat.get-theme-color($theme, primary) !important;
     }
   }
 
-  .sidenav-list {
-    .mat-mdc-list-item-icon {
-      //color: rgba(0, 0, 0, 0.54);
-      color: mat.m2-get-color-from-palette($foreground, icon);
-    }
-  }
-
-  .image-grid-supporting-text {
-    color: mat.m2-get-color-from-palette($foreground, text) !important;
-  }
 }
+
 
 
 /* TODO(mdc-migration): Remove all-legacy-component-typographies once all legacy components are migrated*/
@@ -181,54 +138,22 @@
 
   @include mat.all-component-themes($light-theme);
   @include app-theming($light-theme);
+}
 
+@mixin setup-colors($light-theme, $dark-theme) {
+  @include mat.system-level-colors($light-theme);
   @media (prefers-color-scheme: dark) {
-    @include mat.all-component-colors($dark-theme);
-    @include app-theming($dark-theme);
+    @include mat.system-level-colors($dark-theme);
   }
 }
 
 
-@mixin legacy-theme {
-  // Define the palettes for your theme using the Material Design palettes available in palette.scss
-  // (imported above). For each palette, you can optionally specify a default, lighter, and darker
-  // hue. Available color palettes: https://material.io/design/color/
-  $light-primary: mat.m2-define-palette(mat.$m2-indigo-palette);
-  $dark-primary: mat.m2-define-palette(mat.$m2-indigo-palette, 200);
-  $light-accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
-
-  // The warn palette is optional (defaults to red).
-  $light-warn: mat.m2-define-palette(mat.$m2-red-palette);
-
-  $typography-config: mat.m2-define-typography-config();
-
-  // Create the theme object (a Sass map containing all of the palettes).
-  $light-theme: mat.m2-define-light-theme((
-    color: (
-      primary: $light-primary,
-      accent: $light-accent,
-      warn: $light-warn
-    ),
-    typography: $typography-config,
-    density: 0,
-  ));
-
-  $dark-theme: mat.m2-define-dark-theme((
-    color: (
-      primary: $dark-primary,
-      accent: $light-accent,
-      warn: $light-warn
-    ),
-  ));
-
-  @include setup-themes($light-theme, $dark-theme);
-}
-
-@mixin modern-theme($palette) {
+@mixin modern-theme() {
   $light-theme: mat.define-theme((
     color: (
       theme-type: light,
-      primary: $palette,
+
+      use-system-variables: true
     ),
     density: (
       scale: 0
@@ -238,7 +163,8 @@
   $dark-theme: mat.define-theme((
     color: (
       theme-type: dark,
-      primary: $palette,
+
+      use-system-variables: true
     ),
     density: (
       scale: 0
@@ -248,12 +174,56 @@
   @include setup-themes($light-theme, $dark-theme);
 }
 
+@mixin modern-colors($palette) {
+  $light-theme: mat.define-theme((
+    color: (
+      theme-type: light,
+      primary: $palette,
+      use-system-variables: true
+    )
+  ));
 
-html {
-  @include modern-theme(mat.$azure-palette);
+  $dark-theme: mat.define-theme((
+    color: (
+      theme-type: dark,
+      primary: $palette,
+      use-system-variables: true
+    )
+  ));
+
+  @include setup-colors($light-theme, $dark-theme);
 }
 
+.theming {
+  @include modern-theme();
+}
 
+.main-theme {
+  @include modern-colors(mat.$azure-palette)
+}
+
+$themes: (
+  "red": mat.$red-palette,
+  "green": mat.$green-palette,
+  "blue": mat.$blue-palette,
+  "yellow": mat.$yellow-palette,
+  "cyan": mat.$cyan-palette,
+  "magenta": mat.$magenta-palette,
+  "orange": mat.$orange-palette,
+  "chartreuse": mat.$chartreuse-palette,
+//  "azure": matx.$azure-palette,
+  "violet": mat.$violet-palette,
+  "rose": mat.$rose-palette
+);
+
+
+// body {
+//   @each $name, $palette in $themes {
+//     &.theme-#{$name} {
+//       @include modern-colors($palette)
+//     }
+//   }
+// }
 
 html, body {
   height: 100%;
@@ -324,7 +294,7 @@ mat-icon.mat-mdc-card-avatar {
 }
 
 
-html {
+:root {
   // restores old behavior that was set on each dialog container element
   --mat-dialog-container-max-width: 80vw;
 }
