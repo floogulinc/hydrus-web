@@ -107,6 +107,15 @@ export class FileInfoSheetComponent {
 
   canGetSiblingsParents$ = this.tagsService.canGetSiblingsParents$;
 
+  static open(bottomSheet: MatBottomSheet, file: HydrusBasicFile) {
+    return bottomSheet.open(FileInfoSheetComponent, {
+      data: {
+        file
+      },
+      closeOnNavigation: true
+    })
+  }
+
   processTags(file: HydrusFile): {
     displayTags: TagServiceItem[],
     storageTags?: TagServiceItem[]

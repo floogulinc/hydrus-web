@@ -139,17 +139,14 @@ export class PhotoswipeService {
         html: '<span class="mat-icon material-icons">info_outlined</span>',
         onClick: (event, el, pswp) => {
           const file = pswp.currSlide.data.file as HydrusBasicFile;
-          this.bottomSheet.open(FileInfoSheetComponent, {
-            data: {
-              file
-            },
-            panelClass: 'file-info-panel',
-            closeOnNavigation: true
-          }).afterDismissed().pipe(take(1)).subscribe(res => {
-            if(res) {
-              pswp.close();
-            }
-          });
+          FileInfoSheetComponent.open(this.bottomSheet, file)
+            .afterDismissed()
+            .pipe(take(1))
+            .subscribe(res => {
+              if(res) {
+                pswp.close();
+              }
+            });
         }
       });
 
