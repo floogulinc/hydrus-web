@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { generateThemeFromHex, generateThemeFromRGB, styleSheetFromTheme } from './theme';
+import { Variant, generateThemeFromHex, generateThemeFromRGB, styleSheetFromTheme } from './theme';
 import { HydrusBasicFile } from './hydrus-file';
 import { getBlurHashAverageColor } from 'fast-blurhash';
 
@@ -16,11 +16,11 @@ export class ThemeService {
 
   initTheming() {
     document.adoptedStyleSheets.push(this.themeStylesheet);
-    //this.setThemeFromHexColor('#E4433F')
+    //this.setThemeFromHexColor('#ff0000', Variant.TONAL_SPOT)
   }
 
-  async setThemeFromHexColor(color: string) {
-    const theme = generateThemeFromHex(color);
+  async setThemeFromHexColor(color: string, variant?: Variant) {
+    const theme = generateThemeFromHex(color, variant);
     const styles = styleSheetFromTheme(theme, '.main-theme');
     console.log(styles)
     return this.themeStylesheet.replace(styles);

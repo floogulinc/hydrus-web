@@ -1,14 +1,14 @@
-import { Scheme, Theme, argbFromHex, argbFromRgb, hexFromArgb, themeFromSourceColor } from "@material/material-color-utilities";
+import { DynamicScheme, Hct, MaterialDynamicColors, Scheme, SchemeContent, SchemeExpressive, SchemeFidelity, SchemeMonochrome, SchemeNeutral, SchemeTonalSpot, SchemeVibrant, Theme, argbFromHex, argbFromRgb, hexFromArgb, themeFromSourceColor } from "@material/material-color-utilities";
 
 const SYS_TOKEN_PREFIX = 'sys'
 
-export function generateThemeFromHex(hex: string) {
-  return generateTokensFromColor(argbFromHex(hex));
-}
+// export function generateThemeFromHex(hex: string) {
+//   return generateTokensFromColor(argbFromHex(hex));
+// }
 
-export function generateThemeFromRGB(rgb: [number, number, number]) {
-  return generateTokensFromColor(argbFromRgb(...rgb));
-}
+// export function generateThemeFromRGB(rgb: [number, number, number]) {
+//   return generateTokensFromColor(argbFromRgb(...rgb));
+// }
 
 function generateTokensFromColor(color: number) {
   const theme = themeFromSourceColor(color);
@@ -50,18 +50,18 @@ function getSchemeProperties(
   return list
 }
 
-export function styleSheetFromTheme(theme: Theme, selector: string) {
-  const light = getSchemeProperties(theme.schemes.light).concat(getSurfaceStyles(theme, false));
-  const dark = getSchemeProperties(theme.schemes.dark).concat(getSurfaceStyles(theme, true));
-  return `${selector} {
-    ${light.join('\n')}
-  }
-  @media (prefers-color-scheme: dark) {
-    ${selector} {
-      ${dark.join('\n')}
-    }
-  }`
-}
+// export function styleSheetFromTheme(theme: Theme, selector: string) {
+//   const light = getSchemeProperties(theme.schemes.light).concat(getSurfaceStyles(theme, false));
+//   const dark = getSchemeProperties(theme.schemes.dark).concat(getSurfaceStyles(theme, true));
+//   return `${selector} {
+//     ${light.join('\n')}
+//   }
+//   @media (prefers-color-scheme: dark) {
+//     ${selector} {
+//       ${dark.join('\n')}
+//     }
+//   }`
+// }
 
 
 export function getSurfaceStyles(theme: Theme, dark: boolean,) {
@@ -96,4 +96,121 @@ export function getSurfaceStyles(theme: Theme, dark: boolean,) {
       return `--${SYS_TOKEN_PREFIX}-${property}: ${color};`
     })
   }
+}
+
+
+
+const colors = [
+  MaterialDynamicColors.background,
+  MaterialDynamicColors.onBackground,
+  MaterialDynamicColors.surface,
+  MaterialDynamicColors.surfaceDim,
+  MaterialDynamicColors.surfaceBright,
+  MaterialDynamicColors.surfaceContainerLowest,
+  MaterialDynamicColors.surfaceContainerLow,
+  MaterialDynamicColors.surfaceContainer,
+  MaterialDynamicColors.surfaceContainerHigh,
+  MaterialDynamicColors.surfaceContainerHighest,
+  MaterialDynamicColors.onSurface,
+  MaterialDynamicColors.surfaceVariant,
+  MaterialDynamicColors.onSurfaceVariant,
+  MaterialDynamicColors.inverseSurface,
+  MaterialDynamicColors.inverseOnSurface,
+  MaterialDynamicColors.outline,
+  MaterialDynamicColors.outlineVariant,
+  MaterialDynamicColors.shadow,
+  MaterialDynamicColors.scrim,
+  MaterialDynamicColors.surfaceTint,
+  MaterialDynamicColors.primary,
+  MaterialDynamicColors.onPrimary,
+  MaterialDynamicColors.primaryContainer,
+  MaterialDynamicColors.onPrimaryContainer,
+  MaterialDynamicColors.inversePrimary,
+  MaterialDynamicColors.secondary,
+  MaterialDynamicColors.onSecondary,
+  MaterialDynamicColors.secondaryContainer,
+  MaterialDynamicColors.onSecondaryContainer,
+  MaterialDynamicColors.tertiary,
+  MaterialDynamicColors.onTertiary,
+  MaterialDynamicColors.tertiaryContainer,
+  MaterialDynamicColors.onTertiaryContainer,
+  MaterialDynamicColors.error,
+  MaterialDynamicColors.onError,
+  MaterialDynamicColors.errorContainer,
+  MaterialDynamicColors.onErrorContainer,
+  MaterialDynamicColors.primaryFixed,
+  MaterialDynamicColors.primaryFixedDim,
+  MaterialDynamicColors.onPrimaryFixed,
+  MaterialDynamicColors.onPrimaryFixedVariant,
+  MaterialDynamicColors.secondaryFixed,
+  MaterialDynamicColors.secondaryFixedDim,
+  MaterialDynamicColors.onSecondaryFixed,
+  MaterialDynamicColors.onSecondaryFixedVariant,
+  MaterialDynamicColors.tertiaryFixed,
+  MaterialDynamicColors.tertiaryFixedDim,
+  MaterialDynamicColors.onTertiaryFixed,
+  MaterialDynamicColors.onTertiaryFixedVariant,
+];
+
+
+export function generateThemeFromHex(hex: string, variant?: Variant, contrast?: number) {
+  return newThemeFromHct(Hct.fromInt(argbFromHex(hex)), variant, contrast);
+}
+
+export function generateThemeFromRGB(rgb: [number, number, number]) {
+  return newThemeFromHct(Hct.fromInt(argbFromRgb(...rgb)));
+}
+
+export enum Variant {
+  MONOCHROME = 0,
+  NEUTRAL = 1,
+  TONAL_SPOT = 2,
+  VIBRANT = 3,
+  FIDELITY = 5,
+  CONTENT = 6
+}
+
+
+function schemeFromHct(variant: Variant, sourceColorHct: Hct, isDark: boolean, contrastLevel: number) {
+  switch (variant) {
+    case Variant.MONOCHROME:
+      return new SchemeMonochrome(sourceColorHct, isDark, contrastLevel);
+    case Variant.NEUTRAL:
+      return new SchemeNeutral(sourceColorHct, isDark, contrastLevel);
+    case Variant.TONAL_SPOT:
+      return new SchemeTonalSpot(sourceColorHct, isDark, contrastLevel);
+    case Variant.VIBRANT:
+      return new SchemeVibrant(sourceColorHct, isDark, contrastLevel);
+    case Variant.FIDELITY:
+      return new SchemeFidelity(sourceColorHct, isDark, contrastLevel);
+    case Variant.CONTENT:
+      return new SchemeContent(sourceColorHct, isDark, contrastLevel);
+  }
+}
+
+function newThemeFromHct(hct: Hct, variant = Variant.TONAL_SPOT, contrast = 0.0 ) {
+  const light = schemeFromHct(variant, hct, false, contrast);
+  const dark = schemeFromHct(variant, hct, true, contrast);
+  return {light, dark}
+}
+
+function propertiesFromDynamicScheme(scheme: DynamicScheme) {
+  return colors.map(schemeColor => {
+    const token = schemeColor.name.replace('_', '-');
+    const color = hexFromArgb(schemeColor.getArgb(scheme));
+    return `--${SYS_TOKEN_PREFIX}-${token}: ${color};`
+  })
+}
+
+export function styleSheetFromTheme(theme: {light: DynamicScheme, dark: DynamicScheme}, selector: string) {
+  const light = propertiesFromDynamicScheme(theme.light);
+  const dark = propertiesFromDynamicScheme(theme.dark);
+  return `${selector} {
+    ${light.join('\n')}
+  }
+  @media (prefers-color-scheme: dark) {
+    ${selector} {
+      ${dark.join('\n')}
+    }
+  }`
 }
