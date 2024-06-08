@@ -26,6 +26,10 @@ export class ThemeService {
     return this.themeStylesheet.replace(styles);
   }
 
+  async removeTheme() {
+    return this.themeStylesheet.replace('');
+  }
+
 
 
 }

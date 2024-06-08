@@ -128,6 +128,7 @@
 
 //@include mat.all-component-typographies();
 
+
 //@include mat.core-theme($light-theme);
 /* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated*/
 //@include mat.all-legacy-component-themes($light-theme);
@@ -137,6 +138,9 @@
   @include mat.typography-hierarchy($light-theme, $back-compat: true);
 
   @include mat.all-component-themes($light-theme);
+
+  @include mat.color-variants-backwards-compatibility($light-theme);
+
   @include app-theming($light-theme);
 }
 
