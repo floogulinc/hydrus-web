@@ -39,7 +39,7 @@ export class HydrusVersionService {
         return of(null);
       }
     }),
-    distinctUntilChanged(),
+    distinctUntilChanged((a,b) => a.version === b.version),
     shareReplay(1),
   );
 
