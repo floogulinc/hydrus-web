@@ -370,22 +370,22 @@ mat-icon.mat-mdc-card-avatar {
   // I HATE CSS
   &.tag-color {
     color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
-    --mat-menu-item-label-text-color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
-    --mdc-list-list-item-label-text-color:map-get(map-get($mat-tag-colors, "default-namespace"), "default");
+    --mat-menu-item-label-text-color: #{map-get(map-get($mat-tag-colors, "default-namespace"), "default")};
+    --mdc-list-list-item-label-text-color: #{map-get(map-get($mat-tag-colors, "default-namespace"), "default")};
   }
   //color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
   @each $tag, $palette in $mat-tag-colors {
       &.tag-namespace-#{$tag} {
           color: map-get($palette, "default");
-          --mat-menu-item-label-text-color: map-get($palette, "default");
-          --mdc-list-list-item-label-text-color: map-get($palette, "default");
+          --mat-menu-item-label-text-color: #{map-get($palette, "default")};
+          --mdc-list-list-item-label-text-color: #{map-get($palette, "default")};
           //color: map-get($palette, "default-contrast");
       }
   }
   &.tag-namespace- {
       color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
-      --mat-menu-item-label-text-color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
-      --mdc-list-list-item-label-text-color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
+      --mat-menu-item-label-text-color: #{map-get(map-get($mat-tag-colors, "no-namespace"), "default")};
+      --mdc-list-list-item-label-text-color: #{map-get(map-get($mat-tag-colors, "no-namespace"), "default")};
       //color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
   }
 }
