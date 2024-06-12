@@ -1,16 +1,13 @@
+<form [formGroup]="apiSettingsForm" (ngSubmit)="submitApiSettings()" autocomplete="off">
 <div class="settings-column flex-column">
   <mat-form-field appearance="outline">
     <mat-label>Hydrus API URL</mat-label>
     <input
       matInput
       name="hydrusApiUrl"
+      formControlName="hydrusApiUrl"
       type="url"
       autocomplete="off"
-      ngxLocalStorage="hydrusApiUrl"
-      lsEvent="input"
-      [lsDebounce]="1000"
-      [lsInitFromStorage]="true"
-      (lsStoredValue)="this.apiUrlStored()"
       placeholder="https://my.hydrus.api/"
     >
   </mat-form-field>
@@ -19,16 +16,14 @@
     <input
       matInput
       name="hydrusApiKey"
+      formControlName="hydrusApiKey"
       type="password"
       autocomplete="off"
-      ngxLocalStorage="hydrusApiKey"
-      lsEvent="input"
-      [lsDebounce]="1000"
-      [lsInitFromStorage]="true"
-      (lsStoredValue)="this.apiKeyStored()"
     >
   </mat-form-field>
-  <div class="test-button-container flex-row">
-    <button mat-stroked-button color="primary" (click)="this.testApi()">Test API</button>
+  <div class="button-row">
+    <button mat-stroked-button color="primary" type="button" (click)="this.testApi()" [disabled]="!apiSettingsService.apiSet()">Test Saved Settings</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="apiSettingsForm.invalid || apiSettingsForm.pristine">Save</button>
   </div>
 </div>
+</form>

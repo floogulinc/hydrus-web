@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Hydrus Services</h1>
 <div mat-dialog-content>
-  @if (services.hydrusServicesArray$ | async; as services) {
+  @if (servicesArray$ | async; as services) {
     <div>
       <mat-list>
         @for (service of services; track service.service_key) {

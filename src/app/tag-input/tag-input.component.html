@@ -2,15 +2,15 @@
   <mat-label>{{placeholder}}</mat-label>
   <mat-chip-grid #chipList [attr.aria-label]="placeholder">
     @for (tag of searchTags; track tag; let i = $index) {
-      @if (tag | isString) {
+      @if (tag | isSingleTag) {
         <mat-chip-row
           color="primary"
-          class="tag-chip"
+          class="theming tag-chip tag-color"
           [removable]="true"
           (removed)="removeSearchTag(i)"
-          [ngClass]="$any(tag) | tagClass"
           [matMenuTriggerFor]="tagMenu"
           [matMenuTriggerData]="{tag}"
+          [attr.data-tag-namespace]="tag | tagNamespace"
         >
           <div class="tag-chip-text">{{tag}}</div>
           <button matChipRemove>
@@ -19,9 +19,9 @@
         </mat-chip-row>
       } @else {
         <mat-chip-row
-          color="primary" 
-          class="tag-chip"
-          [removable]="true" 
+          color="primary"
+          class="theming tag-chip tag-color"
+          [removable]="true"
           (removed)="removeSearchTag(i)"
         >
           <div class="tag-chip-text">{{$any(tag) | flatten | join:' OR '}}</div>
@@ -51,13 +51,13 @@
         <cdk-virtual-scroll-viewport
           class="virtual-scroll-viewport-full-width"
           itemSize="48" minBufferPx="256" maxBufferPx="512">
-          <mat-option *cdkVirtualFor="let tag of tags" [value]="tag.value" [ngClass]="tag.value | tagClass" class="tag-color">
+          <mat-option *cdkVirtualFor="let tag of tags" [value]="tag.value" [attr.data-tag-namespace]="tag.value | tagNamespace" class="theming tag-color">
             {{tag.value}} ({{tag.count | number}})
           </mat-option>
         </cdk-virtual-scroll-viewport>
       } @else {
         @for (tag of tags; track tag.value) {
-          <mat-option [value]="tag.value" [ngClass]="tag.value | tagClass" class="tag-color">
+          <mat-option [value]="tag.value" [attr.data-tag-namespace]="tag.value | tagNamespace" class="theming tag-color">
             {{tag.value}} ({{tag.count | number}})
           </mat-option>
         }
@@ -111,7 +111,11 @@
   <mat-menu #favoriteTagsMenu="matMenu">
     <ng-template matMenuContent>
       @for (tag of favoriteTags; track tag) {
-        <button class="tag-color" [ngClass]="(tag | isString) ? ($any(tag)  | tagClass) : ''" mat-menu-item (click)="addSearchTags([tag])">{{(tag | isString) ? tag : ($any(tag) | flatten | join:' OR ')}}</button>
+        @if (tag | isSingleTag) {
+          <button class="tag-color" [attr.data-tag-namespace]="tag | tagNamespace" mat-menu-item (click)="addSearchTags([tag])">{{tag}}</button>
+        } @else {
+          <button class="tag-color" data-tag-namespace="" mat-menu-item (click)="addSearchTags([tag])">{{tag | flatten | join:' OR '}}</button>
+        }
       }
     </ng-template>
   </mat-menu>

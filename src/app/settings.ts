@@ -1,5 +1,5 @@
 import { HydrusSearchTags } from "./hydrus-tags";
-
+import { SettingsThemeVariant } from "./theme/theme";
 
 export interface AppSettingsV1 {
   version: 1;
@@ -19,6 +19,9 @@ export interface AppSettingsV1 {
   mediaAutoplay: boolean;
   mediaLoop: boolean;
   mediaDefaultMuted: boolean;
+  themeEnabled: boolean;
+  themeColor: string;
+  themeVariant: SettingsThemeVariant;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -41,4 +44,7 @@ export const defaultAppSettings: AppSettings = {
   mediaAutoplay: true,
   mediaLoop: true,
   mediaDefaultMuted: false,
+  themeEnabled: false,
+  themeColor: '#0074e9',
+  themeVariant: SettingsThemeVariant.DEFAULT
 }

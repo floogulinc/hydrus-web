@@ -178,11 +178,12 @@
   @include setup-themes($light-theme, $dark-theme);
 }
 
-@mixin modern-colors($palette) {
+@mixin modern-colors($palette, $palette-tertiary) {
   $light-theme: mat.define-theme((
     color: (
       theme-type: light,
       primary: $palette,
+      tertiary: $palette-tertiary,
       use-system-variables: true
     )
   ));
@@ -191,6 +192,7 @@
     color: (
       theme-type: dark,
       primary: $palette,
+      tertiary: $palette-tertiary,
       use-system-variables: true
     )
   ));
@@ -202,23 +204,25 @@
   @include modern-theme();
 }
 
-.main-theme {
-  @include modern-colors(mat.$azure-palette)
-}
+// .main-theme {
+//   @include modern-colors(mat.$azure-palette, mat.$azure-palette)
+// }
 
-$themes: (
-  "red": mat.$red-palette,
-  "green": mat.$green-palette,
-  "blue": mat.$blue-palette,
-  "yellow": mat.$yellow-palette,
-  "cyan": mat.$cyan-palette,
-  "magenta": mat.$magenta-palette,
-  "orange": mat.$orange-palette,
-  "chartreuse": mat.$chartreuse-palette,
-//  "azure": matx.$azure-palette,
-  "violet": mat.$violet-palette,
-  "rose": mat.$rose-palette
-);
+@import 'default-theme-colors';
+
+// $themes: (
+//   "red": mat.$red-palette,
+//   "green": mat.$green-palette,
+//   "blue": mat.$blue-palette,
+//   "yellow": mat.$yellow-palette,
+//   "cyan": mat.$cyan-palette,
+//   "magenta": mat.$magenta-palette,
+//   "orange": mat.$orange-palette,
+//   "chartreuse": mat.$chartreuse-palette,
+// //  "azure": matx.$azure-palette,
+//   "violet": mat.$violet-palette,
+//   "rose": mat.$rose-palette
+// );
 
 
 // body {
@@ -321,74 +325,34 @@ mat-icon.mat-mdc-card-avatar {
   }
 }
 
-.mat-mdc-chip.tag-chip {
-  --mdc-chip-outline-width: 0;
 
-  --mdc-chip-elevated-container-color: #{map-get(
-  map-get($mat-tag-colors, "default-namespace"),
-  "default"
-  )};
-  --mdc-chip-label-text-color: #{map-get(
-    map-get($mat-tag-colors, "default-namespace"),
-    "default-contrast"
-  )};
-  --mdc-chip-with-trailing-icon-trailing-icon-color: #{map-get(
-    map-get($mat-tag-colors, "default-namespace"),
-    "default-contrast"
-  )};
-  //font-weight: 400;
-  @each $tag, $palette in $mat-tag-colors {
-    &.tag-namespace-#{$tag} {
-      --mdc-chip-elevated-container-color: #{map-get($palette, "default")};
-      --mdc-chip-label-text-color: #{map-get($palette, "default-contrast")};
-      --mdc-chip-with-trailing-icon-trailing-icon-color: #{map-get($palette, "default-contrast")};
-    }
-  }
-  &.tag-namespace- {
-    --mdc-chip-elevated-container-color: #{map-get(
-      map-get($mat-tag-colors, "no-namespace"),
-      "default"
-    )};
-    --mdc-chip-label-text-color: #{map-get(
-      map-get($mat-tag-colors, "no-namespace"),
-      "default-contrast"
-    )};
-    --mdc-chip-with-trailing-icon-trailing-icon-color: #{map-get(
-      map-get($mat-tag-colors, "no-namespace"),
-      "default-contrast"
-    )};
-  }
-  /* TODO(mdc-migration): The following rule targets internal classes of chips that may no longer apply for the MDC version.*/
-
-  //height: 100% !important;
-}
+@import 'default-tag-namespace-colors';
 
 .tag-color {
+  // background-color: var(--sys-primary);
+  // color: var(--sys-on-primary);
 
-  --mdc-list-list-item-hover-label-text-color: var(--mdc-list-list-item-label-text-color);
+  &.mat-mdc-chip {
+    --mdc-chip-elevated-container-color: var(--sys-primary-container);
+    --mdc-chip-label-text-color: var(--sys-on-primary-container);
+    --mdc-chip-with-trailing-icon-trailing-icon-color: var(--sys-on-primary-container);
+  }
 
-  // I HATE CSS
-  &.tag-color {
-    color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
-    --mat-menu-item-label-text-color: #{map-get(map-get($mat-tag-colors, "default-namespace"), "default")};
-    --mdc-list-list-item-label-text-color: #{map-get(map-get($mat-tag-colors, "default-namespace"), "default")};
+  &.mat-mdc-menu-item {
+    --mat-menu-item-label-text-color: var(--sys-primary);
+    --mdc-list-list-item-label-text-color: var(--sys-primary);
   }
-  //color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
-  @each $tag, $palette in $mat-tag-colors {
-      &.tag-namespace-#{$tag} {
-          color: map-get($palette, "default");
-          --mat-menu-item-label-text-color: #{map-get($palette, "default")};
-          --mdc-list-list-item-label-text-color: #{map-get($palette, "default")};
-          //color: map-get($palette, "default-contrast");
-      }
-  }
-  &.tag-namespace- {
-      color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
-      --mat-menu-item-label-text-color: #{map-get(map-get($mat-tag-colors, "no-namespace"), "default")};
-      --mdc-list-list-item-label-text-color: #{map-get(map-get($mat-tag-colors, "no-namespace"), "default")};
-      //color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
+
+  &.mat-mdc-option {
+    --mdc-list-list-item-label-text-color: var(--sys-primary);
+    --mdc-list-list-item-hover-label-text-color: var(--sys-primary);
   }
 }
+
+.mat-mdc-chip.tag-chip {
+  --mdc-chip-outline-width: 0;
+}
+
 
 .toolbar-count {
   padding-left: 4px;

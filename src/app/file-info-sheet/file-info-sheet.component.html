@@ -135,34 +135,34 @@
           <mat-list>
             @for (rating of file.ratings_array; track rating.service_key) {
               @if (isNumericalRatingService(rating)) {
-                <mat-list-item>
-                  <p matLine>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
-                  <p matLine class="numerical-rating-line">
+                <mat-list-item lines="3">
+                  <p matListItemTitle>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
+                  <p matListItemLine class="numerical-rating-line">
                     <app-rating-numerical [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-numerical>
                   </p>
-                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                  <button mat-icon-button matListItemMeta [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
                     <mat-icon>more_vert</mat-icon>
                   </button>
                 </mat-list-item>
               }
               @if (isLikeRatingService(rating)) {
                 <mat-list-item>
-                  <p matLine>{{rating.name}} ({{rating.value === null ? 'not set' : rating.value ? 'liked' : 'dislike'}})</p>
-                  <p matLine>
+                  <p matListItemTitle>{{rating.name}} ({{rating.value === null ? 'not set' : rating.value ? 'liked' : 'dislike'}})</p>
+                  <p matListItemLine>
                     <app-rating-like [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-like>
                   </p>
-                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                  <button mat-icon-button matListItemMeta [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
                     <mat-icon>more_vert</mat-icon>
                   </button>
                 </mat-list-item>
               }
               @if (isIncDecRatingService(rating)) {
                 <mat-list-item>
-                  <p matLine>{{rating.name}}</p>
-                  <p matLine class="inc-rating-line">
+                  <p matListItemTitle>{{rating.name}}</p>
+                  <p matListItemLine class="inc-rating-line">
                     <app-rating-inc-dec [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-inc-dec>
                   </p>
-                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                  <button mat-icon-button matListItemMeta [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
                     <mat-icon>more_vert</mat-icon>
                   </button>
                 </mat-list-item>
@@ -203,7 +203,7 @@
       <div class="tags-section">
         <div class="sec-header">
           <h3 class="mat-subheading-2">Tags</h3>
-          <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
+          <mat-slide-toggle color="primary" labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
         </div>
         <mat-accordion multi>
           @for (service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; track  trackByTagService(service)) {
@@ -216,8 +216,8 @@
                   @for (tag of (service.tags | orderBy); track tag) {
                     <mat-chip-option
                       [selectable]="false"
-                      class="tag-chip"
-                      [ngClass]="tag | tagClass"
+                      class="theming tag-chip tag-color"
+                      [attr.data-tag-namespace]="tag | tagNamespace"
                       [matMenuTriggerFor]="tagMenu"
                       [matMenuTriggerData]="{tag, service: {serviceType: service.serviceType, serviceKey: service.serviceKey}}"
                       >

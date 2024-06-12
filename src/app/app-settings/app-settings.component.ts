@@ -8,6 +8,7 @@ import { HydrusServicesService } from '../hydrus-services.service';
 import { defaultAppSettings } from '../settings';
 import { SettingsService } from '../settings.service';
 import { ErrorService } from '../error.service';
+import { settingsThemeVariants } from '../theme/theme';
 
 @Component({
   selector: 'app-app-settings',
@@ -23,6 +24,8 @@ export class AppSettingsComponent implements OnInit {
     public apiSettings: HydrusApiSettingsService,
     private errorService: ErrorService,
   ) { }
+
+  settingsThemeVariants = settingsThemeVariants;
 
   ngOnInit(): void {
   }

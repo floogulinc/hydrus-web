@@ -16,11 +16,11 @@ class StringSerializer implements StorageSerializer<string> {
 export class MigrationService {
 
   constructor(private storage: LocalStorageService) {
-
+    this.migrateLocalStorage();
   }
 
-   async migrateLocalStorage() {
-    const version = await this.storage.asPromisable().get('migrationVersion');
+   migrateLocalStorage() {
+    const version = this.storage.get('migrationVersion');
     console.log(`Local storage migration version ${version}`);
     switch(version) {
       case 1: {
@@ -28,22 +28,22 @@ export class MigrationService {
       }
       case null: {
         console.log('Migrating local storage to version 1');
-        if (await this.storage.asPromisable().get('hydrusApiKey', new StringSerializer())) {
-          await this.storage.asPromisable().set(
+        if (this.storage.get('hydrusApiKey', new StringSerializer())) {
+          this.storage.set(
             'hydrusApiKey',
-            await this.storage.asPromisable().get('hydrusApiKey', new StringSerializer())
+            this.storage.get('hydrusApiKey', new StringSerializer())
           );
         }
-        if (await this.storage.asPromisable().get('hydrusApiUrl', new StringSerializer())) {
-          await this.storage.asPromisable().set(
+        if (this.storage.get('hydrusApiUrl', new StringSerializer())) {
+          this.storage.set(
             'hydrusApiUrl',
-            await this.storage.asPromisable().get('hydrusApiUrl', new StringSerializer())
+            this.storage.get('hydrusApiUrl', new StringSerializer())
           );
         }
-        await this.storage.asPromisable().set(
+        this.storage.set(
           'migrationVersion', 1
         );
-        await this.migrateLocalStorage();
+        this.migrateLocalStorage();
         break;
       }
       default: {

@@ -38,6 +38,7 @@
     "@types/byte-size": "^8.1.0",
     "array-flat-polyfill": "^1.0.1",
     "byte-size": "^8.1.0",
+    "dequal": "^2.0.3",
     "exifreader": "^4.20.0",
     "fast-blurhash": "^1.1.2",
     "file-saver-es": "^2.0.5",

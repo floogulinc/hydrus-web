@@ -7,7 +7,7 @@ import { switchMap } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { Observable, firstValueFrom, of } from 'rxjs';
 import { HydrusTagsService } from '../hydrus-tags.service';
-import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType } from '../hydrus-tags';
+import { HydrusSearchTags, HydrusTagSearchTag, TagDisplayType, isSingleTag } from '../hydrus-tags';
 import { MatDialog } from '@angular/material/dialog';
 import { allSystemPredicates, predicateGroups, SystemPredicate } from '../hydrus-system-predicates';
 import { SystemPredicateDialogComponent } from '../system-predicate-dialog/system-predicate-dialog.component';
@@ -44,6 +44,8 @@ interface ConvertedPredicateGroup {
   styleUrls: ['./tag-input.component.scss']
 })
 export class TagInputComponent implements OnInit, ControlValueAccessor {
+
+  isSingleTag = isSingleTag;
 
   searchTags: HydrusSearchTags = [];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];

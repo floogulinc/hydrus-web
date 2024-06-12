@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HydrusApiService } from './hydrus-api.service';
-import { map, retry, shareReplay } from 'rxjs';
+import { map, retry, shareReplay, switchMap } from 'rxjs';
 import { getServiceArrayUniversal } from './hydrus-services';
 
 @Injectable({
@@ -12,13 +12,16 @@ export class HydrusServicesService {
     private api: HydrusApiService
   ) { }
 
-  public hydrusServices$ = this.api.getServices().pipe(
-    retry(1),
+  public hydrusServices$ = this.api.apiValidConfigChange$.pipe(
+    switchMap(() => this.api.getServices().pipe(
+      retry(1)
+    )),
     shareReplay(1)
   );
 
   public hydrusServicesArray$ = this.hydrusServices$.pipe(
     map(s => getServiceArrayUniversal(s)),
+    shareReplay(1),
   )
 
 }

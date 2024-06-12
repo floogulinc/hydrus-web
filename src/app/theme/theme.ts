@@ -12,6 +12,7 @@ import {
   argbFromRgb,
   hexFromArgb
 } from "@material/material-color-utilities";
+import { SchemeTonalSpotCustom, SchemeVibrantCustom } from "./schemes";
 
 const SYS_TOKEN_PREFIX = 'sys'
 
@@ -68,45 +69,71 @@ export const materialDynamicColors = [
 ];
 
 
-export function generateThemeFromHex(hex: string, variant?: Variant, contrast?: number) {
-  return newThemeFromHct(Hct.fromInt(argbFromHex(hex)), variant, contrast);
+export function generateThemeFromHex(hex: string, variant?: ThemeVariant, contrast?: number) {
+  return schemesFromHct(Hct.fromInt(argbFromHex(hex)), variant, contrast);
 }
 
-export function generateThemeFromRGB(rgb: [number, number, number]) {
-  return newThemeFromHct(Hct.fromInt(argbFromRgb(...rgb)));
+export function generateThemeFromRGB(rgb: [number, number, number], variant?: ThemeVariant, contrast?: number) {
+  return schemesFromHct(Hct.fromInt(argbFromRgb(...rgb)), variant, contrast);
 }
 
-export enum Variant {
+export enum ThemeVariant {
   MONOCHROME = 0,
   NEUTRAL = 1,
   TONAL_SPOT = 2,
   VIBRANT = 3,
   FIDELITY = 5,
-  CONTENT = 6
+  CONTENT = 6,
+  TONAL_SPOT_CUSTOM = 7,
+  VIBRANT_CUSTOM = 8
 }
+
+export enum SettingsThemeVariant {
+  DEFAULT = 0,
+  MONOCHROME = 1,
+  NEUTRAL = 2,
+  VIBRANT = 3,
+}
+
+
+export const settingsThemeVariantToThemeVariant: Record<SettingsThemeVariant, ThemeVariant> = {
+  [SettingsThemeVariant.DEFAULT]: ThemeVariant.TONAL_SPOT_CUSTOM,
+  [SettingsThemeVariant.MONOCHROME]: ThemeVariant.MONOCHROME,
+  [SettingsThemeVariant.NEUTRAL]: ThemeVariant.NEUTRAL,
+  [SettingsThemeVariant.VIBRANT]: ThemeVariant.VIBRANT_CUSTOM
+}
+
+export const settingsThemeVariants = [
+  {id: SettingsThemeVariant.DEFAULT, name : 'Default'},
+  {id: SettingsThemeVariant.MONOCHROME, name : 'Monochrome'},
+  {id: SettingsThemeVariant.NEUTRAL, name : 'Neutral'},
+  {id: SettingsThemeVariant.VIBRANT, name : 'Vibrant'}
+]
 
 
 const variantsToSchemes = {
-  [Variant.MONOCHROME]: SchemeMonochrome,
-  [Variant.NEUTRAL]: SchemeNeutral,
-  [Variant.TONAL_SPOT]: SchemeTonalSpot,
-  [Variant.VIBRANT]: SchemeVibrant,
-  [Variant.FIDELITY]: SchemeFidelity,
-  [Variant.CONTENT]: SchemeContent
+  [ThemeVariant.MONOCHROME]: SchemeMonochrome,
+  [ThemeVariant.NEUTRAL]: SchemeNeutral,
+  [ThemeVariant.TONAL_SPOT]: SchemeTonalSpot,
+  [ThemeVariant.VIBRANT]: SchemeVibrantCustom,
+  [ThemeVariant.FIDELITY]: SchemeFidelity,
+  [ThemeVariant.CONTENT]: SchemeContent,
+  [ThemeVariant.TONAL_SPOT_CUSTOM]: SchemeTonalSpotCustom,
+  [ThemeVariant.VIBRANT_CUSTOM]: SchemeVibrantCustom,
 }
 
-function schemeFromHct(variant: Variant, sourceColorHct: Hct, isDark: boolean, contrastLevel: number) {
+export function schemeFromHct(variant: ThemeVariant, sourceColorHct: Hct, isDark: boolean, contrastLevel = 0.0) {
   return new variantsToSchemes[variant](sourceColorHct, isDark, contrastLevel);
 }
 
-function newThemeFromHct(hct: Hct, variant = Variant.TONAL_SPOT, contrast = 0.0 ) {
+function schemesFromHct(hct: Hct, variant = ThemeVariant.TONAL_SPOT, contrast = 0.0 ) {
   const light = schemeFromHct(variant, hct, false, contrast);
   const dark = schemeFromHct(variant, hct, true, contrast);
   return {light, dark}
 }
 
-function propertiesFromDynamicScheme(scheme: DynamicScheme) {
-  return materialDynamicColors.map(schemeColor => {
+export function propertiesFromDynamicScheme(scheme: DynamicScheme, colors = materialDynamicColors) {
+  return colors.map(schemeColor => {
     const token = schemeColor.name.replaceAll('_', '-');
     const color = hexFromArgb(schemeColor.getArgb(scheme));
     return `--${SYS_TOKEN_PREFIX}-${token}: ${color};`
@@ -125,3 +152,5 @@ export function styleSheetFromTheme(theme: {light: DynamicScheme, dark: DynamicS
     }
   }`
 }
+
+

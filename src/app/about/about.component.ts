@@ -7,6 +7,10 @@ import { MrBonesDialogComponent } from '../mr-bones-dialog/mr-bones-dialog.compo
 import { HydrusVersionService } from '../hydrus-version.service';
 import { ServicesInfoDialogComponent } from '../services-info-dialog/services-info-dialog.component';
 import { env } from '../env';
+import { HydrusClientOptionsService } from '../hydrus-client-options.service';
+import { HydrusApiSettingsService } from '../hydrus-api-settings.service';
+import { JsonViewDialogComponent } from '../json-view-dialog/json-view-dialog.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-about',
@@ -20,7 +24,10 @@ export class AboutComponent implements OnInit {
     public filesService: HydrusFilesService,
     public platform: Platform,
     private dialog: MatDialog,
-    public hydrusVersion: HydrusVersionService) { }
+    public hydrusVersion: HydrusVersionService,
+    public clientOptions: HydrusClientOptionsService,
+    private apiSettings: HydrusApiSettingsService
+  ) { }
 
   public doc = document;
 
@@ -51,6 +58,15 @@ export class AboutComponent implements OnInit {
     this.dialog.open(ServicesInfoDialogComponent, {
       maxWidth: '95vw'
     });
+  }
+
+  async options() {
+    const options = await firstValueFrom(this.clientOptions.clientOptions$)
+    JsonViewDialogComponent.open(this.dialog, {json: options, title: 'Client Options'})
+  }
+
+  reloadClientInfo() {
+    this.apiSettings.refreshApiConfig();
   }
 
 }

@@ -1,27 +1,43 @@
 <form [formGroup]="appSettingsForm" (ngSubmit)="submitAppSettings()" autocomplete="off">
   <div class="settings-column flex-column">
+    <h2 class="mat-headline-6">Theme</h2>
+    <mat-slide-toggle color="primary" formControlName="themeEnabled" class="margin-bottom-16">Enable custom theme</mat-slide-toggle>
+    <mat-form-field appearance="outline">
+      <mat-label>Theme Color</mat-label>
+      <input matInput type="color" formControlName="themeColor">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Theme Style</mat-label>
+      <mat-select formControlName="themeVariant">
+        @for (variant of settingsThemeVariants; track variant.id) {
+          <mat-option [value]="variant.id">
+            {{variant.name}}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
     <h2 class="mat-headline-6">Browse</h2>
-    <mat-slide-toggle formControlName="browseSearchOnLoad" class="margin-bottom-16">Search immediately on the browse page</mat-slide-toggle>
-    <mat-slide-toggle formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
+    <mat-slide-toggle color="primary" formControlName="browseSearchOnLoad" class="margin-bottom-16">Search immediately on the browse page</mat-slide-toggle>
+    <mat-slide-toggle color="primary" formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
     <app-tag-input formControlName="browseDefaultSearchTags" placeholder="Browse page default search" [enableSiblingParentsDialog]="false" class=""></app-tag-input>
     <app-tag-input formControlName="favoriteTags" [enableFavorites]="false" [enableOrSearch]="false" [enableSiblingParentsDialog]="false" placeholder="Favorite tags" class=""></app-tag-input>
     <h2 class="mat-headline-6">File Viewing</h2>
-    <mat-slide-toggle formControlName="mediaAutoplay" class="margin-bottom-16">Autoplay video and audio files</mat-slide-toggle>
-    <mat-slide-toggle formControlName="mediaLoop" class="margin-bottom-16">Loop video and audio files</mat-slide-toggle>
-    <mat-slide-toggle formControlName="mediaDefaultMuted" class="margin-bottom-16">Video and audio files start muted</mat-slide-toggle>
+    <mat-slide-toggle color="primary" formControlName="mediaAutoplay" class="margin-bottom-16">Autoplay video and audio files</mat-slide-toggle>
+    <mat-slide-toggle color="primary" formControlName="mediaLoop" class="margin-bottom-16">Loop video and audio files</mat-slide-toggle>
+    <mat-slide-toggle color="primary" formControlName="mediaDefaultMuted" class="margin-bottom-16">Video and audio files start muted</mat-slide-toggle>
     <h2 class="mat-headline-6">Send</h2>
     <mat-form-field appearance="outline">
       <mat-label>Default page name for sending URLs</mat-label>
       <input matInput type="text" autocomplete="off" formControlName="sendDefaultPage" placeholder="">
     </mat-form-field>
-    <mat-slide-toggle formControlName="sendResetFormAfterSend" class="margin-bottom-16">Reset form after sending URL to Hydrus</mat-slide-toggle>
-    <mat-slide-toggle formControlName="sendFixDiscordUrls" class="margin-bottom-16" matTooltip="media.discordapp.net to cdn.discordapp.com">Fix shared Discord URLs</mat-slide-toggle>
+    <mat-slide-toggle color="primary" formControlName="sendResetFormAfterSend" class="margin-bottom-16">Reset form after sending URL to Hydrus</mat-slide-toggle>
+    <mat-slide-toggle color="primary" formControlName="sendFixDiscordUrls" class="margin-bottom-16" matTooltip="media.discordapp.net to cdn.discordapp.com">Fix shared Discord URLs</mat-slide-toggle>
     <h2 class="mat-headline-6">Upload</h2>
     <mat-form-field appearance="outline">
       <mat-label>Filename Tag Service</mat-label>
       <mat-select formControlName="uploadFilenameTagService">
         <mat-option>None (disabled)</mat-option>
-        @for (service of (apiSettings.apiSet ? (tagServices$ | async) : []); track service.service_key) {
+        @for (service of (apiSettings.apiSet() ? (tagServices$ | async) : []); track service.service_key) {
           <mat-option [value]="service.service_key">
             {{service.name}}
           </mat-option>
@@ -49,7 +65,7 @@
       <input matInput type="text" autocomplete="off" formControlName="saucenaoSearchProxy">
     </mat-form-field>
 
-    <mat-slide-toggle formControlName="photopeaIntegration" class="margin-bottom-16">Enable "open in Photopea" button</mat-slide-toggle>
+    <mat-slide-toggle color="primary" formControlName="photopeaIntegration" class="margin-bottom-16">Enable "open in Photopea" button</mat-slide-toggle>
 
     <div class="button-row">
 

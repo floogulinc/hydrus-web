@@ -20,7 +20,7 @@
       </a>
     }
     @if (hydrusVersion.hydrusVersion$ | async; as v) {
-      <a mat-list-item role="listitem" (click)="hydrusVersion.checkHydrusVersion()">
+      <a mat-list-item role="listitem">
         <div matListItemTitle>Hydrus Version</div>
         @if (v.hydrus_version) {
           <div matListItemLine>Hydrus Client {{v.hydrus_version}}</div>
@@ -28,8 +28,8 @@
         <div matListItemLine>Client API {{v.version}}</div>
       </a>
     } @else {
-      <a mat-list-item role="listitem" (click)="hydrusVersion.checkHydrusVersion()">
-        <div matListItemTitle>Check Hydrus Version</div>
+      <a mat-list-item role="listitem" >
+        <div matListItemTitle>Unknown Hydrus Version</div>
       </a>
     }
     <a mat-list-item role="listitem" (click)="boned()">
@@ -37,6 +37,12 @@
     </a>
     <a mat-list-item role="listitem" (click)="services()">
       <div matListItemTitle>Hydrus Services</div>
+    </a>
+    <a mat-list-item role="listitem" (click)="options()">
+      <div matListItemTitle>Hydrus Client Options</div>
+    </a>
+    <a mat-list-item role="listitem" (click)="reloadClientInfo()">
+      <div matListItemTitle>Reload Client Information</div>
     </a>
     <mat-divider></mat-divider>
     <div mat-subheader>Debug</div>
