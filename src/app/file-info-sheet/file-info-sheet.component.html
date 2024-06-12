@@ -33,6 +33,7 @@
             <span>Copy hyshare URL</span>
           </button>
         }
+        <mat-divider></mat-divider>
         <button mat-menu-item (click)="searchSimilarFiles()">
           <mat-icon>image_search</mat-icon>
           <span>Search for similar files</span>
@@ -43,6 +44,7 @@
             <span>SauceNAO lookup</span>
           </button>
         }
+        <mat-divider></mat-divider>
         @if (canGetMetadata) {
           <button mat-menu-item (click)="fileMetadata()">
             <mat-icon>list</mat-icon>
@@ -53,6 +55,7 @@
           <mat-icon>data_object</mat-icon>
           <span>View raw file info</span>
         </button>
+        <mat-divider></mat-divider>
         <button mat-menu-item (click)="reload()">
           <mat-icon>refresh</mat-icon>
           <span>Refresh</span>

@@ -47,6 +47,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { CdkMenuModule } from '@angular/cdk/menu';
 
 import { PortalModule } from '@angular/cdk/portal';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -93,6 +94,7 @@ import { RatingIncDecComponent } from './rating-inc-dec/rating-inc-dec.component
 import { TagSiblingsParentsDialogComponent } from './tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
 import { BlurHashColorPipe } from './blurhash';
 import { isSingleTagPipe } from "./hydrus-tags";
+import { MatContextMenuTriggerDirective } from "./mat-context-menu-trigger";
 
 
 const MAT_MODULES = [
@@ -168,6 +170,7 @@ const MAT_MODULES = [
     TagSiblingsParentsDialogComponent,
     IsSystemPredicatePipe,
     BlurHashColorPipe,
+    MatContextMenuTriggerDirective,
   ],
   bootstrap: [AppComponent],
   imports: [
@@ -178,6 +181,7 @@ const MAT_MODULES = [
     PortalModule,
     ScrollingModule,
     TextFieldModule,
+    CdkMenuModule,
     MAT_MODULES,
     NgxLocalStorageModule.forRoot({ prefix: environment.localStoragePrefix }),
     BrowserAnimationsModule,

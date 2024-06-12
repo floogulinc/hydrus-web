@@ -22,7 +22,6 @@ export class ThemeTagsService {
 
   async setThemeFromNamespaceColors(namespaceColors: Record<string, [number, number, number]>) {
     const styles = getStyleSheetForNamespaces(namespaceColors);
-    console.log(styles)
     return this.tagsThemeStylesheet.replace(styles)
   }
 

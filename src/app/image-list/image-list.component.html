@@ -1,11 +1,14 @@
-<virtual-scroller class="virtual-scroll" #scroll [items]="files" (vsEnd)="vsEnd($event)"
+<virtual-scroller class="virtual-scroll" #scroll [items]="files()" (vsEnd)="vsEnd($event)"
   [parentScroll]="scrollElement" [bufferAmount]="24">
   <ul class="mdc-image-list browse-image-list" #container>
     @for (file of scroll.viewPortItems; track file.file_id) {
       <li class="mdc-image-list__item grid-item"
         >
         <a [href]="file.file_url"
-          (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.files, file.file_id);">
+          (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.files(), file.file_id);"
+          [appMatContextMenuTriggerFor]="fileMenu"
+          [matMenuTriggerData]="{file}"
+        >
           <div class="mdc-image-list__image-aspect-container">
             <div class="mdc-image-list__image image-list-image"
               [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')', 'background-color' : file.blurhash ? (file.blurhash | blurhashcolor) : '#c7c5cb'}"
@@ -16,3 +19,30 @@
     }
   </ul>
 </virtual-scroller>
+
+<mat-menu #fileMenu="matMenu">
+  <ng-template matMenuContent let-file="file">
+    <button mat-menu-item (click)="fileInfo(file)">
+      <mat-icon>info_outlined</mat-icon>
+      <span>File Info</span>
+    </button>
+    <mat-divider></mat-divider>
+    <a mat-menu-item rel="noopener noreferrer" target="_blank" href="{{file.file_url}}">
+      <mat-icon>open_in_new</mat-icon>
+      <span>Open file in new tab</span>
+    </a>
+    <button mat-menu-item [cdkCopyToClipboard]="file.hash">
+      <mat-icon>content_copy</mat-icon>
+      <span>Copy SHA256 hash</span>
+    </button>
+    <button mat-menu-item (click)="shareFile(file)">
+      <mat-icon>share</mat-icon>
+      <span>Share File</span>
+    </button>
+    <button mat-menu-item (click)="saveFile(file)">
+      <mat-icon>get_app</mat-icon>
+      <span>Download File</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
