@@ -112,7 +112,7 @@
           Known URLs ({{file.known_urls.length}})
         </mat-expansion-panel-header>
         <mat-nav-list>
-          @for (url of file.detailed_known_urls; track url) {
+          @for (url of file.detailed_known_urls; track url.normalised_url) {
             <mat-list-item>
               <a matListItemTitle class="known-url-list-item-title" [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
               @if (true) {
@@ -274,7 +274,7 @@
     @if (fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService) {
       <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)">
         <mat-icon>delete</mat-icon>
-        <span>Delete Tag</span>
+        <span>Remove Tag</span>
       </button>
     }
   </ng-template>

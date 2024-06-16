@@ -2,26 +2,38 @@
   [parentScroll]="scrollElement" [bufferAmount]="24">
   <ul class="mdc-image-list browse-image-list" #container>
     @for (file of scroll.viewPortItems; track file.file_id) {
-      <li class="mdc-image-list__item grid-item"
-        >
+      <li class="mdc-image-list__item grid-item">
         <a [href]="file.file_url"
-          (click)="$event.preventDefault(); this.photoswipe.openPhotoSwipe(this.files(), file.file_id);"
+          (click)="fileClick($event, file)"
           [appMatContextMenuTriggerFor]="fileMenu"
           [matMenuTriggerData]="{file}"
         >
-          <div class="mdc-image-list__image-aspect-container">
-            <div class="mdc-image-list__image image-list-image"
-              [ngStyle]="{'background-image':'url('+ file.thumbnail_url +')', 'background-color' : file.blurhash ? (file.blurhash | blurhashcolor) : '#c7c5cb'}"
-            [ngClass]="'file-id-' + file.file_id"></div>
-          </div>
+          <app-image-list-item [file]="file" [selected]="selected().has(file.file_id)"></app-image-list-item>
         </a>
       </li>
     }
   </ul>
 </virtual-scroller>
 
+
 <mat-menu #fileMenu="matMenu">
   <ng-template matMenuContent let-file="file">
+    @if(selected().has(file.file_id)) {
+      <button mat-menu-item (click)="deselect(file)">
+        <mat-icon>deselect</mat-icon>
+        <span>Deselect</span>
+      </button>
+    } @else {
+      <button mat-menu-item (click)="select(file)">
+        <mat-icon>select_all</mat-icon>
+        <span>Select</span>
+      </button>
+    }
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="viewFile(file)">
+      <mat-icon>preview</mat-icon>
+      <span>View File</span>
+    </button>
     <button mat-menu-item (click)="fileInfo(file)">
       <mat-icon>info_outlined</mat-icon>
       <span>File Info</span>

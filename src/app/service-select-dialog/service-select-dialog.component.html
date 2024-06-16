@@ -15,7 +15,7 @@
     </div>
   </div>
   <div mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="null">Cancel</button>
     <button mat-button type="submit" [disabled]="serviceForm.invalid">Select</button>
   </div>
 </form>

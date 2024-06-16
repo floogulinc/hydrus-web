@@ -34,11 +34,6 @@ export class HydrusApiSettingsService {
 
     this.hydrusApiUrl = this._hydrusApiUrl.asReadonly();
     this.hydrusApiKey = this._hydrusApiKey.asReadonly();
-
-    this.apiSet$.subscribe((x) => {console.log(x)})
-    effect(() => console.log(this.hydrusApiUrl()))
-    effect(() => console.log(this.hydrusApiKey()))
-    effect(() => console.log(`${this.hydrusApiUrl()}${this.hydrusApiKey()}`))
   }
 
 

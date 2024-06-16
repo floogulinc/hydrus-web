@@ -95,6 +95,8 @@ import { TagSiblingsParentsDialogComponent } from './tag-siblings-parents-dialog
 import { BlurHashColorPipe } from './blurhash';
 import { isSingleTagPipe } from "./hydrus-tags";
 import { MatContextMenuTriggerDirective } from "./mat-context-menu-trigger";
+import { ImageListItemComponent } from './image-list-item/image-list-item.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 
 const MAT_MODULES = [
@@ -171,6 +173,8 @@ const MAT_MODULES = [
     IsSystemPredicatePipe,
     BlurHashColorPipe,
     MatContextMenuTriggerDirective,
+    ImageListItemComponent,
+    ConfirmDialogComponent,
   ],
   bootstrap: [AppComponent],
   imports: [

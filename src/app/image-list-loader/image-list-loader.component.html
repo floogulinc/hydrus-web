@@ -1,6 +1,55 @@
-<app-image-list [files]="currentFiles" (scrollEnd)="listScrollEnd($event)"></app-image-list>
-@if (loading) {
+<app-image-list [files]="currentFiles()" (scrollEnd)="listScrollEnd($event)" [(selected)]="selected"></app-image-list>
+@if (loading()) {
   <div class="loader">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 }
+
+@if(anySelected()) {
+  <button
+    class="select-fab"
+    mat-fab aria-label="Select Options"
+    [matMenuTriggerFor]="selectionMenu"
+    [matBadge]="numSelected()"
+    matBadgePosition="before"
+  >
+    <mat-icon>select_all</mat-icon>
+  </button>
+}
+
+<mat-menu #selectionMenu="matMenu">
+  <button mat-menu-item (click)="archiveSelected()">
+    <mat-icon>archive</mat-icon>
+    <span>Archive Selected</span>
+  </button>
+  <button mat-menu-item (click)="inboxSelected()">
+    <mat-icon>move_to_inbox</mat-icon>
+    <span>Inbox Selected</span>
+  </button>
+  <button mat-menu-item (click)="deleteSelected()">
+    <mat-icon>delete</mat-icon>
+    <span>Delete Selected</span>
+  </button>
+  <button mat-menu-item (click)="undeleteSelected()">
+    <mat-icon>restore_from_trash</mat-icon>
+    <span>Undelete Selected</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="addTagsToSelected()">
+    <mat-icon>add</mat-icon>
+    <span>Add Tags</span>
+  </button>
+  <button mat-menu-item (click)="removeTags()">
+    <mat-icon>remove</mat-icon>
+    <span>Remove Tags</span>
+  </button>
+  <mat-divider></mat-divider>
+  <button mat-menu-item (click)="selectAll()">
+    <mat-icon>select_all</mat-icon>
+    <span>Select All</span>
+  </button>
+  <button mat-menu-item (click)="deselectAll()">
+    <mat-icon>deselect</mat-icon>
+    <span>Deselect All</span>
+  </button>
+</mat-menu>

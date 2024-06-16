@@ -9,7 +9,9 @@ import {
   EventEmitter,
   input,
   output,
-  effect
+  effect,
+  model,
+  computed
 } from '@angular/core';
 import { HydrusBasicFile, HydrusFile } from '../hydrus-file';
 import { AppComponent } from '../app.component';
@@ -37,6 +39,11 @@ export class ImageListComponent implements OnInit, OnChanges {
 
   scrollEnd = output<IPageInfo>()
 
+
+  selected = model<Set<number>>(new Set());
+
+  anySelected = computed(() => this.selected().size > 0)
+
   constructor(
     public appComponent: AppComponent,
     public photoswipe: PhotoswipeService,
@@ -44,7 +51,6 @@ export class ImageListComponent implements OnInit, OnChanges {
     private bottomSheet: MatBottomSheet,
     public downloadService: HydrusFileDownloadService,
   ) {
-
   }
 
   scrollElement = this.appComponent.sidenavContent.getElementRef().nativeElement
@@ -63,6 +69,22 @@ export class ImageListComponent implements OnInit, OnChanges {
     }
   }
 
+  fileClick(event: MouseEvent, file: HydrusBasicFile) {
+    event.preventDefault();
+    if(event.shiftKey) {
+      this.selectToggle(file);
+    } else if(event instanceof PointerEvent && event.pointerType === 'touch' && this.anySelected()) {
+      this.selectToggle(file);
+    } else {
+      this.viewFile(file);
+    }
+
+  }
+
+  viewFile(file: HydrusBasicFile) {
+    this.photoswipe.openPhotoSwipe(this.files(), file.file_id);
+  }
+
   fileInfo(file: HydrusBasicFile) {
     FileInfoSheetComponent.open(this.bottomSheet, file)
   }
@@ -74,5 +96,36 @@ export class ImageListComponent implements OnInit, OnChanges {
   shareFile(file: HydrusBasicFile) {
     this.downloadService.shareFile(file);
   }
+
+  select(file: HydrusBasicFile) {
+    this.selected.update(s => {
+      const setCopy = new Set(s);
+      setCopy.add(file.file_id);
+      return setCopy;
+    })
+  }
+
+  deselect(file: HydrusBasicFile) {
+    this.selected.update(s => {
+      const setCopy = new Set(s);
+      setCopy.delete(file.file_id);
+      return setCopy
+    })
+  }
+
+  selectToggle(file: HydrusBasicFile) {
+    this.selected.update(s => {
+      const setCopy = new Set(s);
+      if (setCopy.has(file.file_id)) {
+        setCopy.delete(file.file_id);
+        return setCopy
+      } else {
+        return setCopy.add(file.file_id);
+      }
+    })
+  }
+
+
+
 
 }

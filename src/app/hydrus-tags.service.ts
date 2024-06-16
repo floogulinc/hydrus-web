@@ -56,4 +56,29 @@ export class HydrusTagsService {
   }
 
 
+  addTagsToServiceFileIDs(file_ids: number[], tags: string[], serviceKey: string) {
+    return this.api.addTags(
+      {
+        file_ids,
+        service_keys_to_tags: {
+          [serviceKey]: tags
+        }
+      }
+    )
+  }
+
+  deleteTagsFromLocalServiceFileIDs(file_ids: number[], tags: string[], serviceKey: string) {
+    return this.api.addTags(
+      {
+        file_ids,
+        service_keys_to_actions_to_tags: {
+          [serviceKey]: {
+            "1": tags
+          }
+        }
+      }
+    )
+  }
+
+
 }

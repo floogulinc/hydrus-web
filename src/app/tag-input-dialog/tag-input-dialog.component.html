@@ -3,6 +3,6 @@
   <app-tag-input [(ngModel)]="tags" [enableOrSearch]="data.enableOrSearch" [enableSystemPredicates]="data.enableSystemPredicates" [enableFavorites]="data.enableFavorites" [displayType]="data.displayType" placeholder="Tags"></app-tag-input>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="null">Cancel</button>
   <button mat-button [mat-dialog-close]="tags" [disabled]="tags.length < 1">{{data.submitButtonText}}</button>
 </div>
