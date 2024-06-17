@@ -5,9 +5,9 @@ import { switchMap, debounceTime, catchError, shareReplay, tap, startWith, map }
 import { of, forkJoin, combineLatest } from 'rxjs';
 import { HydrusURLInfo, HydrusURLFiles } from '../hydrus-url';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SaucenaoService, SaucenaoResults } from '../saucenao.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { HydrusApiService } from '../hydrus-api.service';
 import { HydrusFilesService } from '../hydrus-files.service';

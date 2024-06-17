@@ -1,3 +1,5 @@
+import { HydrusTagDisplayType } from "./hydrus-tags";
+
 export enum HydrusSortType {
   FileSize = 0,
   Duration = 1,
@@ -232,3 +234,45 @@ export function sortToString({sortType, sortAsc}: SortInfo) {
   const orderString = sortAsc ? orderInfo.ascString : orderInfo.descString;
   return `${name}${orderInfo.canAsc ? ' (' + orderString + ')' : ''}`;
 }
+
+enum HydrusMediaSortOrder {
+  SORT_ASC = 0,
+  SORT_DESC = 1
+}
+
+enum HydrusSortMetaType {
+  System = 'system',
+  Namespaces = 'namespaces',
+  Rating = 'rating',
+}
+
+interface HydrusTagContext {
+  service_key: string;
+  include_current_tags: boolean;
+  include_pending_tags: boolean;
+  display_service_key: boolean;
+}
+
+interface HydrusMediSortBase {
+  sort_metatype: HydrusSortMetaType;
+  sort_order: HydrusMediaSortOrder;
+  tag_context: HydrusTagContext
+}
+
+export interface HydrusMediaSortSystem extends HydrusMediSortBase {
+  sort_metatype: HydrusSortMetaType.System;
+  sort_type: HydrusSortType;
+}
+
+export interface HydrusMediaSortNamespaces extends HydrusMediSortBase {
+  sort_metatype: HydrusSortMetaType.Namespaces;
+  namespaces: Array<string>;
+  tag_display_type: HydrusTagDisplayType;
+}
+
+export interface HydrusMediaSortRating extends HydrusMediSortBase {
+  sort_metatype: HydrusSortMetaType.Rating;
+  service_key: string;
+}
+
+export type HydrusMediaSort = HydrusMediaSortSystem | HydrusMediaSortNamespaces | HydrusMediaSortRating;

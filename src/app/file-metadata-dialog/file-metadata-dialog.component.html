@@ -1,5 +1,5 @@
 <div class="header">
-  <mat-slide-toggle [(ngModel)]="showRaw">Raw</mat-slide-toggle>
+  <mat-slide-toggle color="primary" [(ngModel)]="showRaw">Raw</mat-slide-toggle>
   <h1 mat-dialog-title>
     File Metadata
   </h1>
@@ -12,21 +12,17 @@
         <mat-list>
           @if (metadata.raw.Thumbnail?.base64) {
             <mat-list-item>
-              <h2 matLine>Embedded Thumbnail</h2>
-              <div matLine>
+              <h2 matListItemTitle>Embedded Thumbnail</h2>
+              <div matListItemLine>
                 <img class="metadata-thumbnail" [src]="'data:image/jpg;base64,' + metadata.raw.Thumbnail.base64">
               </div>
-              <!-- stupid hack to force multi-line dynamic layout -->
-              <div matLine></div>
-              <div matLine></div>
-              <div matLine></div>
             </mat-list-item>
           }
           @for (meta of metadata.array; track meta) {
             <mat-list-item class="mat-multi-line">
-              <h2 matLine>{{meta.name}}</h2>
+              <h2 matListItemTitle>{{meta.name}}</h2>
               @if (meta.description) {
-                <p matLine>{{meta.description}}</p>
+                <p matListItemLine>{{meta.description}}</p>
               }
             </mat-list-item>
           }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SortInputComponent } from './sort-input.component';
+import { ImageListItemComponent } from './image-list-item.component';
 
-describe('SortInputComponent', () => {
-  let component: SortInputComponent;
-  let fixture: ComponentFixture<SortInputComponent>;
+describe('ImageListItemComponent', () => {
+  let component: ImageListItemComponent;
+  let fixture: ComponentFixture<ImageListItemComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SortInputComponent ]
+      declarations: [ImageListItemComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(SortInputComponent);
+    
+    fixture = TestBed.createComponent(ImageListItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

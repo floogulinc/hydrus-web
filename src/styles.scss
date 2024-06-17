@@ -9,6 +9,9 @@
 @import 'material-icons/iconfont/filled.css';
 
 
+// --------------------------------------------------------------------------------
+// Photoswipe:
+
 @import 'photoswipe/dist/photoswipe.css';
 
 .pswp {
@@ -96,80 +99,215 @@
   padding-right: 16px;
 }
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
+
+// --------------------------------------------------------------------------------
+// Material Setup:
+
+/* TODO(mdc-migration): Remove legacy-core once all legacy components are migrated*/
+//@include mat.legacy-core();
+
 @include mat.core();
 
-@include mat.legacy-core();
-
-//setting up for future theme options
 @mixin app-theming($theme) {
-  // Extract the palettes you need from the theme definition.
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-
-  $foreground: map-get($theme, foreground);
-
-  $background: map-get($theme, background);
-
-  $is-dark: map-get($theme, is-dark);
-
-  @if $is-dark {
-    .mat-toolbar.mat-primary {
-      background: mat.get-color-from-palette($background, app-bar);
-      color: mat.get-color-from-palette($foreground, text);
-    }
-  }
-
-  // Define any styles affected by the theme.
   .drawer-list-item-active {
-    background-color: change-color(mat.get-color-from-palette($primary), $alpha: 0.15) !important;
-    color: mat.get-color-from-palette($primary) !important;
-    .mat-list-icon {
-      color: mat.get-color-from-palette($primary) !important;
+    //background-color: rgba(mat.get-theme-color($theme, primary), 0.15) !important;
+    background-color: color-mix(in srgb, mat.get-theme-color($theme, primary) 15%, transparent);
+    color: mat.get-theme-color($theme, primary) !important;
+    .mat-mdc-list-item-icon {
+      color: mat.get-theme-color($theme, primary) !important;
     }
   }
 
-  .sidenav-list {
-    .mat-list-icon {
-      //color: rgba(0, 0, 0, 0.54);
-      color: mat.get-color-from-palette($foreground, icon);
-      margin-right: 16px;
-    }
-  }
-
-  .image-grid-supporting-text {
-    color: mat.get-color-from-palette($foreground, text) !important;
-  }
 }
 
 
-@include mat.all-legacy-component-typographies();
+
+/* TODO(mdc-migration): Remove all-legacy-component-typographies once all legacy components are migrated*/
+//@include mat.all-legacy-component-typographies();
+
+
+//@include mat.all-component-typographies();
+
 
 //@include mat.core-theme($light-theme);
-@include mat.all-legacy-component-themes($light-theme);
+/* TODO(mdc-migration): Remove all-legacy-component-themes once all legacy components are migrated*/
+//@include mat.all-legacy-component-themes($light-theme);
 
-@include app-theming($light-theme);
+@mixin setup-themes($light-theme, $dark-theme) {
+  @include mat.all-component-typographies();
+  @include mat.typography-hierarchy($light-theme, $back-compat: true);
 
-@include mat.chips-theme($light-theme);
+  @include mat.all-component-themes($light-theme);
 
-@media (prefers-color-scheme: dark) {
-  @include mat.all-legacy-component-colors($dark-theme);
+  @include mat.color-variants-backwards-compatibility($light-theme);
 
-  @include app-theming($dark-theme);
-
-  @include mat.chips-color($dark-theme);
+  @include app-theming($light-theme);
 }
 
-html,
-body {
+@mixin setup-colors($light-theme, $dark-theme) {
+  @include mat.system-level-colors($light-theme);
+  @media (prefers-color-scheme: dark) {
+    @include mat.system-level-colors($dark-theme);
+  }
+}
+
+
+@mixin modern-theme() {
+  $light-theme: mat.define-theme((
+    color: (
+      theme-type: light,
+
+      use-system-variables: true
+    ),
+    density: (
+      scale: 0
+    )
+  ));
+
+  $dark-theme: mat.define-theme((
+    color: (
+      theme-type: dark,
+
+      use-system-variables: true
+    ),
+    density: (
+      scale: 0
+    )
+  ));
+
+  @include setup-themes($light-theme, $dark-theme);
+}
+
+@mixin modern-colors($palette, $palette-tertiary) {
+  $light-theme: mat.define-theme((
+    color: (
+      theme-type: light,
+      primary: $palette,
+      tertiary: $palette-tertiary,
+      use-system-variables: true
+    )
+  ));
+
+  $dark-theme: mat.define-theme((
+    color: (
+      theme-type: dark,
+      primary: $palette,
+      tertiary: $palette-tertiary,
+      use-system-variables: true
+    )
+  ));
+
+  @include setup-colors($light-theme, $dark-theme);
+}
+
+.theming {
+  @include modern-theme();
+}
+
+// .main-theme {
+//   @include modern-colors(mat.$azure-palette, mat.$azure-palette)
+// }
+
+@import 'default-theme-colors';
+
+// $themes: (
+//   "red": mat.$red-palette,
+//   "green": mat.$green-palette,
+//   "blue": mat.$blue-palette,
+//   "yellow": mat.$yellow-palette,
+//   "cyan": mat.$cyan-palette,
+//   "magenta": mat.$magenta-palette,
+//   "orange": mat.$orange-palette,
+//   "chartreuse": mat.$chartreuse-palette,
+// //  "azure": matx.$azure-palette,
+//   "violet": mat.$violet-palette,
+//   "rose": mat.$rose-palette
+// );
+
+
+// body {
+//   @each $name, $palette in $themes {
+//     &.theme-#{$name} {
+//       @include modern-colors($palette)
+//     }
+//   }
+// }
+
+html, body {
   height: 100%;
 }
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  overscroll-behavior: none;
 }
+
+// --------------------------------------------------------------------------------
+// Material Overrides:
+
+.mdc-evolution-chip-set .mat-mdc-chip {
+  .mdc-evolution-chip__cell--primary,
+  .mdc-evolution-chip__action--primary,
+  .mat-mdc-chip-action-label {
+    overflow: hidden;
+  }
+}
+
+.mdc-list-item {
+  &.mdc-list-item--with-two-lines, &.mdc-list-item--with-three-lines {
+    .mdc-list-item {
+      &__start, &__end {
+        align-self: center !important;
+        margin-top: 0 !important;
+      }
+    }
+  }
+
+  &.mdc-list-item--with-leading-icon {
+    &.mdc-list-item--with-two-lines, &.mdc-list-item--with-three-lines {
+      &.mdc-list-item--with-trailing-meta .mdc-list-item__end::before {
+        height: 0 !important;
+        content: none !important;
+      }
+    }
+  }
+
+  &.mdc-list-item--with-trailing-meta .mdc-list-item__end {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+
+// https://github.com/angular/components/issues/28618
+
+@mixin elevations() {
+  @for $elevation from 0 to 24 {
+    .mat-elevation-z#{$elevation} {
+      @include mat.elevation($elevation);
+    }
+  }
+}
+
+@include elevations();
+
+.cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
+mat-icon.mat-mdc-card-avatar {
+  width: 40px;
+  height: 40px;
+  font-size: 40px;
+}
+
+
+:root {
+  // restores old behavior that was set on each dialog container element
+  --mat-dialog-container-max-width: 80vw;
+}
+
+// --------------------------------------------------------------------------------
 
 .main-content {
   margin: auto;
@@ -181,60 +319,42 @@ body {
   max-width: 1920px;
 }
 
-body {
-  overscroll-behavior: none;
+.sidenav-list {
+  .mat-mdc-list-item-icon {
+    margin-right: 16px;
+  }
 }
 
-.cdk-overlay-container {
-  z-index: 10000 !important;
-}
 
-.mat-chip.tag-chip {
-  background-color: map-get(
-  map-get($mat-tag-colors, "default-namespace"),
-  "default"
-  );
-  color: map-get(
-    map-get($mat-tag-colors, "default-namespace"),
-    "default-contrast"
-  );
-  font-weight: 400;
-  @each $tag, $palette in $mat-tag-colors {
-    &.tag-namespace-#{$tag} {
-      background-color: map-get($palette, "default");
-      color: map-get($palette, "default-contrast");
-    }
-  }
-  &.tag-namespace- {
-    background-color: map-get(
-      map-get($mat-tag-colors, "no-namespace"),
-      "default"
-    );
-    color: map-get(
-      map-get($mat-tag-colors, "no-namespace"),
-      "default-contrast"
-    );
-  }
-  .mat-chip-remove {
-    opacity: 0.6;
-  }
-  height: 100% !important;
-}
+@import 'default-tag-namespace-colors';
 
 .tag-color {
-  color: map-get(map-get($mat-tag-colors, "default-namespace"), "default");
-  //color: map-get(map-get($mat-tag-colors, "default-namespace"), "default-contrast");
-  @each $tag, $palette in $mat-tag-colors {
-      &.tag-namespace-#{$tag} {
-          color: map-get($palette, "default");
-          //color: map-get($palette, "default-contrast");
-      }
+  // background-color: var(--sys-primary);
+  // color: var(--sys-on-primary);
+
+  &.mat-mdc-chip {
+    --mdc-chip-elevated-container-color: var(--sys-primary-container);
+    --mdc-chip-label-text-color: var(--sys-on-primary-container);
+    --mdc-chip-with-trailing-icon-trailing-icon-color: var(--sys-on-primary-container);
   }
-  &.tag-namespace- {
-      color: map-get(map-get($mat-tag-colors, "no-namespace"), "default");
-      //color: map-get(map-get($mat-tag-colors, "no-namespace"), "default-contrast");
+
+  &.mat-mdc-menu-item {
+    --mat-menu-item-label-text-color: var(--sys-primary);
+    --mdc-list-list-item-label-text-color: var(--sys-primary);
+  }
+
+  &.mat-mdc-option {
+    --mdc-list-list-item-label-text-color: var(--sys-primary);
+    --mdc-list-list-item-hover-label-text-color: var(--sys-primary);
   }
 }
+
+.mat-mdc-chip.tag-chip {
+  --mdc-chip-outline-width: 0;
+}
+
+
+@import 'image-list';
 
 .toolbar-count {
   padding-left: 4px;
@@ -243,18 +363,17 @@ body {
   text-overflow: ellipsis;
 }
 
-.mat-button,
-.mat-raised-button,
-.mat-stroked-button,
-.mat-flat-button {
-  text-transform: uppercase;
-}
 
-.file-info-panel {
-  width: 720px;
-  .mat-bottom-sheet-container {
-    min-width: min(100vw, 720px);
-  }
+// .file-info-panel .mat-bottom-sheet-container- {
+//   &medium, &large, &xlarge {
+//     width: 960px;
+//     max-width: 960px;
+//   }
+// }
+
+.file-info-panel .mat-bottom-sheet-container {
+  width: 960px;
+  max-width: 960px;
 }
 
 
@@ -265,7 +384,9 @@ body {
 }
 
 .form-field-spacing {
-  @extend .mat-form-field-wrapper;
+  // TODO: Fix this
+  //@extend .mat-mdc-text-field-wrapper;
+  padding-bottom: var(--mat-form-field-subscript-text-line-height);
 }
 
 .text-ellipsis {
@@ -275,15 +396,10 @@ body {
 }
 
 .tag-chip-text {
-  width: calc(100%); // calc is important here, do not use "100%" alone
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.tag-chip {
-  width: fit-content;
-  max-width: 100%;
-}
 
 .flex-row {
   display: flex;
@@ -306,8 +422,11 @@ body {
 }
 
 .pages-tab-group {
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
+  /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
   .mat-tab-label {
     max-width: 160px;
+    /* TODO(mdc-migration): The following rule targets internal classes of tabs that may no longer apply for the MDC version.*/
     .mat-tab-label-content {
       width: 100%;
       height: 100%;
@@ -321,11 +440,9 @@ body {
   }
 }
 
-mat-icon.mat-card-avatar {
-  width: 40px;
-  height: 40px;
-  font-size: 40px;
-}
+
+// --------------------------------------------------------------------------------
+// JSON Viewer Themes:
 
 :root {
   --devtools-color-text-primary: rgb(32 33 36);
@@ -367,10 +484,3 @@ mat-icon.mat-card-avatar {
   //--ngx-json-font-family : font-size
 }
 
-
-// Various Material Design overrides
-
-.mat-chip {
-  // restore old font size
-  font-size: 14px;
-}

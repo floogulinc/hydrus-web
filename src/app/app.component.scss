@@ -17,18 +17,14 @@
   width: 256px;
 }
 
-.mat-toolbar.mat-primary {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-
 .app-title {
   padding-left: 16px;
   overflow: hidden;
 }
 
 .main-toolbar {
+  position: sticky;
+  top: 0;
   z-index: 5 !important;
   flex-direction: row;
   box-sizing: border-box;
@@ -38,6 +34,7 @@
 .sidenav-icon {
   display: block;
   width: 24px;
+  height: auto;
   padding: 4px;
 }
 

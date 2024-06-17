@@ -1,117 +1,121 @@
 <div>
-  <h2 class="mat-display-1">About</h2>
+  <h2 class="mat-headline-4">About</h2>
   <mat-nav-list role="list">
     <div mat-subheader>General</div>
     <a mat-list-item role="listitem" [href]="repoURL + '/releases/tag/v' + env.versionInfo.version">
-      <div mat-line>Release Version</div>
-      <div mat-line>Hydrus Web {{ env.versionInfo.version }}</div>
+      <div matListItemTitle>Release Version</div>
+      <div matListItemLine>Hydrus Web {{ env.versionInfo.version }}</div>
     </a>
     <mat-list-item role="listitem">
-      <div mat-line>Running on</div>
-      <div mat-line><code>{{doc.location.origin}}</code></div>
+      <div matListItemTitle>Running on</div>
+      <div matListItemLine><code>{{doc.location.origin}}</code></div>
     </mat-list-item>
     <a mat-list-item role="listitem" [href]="repoURL">
-      <div mat-line>GitHub Repo</div>
-      <div mat-line><code>floogulinc/hydrus-web</code></div>
+      <div matListItemTitle>GitHub Repo</div>
+      <div matListItemLine><code>floogulinc/hydrus-web</code></div>
     </a>
     @if (this.updates.isEnabled) {
       <a mat-list-item role="listitem" (click)="updates.checkForUpdate()">
-        <div mat-line>Check for updates</div>
+        <div matListItemTitle>Check for updates</div>
       </a>
     }
     @if (hydrusVersion.hydrusVersion$ | async; as v) {
-      <a mat-list-item role="listitem" (click)="hydrusVersion.checkHydrusVersion()">
-        <div mat-line>Hydrus Version</div>
+      <a mat-list-item role="listitem">
+        <div matListItemTitle>Hydrus Version</div>
         @if (v.hydrus_version) {
-          <div mat-line>Hydrus Client {{v.hydrus_version}}</div>
+          <div matListItemLine>Hydrus Client {{v.hydrus_version}}</div>
         }
-        <div mat-line>Client API {{v.version}}</div>
+        <div matListItemLine>Client API {{v.version}}</div>
       </a>
     } @else {
-      <a mat-list-item role="listitem" (click)="hydrusVersion.checkHydrusVersion()">
-        <div mat-line>Check Hydrus Version</div>
+      <a mat-list-item role="listitem" >
+        <div matListItemTitle>Unknown Hydrus Version</div>
       </a>
     }
     <a mat-list-item role="listitem" (click)="boned()">
-      <div mat-line>How boned am I?</div>
+      <div matListItemTitle>How boned am I?</div>
     </a>
     <a mat-list-item role="listitem" (click)="services()">
-      <div mat-line>Hydrus Services</div>
+      <div matListItemTitle>Hydrus Services</div>
+    </a>
+    <a mat-list-item role="listitem" (click)="options()">
+      <div matListItemTitle>Hydrus Client Options</div>
+    </a>
+    <a mat-list-item role="listitem" (click)="reloadClientInfo()">
+      <div matListItemTitle>Reload Client Information</div>
     </a>
     <mat-divider></mat-divider>
     <div mat-subheader>Debug</div>
     <a mat-list-item role="listitem" [href]="repoURL + '/commit/' + env.versionInfo.hash">
-      <div mat-line>Git Commit Hash</div>
-      <div mat-line><code>{{env.versionInfo.hash}}</code></div>
+      <div matListItemTitle>Git Commit Hash</div>
+      <div matListItemLine><code>{{env.versionInfo.hash}}</code></div>
     </a>
     <mat-list-item role="listitem">
-      <div mat-line>Git Branch</div>
-      <div mat-line><code>{{env.versionInfo.branch}}</code></div>
+      <div matListItemTitle>Git Branch</div>
+      <div matListItemLine><code>{{env.versionInfo.branch}}</code></div>
     </mat-list-item>
     <mat-list-item role="listitem">
-      <div mat-line>{{env.production ? 'Production' : 'Development'}} Build</div>
+      <div matListItemTitle>{{env.production ? 'Production' : 'Development'}} Build</div>
     </mat-list-item>
     @if (env.versionInfo.vercel) {
       <a mat-list-item role="listitem" [href]="'https://' + env.versionInfo.vercel.VERCEL_URL + '/_logs'">
-        <div mat-line>Deployed on Vercel</div>
-        <div mat-line><code>{{env.versionInfo.vercel.VERCEL_URL}}</code></div>
+        <div matListItemTitle>Deployed on Vercel</div>
+        <div matListItemLine><code>{{env.versionInfo.vercel.VERCEL_URL}}</code></div>
       </a>
     }
     <a mat-list-item role="listitem" (click)="filesService.clearFilesCache()">
-      <div mat-line>Clear session file metadata cache</div>
-      <div mat-line>{{filesService.getFilesCacheSize()}} files cached</div>
+      <div matListItemTitle>Clear session file metadata cache</div>
+      <div matListItemLine>{{filesService.getFilesCacheSize()}} files cached</div>
     </a>
     <mat-list-item role="listitem">
-      <div mat-line>Platform</div>
+      <div matListItemTitle>Platform</div>
       @if (platform.ANDROID) {
-        <div mat-line>Android</div>
+        <div matListItemLine>Android</div>
       }
       @if (platform.IOS) {
-        <div mat-line>iOS</div>
+        <div matListItemLine>iOS</div>
       }
       @if (platform.BLINK) {
-        <div mat-line>Blink</div>
+        <div matListItemLine>Blink</div>
       }
       @if (platform.EDGE) {
-        <div mat-line>Edge</div>
+        <div matListItemLine>Edge</div>
       }
       @if (platform.FIREFOX) {
-        <div mat-line>Firefox</div>
+        <div matListItemLine>Firefox</div>
       }
       @if (platform.TRIDENT) {
-        <div mat-line>Trident</div>
+        <div matListItemLine>Trident</div>
       }
       @if (platform.WEBKIT) {
-        <div mat-line>WebKit</div>
+        <div matListItemLine>WebKit</div>
       }
       @if (platform.SAFARI) {
-        <div mat-line>Safari</div>
+        <div matListItemLine>Safari</div>
       }
     </mat-list-item>
     <a mat-list-item role="listitem" href="/ngsw/state">
-      <div mat-line>Service Worker</div>
-      <div mat-line>{{this.updates.isEnabled ? "Enabled" : "Disabled" }}</div>
+      <div matListItemTitle>Service Worker</div>
+      <div matListItemLine>{{this.updates.isEnabled ? "Enabled" : "Disabled" }}</div>
     </a>
     <mat-list-item role="listitem">
-      <div mat-line>Network</div>
-      <div mat-line>{{window.navigator.onLine ? 'Online' : 'Offline'}}</div>
-      <div mat-line>{{window.isSecureContext ? 'Secure Context' : 'Non-secure Context'}}</div>
+      <div matListItemTitle>Network</div>
+      <div matListItemLine>{{window.navigator.onLine ? 'Online' : 'Offline'}}</div>
+      <div matListItemLine>{{window.isSecureContext ? 'Secure Context' : 'Non-secure Context'}}</div>
     </mat-list-item>
     @if (navigator.storage) {
       <mat-list-item role="listitem">
-        <div mat-line>Storage</div>
-        <div mat-line>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
+        <div matListItemTitle>Storage</div>
+        <div matListItemLine>{{storagePersisted ? "Persistent" : "Not Persistent " }}</div>
         @if (storageQuota && storageQuota.usage !== undefined && storageQuota.quota !== undefined) {
-          <div mat-line>{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
+          <div matListItemLine>{{storageQuota.usage | bytes: 0}} used of {{storageQuota.quota | bytes: 0}}</div>
         }
       </mat-list-item>
     }
     <mat-list-item role="listitem">
-      <div mat-line>Viewport Info</div>
-      <div mat-line>Page Size: {{window.innerWidth}}x{{window.innerHeight}}</div>
-      <div mat-line>Screen Resolution: {{window.screen.width * window.devicePixelRatio}} x {{window.screen.height * window.devicePixelRatio}}</div>
-      <div mat-line>Pixel Ratio: {{window.devicePixelRatio}}</div>
-      <div mat-line>Orientation: {{window.screen.orientation.type}}</div>
+      <div matListItemTitle>Viewport Info</div>
+      <div matListItemLine>Page Size: {{window.innerWidth}}x{{window.innerHeight}} (Pixel Ratio: {{window.devicePixelRatio}})</div>
+      <div matListItemLine>Screen Resolution: {{window.screen.width * window.devicePixelRatio}} x {{window.screen.height * window.devicePixelRatio}} (Orientation: {{window.screen.orientation.type}})</div>
     </mat-list-item>
   </mat-nav-list>
 </div>

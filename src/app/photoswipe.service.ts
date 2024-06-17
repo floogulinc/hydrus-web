@@ -11,7 +11,8 @@ import { HydrusFileDownloadService } from './hydrus-file-download.service';
 import { take } from 'rxjs';
 import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
 import { SettingsService } from './settings.service';
-import { MatLegacyButton as MatButton } from '@angular/material/legacy-button';
+import { MatButton } from '@angular/material/button';
+import { ThemeService } from './theme/theme.service';
 
 
 function isContentType(content: Content | Slide, type: string) {
@@ -31,12 +32,14 @@ export class PhotoswipeService {
     private settingsService: SettingsService,
     private appRef: ApplicationRef,
     private injector: EnvironmentInjector,
-
+    private themeService: ThemeService
   ) { }
 
   private processedFiles = new Map<string, SlideData>();
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
+    this.themeService.addBlackThemeColorMetaTag();
+
     const imgindex = items.findIndex(e => e.file_id === id);
 
     const options: PhotoSwipeOptions = {
@@ -139,17 +142,14 @@ export class PhotoswipeService {
         html: '<span class="mat-icon material-icons">info_outlined</span>',
         onClick: (event, el, pswp) => {
           const file = pswp.currSlide.data.file as HydrusBasicFile;
-          this.bottomSheet.open(FileInfoSheetComponent, {
-            data: {
-              file
-            },
-            panelClass: 'file-info-panel',
-            closeOnNavigation: true
-          }).afterDismissed().pipe(take(1)).subscribe(res => {
-            if(res) {
-              pswp.close();
-            }
-          });
+          FileInfoSheetComponent.open(this.bottomSheet, file)
+            .afterDismissed()
+            .pipe(take(1))
+            .subscribe(res => {
+              if(res) {
+                pswp.close();
+              }
+            });
         }
       });
 
@@ -257,7 +257,7 @@ export class PhotoswipeService {
         errorMsgEl.appendChild(errorMsgText);
 
         const renderButton = document.createElement('button');
-        renderButton.setAttribute('mat-raised-button', '');
+        renderButton.setAttribute('mat-stroked-button', '');
         const psdButtonComponent = createComponent(MatButton, {
           environmentInjector: this.injector,
           hostElement: renderButton,
@@ -408,6 +408,7 @@ export class PhotoswipeService {
     });
 
     pswp.on('close', () => {
+      this.themeService.removeBlackThemeColorMetaTag();
       locSub.unsubscribe();
       if(window.history.state.pswp) {
         window.history.back();
@@ -470,7 +471,7 @@ export class PhotoswipeService {
   addPhotopeaButton(file: HydrusBasicFile, element: HTMLElement) {
     if(canOpenInPhotopea(file) && this.settingsService.appSettings.photopeaIntegration) {
       const photopeaButton = document.createElement('a');
-      photopeaButton.setAttribute('mat-raised-button', '');
+      photopeaButton.setAttribute('mat-stroked-button', '');
       photopeaButton.target = '_blank';
       photopeaButton.href = getPhotopeaUrlForFile(file);
 

@@ -9,7 +9,7 @@
     </div>
   </div>
   <div mat-dialog-actions align="end">
-    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-button type="button"[mat-dialog-close]="null">Cancel</button>
     <button mat-button type="submit" [disabled]="urlForm.invalid || urlForm.pristine">{{data.url ? 'Save' : 'Add'}}</button>
   </div>
 </form>

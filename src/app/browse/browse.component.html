@@ -11,8 +11,11 @@
     }
     @if (search.length === 0 && (searching$ | push) === false) {
       <div>
-        <mat-card>
-          <mat-card-title>No Search Results</mat-card-title>
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>No Search Results</mat-card-title>
+          </mat-card-header>
+          <mat-card-content></mat-card-content>
         </mat-card>
       </div>
     }

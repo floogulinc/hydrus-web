@@ -3,7 +3,7 @@
 }
 
 .cdk-virtual-scroll-viewport {
-  height: 256px;
+  height: 256px - 16px;
 }
 
 .tag-chip-text {

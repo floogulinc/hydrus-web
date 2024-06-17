@@ -18,8 +18,6 @@
  * BROWSER POLYFILLS
  */
 
-// Array Flat Polyfill
-import 'array-flat-polyfill';
 
 /**
  * By default, zone.js will patch all possible macroTask and DomEvents

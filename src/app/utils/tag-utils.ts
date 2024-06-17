@@ -53,7 +53,7 @@ export function getTagValue(tag: string) {
   return tag.split(':')[1].toLowerCase();
 }
 
-function getTagNamespace(tag: string) {
+function getTagNamespaceClass(tag: string) {
   return `tag-namespace-${getNamespaceNoSpace(tag)}`;
 }
 
@@ -62,7 +62,16 @@ function getTagNamespace(tag: string) {
 })
 export class TagNamespaceClassPipe implements PipeTransform {
   transform(tag: string): string {
-    return getTagNamespace(tag);
+    return getTagNamespaceClass(tag);
+  }
+}
+
+@Pipe({
+  name: 'tagNamespace'
+})
+export class TagNamespacePipe implements PipeTransform {
+  transform(tag: string): string {
+    return getNamespace(tag);
   }
 }
 

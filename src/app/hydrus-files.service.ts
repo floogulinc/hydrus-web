@@ -280,4 +280,21 @@ export class HydrusFilesService {
   }
 
 
+  public deleteFiles(file_ids: number[], reason: string = 'Hydrus Web'){
+    return this.api.deleteFiles({file_ids, reason});
+  }
+
+  public undeleteFiles(file_ids: number[]){
+    return this.api.undeleteFiles({file_ids});
+  }
+
+  public archiveFiles(file_ids: number[]){
+    return this.api.archiveFiles({file_ids});
+  }
+
+  public unarchiveFiles(file_ids: number[]){
+    return this.api.unarchiveFiles({file_ids});
+  }
+
+
 }

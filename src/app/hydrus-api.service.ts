@@ -14,6 +14,7 @@ import { HydrusAddFileResponse } from './hydrus-upload.service';
 import { HydrusKeyVerificationData, HydrusRequestFileDomain, HydrusRequestFiles, HydrusRequestSingleFile } from './hydrus-api';
 import { HydrusJobStatus, HydrusJobStatusAddRequest, HydrusJobStatusUpdateRequest } from './hydrus-job-status';
 import { HydrusPage, HydrusPageListItem } from './hydrus-page';
+import { HydrusClientOptions } from './hydrus-client-options';
 
 type AngularHttpParams = HttpParams | {
   [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
@@ -28,12 +29,19 @@ export class HydrusApiService {
 
   constructor(private http: HttpClient, private apiSettings: HydrusApiSettingsService) { }
 
+  apiSet = this.apiSettings.apiSet;
+  apiSet$ = this.apiSettings.apiSet$;
+
+  apiValidConfigChange$ = this.apiSettings.apiValidConfigChange$;
+
+
+
   private get hydrusApiUrl() {
-    return this.apiSettings.hydrusApiUrl;
+    return this.apiSettings.hydrusApiUrl();
   }
 
   private get hydrusApiKey() {
-    return this.apiSettings.hydrusApiKey;
+    return this.apiSettings.hydrusApiKey();
   }
 
   public getAPIUrl(): string {
@@ -446,6 +454,9 @@ export class HydrusApiService {
     return this.apiPost<void>('manage_popups/call_user_callable', data);
   }
 
+  public getClientOptions() {
+    return this.apiGet<HydrusClientOptions & {services: HydrusServices}>('manage_database/get_client_options');
+  }
 
 
 }

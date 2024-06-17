@@ -1,5 +1,5 @@
 <div class="title-row">
-  <h2 mat-dialog-title class="sheet-title">File Info</h2>
+  <h2 class="sheet-title">File Info</h2>
   @if (data.file; as file) {
     <div>
       @if (ipfsUrl$ | async; as ipfsUrl) {
@@ -33,6 +33,7 @@
             <span>Copy hyshare URL</span>
           </button>
         }
+        <mat-divider></mat-divider>
         <button mat-menu-item (click)="searchSimilarFiles()">
           <mat-icon>image_search</mat-icon>
           <span>Search for similar files</span>
@@ -43,6 +44,7 @@
             <span>SauceNAO lookup</span>
           </button>
         }
+        <mat-divider></mat-divider>
         @if (canGetMetadata) {
           <button mat-menu-item (click)="fileMetadata()">
             <mat-icon>list</mat-icon>
@@ -53,6 +55,7 @@
           <mat-icon>data_object</mat-icon>
           <span>View raw file info</span>
         </button>
+        <mat-divider></mat-divider>
         <button mat-menu-item (click)="reload()">
           <mat-icon>refresh</mat-icon>
           <span>Refresh</span>
@@ -65,35 +68,39 @@
   <div>
     <mat-list role="list">
       <mat-list-item role="listitem">
-        <mat-icon mat-list-icon>{{file.fileIcon}}</mat-icon>
-        <div mat-line>{{file.file_id}}</div>
-        <div mat-line class="metadata-line"><span>{{file.file_type_string}}</span> @if (file.width && file.height) {
-        <span>{{file.width}}x{{file.height}}</span>
-        } <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span></div>
+        <mat-icon matListItemIcon>{{file.fileIcon}}</mat-icon>
+        <div matListItemTitle>{{file.file_id}}</div>
+        <div matListItemLine class="metadata-line">
+          <span>{{file.file_type_string}}</span>
+          @if (file.width && file.height) {
+            <span>{{file.width}}x{{file.height}}</span>
+          }
+          <span>{{file.size | byteSize: {units: 'iec', precision: 2} }}</span>
+        </div>
       </mat-list-item>
       <mat-list-item role="listitem">
-        <mat-icon mat-list-icon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
-        <div mat-line>{{file.is_trashed ? "In Trash" + (file.is_inbox ? " (Inbox)" : " (Archived)") : file.is_inbox ? "In Inbox" : "Archived"}}</div>
+        <mat-icon matListItemIcon>{{file.is_trashed ? "delete" : file.is_inbox ? "inbox" : "archive"}}</mat-icon>
+        <div matListItemTitle>{{file.is_trashed ? "In Trash" + (file.is_inbox ? " (Inbox)" : " (Archived)") : file.is_inbox ? "In Inbox" : "Archived"}}</div>
         @if (file.time_imported) {
-          <div mat-line><span [matTooltip]="file.time_imported | date:'yyyy-MM-dd HH:mm:ss.SSS'" matTooltipPosition="above">Imported {{file.time_imported | timeAgo}}</span></div>
+          <div matListItemLine><span [matTooltip]="file.time_imported | date:'yyyy-MM-dd HH:mm:ss.SSS'" matTooltipPosition="above">Imported {{file.time_imported | timeAgo}}</span></div>
         }
         @if (file.is_inbox) {
-          <button mat-icon-button (click)="archiveFile()" matTooltip="Archive">
+          <button mat-icon-button (click)="archiveFile()" matTooltip="Archive" matListItemMeta>
             <mat-icon>archive</mat-icon>
           </button>
         }
         @if (!file.is_inbox) {
-          <button mat-icon-button (click)="unarchiveFile()" matTooltip="Return to inbox">
+          <button mat-icon-button (click)="unarchiveFile()" matTooltip="Return to inbox" matListItemMeta>
             <mat-icon>move_to_inbox</mat-icon>
           </button>
         }
         @if (!file.is_trashed) {
-          <button mat-icon-button (click)="deleteFile()" matTooltip="Send to trash">
+          <button mat-icon-button (click)="deleteFile()" matTooltip="Send to trash" matListItemMeta>
             <mat-icon>delete</mat-icon>
           </button>
         }
         @if (file.is_trashed) {
-          <button mat-icon-button (click)="undeleteFile()" matTooltip="Undelete">
+          <button mat-icon-button (click)="undeleteFile()" matTooltip="Undelete" matListItemMeta>
             <mat-icon>restore_from_trash</mat-icon>
           </button>
         }
@@ -107,13 +114,13 @@
         <mat-nav-list>
           @for (url of file.detailed_known_urls; track url.normalised_url) {
             <mat-list-item>
-              <a matLine [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
-              @if (navigatorShare) {
-                <button mat-icon-button (click)="shareUrl(url.normalised_url)">
+              <a matListItemTitle class="known-url-list-item-title" [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
+              @if (true) {
+                <button mat-icon-button matListItemMeta (click)="shareUrl(url.normalised_url)">
                   <mat-icon>share</mat-icon>
                 </button>
               }
-              <button mat-icon-button [matMenuTriggerFor]="urlMenu" [matMenuTriggerData]="{url}" aria-label="More options">
+              <button mat-icon-button matListItemMeta [matMenuTriggerFor]="urlMenu" [matMenuTriggerData]="{url}" aria-label="More options">
                 <mat-icon>more_vert</mat-icon>
               </button>
             </mat-list-item>
@@ -131,34 +138,34 @@
           <mat-list>
             @for (rating of file.ratings_array; track rating.service_key) {
               @if (isNumericalRatingService(rating)) {
-                <mat-list-item>
-                  <p matLine>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
-                  <p matLine class="numerical-rating-line">
+                <mat-list-item lines="3">
+                  <p matListItemTitle>{{rating.name}} ({{rating.value ?? 'not set'}})</p>
+                  <p matListItemLine class="numerical-rating-line">
                     <app-rating-numerical [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-numerical>
                   </p>
-                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                  <button mat-icon-button matListItemMeta [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
                     <mat-icon>more_vert</mat-icon>
                   </button>
                 </mat-list-item>
               }
               @if (isLikeRatingService(rating)) {
                 <mat-list-item>
-                  <p matLine>{{rating.name}} ({{rating.value === null ? 'not set' : rating.value ? 'liked' : 'dislike'}})</p>
-                  <p matLine>
+                  <p matListItemTitle>{{rating.name}} ({{rating.value === null ? 'not set' : rating.value ? 'liked' : 'dislike'}})</p>
+                  <p matListItemLine>
                     <app-rating-like [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-like>
                   </p>
-                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                  <button mat-icon-button matListItemMeta [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
                     <mat-icon>more_vert</mat-icon>
                   </button>
                 </mat-list-item>
               }
               @if (isIncDecRatingService(rating)) {
                 <mat-list-item>
-                  <p matLine>{{rating.name}}</p>
-                  <p matLine class="inc-rating-line">
+                  <p matListItemTitle>{{rating.name}}</p>
+                  <p matListItemLine class="inc-rating-line">
                     <app-rating-inc-dec [rating]="rating" (ratingSet)="setRating(rating, $event)"></app-rating-inc-dec>
                   </p>
-                  <button mat-icon-button  [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
+                  <button mat-icon-button matListItemMeta [matMenuTriggerFor]="ratingMenu" [matMenuTriggerData]="{rating}">
                     <mat-icon>more_vert</mat-icon>
                   </button>
                 </mat-list-item>
@@ -199,7 +206,7 @@
       <div class="tags-section">
         <div class="sec-header">
           <h3 class="mat-subheading-2">Tags</h3>
-          <mat-slide-toggle labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
+          <mat-slide-toggle color="primary" labelPosition="before" [(ngModel)]="fileInfoSheetService.showStorageTags" [disabled]="!file.storageTags">Edit mode</mat-slide-toggle>
         </div>
         <mat-accordion multi>
           @for (service of (fileInfoSheetService.showStorageTags ? file.storageTags : file.displayTags) | orderBy: 'serviceName' | orderBy: '-serviceType'; track  trackByTagService(service)) {
@@ -208,19 +215,19 @@
                 {{service.serviceName}} ({{service.tags.length}})
               </mat-expansion-panel-header>
               <ng-template matExpansionPanelContent>
-                <mat-chip-list class="mat-chip-list-stacked" aria-orientation="vertical" aria-label="File tags">
+                <mat-chip-listbox class="mat-mdc-chip-set-stacked tag-chip-list" aria-orientation="vertical" aria-label="File tags">
                   @for (tag of (service.tags | orderBy); track tag) {
-                    <mat-chip
+                    <mat-chip-option
                       [selectable]="false"
-                      class="tag-chip"
-                      [ngClass]="tag | tagClass"
+                      class="theming tag-chip tag-color"
+                      [attr.data-tag-namespace]="tag | tagNamespace"
                       [matMenuTriggerFor]="tagMenu"
                       [matMenuTriggerData]="{tag, service: {serviceType: service.serviceType, serviceKey: service.serviceKey}}"
                       >
                       <div class="tag-chip-text">{{tag}}</div>
-                    </mat-chip>
+                    </mat-chip-option>
                   }
-                </mat-chip-list>
+                </mat-chip-listbox>
                 @if (fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService) {
                   <mat-action-row>
                     <button mat-button (click)="addTagsDialog(service.serviceKey, service.serviceName)">Add Tags</button>
@@ -267,7 +274,7 @@
     @if (fileInfoSheetService.showStorageTags && service.serviceType && service.serviceType === LocalTagService) {
       <button mat-menu-item (click)="deleteTag(tag, service.serviceKey)">
         <mat-icon>delete</mat-icon>
-        <span>Delete Tag</span>
+        <span>Remove Tag</span>
       </button>
     }
   </ng-template>

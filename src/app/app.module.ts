@@ -8,9 +8,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-import {NgxLocalStorageModule} from 'ngx-localstorage';
+import { NgxLocalStorageModule } from 'ngx-localstorage';
 
 import { FormsModule } from '@angular/forms';
 
@@ -18,47 +18,48 @@ import { BrowseComponent } from './browse/browse.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
-import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
-import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
-import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
-import {MatLegacyAutocompleteModule as MatAutocompleteModule} from '@angular/material/legacy-autocomplete';
+import { MatListModule } from '@angular/material/list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TagInputComponent } from './tag-input/tag-input.component';
-import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from '@angular/material/legacy-progress-spinner';
-import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
-import {MatLegacyProgressBarModule as MatProgressBarModule} from '@angular/material/legacy-progress-bar';
-import {MatBadgeModule} from '@angular/material/badge';
-import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
-import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
-import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
-import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table';
-import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { CdkMenuModule } from '@angular/cdk/menu';
 
-import {PortalModule} from '@angular/cdk/portal';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-import {ClipboardModule} from '@angular/cdk/clipboard';
-import {TextFieldModule} from '@angular/cdk/text-field';
+import { PortalModule } from '@angular/cdk/portal';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { ClipboardModule } from '@angular/cdk/clipboard';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
+import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 import { NgPipesModule } from 'ngx-pipes';
 import { BarRatingModule } from 'ngx-bar-rating';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
-import { NgxFileDragDropModule } from 'ngx-file-drag-drop';
+import { NgxFileDragDropModule } from '../lib/ngx-file-drag-drop';
 
 import { AboutComponent } from './about/about.component';
 import { ImageListComponent } from './image-list/image-list.component';
@@ -70,9 +71,8 @@ import { ImageListLoaderComponent } from './image-list-loader/image-list-loader.
 import { ToolbarActionsComponent } from './toolbar-actions/toolbar-actions.component';
 import { JoinPipe } from './utils/join.pipe';
 import { TagInputDialogComponent } from './tag-input-dialog/tag-input-dialog.component';
-import { IsSystemPredicatePipe, TagNamespaceClassPipe } from './utils/tag-utils';
+import { IsSystemPredicatePipe, TagNamespaceClassPipe, TagNamespacePipe } from './utils/tag-utils';
 import { SystemPredicateDialogComponent } from './system-predicate-dialog/system-predicate-dialog.component';
-import { SortInputComponent } from './sort-input/sort-input.component';
 import { SaucenaoDialogComponent } from './saucenao-dialog/saucenao-dialog.component';
 import { MrBonesDialogComponent } from './mr-bones-dialog/mr-bones-dialog.component';
 import { ByteSizePipe } from './byte-size.pipe';
@@ -93,106 +93,116 @@ import { RatingLikeComponent } from './rating-like/rating-like.component';
 import { RatingIncDecComponent } from './rating-inc-dec/rating-inc-dec.component';
 import { TagSiblingsParentsDialogComponent } from './tag-siblings-parents-dialog/tag-siblings-parents-dialog.component';
 import { BlurHashColorPipe } from './blurhash';
+import { isSingleTagPipe } from "./hydrus-tags";
+import { MatContextMenuTriggerDirective } from "./mat-context-menu-trigger";
+import { ImageListItemComponent } from './image-list-item/image-list-item.component';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 
 const MAT_MODULES = [
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSnackBarModule,
-    MatChipsModule,
-    MatAutocompleteModule,
-    MatCardModule,
-    MatGridListModule,
-    MatProgressSpinnerModule,
-    MatTabsModule,
-    MatBottomSheetModule,
-    MatDialogModule,
-    MatExpansionModule,
-    MatProgressBarModule,
-    MatBadgeModule,
-    MatMenuModule,
-    MatSlideToggleModule,
-    MatNativeDateModule,
-    MatDatepickerModule,
-    MatButtonToggleModule,
-    MatSelectModule,
-    MatTooltipModule,
-    MatTableModule,
-    MatCheckboxModule
+  MatToolbarModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatIconModule,
+  MatListModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatSnackBarModule,
+  MatChipsModule,
+  MatAutocompleteModule,
+  MatCardModule,
+  MatGridListModule,
+  MatProgressSpinnerModule,
+  MatTabsModule,
+  MatBottomSheetModule,
+  MatDialogModule,
+  MatExpansionModule,
+  MatProgressBarModule,
+  MatBadgeModule,
+  MatMenuModule,
+  MatSlideToggleModule,
+  MatNativeDateModule,
+  MatDatepickerModule,
+  MatButtonToggleModule,
+  MatSelectModule,
+  MatTooltipModule,
+  MatTableModule,
+  MatCheckboxModule
 ];
 
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        BrowseComponent,
-        SettingsComponent,
-        TagInputComponent,
-        AboutComponent,
-        ImageListComponent,
-        PagesComponent,
-        FilesPageComponent,
-        SendComponent,
-        FileInfoSheetComponent,
-        ImageListLoaderComponent,
-        ToolbarActionsComponent,
-        JoinPipe,
-        TagInputDialogComponent,
-        TagNamespaceClassPipe,
-        SystemPredicateDialogComponent,
-        SortInputComponent,
-        SaucenaoDialogComponent,
-        MrBonesDialogComponent,
-        ByteSizePipe,
-        HydrusVersionDialogComponent,
-        NoteEditDialogComponent,
-        WelcomeComponent,
-        UrlEditDialogComponent,
-        UploadFileComponent,
-        ServicesInfoDialogComponent,
-        ApiSettingsComponent,
-        AppSettingsComponent,
-        JsonViewDialogComponent,
-        FileMetadataDialogComponent,
-        SystemPredicateRatingsDialogComponent,
-        ServiceSelectDialogComponent,
-        RatingNumericalComponent,
-        RatingLikeComponent,
-        RatingIncDecComponent,
-        TagSiblingsParentsDialogComponent,
-        IsSystemPredicatePipe,
-        BlurHashColorPipe,
-    ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-        HttpClientModule,
-        FormsModule,
-        PortalModule,
-        ScrollingModule,
-        TextFieldModule,
-        MAT_MODULES,
-        NgxLocalStorageModule.forRoot({ prefix: environment.localStoragePrefix }),
-        BrowserAnimationsModule,
-        LayoutModule,
-        ReactiveFormsModule,
-        VirtualScrollerModule,
-        NgPipesModule,
-        ClipboardModule,
-        RxLet,
-        RxPush,
-        RxIf,
-        BarRatingModule,
-        NgxJsonViewerModule,
-        NgxFileDragDropModule
-    ],
-    providers: [],
-    bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    BrowseComponent,
+    SettingsComponent,
+    TagInputComponent,
+    AboutComponent,
+    ImageListComponent,
+    PagesComponent,
+    FilesPageComponent,
+    SendComponent,
+    FileInfoSheetComponent,
+    ImageListLoaderComponent,
+    ToolbarActionsComponent,
+    JoinPipe,
+    TagInputDialogComponent,
+    TagNamespaceClassPipe,
+    TagNamespacePipe,
+    isSingleTagPipe,
+    SystemPredicateDialogComponent,
+    SaucenaoDialogComponent,
+    MrBonesDialogComponent,
+    ByteSizePipe,
+    HydrusVersionDialogComponent,
+    NoteEditDialogComponent,
+    WelcomeComponent,
+    UrlEditDialogComponent,
+    UploadFileComponent,
+    ServicesInfoDialogComponent,
+    ApiSettingsComponent,
+    AppSettingsComponent,
+    JsonViewDialogComponent,
+    FileMetadataDialogComponent,
+    SystemPredicateRatingsDialogComponent,
+    ServiceSelectDialogComponent,
+    RatingNumericalComponent,
+    RatingLikeComponent,
+    RatingIncDecComponent,
+    TagSiblingsParentsDialogComponent,
+    IsSystemPredicatePipe,
+    BlurHashColorPipe,
+    MatContextMenuTriggerDirective,
+    ImageListItemComponent,
+    ConfirmDialogComponent,
+  ],
+  bootstrap: [AppComponent],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    FormsModule,
+    PortalModule,
+    ScrollingModule,
+    TextFieldModule,
+    CdkMenuModule,
+    MAT_MODULES,
+    NgxLocalStorageModule.forRoot({ prefix: environment.localStoragePrefix }),
+    BrowserAnimationsModule,
+    LayoutModule,
+    ReactiveFormsModule,
+    VirtualScrollerModule,
+    NgPipesModule,
+    ClipboardModule,
+    RxLet,
+    RxPush,
+    RxIf,
+    BarRatingModule,
+    NgxJsonViewerModule,
+    NgxFileDragDropModule
+  ],
+  providers: [
+    provideHttpClient(withInterceptorsFromDi()),
+  ]
 })
 export class AppModule { }

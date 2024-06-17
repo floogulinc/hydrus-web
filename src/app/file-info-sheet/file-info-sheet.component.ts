@@ -1,12 +1,12 @@
 import { Component, Inject, ChangeDetectionStrategy, Injectable } from '@angular/core';
 import { HydrusBasicFile, HydrusFile, FileCategory, HydrusTagServiceType } from '../hydrus-file';
-import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
+import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatBottomSheet} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { legacyTagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
 import { BehaviorSubject, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
 import { HydrusFileDownloadService } from '../hydrus-file-download.service';
@@ -106,6 +106,16 @@ export class FileInfoSheetComponent {
   }
 
   canGetSiblingsParents$ = this.tagsService.canGetSiblingsParents$;
+
+  static open(bottomSheet: MatBottomSheet, file: HydrusBasicFile) {
+    return bottomSheet.open(FileInfoSheetComponent, {
+      data: {
+        file
+      },
+      closeOnNavigation: true,
+      panelClass: 'file-info-panel'
+    })
+  }
 
   processTags(file: HydrusFile): {
     displayTags: TagServiceItem[],

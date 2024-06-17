@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from 'ngx-localstorage';
-import { BehaviorSubject, Observable, ReplaySubject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, distinctUntilChanged, shareReplay } from 'rxjs';
 import { AppSettings, AppSettingsStorage, defaultAppSettings } from './settings';
+import { dequal } from 'dequal';
 
 const appSettingsKey = 'appSettings';
 
@@ -18,7 +19,10 @@ export class SettingsService {
     const {version, ...settings} = ls.get(appSettingsKey) as AppSettingsStorage | null || {};
     const newSettings = {...defaultAppSettings, ...settings};
     this._appSettings$ = new BehaviorSubject(newSettings);
-    this.appSettings$ = this._appSettings$.asObservable();
+    this.appSettings$ = this._appSettings$.asObservable().pipe(
+      distinctUntilChanged(dequal),
+      shareReplay(1)
+    );
   }
 
 

@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/
 import { FormGroup, FormControl } from '@angular/forms';
 import { HydrusAddFileStatus, HydrusUploadService } from '../hydrus-upload.service';
 import { tap, lastValueFrom } from 'rxjs';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpEventType } from '@angular/common/http';
 import { SettingsService } from '../settings.service';
 import { HydrusTagsService } from '../hydrus-tags.service';
 import { ErrorService } from '../error.service';
-import { FileValidators, NgxFileDragDropComponent } from 'ngx-file-drag-drop';
+import { FileValidators, NgxFileDragDropComponent } from '../../lib/ngx-file-drag-drop';
 import { RxState } from '@rx-angular/state';
 
 interface UploadStatus {

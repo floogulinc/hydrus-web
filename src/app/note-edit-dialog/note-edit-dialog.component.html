@@ -21,7 +21,7 @@
     </div>
   </div>
   <div mat-dialog-actions align="end">
-    <button mat-button type="button" mat-dialog-close>Cancel</button>
+    <button mat-button type="button" [mat-dialog-close]="null">Cancel</button>
     <button mat-button type="submit" [disabled]="noteForm.invalid || noteForm.pristine">{{addMode ? 'Add' : 'Save'}}</button>
   </div>
 </form>

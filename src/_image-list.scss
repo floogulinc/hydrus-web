@@ -1,0 +1,26 @@
+//@use 'src/variables' as *;
+@import "@material/image-list/mdc-image-list";
+
+
+.browse-image-list {
+  //@include mdc-image-list-aspect(1.5); // Images are 3:2
+  @include mdc-image-list-standard-columns(12, 8px);
+  //max-width: 1920px;
+  @include mdc-image-list-shape-radius(8px);
+}
+
+@media (max-width: 1023px) {
+.browse-image-list {
+    @include mdc-image-list-standard-columns(8, 8px);
+}
+}
+
+@media (max-width: 599px) {
+  .browse-image-list {
+      @include mdc-image-list-standard-columns(4, 8px);
+  }
+}
+
+.browse-image-list .grid-item > a {
+  -webkit-tap-highlight-color: transparent;
+}

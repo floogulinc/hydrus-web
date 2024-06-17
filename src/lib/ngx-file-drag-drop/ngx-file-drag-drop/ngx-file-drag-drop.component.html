@@ -1,0 +1,10 @@
+<mat-chip-listbox *ngIf="files.length" selectable="false">
+    <mat-chip matTooltip={{file.size|byte}} matTooltipPosition="below" [matTooltipDisabled]="displayFileSize" selected highlighted
+        *ngFor="let file of files" [disabled]="disabled" color="accent" disableRipple="true" [removable]="!disabled"
+        (removed)="removeFile(file)">
+        <span class="filename">{{getFileName(file)}}</span>
+        <mat-icon *ngIf="!disabled" matChipRemove>cancel</mat-icon>
+    </mat-chip>
+</mat-chip-listbox>
+<span class="placeholder" *ngIf="!files.length">{{emptyPlaceholder}}</span>
+<input #fileInputEl class="hidden" #fileInput type="file" [attr.multiple]="multiple? '' : null" [attr.accept]="accept">

@@ -3,7 +3,7 @@
   @if (saucenaoResults$ | async; as saucenaoResults) {
     <div>
       @for (result of saucenaoResults; track result) {
-        <mat-card class="saucenao-card mat-elevation-z0">
+        <mat-card class="saucenao-card" appearance="outlined">
           <mat-card-header>
             <img mat-card-avatar class="thumbnail" [src]="result.thumbnail">
             <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>
@@ -13,12 +13,12 @@
             <mat-list class="saucenao-url-list">
               @for (url of result.urls; track url) {
                 <mat-list-item>
-                  <div mat-line>{{url.site}}</div>
-                  <div mat-line>{{url.url}}</div>
-                  <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
+                  <div matListItemTitle>{{url.site}}</div>
+                  <div matListItemLine>{{url.url}}</div>
+                  <a mat-icon-button matListItemMeta rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
                     <mat-icon>open_in_new</mat-icon>
                   </a>
-                  <button mat-icon-button (click)="send(url.url)" title="Send to Hydrus">
+                  <button mat-icon-button matListItemMeta (click)="send(url.url)" title="Send to Hydrus">
                     <mat-icon>send</mat-icon>
                   </button>
                 </mat-list-item>

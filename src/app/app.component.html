@@ -1,33 +1,33 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport mode="over" [autoFocus]="false">
     <mat-toolbar class="sidenav-toolbar" color="primary">
-      <img src="/assets/hydrus-white.svg" class="sidenav-icon">
+      <mat-icon svgIcon="hydrus" class="sidenav-icon"></mat-icon>
       <span class="app-title">Hydrus Web</span>
     </mat-toolbar>
     <mat-nav-list class="sidenav-list" role="navigation">
       <a mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
         [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
-        <mat-icon matListIcon>photo</mat-icon>
+        <mat-icon matListItemIcon>photo</mat-icon>
         Browse
       </a>
       <a mat-list-item routerLink="/pages" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
-        <mat-icon matListIcon>photo_library</mat-icon>
+        <mat-icon matListItemIcon>photo_library</mat-icon>
         Pages
       </a>
       <a mat-list-item routerLink="/send" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
-        <mat-icon matListIcon>send</mat-icon>
+        <mat-icon matListItemIcon>send</mat-icon>
         Send URL
       </a>
       <a mat-list-item routerLink="/upload" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
-        <mat-icon matListIcon>upload</mat-icon>
+        <mat-icon matListItemIcon>upload</mat-icon>
         Upload File
       </a>
       <a mat-list-item routerLink="/settings" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
-        <mat-icon matListIcon>settings</mat-icon>
+        <mat-icon matListItemIcon>settings</mat-icon>
         Settings
       </a>
       <a mat-list-item routerLink="/about" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
-        <mat-icon matListIcon>info</mat-icon>
+        <mat-icon matListItemIcon>info</mat-icon>
         About
       </a>
     </mat-nav-list>

@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HydrusService } from '../hydrus-services';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig } from '@angular/material/legacy-dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { HydrusServicesService } from '../hydrus-services.service';
 import { Observable, config, filter, map, of, shareReplay, take, tap } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -69,8 +69,6 @@ export class ServiceSelectDialogComponent implements OnInit {
     return dialog.open<ServiceSelectDialogComponent, ServiceSelectDialogData, HydrusService>(
       ServiceSelectDialogComponent,
       {
-        maxWidth: '648px',
-        width: '90vw',
         data: {
           ...defaultData,
           ...data

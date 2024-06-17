@@ -1,6 +1,6 @@
 
 <div class="flex-column">
-  <h2 class="mat-display-1">Upload to Hydrus</h2>
+  <h2 class="mat-headline-4">Upload to Hydrus</h2>
   <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()" class="flex-column">
 
 
@@ -13,7 +13,7 @@
     <mat-checkbox formControlName="addFilenameTag">Add filename tag (new files only)</mat-checkbox>
 
     <div class="button-row">
-      <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="uploadForm.invalid || uploading$ | push">Upload</button>
+      <button mat-flat-button class="send-button" color="primary" type="submit" [disabled]="uploadForm.invalid || uploading$ | push">Upload</button>
     </div>
   </form>
 

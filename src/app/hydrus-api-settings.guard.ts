@@ -13,7 +13,7 @@ export class HydrusApiSettingsGuard  {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      return this.apiSettings.apiSet ? true : this.router.parseUrl('/welcome');
+      return this.apiSettings.apiSet() ? true : this.router.parseUrl('/welcome');
   }
 
 }

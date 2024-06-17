@@ -1,22 +1,24 @@
-import { Component, ElementRef, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewChild, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { MatSidenavContent } from '@angular/material/sidenav';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
-import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
-import { MigrationService } from './migration.service';
+import { CdkPortalOutlet } from '@angular/cdk/portal';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { CUBE, GRAPH, ratingsIcons } from './svg-icons';
+import { CUBE, GRAPH, ratingsIcons, HYDRUS } from './svg-icons';
 import { HydrusVersionService } from './hydrus-version.service';
+import { ThemeService } from './theme/theme.service';
+import { ThemeTagsService } from './theme/theme-tags.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnInit {
   title = 'hydrus-web';
@@ -37,10 +39,13 @@ export class AppComponent implements OnInit {
     private snackBar: MatSnackBar,
     iconRegistry: MatIconRegistry,
     sanitizer: DomSanitizer,
-    private hydrusVersionService: HydrusVersionService
+    private hydrusVersionService: HydrusVersionService,
+    private themeService: ThemeService,
+    private tagThemeService: ThemeTagsService
   ) {
     iconRegistry.addSvgIconLiteral('cube', sanitizer.bypassSecurityTrustHtml(CUBE));
     iconRegistry.addSvgIconLiteral('graph', sanitizer.bypassSecurityTrustHtml(GRAPH));
+    iconRegistry.addSvgIconLiteral('hydrus', sanitizer.bypassSecurityTrustHtml(HYDRUS));
     Object.entries(ratingsIcons).forEach(([name, literal]) => iconRegistry.addSvgIconLiteralInNamespace('rating', name, sanitizer.bypassSecurityTrustHtml(literal)))
   }
 
@@ -69,5 +74,7 @@ export class AppComponent implements OnInit {
           break;
       }
     });
+    this.themeService.initTheming();
+    this.tagThemeService.initTheming();
   }
 }

@@ -6,7 +6,7 @@
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "module": "es2020",
+    "module": "es2022",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -15,7 +15,7 @@
       "node_modules/@types"
     ],
     "lib": [
-      "es2020",
+      "es2022",
       "dom"
     ],
     "resolveJsonModule": true,

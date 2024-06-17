@@ -21,7 +21,7 @@
           </mat-select>
         </mat-form-field>
         <div class="form-field-spacing">
-          <mat-button-toggle-group *ngSwitchDefault formControlName="operator">
+          <mat-button-toggle-group [hideSingleSelectionIndicator]="true" *ngSwitchDefault formControlName="operator">
             <mat-button-toggle *ngFor="let op of operatorOptions[predicate.operator]" [value]="op">{{op}}
             </mat-button-toggle>
           </mat-button-toggle-group>

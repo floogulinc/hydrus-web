@@ -3,9 +3,30 @@
 }
 
 .header {
-  mat-slide-toggle {
+
+  .mat-mdc-slide-toggle {
     float: right;
+    margin-top: 16px;
   }
+
+  //padding: 16px 16px 0px 16px;
+
+  .mat-mdc-dialog-title {
+    padding: 0;
+    pointer-events: none;
+  }
+
+  display: block;
+  margin-top: 0;
+  position: relative;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  margin: 0 0 1px;
+  padding: 0 24px 9px;
+}
+
+.mat-mdc-dialog-content {
+  padding-top: 0px;
 }
 
 .metadata-thumbnail {
