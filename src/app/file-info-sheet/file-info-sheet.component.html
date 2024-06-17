@@ -105,7 +105,7 @@
           Known URLs ({{file.known_urls.length}})
         </mat-expansion-panel-header>
         <mat-nav-list>
-          @for (url of file.detailed_known_urls; track url) {
+          @for (url of file.detailed_known_urls; track url.normalised_url) {
             <mat-list-item>
               <a matLine [href]="url.normalised_url" target="_blank" rel="noopener noreferrer">{{ url.url_type === 5 ? url.normalised_url : url.match_name }}</a>
               @if (navigatorShare) {
