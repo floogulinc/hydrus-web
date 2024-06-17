@@ -45,6 +45,6 @@ export const defaultAppSettings: AppSettings = {
   mediaLoop: true,
   mediaDefaultMuted: false,
   themeEnabled: false,
-  themeColor: '#0074e9',
+  themeColor: '#3f51b5',
   themeVariant: SettingsThemeVariant.DEFAULT
 }

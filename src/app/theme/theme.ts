@@ -153,4 +153,14 @@ export function styleSheetFromTheme(theme: {light: DynamicScheme, dark: DynamicS
   }`
 }
 
+export function getPrimaryColorFromScheme(scheme: DynamicScheme) {
+  return MaterialDynamicColors.primary.getArgb(scheme)
+}
 
+
+export function getMetaThemeColorsFromTheme(theme: {light: DynamicScheme, dark: DynamicScheme}) {
+  return {
+    light: hexFromArgb(MaterialDynamicColors.surface.getArgb(theme.light)),
+    dark: hexFromArgb(MaterialDynamicColors.surface.getArgb(theme.dark))
+  }
+}

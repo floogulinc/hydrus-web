@@ -116,7 +116,6 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
   // }
 
   shiftSelect(id: number) {
-    console.log(id);
     if (this.numSelected() < 1) {
       this.select([id]);
     } else {
