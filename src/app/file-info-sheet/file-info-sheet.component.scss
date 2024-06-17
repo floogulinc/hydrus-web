@@ -79,18 +79,3 @@
 .known-url-list-item-title {
   text-decoration: none;
 }
-
-.tag-chip-list {
-  .tag-chip {
-    // restore old text wrapping behavior
-    padding-block: calc((var(--mdc-chip-container-height) - max(var(--mdc-chip-with-avatar-avatar-size), var(--mdc-chip-label-text-line-height))) / 2);
-    height: 100%;
-  }
-
-  .tag-chip-text {
-    white-space: wrap;
-    overflow-wrap: anywhere;
-  }
-}
-
-

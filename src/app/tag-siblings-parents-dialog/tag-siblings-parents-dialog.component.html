@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Siblings and Parents for "{{data.tag}}"</h1>
+<h1 mat-dialog-title>Siblings and Parents</h1>
 <div mat-dialog-content>
 
   @if (siblingsAndParents$ | async; as siblingsAndParents) {
@@ -7,24 +7,28 @@
         @for (service of siblingsAndParents | orderBy: 'serviceName' | orderBy: '-serviceType'; track service.serviceKey) {
           <mat-tab [label]="service.serviceName">
             <ng-template matTabContent>
-              <p>
-                Ideal tag:
-                <mat-chip-row
-                  class="theming tag-chip tag-color"
-                  [attr.data-tag-namespace]="service.ideal_tag| tagNamespace"
-                  [matMenuTriggerFor]="tagMenu"
-                  [matMenuTriggerData]="{tag: service.ideal_tag}"
-                  >
-                  <div class="tag-chip-text">{{service.ideal_tag}}</div>
-                </mat-chip-row>
-              </p>
               <mat-accordion multi>
-                <mat-expansion-panel >
+                <mat-expansion-panel expanded>
+                  <mat-expansion-panel-header>
+                    Ideal
+                  </mat-expansion-panel-header>
+                  <mat-chip-listbox class="mat-mdc-chip-set-stacked tag-chip-list" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
+                    <mat-chip-option
+                      class="theming tag-chip tag-color"
+                      [attr.data-tag-namespace]="service.ideal_tag| tagNamespace"
+                      [matMenuTriggerFor]="tagMenu"
+                      [matMenuTriggerData]="{tag: service.ideal_tag}"
+                      >
+                      <div class="tag-chip-text">{{service.ideal_tag}}</div>
+                    </mat-chip-option>
+                  </mat-chip-listbox>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
                   <mat-expansion-panel-header>
                     Siblings ({{service.siblings.length}})
                   </mat-expansion-panel-header>
                   <ng-template matExpansionPanelContent>
-                    <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
+                    <mat-chip-listbox class="mat-mdc-chip-set-stacked tag-chip-list" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
                       @for (tag of (service.siblings | orderBy); track tag) {
                         <mat-chip-option
                           class="theming tag-chip tag-color"
@@ -43,7 +47,7 @@
                     Ancestors ({{service.ancestors.length}})
                   </mat-expansion-panel-header>
                   <ng-template matExpansionPanelContent>
-                    <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
+                    <mat-chip-listbox class="mat-mdc-chip-set-stacked tag-chip-list" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
                       @for (tag of (service.ancestors | orderBy); track tag) {
                         <mat-chip-option
                           class="theming tag-chip tag-color"
@@ -62,7 +66,7 @@
                     Descendants ({{service.descendants.length}})
                   </mat-expansion-panel-header>
                   <ng-template matExpansionPanelContent>
-                    <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
+                    <mat-chip-listbox class="mat-mdc-chip-set-stacked tag-chip-list" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
                       @for (tag of (service.descendants | orderBy); track tag) {
                         <mat-chip-option
                           class="theming tag-chip tag-color"
