@@ -1,4 +1,9 @@
-<app-image-list [files]="currentFiles()" (scrollEnd)="listScrollEnd($event)" [(selected)]="selected"></app-image-list>
+<app-image-list
+  [files]="currentFiles()"
+  (scrollEnd)="listScrollEnd($event)"
+  [(selected)]="selected"
+  (shiftSelect)="shiftSelect($event)"
+></app-image-list>
 @if (loading()) {
   <div class="loader">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>

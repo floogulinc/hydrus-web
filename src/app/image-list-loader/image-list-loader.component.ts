@@ -11,6 +11,7 @@ import { ServiceSelectDialogComponent } from '../service-select-dialog/service-s
 import { getLocalTagServices } from '../hydrus-services';
 import { TagInputDialogComponent } from '../tag-input-dialog/tag-input-dialog.component';
 import { HydrusTagsService } from '../hydrus-tags.service';
+import { union } from 'set-utilities';
 
 @Component({
   selector: 'app-image-list-loader',
@@ -83,6 +84,55 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
 
   selectAll() {
     this.selected.set(new Set(this.fileIDs()))
+  }
+
+  select(ids: number[]) {
+    this.selected.update(s => union(s, new Set(ids)))
+  }
+
+  // shiftSelect(id: number) {
+  //   console.log(id);
+  //   if (this.numSelected() < 1) {
+  //     this.select([id]);
+  //   } else {
+  //     const currIndex = this.fileIDs().indexOf(id);
+  //     const selectedIndicies = Array.from(this.selected()).map(id => this.fileIDs().indexOf(id));
+  //     selectedIndicies.sort();
+  //     let toSelect: number[];
+  //     if (selectedIndicies[0] > currIndex) {
+  //       // select from current to first selected
+  //       toSelect = this.fileIDs().slice(currIndex, selectedIndicies[0]);
+  //     } else if (selectedIndicies[selectedIndicies.length - 1] < currIndex) {
+  //       // select from last selected to current
+  //       toSelect = this.fileIDs().slice(selectedIndicies[selectedIndicies.length - 1] + 1, currIndex + 1);
+  //     } else {
+  //       const firstIndexAfterSelected = selectedIndicies.findIndex((v) => v > currIndex);
+  //       const indexToSelectFrom = firstIndexAfterSelected - 1;
+  //       toSelect = this.fileIDs().slice(selectedIndicies[indexToSelectFrom] + 1, currIndex + 1);
+  //       // select from last selected that's before current to current
+  //     }
+  //     this.select(toSelect);
+  //   }
+  // }
+
+  shiftSelect(id: number) {
+    console.log(id);
+    if (this.numSelected() < 1) {
+      this.select([id]);
+    } else {
+      const currIndex = this.fileIDs().indexOf(id);
+      const selectedIndicies = Array.from(this.selected()).map(id => this.fileIDs().indexOf(id));
+      selectedIndicies.sort();
+      let toSelect: number[];
+      if (selectedIndicies[0] > currIndex) {
+        // select from current to first selected
+        toSelect = this.fileIDs().slice(currIndex, selectedIndicies[0]);
+      } else {
+        // select from first selected to current
+        toSelect = this.fileIDs().slice(selectedIndicies[0] + 1, currIndex + 1);
+      }
+      this.select(toSelect);
+    }
   }
 
   async archiveSelected() {

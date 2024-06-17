@@ -20,6 +20,7 @@ import { PhotoswipeService } from '../photoswipe.service';
 import { FileInfoSheetComponent } from '../file-info-sheet/file-info-sheet.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { HydrusFileDownloadService } from '../hydrus-file-download.service';
+import { difference, union } from 'set-utilities';
 
 @Component({
   selector: 'app-image-list',
@@ -43,6 +44,8 @@ export class ImageListComponent implements OnInit, OnChanges {
   selected = model<Set<number>>(new Set());
 
   anySelected = computed(() => this.selected().size > 0)
+
+  shiftSelect = output<number>()
 
   constructor(
     public appComponent: AppComponent,
@@ -72,6 +75,9 @@ export class ImageListComponent implements OnInit, OnChanges {
   fileClick(event: MouseEvent, file: HydrusBasicFile) {
     event.preventDefault();
     if(event.shiftKey) {
+      //this.selectToggle(file);
+      this.shiftSelect.emit(file.file_id);
+    } else if(event.ctrlKey) {
       this.selectToggle(file);
     } else if(event instanceof PointerEvent && event.pointerType === 'touch' && this.anySelected()) {
       this.selectToggle(file);
@@ -98,29 +104,19 @@ export class ImageListComponent implements OnInit, OnChanges {
   }
 
   select(file: HydrusBasicFile) {
-    this.selected.update(s => {
-      const setCopy = new Set(s);
-      setCopy.add(file.file_id);
-      return setCopy;
-    })
+    this.selected.update(s => union(s, new Set([file.file_id])))
   }
 
   deselect(file: HydrusBasicFile) {
-    this.selected.update(s => {
-      const setCopy = new Set(s);
-      setCopy.delete(file.file_id);
-      return setCopy
-    })
+    this.selected.update(s => difference(s, new Set([file.file_id])))
   }
 
   selectToggle(file: HydrusBasicFile) {
     this.selected.update(s => {
-      const setCopy = new Set(s);
-      if (setCopy.has(file.file_id)) {
-        setCopy.delete(file.file_id);
-        return setCopy
+      if (s.has(file.file_id)) {
+        return difference(s, new Set([file.file_id]));
       } else {
-        return setCopy.add(file.file_id);
+        return union(s, new Set([file.file_id]));
       }
     })
   }
