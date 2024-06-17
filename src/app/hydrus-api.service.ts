@@ -13,6 +13,7 @@ import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 import { HydrusAddFileResponse } from './hydrus-upload.service';
 import { HydrusKeyVerificationData, HydrusRequestFileDomain, HydrusRequestFiles, HydrusRequestSingleFile } from './hydrus-api';
 import { HydrusJobStatus, HydrusJobStatusAddRequest, HydrusJobStatusUpdateRequest } from './hydrus-job-status';
+import { HydrusPage, HydrusPageListItem } from './hydrus-page';
 
 type AngularHttpParams = HttpParams | {
   [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean>;
@@ -46,9 +47,9 @@ export class HydrusApiService {
   }
 
   private apiGet<T = any>(path: string, params?: AngularHttpParams, noCache = false) {
-    const cacheHeaders = noCache ? {
+    const cacheHeaders: Record<string, string> = noCache ? {
       'Cache-Control': 'no-cache'
-    } : {};
+    } : { };
     return this.http.get<T & Partial<HydrusVersionResponse>>(this.getAPIUrl() + path, {
       params,
       headers: {...this.headers, ...cacheHeaders}
@@ -157,6 +158,7 @@ export class HydrusApiService {
       include_notes?: boolean;
       include_services_object?: boolean;
       include_blurhash?: boolean;
+      include_milliseconds?: boolean;
     },
     noCache = false
   ) {
@@ -250,7 +252,7 @@ export class HydrusApiService {
    * Get the page structure of the current UI session.
    */
   public getPages() {
-    return this.apiGet('manage_pages/get_pages');
+    return this.apiGet<{pages: HydrusPageListItem}>('manage_pages/get_pages');
   }
 
   /**
@@ -263,7 +265,7 @@ export class HydrusApiService {
   public getPageInfo(page_key: string, simple?: string) {
     let httpParams: HttpParams = new HttpParams().set('page_key', page_key);
     if (simple) { httpParams = httpParams.set('simple', simple); }
-    return this.apiGet('manage_pages/get_page_info', httpParams, true);
+    return this.apiGet<{page_info: HydrusPage}>('manage_pages/get_page_info', httpParams, true);
   }
 
   public refreshPage(page_key: string) {

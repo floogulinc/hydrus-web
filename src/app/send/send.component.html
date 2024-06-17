@@ -1,85 +1,117 @@
-<div fxLayout="column">
+<div>
   <h2 class="mat-display-1">Send to Hydrus</h2>
-  <form [formGroup]="sendForm" (ngSubmit)="onSubmit()" fxLayout="column">
+  <form [formGroup]="sendForm" (ngSubmit)="onSubmit()" class="flex-column">
     <mat-form-field appearance="outline">
       <mat-label>URL to send</mat-label>
       <input matInput type="url" autocomplete="off" required
-      formControlName="sendUrl" placeholder="http://example.com/" >
-      <button mat-icon-button matSuffix (click)="resetForm()" type="button" title="Clear URL">
-        <mat-icon>clear</mat-icon>
-      </button>
-      <mat-error *ngIf="sendUrl.hasError('pattern') && !sendUrl.hasError('required')">
-        Please enter a valid URL
-      </mat-error>
-      <mat-error *ngIf="sendUrl.hasError('required')">
-        URL is required
-      </mat-error>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Destination page name</mat-label>
-      <input matInput type="text" autocomplete="off"
-      formControlName="destPageName" placeholder="" >
-    </mat-form-field>
-    <div fxLayout="row" fxLayoutAlign="end">
-      <button mat-raised-button type="button" [disabled]="sendUrl.invalid || saucenaoLoading" *ngIf="saucenaoService.canSaucenao" (click)="saucenaoLookup()">SauceNAO Lookup</button>
-      <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
-    </div>
-  </form>
+        formControlName="sendUrl" placeholder="http://example.com/" >
+        <button mat-icon-button matSuffix (click)="resetForm()" type="button" title="Clear URL">
+          <mat-icon>clear</mat-icon>
+        </button>
+        @if (sendUrl.hasError('pattern') && !sendUrl.hasError('required')) {
+          <mat-error>
+            Please enter a valid URL
+          </mat-error>
+        }
+        @if (sendUrl.hasError('required')) {
+          <mat-error>
+            URL is required
+          </mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Destination page name</mat-label>
+        <input matInput type="text" autocomplete="off"
+          formControlName="destPageName" placeholder="" >
+      </mat-form-field>
+      <div class="button-row">
+        @if (saucenaoService.canSaucenao) {
+          <button mat-raised-button type="button" [disabled]="sendUrl.invalid || saucenaoLoading" (click)="saucenaoLookup()">SauceNAO Lookup</button>
+        }
+        <button mat-raised-button class="send-button" color="primary" type="submit" [disabled]="sendForm.invalid">Send to Hydrus</button>
+      </div>
+    </form>
 
-  <mat-card *ngIf="currentUrlInfo$ | async as currentUrlInfo" class="url-info-card">
-    <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
-    <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
-    <mat-card-content *ngIf="currentUrlFiles$ | async as currentUrlFiles">
-      <mat-list>
-        <mat-list-item *ngIf="this.currentUrlFiles.url_file_statuses.length === 0">
-          Not yet imported
-        </mat-list-item>
-        <mat-list-item *ngFor="let file of this.currentUrlFiles.url_file_statuses" class="file-list-item">
-          <mat-icon *ngIf="file.status === 2" matListIcon>check</mat-icon>
-          <mat-icon *ngIf="file.status === 3" matListIcon>delete</mat-icon>
-          <div mat-line class="file-note">{{file.note}}</div>
-        </mat-list-item>
-      </mat-list>
-    </mat-card-content>
-  </mat-card>
-
-  <div *ngIf="currentUrlBasicFileInfo$ | async as currentUrlBasicFiles">
-    <h2 class="mat-title">Current URL files</h2>
-    <app-image-list [files]="currentUrlBasicFiles"></app-image-list>
-  </div>
-
-
-  <div *ngIf="saucenaoResults || saucenaoLoading" class="saucenao-results">
-    <h2 class="mat-title">SauceNao Results</h2>
-    <mat-spinner *ngIf="saucenaoLoading" class="saucenao-spinner"></mat-spinner>
-    <div *ngIf="saucenaoResults">
-      <mat-card *ngFor="let result of saucenaoResults" class="saucenao-card">
-        <mat-card-header>
-          <img mat-card-avatar class="thumbnail" [src]="result.thumbnail">
-          <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>
-          <mat-card-subtitle>{{result.similarity}}%</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-list class="saucenao-url-list">
-            <mat-list-item *ngFor="let url of result.urls">
-              <div mat-line>{{url.site}}</div>
-              <div mat-line>{{url.url}}</div>
-              <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
-                <mat-icon>open_in_new</mat-icon>
-              </a>
-              <button mat-icon-button (click)="send(url.url)" title="Send to Hydrus">
-                <mat-icon>send</mat-icon>
-              </button>
-            </mat-list-item>
-          </mat-list>
-        </mat-card-content>
+    @if (currentUrlInfo$ | async; as currentUrlInfo) {
+      <mat-card class="url-info-card">
+        <mat-card-title>{{this.currentUrlInfo.match_name}}</mat-card-title>
+        <mat-card-subtitle>{{ this.currentUrlInfo.url_type_string }}</mat-card-subtitle>
+        @if (currentUrlFiles$ | async; as currentUrlFiles) {
+          <mat-card-content>
+            <mat-list>
+              @if (this.currentUrlFiles.url_file_statuses.length === 0) {
+                <mat-list-item>
+                  Not yet imported
+                </mat-list-item>
+              }
+              @for (file of this.currentUrlFiles.url_file_statuses; track file.hash) {
+                <mat-list-item class="file-list-item">
+                  @if (file.status === 2) {
+                    <mat-icon matListIcon>check</mat-icon>
+                  }
+                  @if (file.status === 3) {
+                    <mat-icon matListIcon>delete</mat-icon>
+                  }
+                  <div mat-line class="file-note">{{file.note}}</div>
+                </mat-list-item>
+              }
+            </mat-list>
+          </mat-card-content>
+        }
       </mat-card>
-      <mat-card *ngIf="saucenaoResults.length === 0" class="saucenao-card">
-        <mat-card-header>
-          <mat-icon mat-card-avatar>error</mat-icon>
-          <mat-card-title>No results found</mat-card-title>
-        </mat-card-header>
-      </mat-card>
-    </div>
+    }
+
+    @if (currentUrlBasicFileInfo$ | async; as currentUrlBasicFiles) {
+      <div>
+        <h2 class="mat-title">Current URL files</h2>
+        <app-image-list [files]="currentUrlBasicFiles"></app-image-list>
+      </div>
+    }
+
+
+    @if (saucenaoResults || saucenaoLoading) {
+      <div class="saucenao-results">
+        <h2 class="mat-title">SauceNao Results</h2>
+        @if (saucenaoLoading) {
+          <mat-spinner class="saucenao-spinner"></mat-spinner>
+        }
+        @if (saucenaoResults) {
+          <div>
+            @for (result of saucenaoResults; track result) {
+              <mat-card class="saucenao-card">
+                <mat-card-header>
+                  <img mat-card-avatar class="thumbnail" [src]="result.thumbnail">
+                  <mat-card-title>{{result.site}}{{result.authorName ? ' - ' + result.authorName : ''}}</mat-card-title>
+                  <mat-card-subtitle>{{result.similarity}}%</mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                  <mat-list class="saucenao-url-list">
+                    @for (url of result.urls; track url) {
+                      <mat-list-item>
+                        <div mat-line>{{url.site}}</div>
+                        <div mat-line>{{url.url}}</div>
+                        <a mat-icon-button rel="noopener noreferrer" target="_blank" href="{{url.url}}" title="Open URL in new tab">
+                          <mat-icon>open_in_new</mat-icon>
+                        </a>
+                        <button mat-icon-button (click)="send(url.url)" title="Send to Hydrus">
+                          <mat-icon>send</mat-icon>
+                        </button>
+                      </mat-list-item>
+                    }
+                  </mat-list>
+                </mat-card-content>
+              </mat-card>
+            }
+            @if (saucenaoResults.length === 0) {
+              <mat-card class="saucenao-card">
+                <mat-card-header>
+                  <mat-icon mat-card-avatar>error</mat-icon>
+                  <mat-card-title>No results found</mat-card-title>
+                </mat-card-header>
+              </mat-card>
+            }
+          </div>
+        }
+      </div>
+    }
   </div>
-</div>

@@ -1,23 +1,29 @@
-<div fxLayout="column">
+<div>
   <ng-template #recursiveList let-list>
 
-  <mat-tab-group animationDuration="0ms" dynamicHeight class="pages-tab-group">
-    <mat-tab *ngFor="let page of list">
-      <ng-template mat-tab-label>
-        <div [matTooltip]="page.name" class="mat-tab-label-content">
-          <span class="pages-tab-label-text">{{page.name}}</span>
-        </div>
-      </ng-template>
-      <ng-template matTabContent>
-        <div *ngIf="page.pages && page.pages.length > 0">
-          <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: page.pages }"></ng-container>
-        </div>
-        <div *ngIf="page.page_type === HydrusPageType.FileSearch || page.page_type === HydrusPageType.ImportURLs || page.page_type === HydrusPageType.ImportHDD || page.page_type === HydrusPageType.ImportGallery || page.page_type === HydrusPageType.ImportSimpleDownloader">
-          <app-files-page [pageListItem]="page"></app-files-page>
-        </div>
-      </ng-template>
-    </mat-tab>
-  </mat-tab-group>
+    <mat-tab-group animationDuration="0ms" dynamicHeight class="pages-tab-group">
+      @for (page of list; track page.page_key) {
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <div [matTooltip]="page.name" class="mat-tab-label-content">
+              <span class="pages-tab-label-text">{{page.name}}</span>
+            </div>
+          </ng-template>
+          <ng-template matTabContent>
+            @if (page.pages && page.pages.length > 0) {
+              <div>
+                <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: page.pages }"></ng-container>
+              </div>
+            }
+            @if (page.page_type === HydrusPageType.FileSearch || page.page_type === HydrusPageType.ImportURLs || page.page_type === HydrusPageType.ImportHDD || page.page_type === HydrusPageType.ImportGallery || page.page_type === HydrusPageType.ImportSimpleDownloader) {
+              <div>
+                <app-files-page [pageListItem]="page"></app-files-page>
+              </div>
+            }
+          </ng-template>
+        </mat-tab>
+      }
+    </mat-tab-group>
   </ng-template>
 
 

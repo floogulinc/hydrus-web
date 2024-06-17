@@ -2,11 +2,11 @@ import { Component, Inject, ChangeDetectionStrategy, Injectable } from '@angular
 import { HydrusBasicFile, HydrusFile, FileCategory, HydrusTagServiceType } from '../hydrus-file';
 import {MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA} from '@angular/material/bottom-sheet';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { tagsObjectFromFile } from '../utils/tag-utils';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { legacyTagsObjectFromFile } from '../utils/tag-utils';
 import { SettingsService } from '../settings.service';
 import { BehaviorSubject, filter, firstValueFrom, map, shareReplay, switchMap } from 'rxjs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { SaucenaoDialogComponent } from '../saucenao-dialog/saucenao-dialog.component';
 import { SaucenaoService } from '../saucenao.service';
 import { HydrusFileDownloadService } from '../hydrus-file-download.service';
@@ -121,7 +121,7 @@ export class FileInfoSheetComponent {
       }
     } else {
       return {
-        displayTags: Object.entries(tagsObjectFromFile(file))
+        displayTags: Object.entries(legacyTagsObjectFromFile(file))
           .filter(([serviceName, statuses]) => statuses[0] && statuses[0].length > 0)
           .map(([serviceName, statuses]) => ({ serviceName, tags: statuses[0] }))
       }
@@ -158,18 +158,9 @@ export class FileInfoSheetComponent {
     this.reload$.next(null);
   }
 
-  trackByTagService(index: number, item: TagServiceItem) {
+  trackByTagService(item: TagServiceItem) {
     return item.serviceKey ?? item.serviceName;
   }
-
-  trackByNote(index: number, item: { name: string, value: string }) {
-    return item.name;
-  }
-
-  trackByRating(index: number, rating: HydrusRating) {
-    return rating.service_key;
-  }
-
 
   navigatorShare = navigator.share;
 

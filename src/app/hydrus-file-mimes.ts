@@ -76,6 +76,16 @@ export enum HydrusFiletype {
   APPLICATION_DJVU = 72,
   APPLICATION_CBZ = 73,
   ANIMATION_UGOIRA = 74,
+  APPLICATION_RTF = 75,
+  APPLICATION_MICROSOFT_OPEN_XML_DOCX = 76,
+  APPLICATION_MICROSOFT_OPEN_XML_XLSX = 77,
+  APPLICATION_MICROSOFT_OPEN_XML_PPTX = 78,
+  UNDETERMINED_OLE = 79,
+  APPLICATION_DOC = 80,
+  APPLICATION_XLS = 81,
+  APPLICATION_PPT = 82,
+  ANIMATION_WEBP = 83,
+  UNDETERMINED_WEBP = 84,
   APPLICATION_OCTET_STREAM = 100,
   APPLICATION_UNKNOWN = 101
 }
@@ -87,6 +97,7 @@ const searchableFileTypes = [
   HydrusFiletype.IMAGE_GIF,
   HydrusFiletype.ANIMATION_GIF,
   HydrusFiletype.IMAGE_WEBP,
+  HydrusFiletype.ANIMATION_WEBP,
   HydrusFiletype.IMAGE_TIFF,
   HydrusFiletype.IMAGE_QOI,
   HydrusFiletype.IMAGE_ICON,
@@ -117,8 +128,15 @@ const searchableFileTypes = [
   HydrusFiletype.APPLICATION_XCF,
   HydrusFiletype.APPLICATION_PROCREATE,
   HydrusFiletype.APPLICATION_PDF,
+  HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_DOCX,
+  HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_XLSX,
+  HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_PPTX,
+  HydrusFiletype.APPLICATION_DOC,
+  HydrusFiletype.APPLICATION_XLS,
+  HydrusFiletype.APPLICATION_PPT,
   HydrusFiletype.APPLICATION_EPUB,
   HydrusFiletype.APPLICATION_DJVU,
+  HydrusFiletype.APPLICATION_RTF,
   HydrusFiletype.APPLICATION_ZIP,
   HydrusFiletype.APPLICATION_RAR,
   HydrusFiletype.APPLICATION_7Z,
@@ -154,6 +172,7 @@ const IMAGES = [
 const ANIMATIONS = [
   HydrusFiletype.ANIMATION_GIF,
   HydrusFiletype.ANIMATION_APNG,
+  HydrusFiletype.ANIMATION_WEBP,
   HydrusFiletype.IMAGE_HEIF_SEQUENCE,
   HydrusFiletype.IMAGE_HEIC_SEQUENCE,
   HydrusFiletype.IMAGE_AVIF_SEQUENCE,
@@ -163,6 +182,7 @@ const ANIMATIONS = [
 const VIEWABLE_ANIMATIONS = [
   HydrusFiletype.ANIMATION_GIF,
   HydrusFiletype.ANIMATION_APNG,
+  HydrusFiletype.ANIMATION_WEBP,
   HydrusFiletype.IMAGE_HEIF_SEQUENCE,
   HydrusFiletype.IMAGE_HEIC_SEQUENCE,
   HydrusFiletype.IMAGE_AVIF_SEQUENCE,
@@ -207,6 +227,13 @@ const APPLICATIONS = [
   HydrusFiletype.APPLICATION_PDF,
   HydrusFiletype.APPLICATION_EPUB,
   HydrusFiletype.APPLICATION_DJVU,
+  HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_DOCX,
+  HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_XLSX,
+  HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_PPTX,
+  HydrusFiletype.APPLICATION_DOC,
+  HydrusFiletype.APPLICATION_XLS,
+  HydrusFiletype.APPLICATION_PPT,
+  HydrusFiletype.APPLICATION_RTF,
 ]
 
 const IMAGE_PROJECT_FILES = [
@@ -238,7 +265,8 @@ const MIMES_WITH_THUMBNAILS = [
   HydrusFiletype.APPLICATION_PSD,
   HydrusFiletype.APPLICATION_KRITA,
   HydrusFiletype.APPLICATION_PROCREATE,
-  HydrusFiletype.APPLICATION_CBZ
+  HydrusFiletype.APPLICATION_CBZ,
+  HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_PPTX
 ]
 
 export function hasThumbnail(mime: HydrusFiletype) {
@@ -254,6 +282,7 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.ANIMATION_GIF] : 'animated gif',
   [HydrusFiletype.IMAGE_BMP] : 'bitmap',
   [HydrusFiletype.IMAGE_WEBP] : 'webp',
+  [HydrusFiletype.ANIMATION_WEBP] : 'animated webp',
   [HydrusFiletype.IMAGE_TIFF] : 'tiff',
   [HydrusFiletype.IMAGE_QOI] : 'qoi',
   [HydrusFiletype.IMAGE_ICON] : 'icon',
@@ -272,8 +301,15 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_JSON] : 'json',
   [HydrusFiletype.APPLICATION_CBOR] : 'cbor',
   [HydrusFiletype.APPLICATION_PDF] : 'pdf',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_DOCX] : 'docx',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_XLSX] : 'xlsx',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_PPTX] : 'pptx',
+  [HydrusFiletype.APPLICATION_DOC] : 'doc',
+  [HydrusFiletype.APPLICATION_XLS] : 'xls',
+  [HydrusFiletype.APPLICATION_PPT] : 'ppt',
   [HydrusFiletype.APPLICATION_EPUB] : 'epub',
   [HydrusFiletype.APPLICATION_DJVU] : 'djvu',
+  [HydrusFiletype.APPLICATION_RTF]: 'rtf',
   [HydrusFiletype.APPLICATION_PSD] : 'psd',
   [HydrusFiletype.APPLICATION_CLIP] : 'clip',
   [HydrusFiletype.APPLICATION_SAI2] : 'sai2',
@@ -314,7 +350,9 @@ export const mime_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.UNDETERMINED_WM] : 'wma or wmv',
   [HydrusFiletype.UNDETERMINED_MP4] : 'mp4 with or without audio',
   [HydrusFiletype.UNDETERMINED_PNG] : 'png or apng',
+  [HydrusFiletype.UNDETERMINED_OLE] : 'ole file',
   [HydrusFiletype.UNDETERMINED_GIF] : 'animated or static gif',
+  [HydrusFiletype.UNDETERMINED_WEBP] : 'animated or static webp',
   [HydrusFiletype.APPLICATION_UNKNOWN] : 'unknown filetype',
   [HydrusFiletype.GENERAL_APPLICATION] : 'application',
   [HydrusFiletype.GENERAL_APPLICATION_ARCHIVE] : 'archive',
@@ -334,6 +372,7 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.ANIMATION_GIF] : 'image/gif',
   [HydrusFiletype.IMAGE_BMP] : 'image/bmp',
   [HydrusFiletype.IMAGE_WEBP] : 'image/webp',
+  [HydrusFiletype.ANIMATION_WEBP] : 'image/webp',
   [HydrusFiletype.IMAGE_TIFF] : 'image/tiff',
   [HydrusFiletype.IMAGE_QOI] : 'image/qoi',
   [HydrusFiletype.IMAGE_ICON] : 'image/x-icon',
@@ -352,8 +391,15 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.APPLICATION_JSON] : 'application/json',
   [HydrusFiletype.APPLICATION_CBOR] : 'application/cbor',
   [HydrusFiletype.APPLICATION_PDF] : 'application/pdf',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_DOCX] : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_XLSX] : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_PPTX] : 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  [HydrusFiletype.APPLICATION_DOC] : 'application/msword',
+  [HydrusFiletype.APPLICATION_XLS] : 'application/vnd.ms-excel',
+  [HydrusFiletype.APPLICATION_PPT] : 'application/vnd.ms-powerpoint',
   [HydrusFiletype.APPLICATION_EPUB] : 'application/epub+zip',
   [HydrusFiletype.APPLICATION_DJVU] : 'image/vnd.djvu',
+  [HydrusFiletype.APPLICATION_RTF] : 'application/rtf',
   [HydrusFiletype.APPLICATION_PSD] : 'image/vnd.adobe.photoshop',
   [HydrusFiletype.APPLICATION_CLIP] : 'application/clip',
   [HydrusFiletype.APPLICATION_SAI2] : 'application/sai2',
@@ -391,6 +437,7 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.VIDEO_OGV] : 'video/ogg',
   [HydrusFiletype.VIDEO_REALMEDIA] : 'video/vnd.rn-realvideo',
   [HydrusFiletype.VIDEO_WEBM] : 'video/webm',
+  [HydrusFiletype.UNDETERMINED_OLE] : 'application/x-ole-storage',
   [HydrusFiletype.APPLICATION_UNKNOWN] : 'unknown filetype',
   [HydrusFiletype.GENERAL_APPLICATION] : 'application',
   [HydrusFiletype.GENERAL_APPLICATION_ARCHIVE] : 'archive',
@@ -403,6 +450,7 @@ const mime_mimetype_string_lookup: Record<HydrusFiletype, string> = {
   [HydrusFiletype.UNDETERMINED_MP4] : 'audio/mp4 or video/mp4',
   [HydrusFiletype.UNDETERMINED_PNG] : 'image/png or image/apng',
   [HydrusFiletype.UNDETERMINED_GIF] : 'image/gif',
+  [HydrusFiletype.UNDETERMINED_WEBP] : 'image/webp',
 }
 
 const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
@@ -414,6 +462,7 @@ const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.ANIMATION_GIF] : '.gif',
   [HydrusFiletype.IMAGE_BMP] : '.bmp',
   [HydrusFiletype.IMAGE_WEBP] : '.webp',
+  [HydrusFiletype.ANIMATION_WEBP] : '.webp',
   [HydrusFiletype.IMAGE_TIFF] : '.tiff',
   [HydrusFiletype.IMAGE_QOI] : '.qoi',
   [HydrusFiletype.IMAGE_ICON] : '.ico',
@@ -431,8 +480,15 @@ const mime_ext_lookup: Partial<Record<HydrusFiletype, string>> = {
   [HydrusFiletype.APPLICATION_YAML] : '.yaml',
   [HydrusFiletype.APPLICATION_JSON] : '.json',
   [HydrusFiletype.APPLICATION_PDF] : '.pdf',
-  [HydrusFiletype.APPLICATION_EPUB] : 'epub',
-  [HydrusFiletype.APPLICATION_DJVU] : 'djvu',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_DOCX] : '.docx',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_XLSX] : '.xlsx',
+  [HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_PPTX] : '.pptx',
+  [HydrusFiletype.APPLICATION_DOC] : '.doc',
+  [HydrusFiletype.APPLICATION_XLS] : '.xls',
+  [HydrusFiletype.APPLICATION_PPT] : '.ppt',
+  [HydrusFiletype.APPLICATION_EPUB] : '.epub',
+  [HydrusFiletype.APPLICATION_DJVU] : '.djvu',
+  [HydrusFiletype.APPLICATION_RTF] : '.rtf',
   [HydrusFiletype.APPLICATION_PSD] : '.psd',
   [HydrusFiletype.APPLICATION_CLIP] : '.clip',
   [HydrusFiletype.APPLICATION_SAI2] : '.sai2',
@@ -509,10 +565,22 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'application/x-yaml' : HydrusFiletype.APPLICATION_YAML,
   'PDF document' : HydrusFiletype.APPLICATION_PDF,
   'application/pdf' : HydrusFiletype.APPLICATION_PDF,
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document' : HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_DOCX,
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' : HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_XLSX,
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation' : HydrusFiletype.APPLICATION_MICROSOFT_OPEN_XML_PPTX,
+  'application/msword' : HydrusFiletype.APPLICATION_DOC,
+  'application/vnd.ms-word' : HydrusFiletype.APPLICATION_DOC,
+  'application/vnd.ms-excel' : HydrusFiletype.APPLICATION_XLS,
+  'application/msexcel' : HydrusFiletype.APPLICATION_XLS,
+  'application/vnd.ms-powerpoint' : HydrusFiletype.APPLICATION_PPT,
+  'application/powerpoint' : HydrusFiletype.APPLICATION_PPT,
+  'application/mspowerpoint' : HydrusFiletype.APPLICATION_PPT,
   'application/epub+zip' : HydrusFiletype.APPLICATION_EPUB,
   'image/vnd.djvu' : HydrusFiletype.APPLICATION_DJVU,
   'image/vnd.djvu+multipage' : HydrusFiletype.APPLICATION_DJVU,
   'image/x-djvu' : HydrusFiletype.APPLICATION_DJVU,
+  'text/rtf' : HydrusFiletype.APPLICATION_RTF,
+  'application/rtf': HydrusFiletype.APPLICATION_RTF,
   'application/vnd.comicbook+zip': HydrusFiletype.APPLICATION_CBZ,
   'application/zip' : HydrusFiletype.APPLICATION_ZIP,
   'application/vnd.rar' : HydrusFiletype.APPLICATION_RAR,
@@ -549,9 +617,45 @@ const mime_enum_lookup: Record<string, HydrusFiletype> = {
   'application/vnd.rn-realmedia' : HydrusFiletype.VIDEO_REALMEDIA,
   'video/webm' : HydrusFiletype.VIDEO_WEBM,
   'video' : HydrusFiletype.GENERAL_VIDEO,
+  'application/x-ole-storage' : HydrusFiletype.UNDETERMINED_OLE,
   'unknown filetype' : HydrusFiletype.APPLICATION_UNKNOWN
 }
 
+const filetypeCategories: {generalFiletype: HydrusFiletype, filetypes: HydrusFiletype[]}[] = [
+  {
+    generalFiletype: HydrusFiletype.GENERAL_IMAGE,
+    filetypes: IMAGES
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_ANIMATION,
+    filetypes: ANIMATIONS
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_VIDEO,
+    filetypes: VIDEO
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_AUDIO,
+    filetypes: AUDIO
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_APPLICATION,
+    filetypes: APPLICATIONS
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_IMAGE_PROJECT,
+    filetypes: IMAGE_PROJECT_FILES
+  },
+  {
+    generalFiletype: HydrusFiletype.GENERAL_APPLICATION_ARCHIVE,
+    filetypes: ARCHIVES
+  },
+]
+
+export const searchFiletypeCategories = filetypeCategories.map(({generalFiletype, filetypes}) => ({
+  name: mime_string_lookup[generalFiletype],
+  filetypes: filetypes.map(filetype => mime_string_lookup[filetype])
+}))
 
 export const searchFiletypes = searchableFileTypes.map(ft => ({
   mime: mime_mimetype_string_lookup[ft],

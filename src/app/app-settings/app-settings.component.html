@@ -1,5 +1,5 @@
 <form [formGroup]="appSettingsForm" (ngSubmit)="submitAppSettings()" autocomplete="off">
-  <div fxLayout="column" class="settings-column">
+  <div class="settings-column flex-column">
     <h2>Browse</h2>
     <mat-slide-toggle formControlName="browseSearchOnLoad" class="margin-bottom-16">Search immediately on the browse page</mat-slide-toggle>
     <mat-slide-toggle formControlName="browseSearchWhenEmpty" class="margin-bottom-16">Search with no tags entered</mat-slide-toggle>
@@ -21,9 +21,11 @@
       <mat-label>Filename Tag Service</mat-label>
       <mat-select formControlName="uploadFilenameTagService">
         <mat-option>None (disabled)</mat-option>
-        <mat-option *ngFor="let service of (apiSettings.apiSet ? (tagServices$ | async) : [])" [value]="service.service_key">
-          {{service.name}}
-        </mat-option>
+        @for (service of (apiSettings.apiSet ? (tagServices$ | async) : []); track service.service_key) {
+          <mat-option [value]="service.service_key">
+            {{service.name}}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
     <h2>External Services</h2>
@@ -49,7 +51,7 @@
 
     <mat-slide-toggle formControlName="photopeaIntegration" class="margin-bottom-16">Enable "open in Photopea" button</mat-slide-toggle>
 
-    <div fxLayout="row wrap" fxLayoutAlign="end" class="">
+    <div class="button-row">
 
       <button type="button" mat-icon-button [matMenuTriggerFor]="appSettingsSaveMenu">
         <mat-icon>more_vert</mat-icon>

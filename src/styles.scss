@@ -99,7 +99,9 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core($typography-config);
+@include mat.core();
+
+@include mat.legacy-core();
 
 //setting up for future theme options
 @mixin app-theming($theme) {
@@ -142,11 +144,23 @@
   }
 }
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($light-theme);
+
+@include mat.all-legacy-component-typographies();
+
+//@include mat.core-theme($light-theme);
+@include mat.all-legacy-component-themes($light-theme);
+
 @include app-theming($light-theme);
+
+@include mat.chips-theme($light-theme);
+
+@media (prefers-color-scheme: dark) {
+  @include mat.all-legacy-component-colors($dark-theme);
+
+  @include app-theming($dark-theme);
+
+  @include mat.chips-color($dark-theme);
+}
 
 html,
 body {
@@ -155,11 +169,6 @@ body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  @include mat.all-component-themes($dark-theme);
-  @include app-theming($dark-theme);
 }
 
 .main-content {
@@ -276,6 +285,25 @@ body {
   max-width: 100%;
 }
 
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+.fxFlex {
+  flex: 1 1 0%;
+}
+
+.button-row {
+  flex-flow: row wrap;
+  display: flex;
+  place-content: stretch flex-end;
+  align-items: stretch;
+  gap: 8px;
+}
 
 .pages-tab-group {
   .mat-tab-label {
@@ -337,4 +365,12 @@ mat-icon.mat-card-avatar {
   --ngx-json-undefined-key : var(--devtools-color-text-primary);
   //--ngx-json-font-family : font-family
   //--ngx-json-font-family : font-size
+}
+
+
+// Various Material Design overrides
+
+.mat-chip {
+  // restore old font size
+  font-size: 14px;
 }

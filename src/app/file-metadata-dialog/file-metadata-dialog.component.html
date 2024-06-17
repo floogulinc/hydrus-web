@@ -6,27 +6,38 @@
 </div>
 
 <mat-dialog-content>
-  <div *ngIf="fileMetadata$ | async as metadata; else loading">
-    <mat-list *ngIf="!showRaw else jsonView">
-      <mat-list-item *ngIf="metadata.raw.Thumbnail?.base64">
-        <h2 matLine>Embedded Thumbnail</h2>
-        <div matLine>
-          <img class="metadata-thumbnail" [src]="'data:image/jpg;base64,' + metadata.raw.Thumbnail.base64">
-        </div>
-        <!-- stupid hack to force multi-line dynamic layout -->
-        <div matLine></div>
-        <div matLine></div>
-        <div matLine></div>
-      </mat-list-item>
-      <mat-list-item *ngFor="let meta of metadata.array" class="mat-multi-line">
-        <h2 matLine>{{meta.name}}</h2>
-        <p matLine *ngIf="meta.description">{{meta.description}}</p>
-      </mat-list-item>
-    </mat-list>
-    <ng-template #jsonView>
-      <ngx-json-viewer [json]="metadata.raw"></ngx-json-viewer>
-    </ng-template>
-  </div>
+  @if (fileMetadata$ | async; as metadata) {
+    <div>
+      @if (!showRaw) {
+        <mat-list>
+          @if (metadata.raw.Thumbnail?.base64) {
+            <mat-list-item>
+              <h2 matLine>Embedded Thumbnail</h2>
+              <div matLine>
+                <img class="metadata-thumbnail" [src]="'data:image/jpg;base64,' + metadata.raw.Thumbnail.base64">
+              </div>
+              <!-- stupid hack to force multi-line dynamic layout -->
+              <div matLine></div>
+              <div matLine></div>
+              <div matLine></div>
+            </mat-list-item>
+          }
+          @for (meta of metadata.array; track meta) {
+            <mat-list-item class="mat-multi-line">
+              <h2 matLine>{{meta.name}}</h2>
+              @if (meta.description) {
+                <p matLine>{{meta.description}}</p>
+              }
+            </mat-list-item>
+          }
+        </mat-list>
+      } @else {
+        <ngx-json-viewer [json]="metadata.raw"></ngx-json-viewer>
+      }
+    </div>
+  } @else {
+    <mat-spinner class="loading-spinner"></mat-spinner>
+  }
   <ng-template #loading>
     <mat-spinner class="loading-spinner"></mat-spinner>
   </ng-template>

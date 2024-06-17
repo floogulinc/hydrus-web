@@ -47,8 +47,4 @@ export class ImageListComponent implements OnInit, OnChanges {
     }
   }
 
-  public scrollTrackByFunction(index: number, file: HydrusBasicFile): number {
-    return file.file_id;
-  }
-
 }

@@ -1,17 +1,24 @@
 <h1 mat-dialog-title>Hydrus Services</h1>
 <div mat-dialog-content>
-  <div *ngIf="services.hydrusServicesArray$ | async as services; else loading">
-    <mat-list>
-      <mat-list-item *ngFor="let service of services">
-        <h2 matLine>{{service.name}}</h2>
-        <p matLine>{{service.type_pretty}}</p>
-        <p matLine *ngIf="isNumericalRatingService(service)">{{service.min_stars}}-{{service.max_stars}} {{service.star_shape}}s</p>
-        <p matLine *ngIf="isLikeRatingService(service)">{{service.star_shape}} shape</p>
-        <pre matLine>{{service.service_key}}</pre>
-      </mat-list-item>
-    </mat-list>
-  </div>
-  <ng-template #loading>
+  @if (services.hydrusServicesArray$ | async; as services) {
+    <div>
+      <mat-list>
+        @for (service of services; track service.service_key) {
+          <mat-list-item>
+            <h2 matLine>{{service.name}}</h2>
+            <p matLine>{{service.type_pretty}}</p>
+            @if (isNumericalRatingService(service)) {
+              <p matLine>{{service.min_stars}}-{{service.max_stars}} {{service.star_shape}}s</p>
+            }
+            @if (isLikeRatingService(service)) {
+              <p matLine>{{service.star_shape}} shape</p>
+            }
+            <pre matLine>{{service.service_key}}</pre>
+          </mat-list-item>
+        }
+      </mat-list>
+    </div>
+  } @else {
     <mat-spinner></mat-spinner>
-  </ng-template>
+  }
 </div>

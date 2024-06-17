@@ -25,7 +25,7 @@ export interface HydrusPageSimple {
 }
 
 export interface HydrusPageListItem extends HydrusPageSimple {
-  focused: boolean;
+  selected: boolean;
   pages?: HydrusPageListItem[];
 }
 

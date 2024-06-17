@@ -80,10 +80,10 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "hydrus-web:build:production"
+              "buildTarget": "hydrus-web:build:production"
             },
             "development": {
-              "browserTarget": "hydrus-web:build:development"
+              "buildTarget": "hydrus-web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -91,7 +91,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "hydrus-web:build"
+            "buildTarget": "hydrus-web:build"
           }
         },
         "test": {
@@ -129,5 +129,13 @@
       "@angular-eslint/schematics"
     ],
     "analytics": false
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }

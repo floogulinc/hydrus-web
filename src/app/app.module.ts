@@ -1,3 +1,6 @@
+import { RxIf } from "@rx-angular/template/if";
+import { RxPush } from "@rx-angular/template/push";
+import { RxLet } from "@rx-angular/template/let";
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -9,42 +12,40 @@ import { HttpClientModule } from '@angular/common/http';
 
 import {NgxLocalStorageModule} from 'ngx-localstorage';
 
-import { FlexLayoutModule } from '@angular/flex-layout';
-
 import { FormsModule } from '@angular/forms';
 
 import { BrowseComponent } from './browse/browse.component';
 import { SettingsComponent } from './settings/settings.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatButtonModule} from '@angular/material/button';
+import {MatLegacyButtonModule as MatButtonModule} from '@angular/material/legacy-button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatLegacyListModule as MatListModule } from '@angular/material/legacy-list';
+import {MatLegacyFormFieldModule as MatFormFieldModule} from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import {MatLegacySnackBarModule as MatSnackBarModule} from '@angular/material/legacy-snack-bar';
+import {MatLegacyChipsModule as MatChipsModule} from '@angular/material/legacy-chips';
+import {MatLegacyAutocompleteModule as MatAutocompleteModule} from '@angular/material/legacy-autocomplete';
 import { TagInputComponent } from './tag-input/tag-input.component';
-import {MatCardModule} from '@angular/material/card';
+import {MatLegacyCardModule as MatCardModule} from '@angular/material/legacy-card';
 import {MatGridListModule} from '@angular/material/grid-list';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatLegacyProgressSpinnerModule as MatProgressSpinnerModule} from '@angular/material/legacy-progress-spinner';
+import {MatLegacyTabsModule as MatTabsModule} from '@angular/material/legacy-tabs';
+import {MatLegacyProgressBarModule as MatProgressBarModule} from '@angular/material/legacy-progress-bar';
 import {MatBadgeModule} from '@angular/material/badge';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatLegacyMenuModule as MatMenuModule} from '@angular/material/legacy-menu';
+import {MatLegacySlideToggleModule as MatSlideToggleModule} from '@angular/material/legacy-slide-toggle';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
-import {MatSelectModule} from '@angular/material/select';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatTableModule} from '@angular/material/table';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatLegacySelectModule as MatSelectModule} from '@angular/material/legacy-select';
+import {MatLegacyTooltipModule as MatTooltipModule} from '@angular/material/legacy-tooltip';
+import {MatLegacyTableModule as MatTableModule} from '@angular/material/legacy-table';
+import {MatLegacyCheckboxModule as MatCheckboxModule} from '@angular/material/legacy-checkbox';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
-import {MatDialogModule} from '@angular/material/dialog';
+import {MatLegacyDialogModule as MatDialogModule} from '@angular/material/legacy-dialog';
 import {MatExpansionModule} from '@angular/material/expansion';
 
 import {PortalModule} from '@angular/cdk/portal';
@@ -53,9 +54,6 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TextFieldModule} from '@angular/cdk/text-field';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LetModule } from '@rx-angular/template/let';
-import { PushModule } from '@rx-angular/template/push';
-import { IfModule } from '@rx-angular/template/if'
 import { VirtualScrollerModule } from '@floogulinc/ngx-virtual-scroller';
 import { NgPipesModule } from 'ngx-pipes';
 import { BarRatingModule } from 'ngx-bar-rating';
@@ -175,7 +173,6 @@ const MAT_MODULES = [
         AppRoutingModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
         HttpClientModule,
-        FlexLayoutModule,
         FormsModule,
         PortalModule,
         ScrollingModule,
@@ -188,9 +185,9 @@ const MAT_MODULES = [
         VirtualScrollerModule,
         NgPipesModule,
         ClipboardModule,
-        LetModule,
-        PushModule,
-        IfModule,
+        RxLet,
+        RxPush,
+        RxIf,
         BarRatingModule,
         NgxJsonViewerModule,
         NgxFileDragDropModule

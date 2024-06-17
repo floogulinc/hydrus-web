@@ -8,21 +8,27 @@
   <p>
     You can download the latest version of Hydrus <a href="https://github.com/hydrusnetwork/hydrus/releases/latest">here</a>.
   </p>
-  <div *ngIf="pastVersion">
-    <mat-divider></mat-divider>
-    <p>
-      Alternatively, you can use a previous version of Hydrus Web. The most recent Hydrus Web for your version of Hydrus is {{pastVersion.name}}.
-    </p>
-    <p *ngIf="pastVersion.releaseUrl">
-      Information about the release is <a [href]="pastVersion.releaseUrl">here</a>.
-    </p>
-    <p>
-      It is available hosted at <a [href]="pastVersion.hostedUrl">{{pastVersion.hostedUrl}}</a>
-    </p>
-    <p *ngIf="pastVersion.dockerUrl">
-      The Docker image can be found <a [href]="pastVersion.dockerUrl">here</a>.
-    </p>
-  </div>
+  @if (pastVersion) {
+    <div>
+      <mat-divider></mat-divider>
+      <p>
+        Alternatively, you can use a previous version of Hydrus Web. The most recent Hydrus Web for your version of Hydrus is {{pastVersion.name}}.
+      </p>
+      @if (pastVersion.releaseUrl) {
+        <p>
+          Information about the release is <a [href]="pastVersion.releaseUrl">here</a>.
+        </p>
+      }
+      <p>
+        It is available hosted at <a [href]="pastVersion.hostedUrl">{{pastVersion.hostedUrl}}</a>
+      </p>
+      @if (pastVersion.dockerUrl) {
+        <p>
+          The Docker image can be found <a [href]="pastVersion.dockerUrl">here</a>.
+        </p>
+      }
+    </div>
+  }
 </div>
 <div mat-dialog-actions align="end">
   <button mat-button mat-dialog-close cdkFocusInitial>OK</button>

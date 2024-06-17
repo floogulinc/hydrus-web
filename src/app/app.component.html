@@ -6,10 +6,10 @@
     </mat-toolbar>
     <mat-nav-list class="sidenav-list" role="navigation">
       <a mat-list-item routerLink="/" routerLinkActive="drawer-list-item-active" #routerLinkActiveInstance="routerLinkActive"
-      [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
+        [routerLinkActiveOptions]="{exact: true}" (click)="drawer.close()">
         <mat-icon matListIcon>photo</mat-icon>
         Browse
-    </a>
+      </a>
       <a mat-list-item routerLink="/pages" routerLinkActive="drawer-list-item-active" (click)="drawer.close()">
         <mat-icon matListIcon>photo_library</mat-icon>
         Pages
@@ -43,8 +43,10 @@
         >
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span class="app-title">Hydrus Web <span class="mat-small" *ngIf="env.versionInfo?.branch !== 'master'">{{env.versionInfo?.branch}}</span></span>
-      <span fxFlex="1 1 auto"></span>
+      <span class="app-title">Hydrus Web @if (env.versionInfo?.branch !== 'master') {
+        <span class="mat-small">{{env.versionInfo?.branch}}</span>
+      }</span>
+      <span class="toolbar-spacer"></span>
       <ng-template cdkPortalOutlet #toolbarActionsPortal></ng-template>
     </mat-toolbar>
     <div class="main-content mat-typography">
@@ -52,57 +54,3 @@
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
-
-
-
-
-
-
-
-<!-- <div >
-  <mdc-top-app-bar fixed class="main-app-bar" [scrollTarget]="mainContent">
-    <mdc-top-app-bar-row>
-      <mdc-top-app-bar-section align="start" title="Hydrus Web">
-        <button mdcTopAppBarNavIcon (click)="drawer.open = !drawer.open">
-          <mdc-icon>menu</mdc-icon>
-        </button>
-      </mdc-top-app-bar-section>
-
-      <mdc-top-app-bar-section align="end">
-        <mdc-icon mdcTopAppBarActionItem>search</mdc-icon>
-        <mdc-icon mdcTopAppBarActionItem>refresh</mdc-icon>
-        <mdc-icon mdcTopAppBarActionItem (click)="profileMenu.open = !profileMenu.open">more_vert</mdc-icon>
-        <div mdcMenuSurfaceAnchor #menuAnchor>
-          <mdc-menu #profileMenu [anchorElement]="menuAnchor">
-            <mdc-list>
-              <mdc-list-item>My Profile</mdc-list-item>
-              <mdc-list-divider></mdc-list-divider>
-              <mdc-list-item>Sign out</mdc-list-item>
-            </mdc-list>
-          </mdc-menu>
-        </div>
-      </mdc-top-app-bar-section>
-    </mdc-top-app-bar-row>
-  </mdc-top-app-bar>
-
-  <mdc-drawer drawer="modal" #drawer>
-    <mdc-drawer-header title="Hydrus Web" subtitle="Subtitle"></mdc-drawer-header>
-    <mdc-drawer-content>
-      <mdc-list>
-        <mdc-list-item routerLink="/" routerLinkActive="mdc-list-item--activated" (click)="drawer.open = false">
-          <mdc-icon mdcListItemGraphic>photo</mdc-icon>Browse
-        </mdc-list-item>
-        <mdc-list-item routerLink="/settings" routerLinkActive="mdc-list-item--activated" (click)="drawer.open = false">
-          <mdc-icon mdcListItemGraphic>settings</mdc-icon>Settings
-        </mdc-list-item>
-      </mdc-list>
-    </mdc-drawer-content>
-  </mdc-drawer>
-
-  <div #mainContent class="main-content" mdcTopAppBarFixedAdjust>
-      <div class="mdc-layout-grid">
-        <router-outlet></router-outlet>
-      </div>
-  </div>
-</div> -->
-

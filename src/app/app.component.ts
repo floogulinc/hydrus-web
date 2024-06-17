@@ -3,7 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable, Subject } from 'rxjs';
 import { map, share } from 'rxjs/operators';
 import { MatSidenavContent } from '@angular/material/sidenav';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from 'src/environments/environment';
 import { PortalOutlet, CdkPortalOutlet } from '@angular/cdk/portal';
@@ -50,19 +50,24 @@ export class AppComponent implements OnInit {
   public env = environment;
 
   ngOnInit() {
-    this.updates.available.subscribe(event => {
-      console.log('current version is', event.current);
-      console.log('available version is', event.available);
-      this.snackBar.open('A new version of Hydrus Web is available', 'Refresh', {
-        duration: 10000
-      }).onAction().subscribe(() => {
-        this.updates.activateUpdate().then(() => document.location.reload());
-      });
+    this.updates.versionUpdates.subscribe(evt => {
+      switch (evt.type) {
+        case 'VERSION_DETECTED':
+          console.log(`Downloading new app version: ${evt.version.hash}`);
+          break;
+        case 'VERSION_READY':
+          console.log(`Current app version: ${evt.currentVersion.hash}`);
+          console.log(`New app version ready for use: ${evt.latestVersion.hash}`);
+          this.snackBar.open('A new version of Hydrus Web is available', 'Refresh', {
+            duration: 10000
+          }).onAction().subscribe(() => {
+            document.location.reload()
+          });
+          break;
+        case 'VERSION_INSTALLATION_FAILED':
+          console.log(`Failed to install app version '${evt.version.hash}': ${evt.error}`);
+          break;
+      }
     });
-    this.updates.activated.subscribe(event => {
-      console.log('old version was', event.previous);
-      console.log('new version is', event.current);
-    });
-
   }
 }

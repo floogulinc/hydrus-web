@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { HydrusTagsService } from '../hydrus-tags.service';
 
 interface TagSiblingsParentsDialogData {
@@ -42,10 +42,6 @@ export class TagSiblingsParentsDialogComponent implements OnInit {
         ...config
       }
     );
-  }
-
-  trackByTagService(index: number, item: {serviceKey: string}) {
-    return item.serviceKey;
   }
 
   searchTag(tag: string) {
