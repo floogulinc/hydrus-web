@@ -55,17 +55,24 @@ export class ThemeService {
     return this.themeStylesheet.replace('');
   }
 
-  updateThemeColorMetaTag(theme: {light: DynamicScheme, dark: DynamicScheme}) {
+  private updateThemeColorMetaTag(theme: {light: DynamicScheme, dark: DynamicScheme}) {
     const {light, dark} = getMetaThemeColorsFromTheme(theme);
     this.meta.updateTag({name: 'theme-color', content: light}, 'data-type=light');
     this.meta.updateTag({name: 'theme-color', content: dark}, 'data-type=dark');
   }
 
-  resetThemeColorMetaTag() {
+  private resetThemeColorMetaTag() {
     this.meta.updateTag({name: 'theme-color', content: '#fbf8ff'}, 'data-type=light');
     this.meta.updateTag({name: 'theme-color', content: '#121318'}, 'data-type=dark');
   }
 
+  addBlackThemeColorMetaTag() {
+    this.meta.updateTag({name: 'theme-color', content: '#000000'}, 'data-type=black');
+  }
+
+  removeBlackThemeColorMetaTag() {
+    this.meta.updateTag({name: 'theme-color', content: ''}, 'data-type=black');
+  }
 
 
 }

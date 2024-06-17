@@ -12,6 +12,7 @@ import { take } from 'rxjs';
 import { canOpenInPhotopea, getPhotopeaUrlForFile } from './photopea';
 import { SettingsService } from './settings.service';
 import { MatButton } from '@angular/material/button';
+import { ThemeService } from './theme/theme.service';
 
 
 function isContentType(content: Content | Slide, type: string) {
@@ -31,12 +32,14 @@ export class PhotoswipeService {
     private settingsService: SettingsService,
     private appRef: ApplicationRef,
     private injector: EnvironmentInjector,
-
+    private themeService: ThemeService
   ) { }
 
   private processedFiles = new Map<string, SlideData>();
 
   openPhotoSwipe(items: HydrusBasicFile[], id: number) {
+    this.themeService.addBlackThemeColorMetaTag();
+
     const imgindex = items.findIndex(e => e.file_id === id);
 
     const options: PhotoSwipeOptions = {
@@ -405,6 +408,7 @@ export class PhotoswipeService {
     });
 
     pswp.on('close', () => {
+      this.themeService.removeBlackThemeColorMetaTag();
       locSub.unsubscribe();
       if(window.history.state.pswp) {
         window.history.back();
