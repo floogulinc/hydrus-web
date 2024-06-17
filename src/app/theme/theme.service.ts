@@ -37,7 +37,6 @@ export class ThemeService {
   async setThemeFromHexColor(color: string, variant: SettingsThemeVariant = SettingsThemeVariant.DEFAULT) {
     const theme = generateThemeFromHex(color, settingsThemeVariantToThemeVariant[variant]);
     const styles = styleSheetFromTheme(theme, '.main-theme');
-    console.log(styles)
     try {
       this.updateThemeColorMetaTag(theme);
     } catch (error) {
