@@ -302,9 +302,13 @@ mat-icon.mat-mdc-card-avatar {
 }
 
 
-:root {
+.theming {
   // restores old behavior that was set on each dialog container element
   --mat-dialog-container-max-width: 80vw;
+
+  // set dialog container to same as bottom sheet container
+  --mdc-dialog-container-color: var(--sys-surface-container-low);
+  //--mat-bottom-sheet-container-background-color: var(--sys-surface-container-low);
 }
 
 // --------------------------------------------------------------------------------

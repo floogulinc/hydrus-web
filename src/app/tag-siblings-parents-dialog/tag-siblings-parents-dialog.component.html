@@ -1,21 +1,20 @@
 <h1 mat-dialog-title>Siblings and Parents</h1>
 <div mat-dialog-content>
-
   @if (siblingsAndParents$ | async; as siblingsAndParents) {
-    <div>
-      <mat-tab-group animationDuration="0ms" dynamicHeight>
-        @for (service of siblingsAndParents | orderBy: 'serviceName' | orderBy: '-serviceType'; track service.serviceKey) {
-          <mat-tab [label]="service.serviceName">
-            <ng-template matTabContent>
+    <mat-tab-group animationDuration="0ms" dynamicHeight>
+      @for (service of siblingsAndParents | orderBy: 'serviceName' | orderBy: '-serviceType'; track service.serviceKey) {
+        <mat-tab [label]="service.serviceName">
+          <ng-template matTabContent>
+            <div class="tag-accordion-wrapper">
               <mat-accordion multi>
-                <mat-expansion-panel expanded>
+                <mat-expansion-panel>
                   <mat-expansion-panel-header>
                     Ideal
                   </mat-expansion-panel-header>
                   <mat-chip-listbox class="mat-mdc-chip-set-stacked tag-chip-list" aria-orientation="vertical" aria-label="File tags" [selectable]="false">
                     <mat-chip-option
                       class="theming tag-chip tag-color"
-                      [attr.data-tag-namespace]="service.ideal_tag| tagNamespace"
+                      [attr.data-tag-namespace]="service.ideal_tag | tagNamespace"
                       [matMenuTriggerFor]="tagMenu"
                       [matMenuTriggerData]="{tag: service.ideal_tag}"
                       >
@@ -81,11 +80,11 @@
                   </ng-template>
                 </mat-expansion-panel>
               </mat-accordion>
-            </ng-template>
-          </mat-tab>
-        }
-      </mat-tab-group>
-    </div>
+            </div>
+          </ng-template>
+        </mat-tab>
+      }
+    </mat-tab-group>
   } @else {
     <mat-spinner></mat-spinner>
   }
