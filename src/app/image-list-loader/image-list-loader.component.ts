@@ -202,6 +202,9 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
     try {
       const serviceDialog = ServiceSelectDialogComponent.open(this.dialog, {serviceFilter: (services) => getLocalTagServices(services)})
       const service = await firstValueFrom(serviceDialog.afterClosed())
+      if(!service) {
+        return;
+      }
       const tagsDialog = TagInputDialogComponent.open(this.dialog, {
         displayType: 'display',
         enableOrSearch: false,
@@ -226,7 +229,10 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
   async removeTags() {
     try {
       const serviceDialog = ServiceSelectDialogComponent.open(this.dialog, {serviceFilter: (services) => getLocalTagServices(services)})
-      const service = await firstValueFrom(serviceDialog.afterClosed())
+      const service = await firstValueFrom(serviceDialog.afterClosed());
+      if(!service) {
+        return;
+      }
       const tagsDialog = TagInputDialogComponent.open(this.dialog, {
         displayType: 'display',
         enableOrSearch: false,
@@ -236,6 +242,10 @@ export class ImageListLoaderComponent implements OnInit, OnChanges {
       })
       const dialogResult = await firstValueFrom(tagsDialog.afterClosed());
       if (dialogResult) {
+        if (!await ConfirmDialogComponent.confirmPromise(this.dialog, {
+          title: 'Delete tags from selected files?',
+          description: `This will attempt to delete the selected tags from ${this.numSelected()} files. A deletion record will be created for the tags on all selected files, including those that do not currently have the tags.`,
+        })) return;
         const tags = dialogResult.flat() as string[];
         await firstValueFrom(this.tagsService.deleteTagsFromLocalServiceFileIDs(Array.from(this.selected()), tags, service.service_key));
         this.snackbar.open(`Tag${tags.length === 1 ? '' : 's'} removed from ${this.numSelected()} files`, undefined, {
