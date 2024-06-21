@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HydrusBasicFile, HydrusBasicFileFromAPI, HydrusFile, HydrusFileFromAPI, FileCategory, generateRatingsArray, getFileCategory } from './hydrus-file';
-import { Observable, of, forkJoin } from 'rxjs';
+import { Observable, of, forkJoin, from } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, tap, toArray } from 'rxjs/operators';
 import { HydrusServices } from './hydrus-services';
 import { HydrusFiletype, filetypeFromMime, hasThumbnail, isFileHydrusRenderable, mime_string_lookup } from './hydrus-file-mimes';
 
@@ -101,12 +101,6 @@ export class HydrusFilesService {
       });
   }
 
-  private getFileMetadataChunked(fileIds: number[]) {
-    return forkJoin(chunk(fileIds, QUERY_CHUNK_SIZE).map(ids => this.getAndProcessFileMetadataChunk(ids))).pipe(
-      map(files => files.flat())
-    );
-  }
-
   private getAndProcessFileMetadataChunk(fileIds: number[]) {
     return this.getBasicFileMetadataAPI(fileIds).pipe(
       // fix for bug in hydrus v556
@@ -129,11 +123,18 @@ export class HydrusFilesService {
     )
   }
 
-  private getAndAddMetadata(fileIds: number[]): Observable<HydrusBasicFile[]> {
+  private getAndAddMetadata(fileIds: number[], concurrency = 8): Observable<HydrusBasicFile[]> {
     if (fileIds.length === 0) {
       return of([]);
+    } else if (fileIds.length <= QUERY_CHUNK_SIZE) {
+      return this.getAndProcessFileMetadataChunk(fileIds);
     }
-    return this.getFileMetadataChunked(fileIds);
+
+    return from(chunk(fileIds, QUERY_CHUNK_SIZE)).pipe(
+      mergeMap(ids => this.getAndProcessFileMetadataChunk(ids), concurrency),
+      toArray(),
+      map(arr => arr.flat())
+    );
   }
 
   private addFilesAndTags(files: HydrusBasicFile[]) {
