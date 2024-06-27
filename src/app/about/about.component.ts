@@ -49,15 +49,11 @@ export class AboutComponent implements OnInit {
   }
 
   boned() {
-    this.dialog.open(MrBonesDialogComponent, {
-      maxWidth: '95vw'
-    });
+    this.dialog.open(MrBonesDialogComponent);
   }
 
   services() {
-    this.dialog.open(ServicesInfoDialogComponent, {
-      maxWidth: '95vw'
-    });
+    this.dialog.open(ServicesInfoDialogComponent);
   }
 
   async options() {

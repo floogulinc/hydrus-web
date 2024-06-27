@@ -46,8 +46,7 @@ export class FileMetadataDialogComponent implements OnInit {
     return dialog.open<FileMetadataDialogComponent, FileMetadataDialogData>(
       FileMetadataDialogComponent,
       {
-        maxWidth: '1280px',
-        width: '95vw',
+        width: '1280px',
         data: {...data},
         ...config
       }

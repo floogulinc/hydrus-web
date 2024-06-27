@@ -36,8 +36,7 @@ export class TagSiblingsParentsDialogComponent implements OnInit {
     return dialog.open<TagSiblingsParentsDialogComponent, TagSiblingsParentsDialogData, TagSiblingsParentsDialogResult>(
       TagSiblingsParentsDialogComponent,
       {
-        maxWidth: '720px',
-        width: '95vw',
+        width: '720px',
         data,
         ...config
       }

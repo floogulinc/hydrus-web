@@ -73,7 +73,8 @@ export class ServiceSelectDialogComponent implements OnInit {
           ...defaultData,
           ...data
         },
-        ...config
+        ...config,
+        width: '560px',
       }
     );
   }

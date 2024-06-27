@@ -45,8 +45,7 @@ export class TagInputDialogComponent implements OnInit {
     return dialog.open<TagInputDialogComponent, TagInputDialogData, HydrusSearchTags>(
       TagInputDialogComponent,
       {
-        maxWidth: '648px',
-        width: '90vw',
+        width: '648px',
         data: {
           ...defaultData,
           ...data

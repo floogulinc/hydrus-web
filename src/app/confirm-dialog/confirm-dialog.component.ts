@@ -31,7 +31,6 @@ export class ConfirmDialogComponent {
       ConfirmDialogComponent,
       {
         data: {...defaultData, ...data},
-        maxWidth: '560px',
         ...config
       }
     );

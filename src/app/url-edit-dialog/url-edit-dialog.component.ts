@@ -22,8 +22,7 @@ export class UrlEditDialogComponent implements OnInit {
     return dialog.open<UrlEditDialogComponent, UrlEditDialogData, UrlEditDialogData>(
       UrlEditDialogComponent,
       {
-        maxWidth: '648px',
-        width: '90vw',
+        width: '648px',
         data: {...data},
         //autoFocus: data && data.noteName ? '.note-content' : 'first-tabbable',
         ...config
