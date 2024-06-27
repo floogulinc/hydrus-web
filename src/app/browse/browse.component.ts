@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { SearchService } from '../search.service';
 import { HydrusFilesService } from '../hydrus-files.service';
-import { BehaviorSubject, catchError, combineLatest, filter, map, Observable, of, shareReplay, Subject, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, combineLatest, filter, firstValueFrom, map, Observable, of, shareReplay, Subject, switchMap, tap } from 'rxjs';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { SettingsService } from '../settings.service';
 import { HydrusSearchTags } from '../hydrus-tags';
@@ -9,6 +9,10 @@ import { defaultSort, displaySortGroups, HydrusSortType, isDisplaySortMetaTypeGr
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ErrorService } from '../error.service';
+import { ALL_KNOWN_TAGS_SERVICE_KEY, ALL_MY_FILES_SERVICE_KEY, getTagServices, isFileService, isNonDeletedFileService } from '../hydrus-services';
+import { ServiceSelectDialogComponent } from '../service-select-dialog/service-select-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { HydrusServicesService } from '../hydrus-services.service';
 
 @UntilDestroy()
 @Component({
@@ -26,6 +30,8 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private errorService: ErrorService,
+    private dialog: MatDialog,
+    private hydrusServices: HydrusServicesService
     ) {
   }
 
@@ -40,7 +46,16 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
 
   refresh$ = new Subject();
 
+  tagServiceKey$ = new BehaviorSubject(ALL_KNOWN_TAGS_SERVICE_KEY);
+  fileServiceKey$ = new BehaviorSubject(ALL_MY_FILES_SERVICE_KEY);
 
+  tagService$ = combineLatest([this.tagServiceKey$, this.hydrusServices.hydrusServicesArray$]).pipe(
+    map(([serviceKey, services]) => services.find(s => s.service_key === serviceKey))
+  )
+
+  fileService$ = combineLatest([this.fileServiceKey$, this.hydrusServices.hydrusServicesArray$]).pipe(
+    map(([serviceKey, services]) => services.find(s => s.service_key === serviceKey))
+  )
 
   displaySortGroups = displaySortGroups;
   isDisplaySortMetaTypeGroup = isDisplaySortMetaTypeGroup;
@@ -48,14 +63,16 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
   sortToString = sortToString;
   defaultSort = defaultSort;
 
-  currentSearch$: Observable<number[]> = combineLatest([this.searchTags$, this.sort$, this.refresh$]).pipe(
+  currentSearch$: Observable<number[]> = combineLatest([this.searchTags$, this.sort$, this.tagServiceKey$, this.fileServiceKey$, this.refresh$]).pipe(
     filter(([searchTags]) => this.settingsService.appSettings.browseSearchWhenEmpty || searchTags.length > 0),
     tap(() => this.searching$.next(true)),
-    switchMap(([searchTags, sort]) => this.searchService.searchFiles(
+    switchMap(([searchTags, sort, tagService, fileService]) => this.searchService.searchFiles(
       searchTags,
       {
         file_sort_type: sort.sortType,
-        file_sort_asc: sort.sortAsc
+        file_sort_asc: sort.sortAsc,
+        tag_service_key: tagService,
+        file_service_key: fileService
       }
     ).pipe(
       catchError(error => {
@@ -112,10 +129,26 @@ export class BrowseComponent implements OnInit, AfterViewInit, OnDestroy {
   setSort(sortType: HydrusSortType, sortAsc: boolean) {
     this.setSortInfo({sortType, sortAsc});
   }
-
-
   resetSort() {
     this.setSortInfo(defaultSort);
+  }
+
+  async tagServiceDialog() {
+    const serviceDialog = ServiceSelectDialogComponent.open(this.dialog, {serviceFilter: (services) => getTagServices(services)})
+    const service = await firstValueFrom(serviceDialog.afterClosed())
+    if(!service) {
+      return;
+    }
+    this.tagServiceKey$.next(service.service_key);
+  }
+
+  async fileServiceDialog() {
+    const serviceDialog = ServiceSelectDialogComponent.open(this.dialog, {serviceFilter: (services) => services.filter(isNonDeletedFileService)})
+    const service = await firstValueFrom(serviceDialog.afterClosed())
+    if(!service) {
+      return;
+    }
+    this.fileServiceKey$.next(service.service_key);
   }
 
 /*   search() {

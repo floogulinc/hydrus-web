@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HydrusSearchTags } from './hydrus-tags';
 import { HydrusSortType } from './hydrus-sort';
+import { HydrusRequestFileDomain } from './hydrus-api';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +15,10 @@ export class SearchService {
 
 
   public searchFiles(tags: HydrusSearchTags, options?: {
-    file_service_name?: string;
-    file_service_key?: string;
-    tag_service_name?: string;
     tag_service_key?: string;
     file_sort_type?: HydrusSortType;
     file_sort_asc?: boolean;
-  }): Observable<number[]> {
+  } & HydrusRequestFileDomain): Observable<number[]> {
     return this.api.searchFiles(
       tags,
       {

@@ -29,7 +29,17 @@
     <button mat-icon-button [matMenuTriggerFor]="sortMenu" aria-label="Sort">
       <mat-icon>sort</mat-icon>
     </button>
+    <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="Search Options">
+      <mat-icon>more_vert</mat-icon>
+    </button>
   </app-toolbar-actions>
+
+  <mat-menu #moreMenu="matMenu">
+    <ng-template matMenuContent>
+      <button mat-menu-item (click)="tagServiceDialog()">Tag Service: {{(tagService$ | async)?.name ?? 'Unknown'}}</button>
+      <button mat-menu-item (click)="fileServiceDialog()">File Service: {{(fileService$ | async)?.name ?? 'Unknown'}}</button>
+    </ng-template>
+  </mat-menu>
 
   <mat-menu #sortMenu="matMenu">
     <button mat-menu-item disabled>{{sortToString(sort)}}</button>

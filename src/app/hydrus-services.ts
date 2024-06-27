@@ -113,8 +113,13 @@ export function getLocalTagServices(serviceArray: HydrusService[]) {
   return serviceArray.filter(s => s.type === HydrusServiceType.LOCAL_TAG)
 }
 
+export const ALL_KNOWN_TAGS_SERVICE_KEY = '616c6c206b6e6f776e2074616773';
+
+export const ALL_KNOWN_FILES_SERVICE_KEY = '616c6c206b6e6f776e2066696c6573';
+export const ALL_MY_FILES_SERVICE_KEY = '616c6c206c6f63616c206d65646961';
+
 export function getAllKnownTagsService(services: HydrusServices) {
-  return services['616c6c206b6e6f776e2074616773'];
+  return services[ALL_KNOWN_TAGS_SERVICE_KEY];
 }
 
 export function isFileService(service: HydrusServiceSimple) {
@@ -130,3 +135,16 @@ export function isFileService(service: HydrusServiceSimple) {
     HydrusServiceType.COMBINED_DELETED_FILE
   ].includes(service.type);
 }
+
+export function isNonDeletedFileService(service: HydrusServiceSimple) {
+  return [
+    HydrusServiceType.FILE_REPOSITORY,
+    HydrusServiceType.LOCAL_FILE_DOMAIN,
+    HydrusServiceType.LOCAL_FILE_UPDATE_DOMAIN,
+    HydrusServiceType.COMBINED_LOCAL_FILE,
+    HydrusServiceType.COMBINED_LOCAL_MEDIA,
+    HydrusServiceType.COMBINED_FILE,
+    HydrusServiceType.IPFS
+  ].includes(service.type);
+}
+

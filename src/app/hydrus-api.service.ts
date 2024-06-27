@@ -149,15 +149,12 @@ export class HydrusApiService {
    public searchFiles<Hashes extends boolean, IDs extends boolean>(
     tags: HydrusSearchTags,
     params: {
-      file_service_name?: string;
-      file_service_key?: string;
-      tag_service_name?: string;
       tag_service_key?: string;
       file_sort_type?: HydrusSortType;
       file_sort_asc?: boolean;
       return_hashes?: Hashes;
       return_file_ids?: IDs;
-    } = {},
+    } & HydrusRequestFileDomain = {},
   ): Observable<
     (Hashes extends true ? { hashes: string[] } : Record<string, never>) &
       (IDs extends true ? { file_ids: number[] } : Record<string, never>)
