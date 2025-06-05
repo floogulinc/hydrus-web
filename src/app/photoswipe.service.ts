@@ -72,10 +72,10 @@ export class PhotoswipeService {
       maxZoomLevel: 10,
       initialZoomLevel: (zoomLevelObject) => {
         if(!this.settingsService.appSettings.scaleMediaToFit) {
-          return zoomLevelObject.fit;
+          return zoomLevelObject.fit; // the default behavior (which doesn't scale up)
         }
-        const wscale = window.innerWidth / zoomLevelObject.itemData.width;
-        const hscale = window.innerHeight / zoomLevelObject.itemData.height;
+        const wscale = zoomLevelObject.panAreaSize.x / zoomLevelObject.itemData.width;
+        const hscale = zoomLevelObject.panAreaSize.y / zoomLevelObject.itemData.height;
         return wscale < hscale ? wscale : hscale;
       },
       //tapAction: null,
