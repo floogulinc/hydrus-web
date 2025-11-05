@@ -115,7 +115,10 @@ export class HydrusApiService {
 
   public testApi(): Observable<HydrusKeyVerificationData> {
     return this.http.get<HydrusKeyVerificationData>(this.getAPIUrl() + 'verify_access_key', {
-      headers: this.headers
+      headers: {
+        ...this.headers,
+        'ngsw-bypass': ''
+      }
     });
   }
 
