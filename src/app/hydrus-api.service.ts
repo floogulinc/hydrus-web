@@ -90,7 +90,8 @@ export class HydrusApiService {
 
   private get headers() {
     return {
-      'Hydrus-Client-API-Access-Key': this.hydrusApiKey
+      'Hydrus-Client-API-Access-Key': this.hydrusApiKey,
+      'ngsw-bypass': ''
     };
   }
 
@@ -115,10 +116,7 @@ export class HydrusApiService {
 
   public testApi(): Observable<HydrusKeyVerificationData> {
     return this.http.get<HydrusKeyVerificationData>(this.getAPIUrl() + 'verify_access_key', {
-      headers: {
-        ...this.headers,
-        'ngsw-bypass': ''
-      }
+      headers: this.headers
     });
   }
 
@@ -454,7 +452,6 @@ export class HydrusApiService {
         headers: {
           ...this.headers,
           'Content-Type': 'application/octet-stream',
-          'ngsw-bypass': ''
         },
         reportProgress: true,
         observe: 'events'
