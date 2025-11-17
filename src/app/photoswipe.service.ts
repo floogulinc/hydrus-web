@@ -69,7 +69,15 @@ export class PhotoswipeService {
       zoom: false,
       close: false,
       //secondaryZoomLevel: 1,
-      maxZoomLevel: 2,
+      maxZoomLevel: 10,
+      initialZoomLevel: (zoomLevelObject) => {
+        if(!this.settingsService.appSettings.scaleMediaToFit) {
+          return zoomLevelObject.fit; // the default behavior (which doesn't scale up)
+        }
+        const wscale = zoomLevelObject.panAreaSize.x / zoomLevelObject.itemData.width;
+        const hscale = zoomLevelObject.panAreaSize.y / zoomLevelObject.itemData.height;
+        return wscale < hscale ? wscale : hscale;
+      },
       //tapAction: null,
       errorMsg: 'The file cannot be loaded',
       trapFocus: false

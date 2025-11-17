@@ -23,6 +23,7 @@ export interface AppSettingsV1 {
   themeColor: string;
   themeVariant: SettingsThemeVariant;
   sendViews: boolean;
+  scaleMediaToFit: boolean;
 }
 
 export type AppSettingsStorage = AppSettingsV1;
@@ -49,4 +50,5 @@ export const defaultAppSettings: AppSettings = {
   themeColor: '#3f51b5',
   themeVariant: SettingsThemeVariant.DEFAULT,
   sendViews: true,
+  scaleMediaToFit: false,
 }
