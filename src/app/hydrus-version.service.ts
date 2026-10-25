@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, catchError, combineLatest, distinctUntilChanged, filter, map, of, retry, shareReplay, switchMap } from 'rxjs';
-import { HydrusApiSettingsService } from './hydrus-api-settings.service';
+import { catchError, distinctUntilChanged, map, of, retry, shareReplay, switchMap } from 'rxjs';
 import { HydrusApiService } from './hydrus-api.service';
 import { requiredVersion, secureVersion } from './hydrus-version';
 import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-version-dialog.component';
-import { debug } from 'ngxtension/debug';
 
 
 @Injectable({
@@ -44,21 +42,6 @@ export class HydrusVersionService {
     distinctUntilChanged((a,b) => a?.version === b?.version),
     shareReplay(1),
   )
-
-  // public hydrusVersion$ = this.refreshVersion$.pipe(
-  //   switchMap(() => {
-  //     if(this.apiSettings.apiSet()) {
-  //       return this.api.getApiVersion().pipe(
-  //         retry(1),
-  //         catchError((err) => of(null))
-  //       )
-  //     } else {
-  //       return of(null);
-  //     }
-  //   }),
-  //   distinctUntilChanged((a,b) => a.version === b.version),
-  //   shareReplay(1),
-  // );
 
   public isAtLeastVersion(version: number) {
     return this.hydrusVersion$.pipe(
