@@ -1,13 +1,27 @@
-<h1 mat-dialog-title>Outdated Hydrus</h1>
+<h1 mat-dialog-title>{{data.reason === 'insecure' ? 'Security Warning' : 'Outdated Hydrus'}}</h1>
 <div mat-dialog-content>
-  <p>Hydrus Web requires a newer version of the Hydrus client.</p>
-  <p>
-    You appear to be running Hydrus {{data.hydrus_version}}.
-    Hydrus Web requires at least Hydrus {{requiredVersion}}.
-  </p>
-  <p>
-    You can download the latest version of Hydrus <a href="https://github.com/hydrusnetwork/hydrus/releases/latest">here</a>.
-  </p>
+  @if(data.reason === 'outdated') {
+    <p>Hydrus Web requires a newer version of the Hydrus client.</p>
+    <p>
+      You appear to be running Hydrus {{data.hydrus_version}}.
+      Hydrus Web requires at least Hydrus {{requiredVersion}}.
+    </p>
+    <p>
+      You can download the latest version of Hydrus <a href="https://github.com/hydrusnetwork/hydrus/releases/latest">here</a>.
+    </p>
+  } @else if (data.reason === 'insecure') {
+    <p>This version of hydrus contains various critical security vulnerabilities.</p>
+    <p>
+      You appear to be running Hydrus {{data.hydrus_version}}.
+      Versions before {{secureVersion}} are vulnerable.
+    </p>
+    <p>
+      Hydrus Web will continue to work with these versions, but you should update hydrus as soon as possible.
+    </p>
+    <p>
+      You can download the latest version of Hydrus <a href="https://github.com/hydrusnetwork/hydrus/releases/latest">here</a>.
+    </p>
+  }
   @if (pastVersion) {
     <div>
       <mat-divider></mat-divider>

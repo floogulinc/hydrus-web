@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, catchError, combineLatest, distinctUntilChanged, filter, map, of, retry, shareReplay, switchMap } from 'rxjs';
 import { HydrusApiSettingsService } from './hydrus-api-settings.service';
 import { HydrusApiService } from './hydrus-api.service';
-import { requiredVersion } from './hydrus-version';
+import { requiredVersion, secureVersion } from './hydrus-version';
 import { HydrusVersionDialogComponent } from './hydrus-version-dialog/hydrus-version-dialog.component';
 import { debug } from 'ngxtension/debug';
 
@@ -16,9 +16,21 @@ export class HydrusVersionService {
   constructor(private api: HydrusApiService, private dialog: MatDialog) {
     this.hydrusVersion$.subscribe(v => {
       console.log(v);
-      if(v && ((v.hydrus_version && v.hydrus_version < requiredVersion) || (!v.hydrus_version && v.version))) {
-        const dialogRef = this.dialog.open(HydrusVersionDialogComponent, {
-          data: v
+      if(v && v.is_idhan_instance) {
+        return;
+      } else if(v && ((v.hydrus_version && v.hydrus_version < requiredVersion) || (!v.hydrus_version && v.version))) {
+        this.dialog.open(HydrusVersionDialogComponent, {
+          data: {
+            ...v,
+            reason: 'outdated'
+          }
+        });
+      } else if (v && v.hydrus_version && v.hydrus_version < secureVersion) {
+        this.dialog.open(HydrusVersionDialogComponent, {
+          data: {
+            ...v,
+            reason: 'insecure'
+          }
         });
       }
     })

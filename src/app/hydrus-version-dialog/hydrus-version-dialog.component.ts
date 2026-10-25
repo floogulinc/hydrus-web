@@ -1,7 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
-import { getPastHydrusWebVersion, HydrusVersionResponse, requiredVersion } from '../hydrus-version';
+import { getPastHydrusWebVersion, HydrusVersionResponse, requiredVersion, secureVersion } from '../hydrus-version';
+
+interface VersionDialogData extends HydrusVersionResponse {
+  reason: 'outdated' | 'insecure';
+}
 
 @Component({
   selector: 'app-hydrus-version-dialog',
@@ -11,12 +15,13 @@ import { getPastHydrusWebVersion, HydrusVersionResponse, requiredVersion } from 
 export class HydrusVersionDialogComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<HydrusVersionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: HydrusVersionResponse) { }
+    @Inject(MAT_DIALOG_DATA) public data: VersionDialogData) { }
 
   ngOnInit(): void {
   }
 
   requiredVersion = requiredVersion;
+  secureVersion = secureVersion;
 
   pastVersion = getPastHydrusWebVersion(this.data);
 
